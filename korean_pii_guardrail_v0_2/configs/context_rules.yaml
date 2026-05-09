@@ -1,0 +1,45 @@
+version: v0.2-single-turn
+window:
+  unit: eojeol
+  size_left: 5
+  size_right: 5
+  same_sentence_only: true
+  field_label_same_sentence_override: true
+  cooccurrence_same_sentence_only: true
+  use_previous_turns: false
+  use_rag_context: false
+field_labels:
+  name_label: [성명, 이름, 고객명, 신청자, 담당자, 수신자]
+  phone_label: [연락처, 전화번호, 휴대폰, 핸드폰, 모바일]
+  email_label: [이메일, 메일, 전자우편]
+  address_label: [주소, 배송지, 거주지, 수령지, 자택]
+  account_label: [계좌, 입금, 송금, 환불계좌, 이체]
+  id_label: [고객번호, 회원번호, 회원ID, 사번, 학번, ID]
+  medical_label: [환자번호, 차트번호, 진료기록, 의무기록, 병원]
+honorifics_and_titles:
+  person_suffixes: [님, 씨, 군, 양]
+  job_titles: [과장, 팀장, 부장, 차장, 대리, 교수, 변호사, 의사, 간호사, 상담사]
+negative_contexts:
+  example_context: [예시, 샘플, 테스트, 더미, dummy, sample]
+  weather_context: [날씨, 맑네요, 흐림, 비, 눈, 계절]
+  public_number_context: [대표번호, 고객센터, 안내번호, 콜센터]
+  code_context: [stack, traceback, json, 변수, 로그, error, debug]
+  business_name_context: [상호, 식당, 김밥, 카페, 브랜드]
+cooccurrence:
+  person_contact:
+    entities: [PERSON_NAME, PHONE_MOBILE, PHONE_LANDLINE, EMAIL]
+    same_sentence: true
+  bank_account:
+    entities: [BANK_ACCOUNT]
+    requires_any_terms_from: [account_label]
+  person_address:
+    entities: [PERSON_NAME, ADDRESS_FULL]
+    same_sentence: true
+context_judge:
+  llm_enabled: false
+  deterministic_steps:
+    - strong_field_label
+    - entity_specific_validator
+    - negative_context
+    - single_turn_composite
+    - risk_fallback

@@ -1,0 +1,8 @@
+version: v0.2-single-turn
+dataset: hard_cases_v0
+scope: single_turn_only
+rag_included: false
+multi_turn_included: false
+case_count: 20
+buckets: ["structured", "boundary", "context", "address", "adversarial", "hard_negative", "single_turn_composite"]
+raw_data_policy: synthetic fixtures only; no production PII

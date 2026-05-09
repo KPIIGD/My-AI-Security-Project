@@ -1,0 +1,51 @@
+version: v0.2-single-turn
+suffix_groups:
+  josa:
+    - 이
+    - 가
+    - 은
+    - 는
+    - 을
+    - 를
+    - 에
+    - 에게
+    - 한테
+    - 께
+    - 에서
+    - 으로
+    - 로
+    - 와
+    - 과
+    - 랑
+    - 이랑
+    - 도
+    - 만
+    - 부터
+    - 까지
+  honorific:
+    - 님
+    - 씨
+    - 군
+    - 양
+  ending:
+    - 입니다
+    - 였습니다
+    - 입니다.
+    - 입니다,
+    - 라고
+    - 라는
+    - 하고
+entity_application:
+  PERSON_NAME: [josa, honorific]
+  ADDRESS_FULL: [josa]
+  ADDRESS_UNIT: [josa]
+  ORGANIZATION: [josa]
+  SCHOOL: [josa]
+  HOSPITAL: [josa]
+  PHONE_MOBILE: [josa, ending]
+  PHONE_LANDLINE: [josa, ending]
+  EMAIL: [josa, ending]
+  BANK_ACCOUNT: [josa, ending]
+  RRN: [josa, ending]
+  FRN: [josa, ending]
+  CREDIT_CARD: [josa, ending]

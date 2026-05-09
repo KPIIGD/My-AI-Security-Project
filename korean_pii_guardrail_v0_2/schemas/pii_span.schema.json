@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/pii_span.schema.json",
+  "title": "PublicPIISpan",
+  "type": "object",
+  "required": [
+    "start",
+    "end",
+    "span_length",
+    "entity_type",
+    "score",
+    "risk_level",
+    "action",
+    "sources",
+    "reason_codes",
+    "raw_value_logged"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "start": { "type": "integer", "minimum": 0 },
+    "end": { "type": "integer", "minimum": 0 },
+    "span_length": { "type": "integer", "minimum": 0 },
+    "entity_type": {
+      "type": "string",
+      "enum": [
+        "RRN", "FRN", "PASSPORT", "DRIVER_LICENSE", "PHONE_MOBILE", "PHONE_LANDLINE",
+        "EMAIL", "CREDIT_CARD", "BANK_ACCOUNT", "BUSINESS_REG_NO", "CORPORATE_REG_NO",
+        "VEHICLE_REG_NO", "PERSON_NAME", "ALIAS_HANDLE", "ADDRESS_FULL", "ADDRESS_UNIT",
+        "ORGANIZATION", "SCHOOL", "HOSPITAL", "DOB", "AGE", "GENDER", "CUSTOMER_ID",
+        "EMPLOYEE_ID", "STUDENT_ID", "MEDICAL_RECORD_NO", "FAMILY_RELATION", "HEALTH_INFO",
+        "IP_ADDRESS", "MAC_ADDRESS", "DEVICE_ID", "API_KEY_SECRET", "COMBINED_QUASI_ID"
+      ]
+    },
+    "score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "risk_level": { "type": "string", "enum": ["P0", "P1", "P2", "P3"] },
+    "action": { "type": "string", "enum": ["candidate", "pass", "mask", "pseudonymize", "hash", "review", "block"] },
+    "suffix": { "type": ["string", "null"] },
+    "is_composite": { "type": "boolean", "default": false },
+    "sources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "detector_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "value_hash": { "type": ["string", "null"] },
+    "raw_value_logged": { "type": "boolean", "const": false }
+  }
+}
