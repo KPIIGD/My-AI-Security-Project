@@ -18,10 +18,18 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      presidio-analyzer:
+        condition: service_healthy
+      presidio-anonymizer:
+        condition: service_healthy
     ports:
       - "4000:4000"
     volumes:
       - C:\litellm:/app/config
+      - C:\litellm\korean_layer0_guardrail.py:/app/korean_layer0_guardrail.py
+      - C:\litellm\korean_normalizer.py:/app/korean_normalizer.py
+      - C:\litellm\korean_pii_detector.py:/app/korean_pii_detector.py
+      - C:\litellm\custom_guardrail.py:/app/custom_guardrail.py
     environment:
       # ── DB ──
       DATABASE_URL: postgresql://llmproxy:dbpass123@db:5432/litellm
@@ -80,6 +88,26 @@ services:
   #     interval: 10s
   #     timeout: 5s
   #     retries: 5
+
+  presidio-analyzer:
+    image: mcr.microsoft.com/presidio-analyzer:latest
+    ports:
+      - "5002:3000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3000/health', timeout=5).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  presidio-anonymizer:
+    image: mcr.microsoft.com/presidio-anonymizer:latest
+    ports:
+      - "5001:3000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3000/health', timeout=5).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:

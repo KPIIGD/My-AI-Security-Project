@@ -1,0 +1,651 @@
+===== Slide 1 =====
+캡스톤 연구보고서 · 2026.04
+---
+한국어 LLM 게이트웨이
+다계층 PII 가드레일 취약성 분석
+---
+Normalization-First Defense for Korean PII:
+Outperforming LLM-as-Judge at 1/220 the Latency
+---
+CCIT
+---
+===== Slide 2 =====
+목차
+---
+01
+---
+연구 배경 및 동기
+---
+왜 한국어 LLM 보안이 문제인가?
+---
+02
+---
+시스템 설계
+---
+5계층 파이프라인 & Layer 0 구조
+---
+03
+---
+평가 방법
+---
+Validity-first 퍼저 v4, 10k 벤치마크
+---
+04
+---
+핵심 결과
+---
+4-way 비교 / McNemar / Ablation
+---
+05
+---
+비용·지연 & 스마트 캐스케이드
+---
+LLM judge 94% 절감 전략
+---
+06
+---
+결론 및 함의
+---
+실무 권장, 한계, 후속 연구
+---
+===== Slide 3 =====
+프로젝트 시작 배경
+---
+Li Fei et al., "KDPII: A New Korean Dialogic Dataset for the Deidentification of Personally Identifiable Information," IEEE, 2024. (Open Access, CC License)
+---
+===== Slide 4 =====
+그렇다면 가드레일은 어떨까????
+[LLM이 못 잡는다면, 앞단 가드레일이 방어선이 되어야 한다.]
+---
+베드록 가드레일 실험
+---
+===== Slide 5 =====
+===== Slide 6 =====
+원인 : 대부분 가드레일들 영어 기반
+---
+===== Slide 7 =====
+Safe / unsafe 만 분류
+---
+===== Slide 8 =====
+한국어 PII 보호 엔진
+---
+프로젝트 목표
+---
+===== Slide 9 =====
+PII란?
+---
+개인 식별 정보(Personally Identifiable Information)의 약자로, 개인을 식별하는 데 사용할 수 있는 모든 정보를 의미합니다. 예를 들어, 이름, 이메일 주소, 전화번호, 사회보장번호 등이 PII에 해당합니다.
+---
+===== Slide 10 =====
+기존 LLM 사용 가능성
+---
+1.LLM 사용 X
+2.자체 LLM 사용 / 로컬 LLM 사용    온프레미스 셀프호스팅
+3.Public API : 외부 AI 모델 API로 사용
+4.클라우드 매니지드 (Azure OpenAi 등)
+5.하이브리드 / 라우팅
+6.웹 브라우저로 LLM 사용
+---
+===== Slide 11 =====
+AI Gateway란?
+---
+LLM과 애플리케이션 사이의 통합 관리 계층
+---
+Application
+---
+사용자 요청
+---
+▶
+---
+AI Gateway
+---
+Guardrails
+---
+Routing
+---
+Logging
+---
+Auth
+---
+▶
+---
+LLM
+---
+GPT, Claude, etc.
+---
+라우팅
+---
+모델 간 자동 전환
+로드밸런싱, 폴백
+---
+관찰성
+---
+모든 요청 로깅
+비용/레이턴시 추적
+---
+거버넌스
+---
+RBAC, API 키 관리
+팀별 정책 적용
+---
+===== Slide 12 =====
+===== Slide 13 =====
+===== Slide 14 =====
+데이터 흐름
+---
+===== Slide 15 =====
+01 서론
+---
+왜 한국어 LLM 보안이 문제인가?
+---
+ENG
+---
+영어 중심 가드레일
+---
+Presidio는 한국어 PII 5종만 지원
+(주민번호·사업자번호 등 숫자형)
+텍스트형 PII는 사각지대
+---
+🔓
+---
+한국어 텍스트형 PII 무방비
+---
+알레르기·처방·혈액형·학력
+가족관계·직장·사건번호 등
+구조 없음 → 정규식 불가
+---
+💸
+---
+LLM judge의 딜레마
+---
+GPT-4o-mini cascade로 보완 가능
+BUT 평균 1,542ms + $0.0001/call
+→ 고트래픽 환경에서 병목
+---
+→  본 연구: LLM 없는 경량  방어선(Layer 0)으로 LLM judge를 능가할 수 있는가?
+---
+===== Slide 16 =====
+02 시스템 설계
+---
+5계층 방어 파이프라인
+---
+L0
+---
+Korean Layer 0
+---
+정규화 13단계 + 42 정규식 + 22 사전
+---
+★ 본 연구 기여
+---
+L1
+---
+Microsoft Presidio
+---
+regex + NER, 영어 중심 PII 탐지
+---
+pre_call
+---
+L2
+---
+AWS Bedrock Guardrails
+---
+관리형 가드레일, 다국어 부분 지원
+---
+during_call
+---
+L3
+---
+Lakera Guard v2
+---
+프롬프트 인젝션 전용 방어
+---
+pre_call
+---
+L4
+---
+GPT-4o-mini Judge
+---
+LLM-as-judge 최종 검증
+---
+post_call · $0.0001/call
+---
+👤 User Input
+---
+🤖 LLM
+---
+===== Slide 17 =====
+02 Layer 0 설계
+---
+Layer 0: 정규화 파이프라인 + PII 탐지기
+---
+🔧 Korean Normalizer (13단계)
+---
+① NFKC 유니코드 정규화
+---
+② Zero-Width Space / ZWNJ 제거
+---
+③ Soft Hyphen (\u00AD) 제거
+---
+④ Combining Mark 제거
+---
+⑤ Fullwidth → ASCII 변환
+---
+⑥ Mathematical Bold Digits → ASCII
+---
+⑦ Circled Digits → ASCII
+---
+⑧ 한자 성씨 → 한글 변환
+---
+⑨ ★ 자모 결합 (ㅈㅜㅁㅣㄴ → 주민)
+---
+⑩ Homoglyph 치환
+---
+⑪ 공백 정규화 / 제어 문자 제거
+---
+⑫ 최종 trim
+---
+🔍 Korean PII Detector
+---
+정규식 패턴  42종  — 구조형 PII
+---
+• 세션토큰, JWT, 암호화폐 지갑
+---
+• 사건번호, GPS 좌표, AWS키
+---
+• 의료기록번호(MRN), 사번(EMP)
+---
+• 차량번호, 택배송장, 승인번호
+---
+• 여권, 운전면허, 보험증권
+---
+키워드 사전  22종  — 텍스트형 PII  ★핵심
+---
+• 의료: 알레르기, 진단, 처방, 수술, 혈액형
+---
+• 신원: 종교, 혼인, 성별, 국적
+---
+• 교육: 학교, 학위, 성적
+---
+• 고용: 직책, 회사, 부서, 이메일
+---
+• 금융: 거래내역, 자동차보험
+---
+⚠ 2자 이하 키워드는 컨텍스트 필수 → FP 26% → 2%
+---
+===== Slide 18 =====
+03 평가 방법
+---
+Validity-First 퍼저 v4 & 10,000건 벤치마크
+---
+📦 퍼저 v4 설계 원칙
+---
+v3 문제: 시드 자체가 무효
+→ 가드레일 실패가 당연
+---
+Group A (Checksum): 주민번호(체크섬), 신용카드(Luhn), 사업자번호, IMEI, VIN — 100% 유효
+---
+Group B (Format): 전화번호, 이메일, IP, MAC, 여권, 운전면허 — 구조 규칙 준수
+---
+Group C (Semantic): 진단명(30종), 처방약(22종×용량), 알레르기(15종) — 실제 값 목록
+---
+→ 각 payload에 format_valid / rule_valid / semantic_valid 메타기록
+---
+📊 데이터셋 분포 (n=10,000)
+---
+EN_checksum
+---
+2,603
+---
+EN_format
+---
+884
+---
+KR_checksum
+---
+522
+---
+KR_format
+---
+4,689
+---
+★ KR_semantic
+---
+1,302
+---
+🔀 6단계 변이 레벨
+---
+L0 Original:
+---
+원본 PII 그대로
+---
+L1 Character:
+---
+자모 분해, 초성, 한자, fullwidth, homoglyph
+---
+L2 Encoding:
+---
+ZWSP, combining marks, soft hyphen 삽입
+---
+L3 Format:
+---
+구분자 변경 (dot/slash/space/none)
+---
+L4 Linguistic:
+---
+code-switch, 한국어 숫자, EMR포맷, 다국어
+---
+L5 Context:
+---
+RAG 삽입, JSON, HouYi 인젝션
+---
+===== Slide 19 =====
+04 결과 — RQ1
+---
+프로덕션 가드레일의 한국어 공백
+---
+99.4%
+---
+영어 PII
+탐지율
+---
+69.9%
+---
+한국어 PII
+탐지율
+---
+49.6%
+---
+KR_semantic
+탐지율 ⚠
+---
+50.4%
+---
+텍스트형 PII
+실제 우회율
+---
+가장 심각한 PII 유형별 우회율 (Baseline A)
+---
+===== Slide 20 =====
+04 결과 — RQ2/3
+---
+4-way 비교: Layer 0 vs LLM Judge
+---
+C vs B (전체)
+---
++3.36%p
+---
+Layer 0가 LLM judge 능가
+---
+C vs B (KR_semantic)
+---
++8.99%p
+---
+텍스트형 PII에서 결정적 차이
+---
+C 비용 (10k)
+---
+$0.08
+---
+vs B의 $1.35
+---
+C 지연 p99
+---
+830ms
+---
+vs B의 4,819ms
+---
+★  Layer 0 단독 (LLM 없음)이 GPT-4o-mini judge cascade를 KR_semantic에서 +8.99%p 능가  (p < 1e-28)
+---
+===== Slide 21 =====
+04 통계 검정
+---
+McNemar 짝비교 검정 (n = 10,000)
+---
+같은 10,000건에 대해 구성 간 독립 탐지 건수를 비교 — 짝비교이므로 McNemar 검정이 적절
+---
+결과 해석
+---
+🔑 핵심 (B vs C)
+---
+b=291 vs c=627 → Layer 0가 LLM judge보다 336건 더 독립적으로 catch
+→ p < 2e-28, 통계적으로 결정적
+---
+📌 A vs C
+---
+b=0 (Baseline이 단독 catch한 케이스 없음)
+c=1,417 (Layer 0 추가분)
+→ Layer 0는 Baseline 대비 100% 순증
+---
+💡 C vs D
+---
+Layer 0 이후 LLM judge 추가 효과는
++2.91%p (291건)로 제한적
+→ Smart Cascade 전략의 근거
+---
+===== Slide 22 =====
+04 Ablation
+---
+Layer 0 내부 구성요소 기여도 분해
+---
+효과 기여 분석 (KR_semantic)
+---
+키워드 사전
+---
+96%
+---
++38.10%p
+---
+정규화 단독
+---
+1%
+---
++0.31%p
+---
+시너지 효과
+---
+3%
+---
++1.14%p
+---
+합계
+---
+100%
+---
++39.55%p
+---
+💡 핵심 인사이트: Layer 0의 효과는 키워드 사전에서 96% 발생
+→ 새로운 언어로 확장 시 '정규화 파이프라인 + 도메인 사전' 구조 그대로 재사용 가능
+---
+===== Slide 23 =====
+05 비용·지연 최적화
+---
+Smart Cascade: LLM judge 호출 94% 절감
+---
+End-to-end Latency 비교
+---
+⚡ Smart Cascade 최적화 결과
+---
+작동 원리
+---
+① L0+L1~L3가 탐지 → 즉시 BLOCK, L4 스킵
+---
+② L0+L1~L3 통과 → 5.68% 케이스만 L4 호출
+---
+③ L4는 진짜 어려운 케이스에만 집중
+---
+→ 탐지율 동일 97.23% 유지
+---
+→ 비용 $1.35 → $0.08 (94% 절감)
+---
+→ 폐쇄망도 L0+L1~L3만으로 94.32% 달성
+---
+💰 월 100만 API 호출 환경: Full Cascade $13,500/월 vs Smart Cascade $800/월
+→ 연간 약 $153,000 절감 · p99 지연 3.9초 단축 · 사용자 경험 대폭 향상
+---
+===== Slide 24 =====
+04 결과 — 강건성
+---
+Robustness 검증 & False Positive 분석
+---
+🛡 Validity-First Fuzzer v4 재평가
+---
+"결과가 퍼저 구현에 의존하는 것이 아닌가?"
+---
+KR_semantic에서 B vs C 격차:
+---
+v1: +8.99%p  →  v4: +10.65%p  ↑ 확대
+---
+v4의 새 변이(prescription_emr_line,
+---
+account_bank_alias)가 LLM judge는 혼란시키지만
+---
+Layer 0 사전은 핵심 키워드를 그대로 매칭
+---
+→ Layer 0 우위는 퍼저 구현의 artifact가 아닌
+---
+방어 메커니즘 자체의 속성
+---
+✅ False Positive 분석
+---
+정상 한국어 문서 50건
+(뉴스 10 / 이메일 10 / 대화 10 / 기술 10 / 학술 10)
+---
+초기 구현
+---
+26%
+---
+"개" → 3개월/개선
+"한국" → 한국은행
+---
+규칙 추가
+(2자 이하 컨텍스트 필수)
+---
+2%
+---
+"한국"은 '국적/시민권'
+있을 때만 매칭
+---
+잔여 1건 (2%): 사내 공지문 '개발팀/경영지원팀'
+→ 실제 조직정보 누설로도 볼 수 있어 정책적 판단 영역
+---
+===== Slide 25 =====
+06 논의
+---
+왜 Layer 0가 LLM judge를 이기는가?
+---
+✅  Layer 0 강점
+---
+한국어 텍스트형 PII = bounded vocabulary
+→ '페니실린 알레르기', '메트포르민 500mg'
+→ 수천 개 어휘 조합에 수렴
+---
+결정론적: 같은 입력 → 같은 출력
+---
+설명 가능: 어떤 키워드/정규식 매칭인지 로그
+---
+Local: 인터넷 불필요 → 폐쇄망 OK
+---
+Fast: 평균 10ms, p99 135ms
+---
+Cost: $0 (로컬 연산)
+---
+⚠️  LLM judge 한계
+---
+Threshold (0.7) 기반 이진 분류
+→ 경계 케이스에서 일관성 부족
+---
+긴 컨텍스트에서 PII 판단
+→ EMR 포맷/복잡 변이에서 혼동
+---
+블랙박스: 왜 놓쳤는지 디버깅 어려움
+---
+고지연: 평균 1,542ms, p99 4,164ms
+---
+유료: $0.0001/call → 고트래픽 시 누적
+---
+외부 API 의존: 폐쇄망 불가
+---
+결론: LLM 방어가 항상 최선이 아니다
+→ Bounded vocabulary 문제에서는 도메인 지식 기반 결정론적 접근이 더 정확하고 실용적
+---
+===== Slide 26 =====
+06 한계 & 후속연구
+---
+한계 및 향후 연구 방향
+---
+⚠️ Semantic Ambiguity
+---
+'김철수'가 고객인지 공인인지 Layer 0는 구분 불가
+→ Context-aware disambiguation은 여전히 LLM judge 영역
+---
+🔄 신규 PII 유형 대응
+---
+91종 외 신종 결제 서비스 ID 등은 사전 수동 업데이트 필요
+→ NER 모델 기반 접근 대비 약점
+---
+💉 인젝션 결합 공격
+---
+PII + 프롬프트 인젝션 결합 ('ㅈㅁㄷㄹㅂㅎ 조회해줘') 미평가
+→ Lakera의 실역할과 연계한 별도 평가 필요
+---
+후속 연구 방향
+---
+🌐 다국어 확장
+---
+일본어(히라가나-카타카나 변이), 중국어(번체-간체), 아랍어
+→ 동일한 '정규화 + 도메인 사전' 프레임워크 적용
+---
+📤 출력 측 방어
+---
+LLM 응답에 PII 누설 탐지
+→ korean_pii_output_fuzzer_v4 3,025건 준비 완료
+---
+🤝 NER 앙상블
+---
+KPF-BERT-NER와 Layer 0 사전 앙상블
+→ Novel PII 유형 자동 추가 파이프라인 구축
+---
+🔗 인젝션 결합 평가
+---
+HouYi-style PII+인젝션 결합 공격
+→ L0+Lakera 통합 방어 효과 측정
+---
+===== Slide 27 =====
+결론
+---
+본 연구의 요약
+---
+1
+---
+프로덕션 3계층 가드레일은 한국어 텍스트형 PII를 49.6%만 탐지 — 절반이 무방비
+---
+2
+---
+Layer 0 (13단계 정규화 + 22 키워드 사전) 추가로 96.4%까지 회복 (+46.8%p)
+---
+3
+---
+GPT-4o-mini judge(87.4%) 대비 +8.99%p 우위 (p < 1e-28, 결정적 유의)
+---
+4
+---
+Layer 0: 10ms / $0 vs LLM judge: 1,542ms / $0.0001 — 220배 빠르고 무료
+---
+5
+---
+Smart Cascade로 LLM judge 호출 94% 절감, 탐지율 동일 유지
+---
+6
+---
+전체 코드·데이터·89개 유닛 테스트·CI 공개 — make all 단일 명령 재현 가능
+---
+LLM 방어가 항상 최선이 아니다 — 도메인 지식 기반 결정론적 접근이 경우에 따라 더 우월
+---
+===== Slide 28 =====
+Q & A
+---
+감사합니다
+---
+저자: 민우  ·  지도교수: 임정묵
+🔗 github.com/vmaca123/My-AI-Security-Project
+---

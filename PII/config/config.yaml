@@ -75,7 +75,7 @@ guardrails:
     litellm_params:
       guardrail: bedrock
       mode: "during_call"
-      guardrailIdentifier: "lwkm339ab127"
+      guardrailIdentifier: "3azzv16jyg32"
       guardrailVersion: "DRAFT"
       default_on: true
     environment_variables:

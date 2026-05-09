@@ -1,0 +1,39 @@
+{
+  "url": "https://your-samsung-sds-endpoint.example/v1/pii/guardrail",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer ${SAMSUNG_SDS_API_KEY}",
+    "Content-Type": "application/json"
+  },
+  "timeout_sec": 30,
+  "request_json": {
+    "text": "{{text}}"
+  },
+  "response_text_paths": [
+    "response_text",
+    "result.redactedText",
+    "data.outputText"
+  ],
+  "decision_paths": [
+    "blocked",
+    "result.action",
+    "result.decision"
+  ],
+  "blocked_values": [
+    true,
+    "BLOCK",
+    "BLOCKED",
+    "DENY",
+    "DENIED"
+  ],
+  "block_on_status_codes": [
+    400,
+    403,
+    406,
+    422
+  ],
+  "error_paths": [
+    "error.message",
+    "message"
+  ]
+}

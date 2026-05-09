@@ -1,0 +1,1479 @@
+{"kind":"deck","id":"capstone-midterm-20260424","slideCount":30,"slideSize":{"width":1280,"height":720}}
+{"kind":"slide","slide":1,"id":"r35k4f"}
+{"kind":"slide","slide":2,"id":"xgv3aq"}
+{"kind":"slide","slide":3,"id":"x1uyls"}
+{"kind":"slide","slide":4,"id":"wka5zd"}
+{"kind":"slide","slide":5,"id":"q7ue1b"}
+{"kind":"slide","slide":6,"id":"r6pamr"}
+{"kind":"slide","slide":7,"id":"4yadvl"}
+{"kind":"slide","slide":8,"id":"3ywu1i"}
+{"kind":"slide","slide":9,"id":"u3tlv3"}
+{"kind":"slide","slide":10,"id":"qdad1w"}
+{"kind":"slide","slide":11,"id":"d29ycc"}
+{"kind":"slide","slide":12,"id":"cq0j7v"}
+{"kind":"slide","slide":13,"id":"bi18qw"}
+{"kind":"slide","slide":14,"id":"gq4d1n"}
+{"kind":"slide","slide":15,"id":"6ylszh"}
+{"kind":"slide","slide":16,"id":"2lv93w"}
+{"kind":"slide","slide":17,"id":"a1ynkj"}
+{"kind":"slide","slide":18,"id":"qp3n58"}
+{"kind":"slide","slide":19,"id":"myfgly"}
+{"kind":"slide","slide":20,"id":"day8ik"}
+{"kind":"slide","slide":21,"id":"7nnhvq"}
+{"kind":"slide","slide":22,"id":"3u5bax"}
+{"kind":"slide","slide":23,"id":"qx2xc9"}
+{"kind":"slide","slide":24,"id":"4y8ofq"}
+{"kind":"slide","slide":25,"id":"xg45wm"}
+{"kind":"slide","slide":26,"id":"6yx8lw"}
+{"kind":"slide","slide":27,"id":"0gjom7"}
+{"kind":"slide","slide":28,"id":"4x3yns"}
+{"kind":"slide","slide":29,"id":"agiv5k"}
+{"kind":"slide","slide":30,"id":"qvjhdx"}
+{"kind":"shape","slide":1,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":1,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":1,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":1,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":1,"id":"6","role":"cover panel","shapeType":"roundRect","bbox":[64,86,610,556]}
+{"kind":"shape","slide":1,"id":"7","role":"cover accent","shapeType":"rect","bbox":[64,86,10,556]}
+{"kind":"shape","slide":1,"id":"8","role":"cover kicker","shapeType":"rect","bbox":[90,98,220,20]}
+{"kind":"textbox","slide":1,"id":"8","role":"cover kicker","text":"MIDTERM PRESENTATION","textChars":20,"textLines":1,"bbox":[90,98,220,20]}
+{"kind":"shape","slide":1,"id":"9","role":"cover title","shapeType":"rect","bbox":[92,134,520,160]}
+{"kind":"textbox","slide":1,"id":"9","role":"cover title","text":"한국어 LLM 게이트웨이에서\n계층형 PII 가드레일의 한계와 Layer 0 설계","textChars":44,"textLines":2,"bbox":[92,134,520,160]}
+{"kind":"shape","slide":1,"id":"10","role":"cover subtitle","shapeType":"rect","bbox":[94,314,520,54]}
+{"kind":"textbox","slide":1,"id":"10","role":"cover subtitle","text":"영어 중심 가드레일의 한국어 공백을 Layer 0 (L0)가 메운다","textChars":37,"textLines":1,"bbox":[94,314,520,54]}
+{"kind":"shape","slide":1,"id":"11","role":"bullet dot","shapeType":"ellipse","bbox":[96,410,8,8]}
+{"kind":"shape","slide":1,"id":"12","role":"cover bullets","shapeType":"rect","bbox":[116,400,488,44.8]}
+{"kind":"textbox","slide":1,"id":"12","role":"cover bullets","text":"영어는 이미 잘 막지만, 한국어 텍스트형 PII는 기존 스택에서 크게\n무너진다.","textChars":44,"textLines":2,"bbox":[116,400,488,44.8]}
+{"kind":"shape","slide":1,"id":"13","role":"bullet dot","shapeType":"ellipse","bbox":[96,466.8,8,8]}
+{"kind":"shape","slide":1,"id":"14","role":"cover bullets","shapeType":"rect","bbox":[116,456.8,488,44.8]}
+{"kind":"textbox","slide":1,"id":"14","role":"cover bullets","text":"L0는 한국어 입력을 먼저 정규화하고, 한국어 의미형 PII를 사전\n중심으로 보강한다.","textChars":48,"textLines":2,"bbox":[116,456.8,488,44.8]}
+{"kind":"shape","slide":1,"id":"15","role":"bullet dot","shapeType":"ellipse","bbox":[96,523.6,8,8]}
+{"kind":"shape","slide":1,"id":"16","role":"cover bullets","shapeType":"rect","bbox":[116,513.6,488,44.8]}
+{"kind":"textbox","slide":1,"id":"16","role":"cover bullets","text":"결과적으로 LLM Judge보다 더 빠르고 싸면서 한국어 의미형에서 더\n높은 탐지율을 보였다.","textChars":52,"textLines":2,"bbox":[116,513.6,488,44.8]}
+{"kind":"shape","slide":1,"id":"17","role":"cover footer","shapeType":"rect","bbox":[94,602,360,18]}
+{"kind":"textbox","slide":1,"id":"17","role":"cover footer","text":"2026.04  |  CCIT 통합전공 캡스톤 중간발표","textChars":30,"textLines":1,"bbox":[94,602,360,18]}
+{"kind":"shape","slide":1,"id":"18","role":"cover viz panel","shapeType":"roundRect","bbox":[720,86,496,556]}
+{"kind":"shape","slide":1,"id":"19","role":"cover node 사용자 입력","shapeType":"roundRect","bbox":[770,170,130,74]}
+{"kind":"shape","slide":1,"id":"20","role":"cover node label 사용자 입력","shapeType":"rect","bbox":[770,192,130,28]}
+{"kind":"textbox","slide":1,"id":"20","role":"cover node label 사용자 입력","text":"사용자 입력","textChars":6,"textLines":1,"bbox":[770,192,130,28]}
+{"kind":"shape","slide":1,"id":"21","role":"cover node Layer 0","shapeType":"roundRect","bbox":[934,170,130,74]}
+{"kind":"shape","slide":1,"id":"22","role":"cover node label Layer 0","shapeType":"rect","bbox":[934,192,130,28]}
+{"kind":"textbox","slide":1,"id":"22","role":"cover node label Layer 0","text":"Layer 0","textChars":7,"textLines":1,"bbox":[934,192,130,28]}
+{"kind":"shape","slide":1,"id":"23","role":"cover node L1~L3","shapeType":"roundRect","bbox":[1098,170,90,74]}
+{"kind":"shape","slide":1,"id":"24","role":"cover node label L1~L3","shapeType":"rect","bbox":[1098,192,90,28]}
+{"kind":"textbox","slide":1,"id":"24","role":"cover node label L1~L3","text":"L1~L3","textChars":5,"textLines":1,"bbox":[1098,192,90,28]}
+{"kind":"shape","slide":1,"id":"25","role":"cover node KR 의미형","shapeType":"roundRect","bbox":[770,324,130,74]}
+{"kind":"shape","slide":1,"id":"26","role":"cover node label KR 의미형","shapeType":"rect","bbox":[770,346,130,28]}
+{"kind":"textbox","slide":1,"id":"26","role":"cover node label KR 의미형","text":"KR 의미형","textChars":6,"textLines":1,"bbox":[770,346,130,28]}
+{"kind":"shape","slide":1,"id":"27","role":"cover node LLM judge","shapeType":"roundRect","bbox":[934,324,130,74]}
+{"kind":"shape","slide":1,"id":"28","role":"cover node label LLM judge","shapeType":"rect","bbox":[934,346,130,28]}
+{"kind":"textbox","slide":1,"id":"28","role":"cover node label LLM judge","text":"LLM judge","textChars":9,"textLines":1,"bbox":[934,346,130,28]}
+{"kind":"shape","slide":1,"id":"29","role":"cover node 외부 LLM","shapeType":"roundRect","bbox":[1098,324,90,74]}
+{"kind":"shape","slide":1,"id":"30","role":"cover node label 외부 LLM","shapeType":"rect","bbox":[1098,346,90,28]}
+{"kind":"textbox","slide":1,"id":"30","role":"cover node label 외부 LLM","text":"외부 LLM","textChars":6,"textLines":1,"bbox":[1098,346,90,28]}
+{"kind":"shape","slide":1,"id":"31","role":"flow arrow","shapeType":"rightArrow","bbox":[900,201,32,12]}
+{"kind":"shape","slide":1,"id":"32","role":"flow arrow","shapeType":"rightArrow","bbox":[1064,201,32,12]}
+{"kind":"shape","slide":1,"id":"33","role":"flow arrow","shapeType":"rightArrow","bbox":[900,355,32,12]}
+{"kind":"shape","slide":1,"id":"34","role":"flow arrow","shapeType":"rightArrow","bbox":[1064,355,32,12]}
+{"kind":"shape","slide":1,"id":"35","role":"cover metric label","shapeType":"rect","bbox":[762,464,120,18]}
+{"kind":"textbox","slide":1,"id":"35","role":"cover metric label","text":"핵심 숫자","textChars":5,"textLines":1,"bbox":[762,464,120,18]}
+{"kind":"shape","slide":1,"id":"36","role":"metric EN","shapeType":"roundRect","bbox":[758,492,132,114]}
+{"kind":"shape","slide":1,"id":"37","role":"metric accent EN","shapeType":"rect","bbox":[758,492,132,6]}
+{"kind":"shape","slide":1,"id":"38","role":"metric value EN","shapeType":"rect","bbox":[776,506,96,38]}
+{"kind":"textbox","slide":1,"id":"38","role":"metric value EN","text":"99.37%","textChars":6,"textLines":1,"bbox":[776,506,96,38]}
+{"kind":"shape","slide":1,"id":"39","role":"metric label EN","shapeType":"rect","bbox":[776,544,96,18]}
+{"kind":"textbox","slide":1,"id":"39","role":"metric label EN","text":"EN","textChars":2,"textLines":1,"bbox":[776,544,96,18]}
+{"kind":"shape","slide":1,"id":"40","role":"metric KR 의미형","shapeType":"roundRect","bbox":[902,492,146,114]}
+{"kind":"shape","slide":1,"id":"41","role":"metric accent KR 의미형","shapeType":"rect","bbox":[902,492,146,6]}
+{"kind":"shape","slide":1,"id":"42","role":"metric value KR 의미형","shapeType":"rect","bbox":[920,506,110,38]}
+{"kind":"textbox","slide":1,"id":"42","role":"metric value KR 의미형","text":"49.62%","textChars":6,"textLines":1,"bbox":[920,506,110,38]}
+{"kind":"shape","slide":1,"id":"43","role":"metric label KR 의미형","shapeType":"rect","bbox":[920,544,110,18]}
+{"kind":"textbox","slide":1,"id":"43","role":"metric label KR 의미형","text":"KR 의미형","textChars":6,"textLines":1,"bbox":[920,544,110,18]}
+{"kind":"shape","slide":1,"id":"44","role":"metric L0+기존스택","shapeType":"roundRect","bbox":[1062,492,126,114]}
+{"kind":"shape","slide":1,"id":"45","role":"metric accent L0+기존스택","shapeType":"rect","bbox":[1062,492,126,6]}
+{"kind":"shape","slide":1,"id":"46","role":"metric value L0+기존스택","shapeType":"rect","bbox":[1080,506,90,38]}
+{"kind":"textbox","slide":1,"id":"46","role":"metric value L0+기존스택","text":"96.39%","textChars":6,"textLines":1,"bbox":[1080,506,90,38]}
+{"kind":"shape","slide":1,"id":"47","role":"metric label L0+기존스택","shapeType":"rect","bbox":[1080,544,90,18]}
+{"kind":"textbox","slide":1,"id":"47","role":"metric label L0+기존스택","text":"L0+기존스택","textChars":7,"textLines":1,"bbox":[1080,544,90,18]}
+{"kind":"shape","slide":2,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":2,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":2,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":2,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":2,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":2,"id":"6","role":"header section","text":"개요","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":2,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":2,"id":"7","role":"header index","text":"02 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":2,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":2,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":2,"id":"9","role":"title","text":"한 장 요약","textChars":6,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":2,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":2,"id":"10","role":"subtitle","text":"발표 전체 결론을 먼저 보여주는 슬라이드","textChars":22,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":2,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,900,40]}
+{"kind":"shape","slide":2,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":2,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,866,22]}
+{"kind":"textbox","slide":2,"id":"13","role":"takeaway text","text":"영어는 이미 막지만, 한국어 텍스트형 PII는 기존 가드레일에서 큰 공백이 남는다.","textChars":46,"textLines":1,"bbox":[94,169,866,22]}
+{"kind":"shape","slide":2,"id":"14","role":"metric 영어 TRUE 탐지율","shapeType":"roundRect","bbox":[92,258,326,170]}
+{"kind":"shape","slide":2,"id":"15","role":"metric accent 영어 TRUE 탐지율","shapeType":"rect","bbox":[92,258,326,6]}
+{"kind":"shape","slide":2,"id":"16","role":"metric value 영어 TRUE 탐지율","shapeType":"rect","bbox":[110,276,290,52]}
+{"kind":"textbox","slide":2,"id":"16","role":"metric value 영어 TRUE 탐지율","text":"99.37%","textChars":6,"textLines":1,"bbox":[110,276,290,52]}
+{"kind":"shape","slide":2,"id":"17","role":"metric label 영어 TRUE 탐지율","shapeType":"rect","bbox":[110,332,290,30]}
+{"kind":"textbox","slide":2,"id":"17","role":"metric label 영어 TRUE 탐지율","text":"영어 TRUE 탐지율","textChars":11,"textLines":1,"bbox":[110,332,290,30]}
+{"kind":"shape","slide":2,"id":"18","role":"metric note 영어 TRUE 탐지율","shapeType":"rect","bbox":[110,400,290,18]}
+{"kind":"textbox","slide":2,"id":"18","role":"metric note 영어 TRUE 탐지율","text":"기준선 A","textChars":5,"textLines":1,"bbox":[110,400,290,18]}
+{"kind":"shape","slide":2,"id":"19","role":"metric 한국어 의미형 TRUE 탐지율","shapeType":"roundRect","bbox":[478,258,326,170]}
+{"kind":"shape","slide":2,"id":"20","role":"metric accent 한국어 의미형 TRUE 탐지율","shapeType":"rect","bbox":[478,258,326,6]}
+{"kind":"shape","slide":2,"id":"21","role":"metric value 한국어 의미형 TRUE 탐지율","shapeType":"rect","bbox":[496,276,290,52]}
+{"kind":"textbox","slide":2,"id":"21","role":"metric value 한국어 의미형 TRUE 탐지율","text":"49.62%","textChars":6,"textLines":1,"bbox":[496,276,290,52]}
+{"kind":"shape","slide":2,"id":"22","role":"metric label 한국어 의미형 TRUE 탐지율","shapeType":"rect","bbox":[496,332,290,30]}
+{"kind":"textbox","slide":2,"id":"22","role":"metric label 한국어 의미형 TRUE 탐지율","text":"한국어 의미형 TRUE 탐지율","textChars":16,"textLines":1,"bbox":[496,332,290,30]}
+{"kind":"shape","slide":2,"id":"23","role":"metric note 한국어 의미형 TRUE 탐지율","shapeType":"rect","bbox":[496,400,290,18]}
+{"kind":"textbox","slide":2,"id":"23","role":"metric note 한국어 의미형 TRUE 탐지율","text":"기준선 A","textChars":5,"textLines":1,"bbox":[496,400,290,18]}
+{"kind":"shape","slide":2,"id":"24","role":"metric L0 적용 후 의미형","shapeType":"roundRect","bbox":[864,258,326,170]}
+{"kind":"shape","slide":2,"id":"25","role":"metric accent L0 적용 후 의미형","shapeType":"rect","bbox":[864,258,326,6]}
+{"kind":"shape","slide":2,"id":"26","role":"metric value L0 적용 후 의미형","shapeType":"rect","bbox":[882,276,290,52]}
+{"kind":"textbox","slide":2,"id":"26","role":"metric value L0 적용 후 의미형","text":"96.39%","textChars":6,"textLines":1,"bbox":[882,276,290,52]}
+{"kind":"shape","slide":2,"id":"27","role":"metric label L0 적용 후 의미형","shapeType":"rect","bbox":[882,332,290,30]}
+{"kind":"textbox","slide":2,"id":"27","role":"metric label L0 적용 후 의미형","text":"L0 적용 후 의미형","textChars":11,"textLines":1,"bbox":[882,332,290,30]}
+{"kind":"shape","slide":2,"id":"28","role":"metric note L0 적용 후 의미형","shapeType":"rect","bbox":[882,400,290,18]}
+{"kind":"textbox","slide":2,"id":"28","role":"metric note L0 적용 후 의미형","text":"C = L0 + 기존 스택","textChars":14,"textLines":1,"bbox":[882,400,290,18]}
+{"kind":"shape","slide":2,"id":"29","role":"summary conclusions","shapeType":"roundRect","bbox":[92,470,1098,156]}
+{"kind":"shape","slide":2,"id":"30","role":"bullet dot","shapeType":"ellipse","bbox":[118,506,8,8]}
+{"kind":"shape","slide":2,"id":"31","role":"summary bullets","shapeType":"rect","bbox":[138,496,1022,25.599999999999998]}
+{"kind":"textbox","slide":2,"id":"31","role":"summary bullets","text":"영어는 기준선만으로 99.37%를 기록했지만, 한국어 의미형 PII는 49.62%에 머물렀다.","textChars":52,"textLines":1,"bbox":[138,496,1022,25.599999999999998]}
+{"kind":"shape","slide":2,"id":"32","role":"bullet dot","shapeType":"ellipse","bbox":[118,545.6,8,8]}
+{"kind":"shape","slide":2,"id":"33","role":"summary bullets","shapeType":"rect","bbox":[138,535.6,1022,25.599999999999998]}
+{"kind":"textbox","slide":2,"id":"33","role":"summary bullets","text":"Layer 0를 기존 스택 앞단에 붙이면 한국어 의미형이 96.39%까지 올라가 LLM Judge보다 높았다.","textChars":61,"textLines":1,"bbox":[138,535.6,1022,25.599999999999998]}
+{"kind":"shape","slide":2,"id":"34","role":"bullet dot","shapeType":"ellipse","bbox":[118,585.2,8,8]}
+{"kind":"shape","slide":2,"id":"35","role":"summary bullets","shapeType":"rect","bbox":[138,575.2,1022,25.599999999999998]}
+{"kind":"textbox","slide":2,"id":"35","role":"summary bullets","text":"그리고 p99 지연 830ms, L4 호출 94.32% 절감으로 Judge 대비 더 실용적인 운영 구성이 가능했다.","textChars":64,"textLines":1,"bbox":[138,575.2,1022,25.599999999999998]}
+{"kind":"shape","slide":3,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":3,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":3,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":3,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":3,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":3,"id":"6","role":"header section","text":"개요","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":3,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":3,"id":"7","role":"header index","text":"03 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":3,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":3,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":3,"id":"9","role":"title","text":"목차","textChars":2,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":3,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":3,"id":"10","role":"subtitle","text":"문제에서 운영성까지 한 흐름으로 간다","textChars":20,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":3,"id":"11","role":"agenda 01","shapeType":"roundRect","bbox":[120,192,1040,68]}
+{"kind":"shape","slide":3,"id":"12","role":"metric ","shapeType":"roundRect","bbox":[120,192,120,68]}
+{"kind":"shape","slide":3,"id":"13","role":"metric accent ","shapeType":"rect","bbox":[120,192,120,6]}
+{"kind":"shape","slide":3,"id":"14","role":"metric value ","shapeType":"rect","bbox":[138,204,84,28]}
+{"kind":"textbox","slide":3,"id":"14","role":"metric value ","text":"01","textChars":2,"textLines":1,"bbox":[138,204,84,28]}
+{"kind":"shape","slide":3,"id":"15","role":"agenda title 01","shapeType":"rect","bbox":[270,210,220,24]}
+{"kind":"textbox","slide":3,"id":"15","role":"agenda title 01","text":"문제 정의","textChars":5,"textLines":1,"bbox":[270,210,220,24]}
+{"kind":"shape","slide":3,"id":"16","role":"agenda desc 01","shapeType":"rect","bbox":[510,212,580,20]}
+{"kind":"textbox","slide":3,"id":"16","role":"agenda desc 01","text":"왜 한국어가 영어보다 더 취약한가","textChars":18,"textLines":1,"bbox":[510,212,580,20]}
+{"kind":"shape","slide":3,"id":"17","role":"agenda 02","shapeType":"roundRect","bbox":[120,272,1040,68]}
+{"kind":"shape","slide":3,"id":"18","role":"metric ","shapeType":"roundRect","bbox":[120,272,120,68]}
+{"kind":"shape","slide":3,"id":"19","role":"metric accent ","shapeType":"rect","bbox":[120,272,120,6]}
+{"kind":"shape","slide":3,"id":"20","role":"metric value ","shapeType":"rect","bbox":[138,284,84,28]}
+{"kind":"textbox","slide":3,"id":"20","role":"metric value ","text":"02","textChars":2,"textLines":1,"bbox":[138,284,84,28]}
+{"kind":"shape","slide":3,"id":"21","role":"agenda title 02","shapeType":"rect","bbox":[270,290,220,24]}
+{"kind":"textbox","slide":3,"id":"21","role":"agenda title 02","text":"설계","textChars":2,"textLines":1,"bbox":[270,290,220,24]}
+{"kind":"shape","slide":3,"id":"22","role":"agenda desc 02","shapeType":"rect","bbox":[510,292,580,20]}
+{"kind":"textbox","slide":3,"id":"22","role":"agenda desc 02","text":"왜 Layer 0를 게이트웨이에 넣었는가","textChars":22,"textLines":1,"bbox":[510,292,580,20]}
+{"kind":"shape","slide":3,"id":"23","role":"agenda 03","shapeType":"roundRect","bbox":[120,352,1040,68]}
+{"kind":"shape","slide":3,"id":"24","role":"metric ","shapeType":"roundRect","bbox":[120,352,120,68]}
+{"kind":"shape","slide":3,"id":"25","role":"metric accent ","shapeType":"rect","bbox":[120,352,120,6]}
+{"kind":"shape","slide":3,"id":"26","role":"metric value ","shapeType":"rect","bbox":[138,364,84,28]}
+{"kind":"textbox","slide":3,"id":"26","role":"metric value ","text":"03","textChars":2,"textLines":1,"bbox":[138,364,84,28]}
+{"kind":"shape","slide":3,"id":"27","role":"agenda title 03","shapeType":"rect","bbox":[270,370,220,24]}
+{"kind":"textbox","slide":3,"id":"27","role":"agenda title 03","text":"평가","textChars":2,"textLines":1,"bbox":[270,370,220,24]}
+{"kind":"shape","slide":3,"id":"28","role":"agenda desc 03","shapeType":"rect","bbox":[510,372,580,20]}
+{"kind":"textbox","slide":3,"id":"28","role":"agenda desc 03","text":"왜 이 결과를 믿을 수 있는가","textChars":16,"textLines":1,"bbox":[510,372,580,20]}
+{"kind":"shape","slide":3,"id":"29","role":"agenda 04","shapeType":"roundRect","bbox":[120,432,1040,68]}
+{"kind":"shape","slide":3,"id":"30","role":"metric ","shapeType":"roundRect","bbox":[120,432,120,68]}
+{"kind":"shape","slide":3,"id":"31","role":"metric accent ","shapeType":"rect","bbox":[120,432,120,6]}
+{"kind":"shape","slide":3,"id":"32","role":"metric value ","shapeType":"rect","bbox":[138,444,84,28]}
+{"kind":"textbox","slide":3,"id":"32","role":"metric value ","text":"04","textChars":2,"textLines":1,"bbox":[138,444,84,28]}
+{"kind":"shape","slide":3,"id":"33","role":"agenda title 04","shapeType":"rect","bbox":[270,450,220,24]}
+{"kind":"textbox","slide":3,"id":"33","role":"agenda title 04","text":"결과","textChars":2,"textLines":1,"bbox":[270,450,220,24]}
+{"kind":"shape","slide":3,"id":"34","role":"agenda desc 04","shapeType":"rect","bbox":[510,452,580,20]}
+{"kind":"textbox","slide":3,"id":"34","role":"agenda desc 04","text":"4-way 비교와 한국어 의미형 핵심 결과","textChars":23,"textLines":1,"bbox":[510,452,580,20]}
+{"kind":"shape","slide":3,"id":"35","role":"agenda 05","shapeType":"roundRect","bbox":[120,512,1040,68]}
+{"kind":"shape","slide":3,"id":"36","role":"metric ","shapeType":"roundRect","bbox":[120,512,120,68]}
+{"kind":"shape","slide":3,"id":"37","role":"metric accent ","shapeType":"rect","bbox":[120,512,120,6]}
+{"kind":"shape","slide":3,"id":"38","role":"metric value ","shapeType":"rect","bbox":[138,524,84,28]}
+{"kind":"textbox","slide":3,"id":"38","role":"metric value ","text":"05","textChars":2,"textLines":1,"bbox":[138,524,84,28]}
+{"kind":"shape","slide":3,"id":"39","role":"agenda title 05","shapeType":"rect","bbox":[270,530,220,24]}
+{"kind":"textbox","slide":3,"id":"39","role":"agenda title 05","text":"운영성","textChars":3,"textLines":1,"bbox":[270,530,220,24]}
+{"kind":"shape","slide":3,"id":"40","role":"agenda desc 05","shapeType":"rect","bbox":[510,532,580,20]}
+{"kind":"textbox","slide":3,"id":"40","role":"agenda desc 05","text":"지연, 비용, cascade, FP, robustness","textChars":31,"textLines":1,"bbox":[510,532,580,20]}
+{"kind":"shape","slide":3,"id":"41","role":"agenda 06","shapeType":"roundRect","bbox":[120,592,1040,68]}
+{"kind":"shape","slide":3,"id":"42","role":"metric ","shapeType":"roundRect","bbox":[120,592,120,68]}
+{"kind":"shape","slide":3,"id":"43","role":"metric accent ","shapeType":"rect","bbox":[120,592,120,6]}
+{"kind":"shape","slide":3,"id":"44","role":"metric value ","shapeType":"rect","bbox":[138,604,84,28]}
+{"kind":"textbox","slide":3,"id":"44","role":"metric value ","text":"06","textChars":2,"textLines":1,"bbox":[138,604,84,28]}
+{"kind":"shape","slide":3,"id":"45","role":"agenda title 06","shapeType":"rect","bbox":[270,610,220,24]}
+{"kind":"textbox","slide":3,"id":"45","role":"agenda title 06","text":"중간발표 정리","textChars":7,"textLines":1,"bbox":[270,610,220,24]}
+{"kind":"shape","slide":3,"id":"46","role":"agenda desc 06","shapeType":"rect","bbox":[510,612,580,20]}
+{"kind":"textbox","slide":3,"id":"46","role":"agenda desc 06","text":"현재까지 증명한 것과 남은 과제","textChars":17,"textLines":1,"bbox":[510,612,580,20]}
+{"kind":"shape","slide":4,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":4,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":4,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":4,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":4,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":4,"id":"6","role":"header section","text":"문제","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":4,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":4,"id":"7","role":"header index","text":"04 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":4,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":4,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":4,"id":"9","role":"title","text":"프로젝트 시작 배경","textChars":10,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":4,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":4,"id":"10","role":"subtitle","text":"문제의 출발점은 한국어 PII 자체의 난도였다","textChars":25,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":4,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,900,40]}
+{"kind":"shape","slide":4,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":4,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,866,22]}
+{"kind":"textbox","slide":4,"id":"13","role":"takeaway text","text":"한국어 PII는 모델이 원래부터 어려워하는 영역이었고, 그 위에 영어 기반 가드레일이 다시 얹혀 있다.","textChars":57,"textLines":1,"bbox":[94,169,866,22]}
+{"kind":"shape","slide":4,"id":"14","role":"background text","shapeType":"roundRect","bbox":[72,232,448,326]}
+{"kind":"shape","slide":4,"id":"15","role":"bullet dot","shapeType":"ellipse","bbox":[96,270,8,8]}
+{"kind":"shape","slide":4,"id":"16","role":"background bullets","shapeType":"rect","bbox":[116,260,380,47.199999999999996]}
+{"kind":"textbox","slide":4,"id":"16","role":"background bullets","text":"KDPII는 한국어 대화형 PII 비식별화를 정면으로\n다룬 공개 연구다.","textChars":40,"textLines":2,"bbox":[116,260,380,47.199999999999996]}
+{"kind":"shape","slide":4,"id":"17","role":"bullet dot","shapeType":"ellipse","bbox":[96,331.2,8,8]}
+{"kind":"shape","slide":4,"id":"18","role":"background bullets","shapeType":"rect","bbox":[116,321.2,380,47.199999999999996]}
+{"kind":"textbox","slide":4,"id":"18","role":"background bullets","text":"해당 연구는 영어 범용 PII보다 한국어 특화 PII에서\n성능이 유의하게 낮음을 보여준다.","textChars":50,"textLines":2,"bbox":[116,321.2,380,47.199999999999996]}
+{"kind":"shape","slide":4,"id":"19","role":"bullet dot","shapeType":"ellipse","bbox":[96,392.4,8,8]}
+{"kind":"shape","slide":4,"id":"20","role":"background bullets","shapeType":"rect","bbox":[116,382.4,380,47.199999999999996]}
+{"kind":"textbox","slide":4,"id":"20","role":"background bullets","text":"즉, 한국어 LLM 보안 문제는 애초에 더 어려운 데이터\n분포에서 시작한다.","textChars":42,"textLines":2,"bbox":[116,382.4,380,47.199999999999996]}
+{"kind":"shape","slide":4,"id":"21","role":"background label","shapeType":"rect","bbox":[96,500,120,18]}
+{"kind":"textbox","slide":4,"id":"21","role":"background label","text":"논문 근거","textChars":5,"textLines":1,"bbox":[96,500,120,18]}
+{"kind":"shape","slide":4,"id":"22","role":"background citation","shapeType":"rect","bbox":[96,522,260,18]}
+{"kind":"textbox","slide":4,"id":"22","role":"background citation","text":"IEEE Access, KDPII (기존 PPT 자산 재활용)","textChars":34,"textLines":1,"bbox":[96,522,260,18]}
+{"kind":"shape","slide":4,"id":"23","role":"kdpii image panel","shapeType":"roundRect","bbox":[556,232,650,326]}
+{"kind":"shape","slide":4,"id":"24","role":"quote bar","shapeType":"roundRect","bbox":[556,576,650,70]}
+{"kind":"shape","slide":4,"id":"25","role":"KDPII quote","shapeType":"rect","bbox":[584,597,596,20]}
+{"kind":"textbox","slide":4,"id":"25","role":"KDPII quote","text":"KDPII: 주요 언어모델은 범용 PII보다 한국어 특화 PII 인식에서 더 낮은 성능을 보였다.","textChars":54,"textLines":1,"bbox":[584,597,596,20]}
+{"kind":"shape","slide":5,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":5,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":5,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":5,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":5,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":5,"id":"6","role":"header section","text":"문제","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":5,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":5,"id":"7","role":"header index","text":"05 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":5,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":5,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":5,"id":"9","role":"title","text":"그렇다면 가드레일은 어떨까?","textChars":15,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":5,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":5,"id":"10","role":"subtitle","text":"모델이 못 잡는다면, 게이트웨이 앞단 방어가 먼저 작동해야 한다","textChars":35,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":5,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,620,40]}
+{"kind":"shape","slide":5,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":5,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,586,22]}
+{"kind":"textbox","slide":5,"id":"13","role":"takeaway text","text":"모델이 못 잡으면 게이트웨이 앞단이 막아야 한다.","textChars":27,"textLines":1,"bbox":[94,169,586,22]}
+{"kind":"shape","slide":5,"id":"14","role":"guardrail question text","shapeType":"roundRect","bbox":[72,222,430,380]}
+{"kind":"shape","slide":5,"id":"15","role":"bullet dot","shapeType":"ellipse","bbox":[96,262,8,8]}
+{"kind":"shape","slide":5,"id":"16","role":"guardrail question bullets","shapeType":"rect","bbox":[116,252,362,47.199999999999996]}
+{"kind":"textbox","slide":5,"id":"16","role":"guardrail question bullets","text":"기업 환경에서는 사용자 입력이 외부 LLM으로 가기\n전에 게이트웨이를 통과한다.","textChars":44,"textLines":2,"bbox":[116,252,362,47.199999999999996]}
+{"kind":"shape","slide":5,"id":"17","role":"bullet dot","shapeType":"ellipse","bbox":[96,323.2,8,8]}
+{"kind":"shape","slide":5,"id":"18","role":"guardrail question bullets","shapeType":"rect","bbox":[116,313.2,362,47.199999999999996]}
+{"kind":"textbox","slide":5,"id":"18","role":"guardrail question bullets","text":"따라서 한국어 PII 보호 문제는 모델 성능뿐 아니라\n게이트웨이 방어 구조의 문제다.","textChars":47,"textLines":2,"bbox":[116,313.2,362,47.199999999999996]}
+{"kind":"shape","slide":5,"id":"19","role":"bullet dot","shapeType":"ellipse","bbox":[96,384.4,8,8]}
+{"kind":"shape","slide":5,"id":"20","role":"guardrail question bullets","shapeType":"rect","bbox":[116,374.4,362,47.199999999999996]}
+{"kind":"textbox","slide":5,"id":"20","role":"guardrail question bullets","text":"이 발표는 기존 가드레일 조합이 한국어에서 실제로\n얼마나 비는지부터 확인한다.","textChars":43,"textLines":2,"bbox":[116,374.4,362,47.199999999999996]}
+{"kind":"shape","slide":5,"id":"21","role":"no guardrail image frame","shapeType":"roundRect","bbox":[540,212,666,430]}
+{"kind":"shape","slide":6,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":6,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":6,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":6,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":6,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":6,"id":"6","role":"header section","text":"문제","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":6,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":6,"id":"7","role":"header index","text":"06 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":6,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":6,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":6,"id":"9","role":"title","text":"베드록 가드레일 실험","textChars":11,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":6,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":6,"id":"10","role":"subtitle","text":"정량보다 먼저, 직관적으로 한국어 텍스트형 PII를 놓치는 사례를 보여준다","textChars":41,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":6,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,520,40]}
+{"kind":"shape","slide":6,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":6,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,486,22]}
+{"kind":"textbox","slide":6,"id":"13","role":"takeaway text","text":"이름은 가렸지만 주민번호는 그대로 남았다.","textChars":23,"textLines":1,"bbox":[94,169,486,22]}
+{"kind":"shape","slide":6,"id":"14","role":"bedrock input frame","shapeType":"roundRect","bbox":[72,224,538,330]}
+{"kind":"shape","slide":6,"id":"15","role":"bedrock output frame","shapeType":"roundRect","bbox":[670,224,538,330]}
+{"kind":"shape","slide":6,"id":"16","role":"input label","shapeType":"rect","bbox":[94,234,80,20]}
+{"kind":"textbox","slide":6,"id":"16","role":"input label","text":"입력","textChars":2,"textLines":1,"bbox":[94,234,80,20]}
+{"kind":"shape","slide":6,"id":"17","role":"output label","shapeType":"rect","bbox":[692,234,80,20]}
+{"kind":"textbox","slide":6,"id":"17","role":"output label","text":"결과","textChars":2,"textLines":1,"bbox":[692,234,80,20]}
+{"kind":"shape","slide":6,"id":"18","role":"metric 하지만 주민번호는 그대로 통과","shapeType":"roundRect","bbox":[72,582,540,82]}
+{"kind":"shape","slide":6,"id":"19","role":"metric accent 하지만 주민번호는 그대로 통과","shapeType":"rect","bbox":[72,582,540,6]}
+{"kind":"shape","slide":6,"id":"20","role":"metric value 하지만 주민번호는 그대로 통과","shapeType":"rect","bbox":[90,594,504,28]}
+{"kind":"textbox","slide":6,"id":"20","role":"metric value 하지만 주민번호는 그대로 통과","text":"이름은 마스킹","textChars":7,"textLines":1,"bbox":[90,594,504,28]}
+{"kind":"shape","slide":6,"id":"21","role":"metric label 하지만 주민번호는 그대로 통과","shapeType":"rect","bbox":[90,622,504,16]}
+{"kind":"textbox","slide":6,"id":"21","role":"metric label 하지만 주민번호는 그대로 통과","text":"하지만 주민번호는 그대로 통과","textChars":16,"textLines":1,"bbox":[90,622,504,16]}
+{"kind":"shape","slide":6,"id":"22","role":"metric 숫자형·정규식형보다 더 취약한 영역","shapeType":"roundRect","bbox":[670,582,540,82]}
+{"kind":"shape","slide":6,"id":"23","role":"metric accent 숫자형·정규식형보다 더 취약한 영역","shapeType":"rect","bbox":[670,582,540,6]}
+{"kind":"shape","slide":6,"id":"24","role":"metric value 숫자형·정규식형보다 더 취약한 영역","shapeType":"rect","bbox":[688,594,504,28]}
+{"kind":"textbox","slide":6,"id":"24","role":"metric value 숫자형·정규식형보다 더 취약한 영역","text":"한국어 의미형 PII","textChars":11,"textLines":1,"bbox":[688,594,504,28]}
+{"kind":"shape","slide":6,"id":"25","role":"metric label 숫자형·정규식형보다 더 취약한 영역","shapeType":"rect","bbox":[688,622,504,16]}
+{"kind":"textbox","slide":6,"id":"25","role":"metric label 숫자형·정규식형보다 더 취약한 영역","text":"숫자형·정규식형보다 더 취약한 영역","textChars":19,"textLines":1,"bbox":[688,622,504,16]}
+{"kind":"shape","slide":7,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":7,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":7,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":7,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":7,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":7,"id":"6","role":"header section","text":"문제","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":7,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":7,"id":"7","role":"header index","text":"07 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":7,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":7,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":7,"id":"9","role":"title","text":"원인: 대부분 가드레일은 영어 기반","textChars":19,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":7,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":7,"id":"10","role":"subtitle","text":"문제의 핵심은 한국어 전체보다 한국어 의미형 PII 탐지 공백이다","textChars":36,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":7,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,900,40]}
+{"kind":"shape","slide":7,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":7,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,866,22]}
+{"kind":"textbox","slide":7,"id":"13","role":"takeaway text","text":"영어 중심 탐지, 한국어 숫자형 편중, 의미형 PII 탐지 공백이 겹친다.","textChars":41,"textLines":1,"bbox":[94,169,866,22]}
+{"kind":"shape","slide":7,"id":"14","role":"triple card 영어 중심 탐지","shapeType":"roundRect","bbox":[72,236,368,188]}
+{"kind":"shape","slide":7,"id":"15","role":"triple accent 영어 중심 탐지","shapeType":"rect","bbox":[72,236,10,188]}
+{"kind":"shape","slide":7,"id":"16","role":"triple title 영어 중심 탐지","shapeType":"rect","bbox":[96,260,328,28]}
+{"kind":"textbox","slide":7,"id":"16","role":"triple title 영어 중심 탐지","text":"영어 중심 탐지","textChars":8,"textLines":1,"bbox":[96,260,328,28]}
+{"kind":"shape","slide":7,"id":"17","role":"triple body 영어 중심 탐지","shapeType":"rect","bbox":[96,308,326,92]}
+{"kind":"textbox","slide":7,"id":"17","role":"triple body 영어 중심 탐지","text":"기존 기준선은 영어에서 99.37% TRUE\n탐지율을 기록한다.","textChars":35,"textLines":2,"bbox":[96,308,326,92]}
+{"kind":"shape","slide":7,"id":"18","role":"triple card 한국어 숫자형 위주","shapeType":"roundRect","bbox":[464,236,368,188]}
+{"kind":"shape","slide":7,"id":"19","role":"triple accent 한국어 숫자형 위주","shapeType":"rect","bbox":[464,236,10,188]}
+{"kind":"shape","slide":7,"id":"20","role":"triple title 한국어 숫자형 위주","shapeType":"rect","bbox":[488,260,328,28]}
+{"kind":"textbox","slide":7,"id":"20","role":"triple title 한국어 숫자형 위주","text":"한국어 숫자형 위주","textChars":10,"textLines":1,"bbox":[488,260,328,28]}
+{"kind":"shape","slide":7,"id":"21","role":"triple body 한국어 숫자형 위주","shapeType":"rect","bbox":[488,308,326,92]}
+{"kind":"textbox","slide":7,"id":"21","role":"triple body 한국어 숫자형 위주","text":"기존 스택은 주민번호·사업자번호 같은 체크섬·형식형\nPII에서 상대적으로 강하다.","textChars":45,"textLines":2,"bbox":[488,308,326,92]}
+{"kind":"shape","slide":7,"id":"22","role":"triple card 의미형 PII 탐지 공백","shapeType":"roundRect","bbox":[856,236,368,188]}
+{"kind":"shape","slide":7,"id":"23","role":"triple accent 의미형 PII 탐지 공백","shapeType":"rect","bbox":[856,236,10,188]}
+{"kind":"shape","slide":7,"id":"24","role":"triple title 의미형 PII 탐지 공백","shapeType":"rect","bbox":[880,260,328,28]}
+{"kind":"textbox","slide":7,"id":"24","role":"triple title 의미형 PII 탐지 공백","text":"의미형 PII 탐지 공백","textChars":13,"textLines":1,"bbox":[880,260,328,28]}
+{"kind":"shape","slide":7,"id":"25","role":"triple body 의미형 PII 탐지 공백","shapeType":"rect","bbox":[880,308,326,92]}
+{"kind":"textbox","slide":7,"id":"25","role":"triple body 의미형 PII 탐지 공백","text":"한국어 의미형 slice에서는 기준선 TRUE\n탐지율이 49.62%까지 떨어진다.","textChars":45,"textLines":2,"bbox":[880,308,326,92]}
+{"kind":"shape","slide":7,"id":"26","role":"root cause panel","shapeType":"roundRect","bbox":[72,468,1132,144]}
+{"kind":"shape","slide":7,"id":"27","role":"root cause label","shapeType":"rect","bbox":[98,492,120,18]}
+{"kind":"textbox","slide":7,"id":"27","role":"root cause label","text":"발표 해석","textChars":5,"textLines":1,"bbox":[98,492,120,18]}
+{"kind":"shape","slide":7,"id":"28","role":"bullet dot","shapeType":"ellipse","bbox":[98,526,8,8]}
+{"kind":"shape","slide":7,"id":"29","role":"root cause bullets","shapeType":"rect","bbox":[118,516,1048,24.4]}
+{"kind":"textbox","slide":7,"id":"29","role":"root cause bullets","text":"초기 소규모 탐색 표는 본문에서 빼고, 메인 논리는 10k 벤치마크 기준으로만 전개한다.","textChars":49,"textLines":1,"bbox":[118,516,1048,24.4]}
+{"kind":"shape","slide":7,"id":"30","role":"bullet dot","shapeType":"ellipse","bbox":[98,560.4,8,8]}
+{"kind":"shape","slide":7,"id":"31","role":"root cause bullets","shapeType":"rect","bbox":[118,550.4,1048,24.4]}
+{"kind":"textbox","slide":7,"id":"31","role":"root cause bullets","text":"따라서 이후 결과는 '한국어 전체'보다 '한국어 의미형 PII'를 중심으로 읽어야 한다.","textChars":49,"textLines":1,"bbox":[118,550.4,1048,24.4]}
+{"kind":"shape","slide":7,"id":"32","role":"bullet dot","shapeType":"ellipse","bbox":[98,594.8,8,8]}
+{"kind":"shape","slide":7,"id":"33","role":"root cause bullets","shapeType":"rect","bbox":[118,584.8,1048,24.4]}
+{"kind":"textbox","slide":7,"id":"33","role":"root cause bullets","text":"모델이 놓치는 입력은 게이트웨이 앞단의 Layer 0에서 먼저 보강한다.","textChars":40,"textLines":1,"bbox":[118,584.8,1048,24.4]}
+{"kind":"shape","slide":8,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":8,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":8,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":8,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":8,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":8,"id":"6","role":"header section","text":"설계","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":8,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":8,"id":"7","role":"header index","text":"08 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":8,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":8,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":8,"id":"9","role":"title","text":"연구 질문과 프로젝트 목표","textChars":14,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":8,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":8,"id":"10","role":"subtitle","text":"이번 발표에서는 목표를 '한국어 PII 보강 계층'으로 정직하게 정의한다","textChars":40,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":8,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,760,40]}
+{"kind":"shape","slide":8,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":8,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,726,22]}
+{"kind":"textbox","slide":8,"id":"13","role":"takeaway text","text":"보호 엔진 전체가 아니라 기존 스택 앞단의 한국어 보강 계층이 목표다.","textChars":39,"textLines":1,"bbox":[94,169,726,22]}
+{"kind":"shape","slide":8,"id":"14","role":"rq panel","shapeType":"roundRect","bbox":[72,238,550,354]}
+{"kind":"shape","slide":8,"id":"15","role":"rq1 label","shapeType":"rect","bbox":[98,266,60,20]}
+{"kind":"textbox","slide":8,"id":"15","role":"rq1 label","text":"RQ1","textChars":3,"textLines":1,"bbox":[98,266,60,20]}
+{"kind":"shape","slide":8,"id":"16","role":"rq1 title","shapeType":"rect","bbox":[98,296,480,46]}
+{"kind":"textbox","slide":8,"id":"16","role":"rq1 title","text":"왜 기존 가드레일은 영어 대비 한국어, 특히 한국어 의미형에서 크게 약한가?","textChars":42,"textLines":1,"bbox":[98,296,480,46]}
+{"kind":"shape","slide":8,"id":"17","role":"rq1 desc","shapeType":"rect","bbox":[98,350,480,56]}
+{"kind":"textbox","slide":8,"id":"17","role":"rq1 desc","text":"언어 차이 자체인지, 혹은 한국어 의미형 PII라는 어려운\nslice 때문인지 분리해서 확인한다.","textChars":54,"textLines":2,"bbox":[98,350,480,56]}
+{"kind":"shape","slide":8,"id":"18","role":"rq2 label","shapeType":"rect","bbox":[98,438,60,20]}
+{"kind":"textbox","slide":8,"id":"18","role":"rq2 label","text":"RQ2","textChars":3,"textLines":1,"bbox":[98,438,60,20]}
+{"kind":"shape","slide":8,"id":"19","role":"rq2 title","shapeType":"rect","bbox":[98,468,480,46]}
+{"kind":"textbox","slide":8,"id":"19","role":"rq2 title","text":"LLM Judge 대신 Layer 0가 더 싸고 빠르게 같은 공백을 메울 수 있는가?","textChars":47,"textLines":1,"bbox":[98,468,480,46]}
+{"kind":"shape","slide":8,"id":"20","role":"rq2 desc","shapeType":"rect","bbox":[98,522,480,40]}
+{"kind":"textbox","slide":8,"id":"20","role":"rq2 desc","text":"결과 비교뿐 아니라 지연, 비용, 스마트 캐스케이드까지 포함해\n실용성을 평가한다.","textChars":45,"textLines":2,"bbox":[98,522,480,40]}
+{"kind":"shape","slide":8,"id":"21","role":"goal panel","shapeType":"roundRect","bbox":[662,238,546,354]}
+{"kind":"shape","slide":8,"id":"22","role":"goal label","shapeType":"rect","bbox":[694,266,180,20]}
+{"kind":"textbox","slide":8,"id":"22","role":"goal label","text":"프로젝트 목표","textChars":7,"textLines":1,"bbox":[694,266,180,20]}
+{"kind":"shape","slide":8,"id":"23","role":"goal title","shapeType":"rect","bbox":[694,300,420,92]}
+{"kind":"textbox","slide":8,"id":"23","role":"goal title","text":"한국어 PII 보강 계층\nLayer 0 (L0)","textChars":26,"textLines":2,"bbox":[694,300,420,92]}
+{"kind":"shape","slide":8,"id":"24","role":"goal desc","shapeType":"rect","bbox":[694,412,442,92]}
+{"kind":"textbox","slide":8,"id":"24","role":"goal desc","text":"기존 L1~L3 스택을 유지한 채, 그 앞단에서\n한국어 입력을 먼저 정규화·탐지해 한국어 의미형\nPII 탐지 공백을 메우는 계층","textChars":71,"textLines":3,"bbox":[694,412,442,92]}
+{"kind":"shape","slide":8,"id":"25","role":"chip 발표 표기: L0","shapeType":"roundRect","bbox":[694,534,140,30]}
+{"kind":"shape","slide":8,"id":"26","role":"chip dot","shapeType":"ellipse","bbox":[706,544,10,10]}
+{"kind":"shape","slide":8,"id":"27","role":"chip label 발표 표기: L0","shapeType":"rect","bbox":[724,541,102,16]}
+{"kind":"textbox","slide":8,"id":"27","role":"chip label 발표 표기: L0","text":"발표 표기: L0","textChars":9,"textLines":1,"bbox":[724,541,102,16]}
+{"kind":"shape","slide":8,"id":"28","role":"chip 기존 스택 유지","shapeType":"roundRect","bbox":[850,534,150,30]}
+{"kind":"shape","slide":8,"id":"29","role":"chip dot","shapeType":"ellipse","bbox":[862,544,10,10]}
+{"kind":"shape","slide":8,"id":"30","role":"chip label 기존 스택 유지","shapeType":"rect","bbox":[880,541,112,16]}
+{"kind":"textbox","slide":8,"id":"30","role":"chip label 기존 스택 유지","text":"기존 스택 유지","textChars":8,"textLines":1,"bbox":[880,541,112,16]}
+{"kind":"shape","slide":9,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":9,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":9,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":9,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":9,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":9,"id":"6","role":"header section","text":"설계","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":9,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":9,"id":"7","role":"header index","text":"09 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":9,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":9,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":9,"id":"9","role":"title","text":"AI Gateway 맥락","textChars":13,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":9,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":9,"id":"10","role":"subtitle","text":"이 연구는 모델 자체가 아니라 LLM 게이트웨이에서의 방어 배치 문제다","textChars":39,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":9,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,700,40]}
+{"kind":"shape","slide":9,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":9,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,666,22]}
+{"kind":"textbox","slide":9,"id":"13","role":"takeaway text","text":"입력과 출력이 오가는 교차점이기 때문에, L0는 게이트웨이에 붙는 것이 맞다.","textChars":43,"textLines":1,"bbox":[94,169,666,22]}
+{"kind":"shape","slide":9,"id":"14","role":"gateway text panel","shapeType":"roundRect","bbox":[72,228,420,392]}
+{"kind":"shape","slide":9,"id":"15","role":"bullet dot","shapeType":"ellipse","bbox":[96,268,8,8]}
+{"kind":"shape","slide":9,"id":"16","role":"gateway bullets","shapeType":"rect","bbox":[116,258,352,47.199999999999996]}
+{"kind":"textbox","slide":9,"id":"16","role":"gateway bullets","text":"게이트웨이는 사용자 입력과 외부 LLM 사이를\n통제하는 계층이다.","textChars":36,"textLines":2,"bbox":[116,258,352,47.199999999999996]}
+{"kind":"shape","slide":9,"id":"17","role":"bullet dot","shapeType":"ellipse","bbox":[96,329.2,8,8]}
+{"kind":"shape","slide":9,"id":"18","role":"gateway bullets","shapeType":"rect","bbox":[116,319.2,352,47.199999999999996]}
+{"kind":"textbox","slide":9,"id":"18","role":"gateway bullets","text":"이 지점에서 라우팅, 로깅, 인증, 입력/출력\n가드레일이 함께 작동한다.","textChars":40,"textLines":2,"bbox":[116,319.2,352,47.199999999999996]}
+{"kind":"shape","slide":9,"id":"19","role":"bullet dot","shapeType":"ellipse","bbox":[96,390.4,8,8]}
+{"kind":"shape","slide":9,"id":"20","role":"gateway bullets","shapeType":"rect","bbox":[116,380.4,352,47.199999999999996]}
+{"kind":"textbox","slide":9,"id":"20","role":"gateway bullets","text":"따라서 한국어 입력 보호 문제를 해결하려면 모델\n내부가 아니라 게이트웨이 전처리 계층이 핵심이다.","textChars":54,"textLines":2,"bbox":[116,380.4,352,47.199999999999996]}
+{"kind":"shape","slide":9,"id":"21","role":"gateway image frame","shapeType":"roundRect","bbox":[528,210,680,432]}
+{"kind":"shape","slide":10,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":10,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":10,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":10,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":10,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":10,"id":"6","role":"header section","text":"설계","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":10,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":10,"id":"7","role":"header index","text":"10 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":10,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":10,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":10,"id":"9","role":"title","text":"데이터 흐름과 삽입 위치","textChars":13,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":10,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":10,"id":"10","role":"subtitle","text":"Layer 0는 외부 LLM 호출 전에 한국어 입력을 먼저 복원하고 탐지한다","textChars":42,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":10,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,900,40]}
+{"kind":"shape","slide":10,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":10,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,866,22]}
+{"kind":"textbox","slide":10,"id":"13","role":"takeaway text","text":"삽입 위치는 pre-call 앞단이다. 여기서 한국어 입력을 복원하지 않으면 뒤 레이어는 그대로 놓친다.","textChars":58,"textLines":1,"bbox":[94,169,866,22]}
+{"kind":"shape","slide":10,"id":"14","role":"flow box 사용자 입력","shapeType":"roundRect","bbox":[92,310,138,76]}
+{"kind":"shape","slide":10,"id":"15","role":"flow label 사용자 입력","shapeType":"rect","bbox":[92,334,138,24]}
+{"kind":"textbox","slide":10,"id":"15","role":"flow label 사용자 입력","text":"사용자 입력","textChars":6,"textLines":1,"bbox":[92,334,138,24]}
+{"kind":"shape","slide":10,"id":"16","role":"flow box Layer 0","shapeType":"roundRect","bbox":[256,310,138,76]}
+{"kind":"shape","slide":10,"id":"17","role":"flow label Layer 0","shapeType":"rect","bbox":[256,334,138,24]}
+{"kind":"textbox","slide":10,"id":"17","role":"flow label Layer 0","text":"Layer 0","textChars":7,"textLines":1,"bbox":[256,334,138,24]}
+{"kind":"shape","slide":10,"id":"18","role":"flow box Presidio","shapeType":"roundRect","bbox":[420,310,138,76]}
+{"kind":"shape","slide":10,"id":"19","role":"flow label Presidio","shapeType":"rect","bbox":[420,334,138,24]}
+{"kind":"textbox","slide":10,"id":"19","role":"flow label Presidio","text":"Presidio","textChars":8,"textLines":1,"bbox":[420,334,138,24]}
+{"kind":"shape","slide":10,"id":"20","role":"flow box Bedrock","shapeType":"roundRect","bbox":[584,310,138,76]}
+{"kind":"shape","slide":10,"id":"21","role":"flow label Bedrock","shapeType":"rect","bbox":[584,334,138,24]}
+{"kind":"textbox","slide":10,"id":"21","role":"flow label Bedrock","text":"Bedrock","textChars":7,"textLines":1,"bbox":[584,334,138,24]}
+{"kind":"shape","slide":10,"id":"22","role":"flow box Lakera","shapeType":"roundRect","bbox":[748,310,138,76]}
+{"kind":"shape","slide":10,"id":"23","role":"flow label Lakera","shapeType":"rect","bbox":[748,334,138,24]}
+{"kind":"textbox","slide":10,"id":"23","role":"flow label Lakera","text":"Lakera","textChars":6,"textLines":1,"bbox":[748,334,138,24]}
+{"kind":"shape","slide":10,"id":"24","role":"flow box 외부 LLM","shapeType":"roundRect","bbox":[912,310,138,76]}
+{"kind":"shape","slide":10,"id":"25","role":"flow label 외부 LLM","shapeType":"rect","bbox":[912,334,138,24]}
+{"kind":"textbox","slide":10,"id":"25","role":"flow label 외부 LLM","text":"외부 LLM","textChars":6,"textLines":1,"bbox":[912,334,138,24]}
+{"kind":"shape","slide":10,"id":"26","role":"flow box 응답","shapeType":"roundRect","bbox":[1076,310,110,76]}
+{"kind":"shape","slide":10,"id":"27","role":"flow label 응답","shapeType":"rect","bbox":[1076,334,110,24]}
+{"kind":"textbox","slide":10,"id":"27","role":"flow label 응답","text":"응답","textChars":2,"textLines":1,"bbox":[1076,334,110,24]}
+{"kind":"shape","slide":10,"id":"28","role":"flow arrow","shapeType":"rightArrow","bbox":[230,342,26,12]}
+{"kind":"shape","slide":10,"id":"29","role":"flow arrow","shapeType":"rightArrow","bbox":[394,342,26,12]}
+{"kind":"shape","slide":10,"id":"30","role":"flow arrow","shapeType":"rightArrow","bbox":[558,342,26,12]}
+{"kind":"shape","slide":10,"id":"31","role":"flow arrow","shapeType":"rightArrow","bbox":[722,342,26,12]}
+{"kind":"shape","slide":10,"id":"32","role":"flow arrow","shapeType":"rightArrow","bbox":[886,342,26,12]}
+{"kind":"shape","slide":10,"id":"33","role":"flow arrow","shapeType":"rightArrow","bbox":[1050,342,26,12]}
+{"kind":"shape","slide":10,"id":"34","role":"highlight L0","shapeType":"roundRect","bbox":[240,264,170,160]}
+{"kind":"shape","slide":10,"id":"35","role":"highlight note","shapeType":"rect","bbox":[248,432,160,18]}
+{"kind":"textbox","slide":10,"id":"35","role":"highlight note","text":"이번 연구의 추가 계층","textChars":12,"textLines":1,"bbox":[248,432,160,18]}
+{"kind":"shape","slide":10,"id":"36","role":"flow notes panel","shapeType":"roundRect","bbox":[72,492,1114,118]}
+{"kind":"shape","slide":10,"id":"37","role":"bullet dot","shapeType":"ellipse","bbox":[96,524,8,8]}
+{"kind":"shape","slide":10,"id":"38","role":"flow notes","shapeType":"rect","bbox":[116,514,1048,24.4]}
+{"kind":"textbox","slide":10,"id":"38","role":"flow notes","text":"L0는 한국어 입력을 정규화해 공격 표면을 복원한다.","textChars":29,"textLines":1,"bbox":[116,514,1048,24.4]}
+{"kind":"shape","slide":10,"id":"39","role":"bullet dot","shapeType":"ellipse","bbox":[96,558.4,8,8]}
+{"kind":"shape","slide":10,"id":"40","role":"flow notes","shapeType":"rect","bbox":[116,548.4,1048,24.4]}
+{"kind":"textbox","slide":10,"id":"40","role":"flow notes","text":"그 다음 L1~L3는 기존 운영 스택을 그대로 유지한다.","textChars":31,"textLines":1,"bbox":[116,548.4,1048,24.4]}
+{"kind":"shape","slide":10,"id":"41","role":"bullet dot","shapeType":"ellipse","bbox":[96,592.8,8,8]}
+{"kind":"shape","slide":10,"id":"42","role":"flow notes","shapeType":"rect","bbox":[116,582.8,1048,24.4]}
+{"kind":"textbox","slide":10,"id":"42","role":"flow notes","text":"필요한 경우에만 L4 judge를 smart cascade로 호출할 수 있다.","textChars":43,"textLines":1,"bbox":[116,582.8,1048,24.4]}
+{"kind":"shape","slide":11,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":11,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":11,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":11,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":11,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":11,"id":"6","role":"header section","text":"설계","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":11,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":11,"id":"7","role":"header index","text":"11 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":11,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":11,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":11,"id":"9","role":"title","text":"5계층 방어 파이프라인","textChars":12,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":11,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":11,"id":"10","role":"subtitle","text":"L0만 새로 제안하고, 나머지는 기존 운영 가드레일을 그대로 둔다","textChars":36,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":11,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,760,40]}
+{"kind":"shape","slide":11,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":11,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,726,22]}
+{"kind":"textbox","slide":11,"id":"13","role":"takeaway text","text":"핵심은 기존 스택을 대체하는 것이 아니라, 한국어 공백을 앞단에서 보강하는 것이다.","textChars":46,"textLines":1,"bbox":[94,169,726,22]}
+{"kind":"shape","slide":11,"id":"14","role":"layer panel L0","shapeType":"roundRect","bbox":[82,236,214,250]}
+{"kind":"shape","slide":11,"id":"15","role":"layer accent L0","shapeType":"rect","bbox":[82,236,214,12]}
+{"kind":"shape","slide":11,"id":"16","role":"layer title L0","shapeType":"rect","bbox":[104,264,70,34]}
+{"kind":"textbox","slide":11,"id":"16","role":"layer title L0","text":"L0","textChars":2,"textLines":1,"bbox":[104,264,70,34]}
+{"kind":"shape","slide":11,"id":"17","role":"layer body L0","shapeType":"rect","bbox":[104,320,170,62]}
+{"kind":"textbox","slide":11,"id":"17","role":"layer body L0","text":"한국어 정규화 + 키워드 사전","textChars":16,"textLines":1,"bbox":[104,320,170,62]}
+{"kind":"shape","slide":11,"id":"18","role":"chip pre-call","shapeType":"roundRect","bbox":[104,412,110,30]}
+{"kind":"shape","slide":11,"id":"19","role":"chip dot","shapeType":"ellipse","bbox":[116,422,10,10]}
+{"kind":"shape","slide":11,"id":"20","role":"chip label pre-call","shapeType":"rect","bbox":[134,419,72,16]}
+{"kind":"textbox","slide":11,"id":"20","role":"chip label pre-call","text":"pre-call","textChars":8,"textLines":1,"bbox":[134,419,72,16]}
+{"kind":"shape","slide":11,"id":"21","role":"layer note L0","shapeType":"rect","bbox":[104,450,160,18]}
+{"kind":"textbox","slide":11,"id":"21","role":"layer note L0","text":"이번 연구의 핵심 기여","textChars":12,"textLines":1,"bbox":[104,450,160,18]}
+{"kind":"shape","slide":11,"id":"22","role":"layer panel L1","shapeType":"roundRect","bbox":[312,236,214,250]}
+{"kind":"shape","slide":11,"id":"23","role":"layer accent L1","shapeType":"rect","bbox":[312,236,214,12]}
+{"kind":"shape","slide":11,"id":"24","role":"layer title L1","shapeType":"rect","bbox":[334,264,70,34]}
+{"kind":"textbox","slide":11,"id":"24","role":"layer title L1","text":"L1","textChars":2,"textLines":1,"bbox":[334,264,70,34]}
+{"kind":"shape","slide":11,"id":"25","role":"layer body L1","shapeType":"rect","bbox":[334,320,170,62]}
+{"kind":"textbox","slide":11,"id":"25","role":"layer body L1","text":"Presidio\nregex + NER","textChars":20,"textLines":2,"bbox":[334,320,170,62]}
+{"kind":"shape","slide":11,"id":"26","role":"chip pre-call","shapeType":"roundRect","bbox":[334,412,110,30]}
+{"kind":"shape","slide":11,"id":"27","role":"chip dot","shapeType":"ellipse","bbox":[346,422,10,10]}
+{"kind":"shape","slide":11,"id":"28","role":"chip label pre-call","shapeType":"rect","bbox":[364,419,72,16]}
+{"kind":"textbox","slide":11,"id":"28","role":"chip label pre-call","text":"pre-call","textChars":8,"textLines":1,"bbox":[364,419,72,16]}
+{"kind":"shape","slide":11,"id":"29","role":"layer note L1","shapeType":"rect","bbox":[334,450,160,18]}
+{"kind":"textbox","slide":11,"id":"29","role":"layer note L1","text":"기존 운영 스택","textChars":8,"textLines":1,"bbox":[334,450,160,18]}
+{"kind":"shape","slide":11,"id":"30","role":"layer panel L2","shapeType":"roundRect","bbox":[542,236,214,250]}
+{"kind":"shape","slide":11,"id":"31","role":"layer accent L2","shapeType":"rect","bbox":[542,236,214,12]}
+{"kind":"shape","slide":11,"id":"32","role":"layer title L2","shapeType":"rect","bbox":[564,264,70,34]}
+{"kind":"textbox","slide":11,"id":"32","role":"layer title L2","text":"L2","textChars":2,"textLines":1,"bbox":[564,264,70,34]}
+{"kind":"shape","slide":11,"id":"33","role":"layer body L2","shapeType":"rect","bbox":[564,320,170,62]}
+{"kind":"textbox","slide":11,"id":"33","role":"layer body L2","text":"Bedrock Guardrails","textChars":18,"textLines":1,"bbox":[564,320,170,62]}
+{"kind":"shape","slide":11,"id":"34","role":"chip during-call","shapeType":"roundRect","bbox":[564,412,110,30]}
+{"kind":"shape","slide":11,"id":"35","role":"chip dot","shapeType":"ellipse","bbox":[576,422,10,10]}
+{"kind":"shape","slide":11,"id":"36","role":"chip label during-call","shapeType":"rect","bbox":[594,419,72,16]}
+{"kind":"textbox","slide":11,"id":"36","role":"chip label during-call","text":"during-call","textChars":11,"textLines":1,"bbox":[594,419,72,16]}
+{"kind":"shape","slide":11,"id":"37","role":"layer note L2","shapeType":"rect","bbox":[564,450,160,18]}
+{"kind":"textbox","slide":11,"id":"37","role":"layer note L2","text":"기존 운영 스택","textChars":8,"textLines":1,"bbox":[564,450,160,18]}
+{"kind":"shape","slide":11,"id":"38","role":"layer panel L3","shapeType":"roundRect","bbox":[772,236,214,250]}
+{"kind":"shape","slide":11,"id":"39","role":"layer accent L3","shapeType":"rect","bbox":[772,236,214,12]}
+{"kind":"shape","slide":11,"id":"40","role":"layer title L3","shapeType":"rect","bbox":[794,264,70,34]}
+{"kind":"textbox","slide":11,"id":"40","role":"layer title L3","text":"L3","textChars":2,"textLines":1,"bbox":[794,264,70,34]}
+{"kind":"shape","slide":11,"id":"41","role":"layer body L3","shapeType":"rect","bbox":[794,320,170,62]}
+{"kind":"textbox","slide":11,"id":"41","role":"layer body L3","text":"Lakera Guard","textChars":12,"textLines":1,"bbox":[794,320,170,62]}
+{"kind":"shape","slide":11,"id":"42","role":"chip pre-call","shapeType":"roundRect","bbox":[794,412,110,30]}
+{"kind":"shape","slide":11,"id":"43","role":"chip dot","shapeType":"ellipse","bbox":[806,422,10,10]}
+{"kind":"shape","slide":11,"id":"44","role":"chip label pre-call","shapeType":"rect","bbox":[824,419,72,16]}
+{"kind":"textbox","slide":11,"id":"44","role":"chip label pre-call","text":"pre-call","textChars":8,"textLines":1,"bbox":[824,419,72,16]}
+{"kind":"shape","slide":11,"id":"45","role":"layer note L3","shapeType":"rect","bbox":[794,450,160,18]}
+{"kind":"textbox","slide":11,"id":"45","role":"layer note L3","text":"기존 운영 스택","textChars":8,"textLines":1,"bbox":[794,450,160,18]}
+{"kind":"shape","slide":11,"id":"46","role":"layer panel L4","shapeType":"roundRect","bbox":[1002,236,214,250]}
+{"kind":"shape","slide":11,"id":"47","role":"layer accent L4","shapeType":"rect","bbox":[1002,236,214,12]}
+{"kind":"shape","slide":11,"id":"48","role":"layer title L4","shapeType":"rect","bbox":[1024,264,70,34]}
+{"kind":"textbox","slide":11,"id":"48","role":"layer title L4","text":"L4","textChars":2,"textLines":1,"bbox":[1024,264,70,34]}
+{"kind":"shape","slide":11,"id":"49","role":"layer body L4","shapeType":"rect","bbox":[1024,320,170,62]}
+{"kind":"textbox","slide":11,"id":"49","role":"layer body L4","text":"GPT-4o-mini judge","textChars":17,"textLines":1,"bbox":[1024,320,170,62]}
+{"kind":"shape","slide":11,"id":"50","role":"chip post-call","shapeType":"roundRect","bbox":[1024,412,110,30]}
+{"kind":"shape","slide":11,"id":"51","role":"chip dot","shapeType":"ellipse","bbox":[1036,422,10,10]}
+{"kind":"shape","slide":11,"id":"52","role":"chip label post-call","shapeType":"rect","bbox":[1054,419,72,16]}
+{"kind":"textbox","slide":11,"id":"52","role":"chip label post-call","text":"post-call","textChars":9,"textLines":1,"bbox":[1054,419,72,16]}
+{"kind":"shape","slide":11,"id":"53","role":"layer note L4","shapeType":"rect","bbox":[1024,450,160,18]}
+{"kind":"textbox","slide":11,"id":"53","role":"layer note L4","text":"기존 운영 스택","textChars":8,"textLines":1,"bbox":[1024,450,160,18]}
+{"kind":"shape","slide":11,"id":"54","role":"input word","shapeType":"rect","bbox":[88,186,40,18]}
+{"kind":"textbox","slide":11,"id":"54","role":"input word","text":"입력","textChars":2,"textLines":1,"bbox":[88,186,40,18]}
+{"kind":"shape","slide":11,"id":"55","role":"output word","shapeType":"rect","bbox":[1128,186,70,18]}
+{"kind":"textbox","slide":11,"id":"55","role":"output word","text":"LLM 응답","textChars":6,"textLines":1,"bbox":[1128,186,70,18]}
+{"kind":"shape","slide":12,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":12,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":12,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":12,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":12,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":12,"id":"6","role":"header section","text":"설계","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":12,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":12,"id":"7","role":"header index","text":"12 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":12,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":12,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":12,"id":"9","role":"title","text":"L0 설계 1: 정규화 파이프라인","textChars":18,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":12,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":12,"id":"10","role":"subtitle","text":"정규화의 목적은 한국어 입력에 숨겨진 공격 표면을 다시 복원하는 것이다","textChars":39,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":12,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,860,40]}
+{"kind":"shape","slide":12,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":12,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,826,22]}
+{"kind":"textbox","slide":12,"id":"13","role":"takeaway text","text":"정규화는 성능의 중심이 아니라, 사전 매칭이 작동하도록 공격 표면을 복구하는 역할이다.","textChars":48,"textLines":1,"bbox":[94,169,826,22]}
+{"kind":"shape","slide":12,"id":"14","role":"norm card 자모 결합","shapeType":"roundRect","bbox":[78,248,220,228]}
+{"kind":"shape","slide":12,"id":"15","role":"norm icon 자모 결합","shapeType":"ellipse","bbox":[150,274,72,72]}
+{"kind":"shape","slide":12,"id":"16","role":"norm title 자모 결합","shapeType":"rect","bbox":[96,366,184,26]}
+{"kind":"textbox","slide":12,"id":"16","role":"norm title 자모 결합","text":"자모 결합","textChars":5,"textLines":1,"bbox":[96,366,184,26]}
+{"kind":"shape","slide":12,"id":"17","role":"norm ex 자모 결합","shapeType":"rect","bbox":[96,404,184,50]}
+{"kind":"textbox","slide":12,"id":"17","role":"norm ex 자모 결합","text":"ㅎㅏㄴㄱㅡㄹ → 한글","textChars":11,"textLines":1,"bbox":[96,404,184,50]}
+{"kind":"shape","slide":12,"id":"18","role":"norm card ZWSP 제거","shapeType":"roundRect","bbox":[312,248,220,228]}
+{"kind":"shape","slide":12,"id":"19","role":"norm icon ZWSP 제거","shapeType":"ellipse","bbox":[384,274,72,72]}
+{"kind":"shape","slide":12,"id":"20","role":"norm title ZWSP 제거","shapeType":"rect","bbox":[330,366,184,26]}
+{"kind":"textbox","slide":12,"id":"20","role":"norm title ZWSP 제거","text":"ZWSP 제거","textChars":7,"textLines":1,"bbox":[330,366,184,26]}
+{"kind":"shape","slide":12,"id":"21","role":"norm ex ZWSP 제거","shapeType":"rect","bbox":[330,404,184,50]}
+{"kind":"textbox","slide":12,"id":"21","role":"norm ex ZWSP 제거","text":"주민​번호 → 주민번호","textChars":12,"textLines":1,"bbox":[330,404,184,50]}
+{"kind":"shape","slide":12,"id":"22","role":"norm card Fullwidth 복원","shapeType":"roundRect","bbox":[546,248,220,228]}
+{"kind":"shape","slide":12,"id":"23","role":"norm icon Fullwidth 복원","shapeType":"ellipse","bbox":[618,274,72,72]}
+{"kind":"shape","slide":12,"id":"24","role":"norm title Fullwidth 복원","shapeType":"rect","bbox":[564,366,184,26]}
+{"kind":"textbox","slide":12,"id":"24","role":"norm title Fullwidth 복원","text":"Fullwidth 복원","textChars":12,"textLines":1,"bbox":[564,366,184,26]}
+{"kind":"shape","slide":12,"id":"25","role":"norm ex Fullwidth 복원","shapeType":"rect","bbox":[564,404,184,50]}
+{"kind":"textbox","slide":12,"id":"25","role":"norm ex Fullwidth 복원","text":"１２３４ → 1234","textChars":11,"textLines":1,"bbox":[564,404,184,50]}
+{"kind":"shape","slide":12,"id":"26","role":"norm card 숫자-한글 변환","shapeType":"roundRect","bbox":[780,248,220,228]}
+{"kind":"shape","slide":12,"id":"27","role":"norm icon 숫자-한글 변환","shapeType":"ellipse","bbox":[852,274,72,72]}
+{"kind":"shape","slide":12,"id":"28","role":"norm title 숫자-한글 변환","shapeType":"rect","bbox":[798,366,184,26]}
+{"kind":"textbox","slide":12,"id":"28","role":"norm title 숫자-한글 변환","text":"숫자-한글 변환","textChars":8,"textLines":1,"bbox":[798,366,184,26]}
+{"kind":"shape","slide":12,"id":"29","role":"norm ex 숫자-한글 변환","shapeType":"rect","bbox":[798,404,184,50]}
+{"kind":"textbox","slide":12,"id":"29","role":"norm ex 숫자-한글 변환","text":"공이공칠일사 → 020714","textChars":15,"textLines":1,"bbox":[798,404,184,50]}
+{"kind":"shape","slide":12,"id":"30","role":"norm card Homoglyph 치환","shapeType":"roundRect","bbox":[1014,248,220,228]}
+{"kind":"shape","slide":12,"id":"31","role":"norm icon Homoglyph 치환","shapeType":"ellipse","bbox":[1086,274,72,72]}
+{"kind":"shape","slide":12,"id":"32","role":"norm title Homoglyph 치환","shapeType":"rect","bbox":[1032,366,184,26]}
+{"kind":"textbox","slide":12,"id":"32","role":"norm title Homoglyph 치환","text":"Homoglyph 치환","textChars":12,"textLines":1,"bbox":[1032,366,184,26]}
+{"kind":"shape","slide":12,"id":"33","role":"norm ex Homoglyph 치환","shapeType":"rect","bbox":[1032,404,184,50]}
+{"kind":"textbox","slide":12,"id":"33","role":"norm ex Homoglyph 치환","text":"O0 / I1 혼용 정리","textChars":13,"textLines":1,"bbox":[1032,404,184,50]}
+{"kind":"shape","slide":12,"id":"34","role":"norm summary","shapeType":"roundRect","bbox":[78,518,1124,94]}
+{"kind":"shape","slide":12,"id":"35","role":"bullet dot","shapeType":"ellipse","bbox":[104,550,8,8]}
+{"kind":"shape","slide":12,"id":"36","role":"norm summary bullets","shapeType":"rect","bbox":[124,540,1050,24.4]}
+{"kind":"textbox","slide":12,"id":"36","role":"norm summary bullets","text":"전체 13단계 정규화 중 발표에서는 대표 5개만 보여준다.","textChars":32,"textLines":1,"bbox":[124,540,1050,24.4]}
+{"kind":"shape","slide":12,"id":"37","role":"bullet dot","shapeType":"ellipse","bbox":[104,584.4,8,8]}
+{"kind":"shape","slide":12,"id":"38","role":"norm summary bullets","shapeType":"rect","bbox":[124,574.4,1050,24.4]}
+{"kind":"textbox","slide":12,"id":"38","role":"norm summary bullets","text":"핵심은 사람이 읽는 한국어와 시스템이 매칭하는 문자열을 다시 맞추는 것이다.","textChars":42,"textLines":1,"bbox":[124,574.4,1050,24.4]}
+{"kind":"shape","slide":13,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":13,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":13,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":13,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":13,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":13,"id":"6","role":"header section","text":"설계","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":13,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":13,"id":"7","role":"header index","text":"13 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":13,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":13,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":13,"id":"9","role":"title","text":"L0 설계 2: 탐지기","textChars":12,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":13,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":13,"id":"10","role":"subtitle","text":"정규식보다 키워드 사전이 실제 개선의 중심이다","textChars":25,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":13,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,620,40]}
+{"kind":"shape","slide":13,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":13,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,586,22]}
+{"kind":"textbox","slide":13,"id":"13","role":"takeaway text","text":"KR semantic 성능 상승의 대부분은 키워드 사전에서 나온다.","textChars":37,"textLines":1,"bbox":[94,169,586,22]}
+{"kind":"shape","slide":13,"id":"14","role":"regex panel","shapeType":"roundRect","bbox":[78,236,532,350]}
+{"kind":"shape","slide":13,"id":"15","role":"dict panel","shapeType":"roundRect","bbox":[670,236,532,350]}
+{"kind":"shape","slide":13,"id":"16","role":"regex title","shapeType":"rect","bbox":[102,264,200,24]}
+{"kind":"textbox","slide":13,"id":"16","role":"regex title","text":"정규식 / 구조형 탐지","textChars":12,"textLines":1,"bbox":[102,264,200,24]}
+{"kind":"shape","slide":13,"id":"17","role":"bullet dot","shapeType":"ellipse","bbox":[102,322,8,8]}
+{"kind":"shape","slide":13,"id":"18","role":"regex bullets","shapeType":"rect","bbox":[122,312,450,25.599999999999998]}
+{"kind":"textbox","slide":13,"id":"18","role":"regex bullets","text":"session token, JWT, court case number","textChars":37,"textLines":1,"bbox":[122,312,450,25.599999999999998]}
+{"kind":"shape","slide":13,"id":"19","role":"bullet dot","shapeType":"ellipse","bbox":[102,359.6,8,8]}
+{"kind":"shape","slide":13,"id":"20","role":"regex bullets","shapeType":"rect","bbox":[122,349.6,450,25.599999999999998]}
+{"kind":"textbox","slide":13,"id":"20","role":"regex bullets","text":"GPS 좌표, AWS key, SSH key, MAC","textChars":29,"textLines":1,"bbox":[122,349.6,450,25.599999999999998]}
+{"kind":"shape","slide":13,"id":"21","role":"bullet dot","shapeType":"ellipse","bbox":[102,397.20000000000005,8,8]}
+{"kind":"shape","slide":13,"id":"22","role":"regex bullets","shapeType":"rect","bbox":[122,387.20000000000005,450,25.599999999999998]}
+{"kind":"textbox","slide":13,"id":"22","role":"regex bullets","text":"medical record number, employee ID","textChars":34,"textLines":1,"bbox":[122,387.20000000000005,450,25.599999999999998]}
+{"kind":"shape","slide":13,"id":"23","role":"bullet dot","shapeType":"ellipse","bbox":[102,434.80000000000007,8,8]}
+{"kind":"shape","slide":13,"id":"24","role":"regex bullets","shapeType":"rect","bbox":[122,424.80000000000007,450,25.599999999999998]}
+{"kind":"textbox","slide":13,"id":"24","role":"regex bullets","text":"차량번호, 보험증권번호, 거래번호","textChars":18,"textLines":1,"bbox":[122,424.80000000000007,450,25.599999999999998]}
+{"kind":"shape","slide":13,"id":"25","role":"dict title","shapeType":"rect","bbox":[694,264,240,24]}
+{"kind":"textbox","slide":13,"id":"25","role":"dict title","text":"키워드 사전 / 의미형 탐지","textChars":15,"textLines":1,"bbox":[694,264,240,24]}
+{"kind":"shape","slide":13,"id":"26","role":"bullet dot","shapeType":"ellipse","bbox":[694,322,8,8]}
+{"kind":"shape","slide":13,"id":"27","role":"dict bullets","shapeType":"rect","bbox":[714,312,450,47.199999999999996]}
+{"kind":"textbox","slide":13,"id":"27","role":"dict bullets","text":"allergy, diagnosis, prescription,\nsurgery","textChars":41,"textLines":2,"bbox":[714,312,450,47.199999999999996]}
+{"kind":"shape","slide":13,"id":"28","role":"bullet dot","shapeType":"ellipse","bbox":[694,381.2,8,8]}
+{"kind":"shape","slide":13,"id":"29","role":"dict bullets","shapeType":"rect","bbox":[714,371.2,450,47.199999999999996]}
+{"kind":"textbox","slide":13,"id":"29","role":"dict bullets","text":"family, marital, religion,\nnationality","textChars":38,"textLines":2,"bbox":[714,371.2,450,47.199999999999996]}
+{"kind":"shape","slide":13,"id":"30","role":"bullet dot","shapeType":"ellipse","bbox":[694,440.4,8,8]}
+{"kind":"shape","slide":13,"id":"31","role":"dict bullets","shapeType":"rect","bbox":[714,430.4,450,47.199999999999996]}
+{"kind":"textbox","slide":13,"id":"31","role":"dict bullets","text":"company, department, job title,\nschool","textChars":38,"textLines":2,"bbox":[714,430.4,450,47.199999999999996]}
+{"kind":"shape","slide":13,"id":"32","role":"bullet dot","shapeType":"ellipse","bbox":[694,499.59999999999997,8,8]}
+{"kind":"shape","slide":13,"id":"33","role":"dict bullets","shapeType":"rect","bbox":[714,489.59999999999997,450,25.599999999999998]}
+{"kind":"textbox","slide":13,"id":"33","role":"dict bullets","text":"의료·법적·조직 맥락의 한국어 텍스트형 PII","textChars":25,"textLines":1,"bbox":[714,489.59999999999997,450,25.599999999999998]}
+{"kind":"shape","slide":13,"id":"34","role":"metric 사전만 켜도 KR semantic이 크게 상승","shapeType":"roundRect","bbox":[450,604,380,72]}
+{"kind":"shape","slide":13,"id":"35","role":"metric accent 사전만 켜도 KR semantic이 크게 상승","shapeType":"rect","bbox":[450,604,380,6]}
+{"kind":"shape","slide":13,"id":"36","role":"metric value 사전만 켜도 KR semantic이 크게 상승","shapeType":"rect","bbox":[468,616,344,28]}
+{"kind":"textbox","slide":13,"id":"36","role":"metric value 사전만 켜도 KR semantic이 크게 상승","text":"+38.10%p","textChars":8,"textLines":1,"bbox":[468,616,344,28]}
+{"kind":"shape","slide":13,"id":"37","role":"metric label 사전만 켜도 KR semantic이 크게 상승","shapeType":"rect","bbox":[468,644,344,16]}
+{"kind":"textbox","slide":13,"id":"37","role":"metric label 사전만 켜도 KR semantic이 크게 상승","text":"사전만 켜도 KR semantic이 크게 상승","textChars":25,"textLines":1,"bbox":[468,644,344,16]}
+{"kind":"shape","slide":13,"id":"38","role":"metric 정규화만 단독","shapeType":"roundRect","bbox":[848,604,220,72]}
+{"kind":"shape","slide":13,"id":"39","role":"metric accent 정규화만 단독","shapeType":"rect","bbox":[848,604,220,6]}
+{"kind":"shape","slide":13,"id":"40","role":"metric value 정규화만 단독","shapeType":"rect","bbox":[866,616,184,28]}
+{"kind":"textbox","slide":13,"id":"40","role":"metric value 정규화만 단독","text":"+0.31%p","textChars":7,"textLines":1,"bbox":[866,616,184,28]}
+{"kind":"shape","slide":13,"id":"41","role":"metric label 정규화만 단독","shapeType":"rect","bbox":[866,644,184,16]}
+{"kind":"textbox","slide":13,"id":"41","role":"metric label 정규화만 단독","text":"정규화만 단독","textChars":7,"textLines":1,"bbox":[866,644,184,16]}
+{"kind":"shape","slide":14,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":14,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":14,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":14,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":14,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":14,"id":"6","role":"header section","text":"평가","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":14,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":14,"id":"7","role":"header index","text":"14 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":14,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":14,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":14,"id":"9","role":"title","text":"평가 방법 개요","textChars":8,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":14,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":14,"id":"10","role":"subtitle","text":"왜 이 결과를 믿을 수 있는지 세 가지 원칙으로만 정리한다","textChars":32,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":14,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,760,40]}
+{"kind":"shape","slide":14,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":14,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,726,22]}
+{"kind":"textbox","slide":14,"id":"13","role":"takeaway text","text":"핵심은 유효성 우선, 실제 API 호출, 그리고 TRUE/FALSE/BYPASS 분리다.","textChars":49,"textLines":1,"bbox":[94,169,726,22]}
+{"kind":"shape","slide":14,"id":"14","role":"triple card 유효성 우선 fuzzer v4","shapeType":"roundRect","bbox":[72,236,368,188]}
+{"kind":"shape","slide":14,"id":"15","role":"triple accent 유효성 우선 fuzzer v4","shapeType":"rect","bbox":[72,236,10,188]}
+{"kind":"shape","slide":14,"id":"16","role":"triple title 유효성 우선 fuzzer v4","shapeType":"rect","bbox":[96,260,328,28]}
+{"kind":"textbox","slide":14,"id":"16","role":"triple title 유효성 우선 fuzzer v4","text":"유효성 우선 fuzzer v4","textChars":16,"textLines":1,"bbox":[96,260,328,28]}
+{"kind":"shape","slide":14,"id":"17","role":"triple body 유효성 우선 fuzzer v4","shapeType":"rect","bbox":[96,308,326,92]}
+{"kind":"textbox","slide":14,"id":"17","role":"triple body 유효성 우선 fuzzer v4","text":"형태만 그럴듯한 payload가 아니라 실제로 동작\n가능한 한국어 PII 입력을 우선 생성했다.","textChars":53,"textLines":2,"bbox":[96,308,326,92]}
+{"kind":"shape","slide":14,"id":"18","role":"triple card 실제 API 호출 벤치마크","shapeType":"roundRect","bbox":[464,236,368,188]}
+{"kind":"shape","slide":14,"id":"19","role":"triple accent 실제 API 호출 벤치마크","shapeType":"rect","bbox":[464,236,10,188]}
+{"kind":"shape","slide":14,"id":"20","role":"triple title 실제 API 호출 벤치마크","shapeType":"rect","bbox":[488,260,328,28]}
+{"kind":"textbox","slide":14,"id":"20","role":"triple title 실제 API 호출 벤치마크","text":"실제 API 호출 벤치마크","textChars":14,"textLines":1,"bbox":[488,260,328,28]}
+{"kind":"shape","slide":14,"id":"21","role":"triple body 실제 API 호출 벤치마크","shapeType":"rect","bbox":[488,308,326,92]}
+{"kind":"textbox","slide":14,"id":"21","role":"triple body 실제 API 호출 벤치마크","text":"모든 케이스를 LiteLLM Gateway와 외부\nguardrail / judge 호출로 직접\n측정했다.","textChars":58,"textLines":3,"bbox":[488,308,326,92]}
+{"kind":"shape","slide":14,"id":"22","role":"triple card TRUE / FALSE / BYPASS","shapeType":"roundRect","bbox":[856,236,368,188]}
+{"kind":"shape","slide":14,"id":"23","role":"triple accent TRUE / FALSE / BYPASS","shapeType":"rect","bbox":[856,236,10,188]}
+{"kind":"shape","slide":14,"id":"24","role":"triple title TRUE / FALSE / BYPASS","shapeType":"rect","bbox":[880,260,328,28]}
+{"kind":"textbox","slide":14,"id":"24","role":"triple title TRUE / FALSE / BYPASS","text":"TRUE / FALSE / BYPASS","textChars":21,"textLines":1,"bbox":[880,260,328,28]}
+{"kind":"shape","slide":14,"id":"25","role":"triple body TRUE / FALSE / BYPASS","shapeType":"rect","bbox":[880,308,326,92]}
+{"kind":"textbox","slide":14,"id":"25","role":"triple body TRUE / FALSE / BYPASS","text":"출력 문구가 아니라 실제 무해화 여부를 기준으로\n결과를 분리했다.","textChars":36,"textLines":2,"bbox":[880,308,326,92]}
+{"kind":"shape","slide":14,"id":"26","role":"metric 동일 payload 4-way 비교","shapeType":"roundRect","bbox":[92,492,250,118]}
+{"kind":"shape","slide":14,"id":"27","role":"metric accent 동일 payload 4-way 비교","shapeType":"rect","bbox":[92,492,250,6]}
+{"kind":"shape","slide":14,"id":"28","role":"metric value 동일 payload 4-way 비교","shapeType":"rect","bbox":[110,510,214,52]}
+{"kind":"textbox","slide":14,"id":"28","role":"metric value 동일 payload 4-way 비교","text":"10,000","textChars":6,"textLines":1,"bbox":[110,510,214,52]}
+{"kind":"shape","slide":14,"id":"29","role":"metric label 동일 payload 4-way 비교","shapeType":"rect","bbox":[110,566,214,30]}
+{"kind":"textbox","slide":14,"id":"29","role":"metric label 동일 payload 4-way 비교","text":"동일 payload 4-way 비교","textChars":19,"textLines":1,"bbox":[110,566,214,30]}
+{"kind":"shape","slide":14,"id":"30","role":"metric PII 유형","shapeType":"roundRect","bbox":[364,492,250,118]}
+{"kind":"shape","slide":14,"id":"31","role":"metric accent PII 유형","shapeType":"rect","bbox":[364,492,250,6]}
+{"kind":"shape","slide":14,"id":"32","role":"metric value PII 유형","shapeType":"rect","bbox":[382,510,214,52]}
+{"kind":"textbox","slide":14,"id":"32","role":"metric value PII 유형","text":"91개","textChars":3,"textLines":1,"bbox":[382,510,214,52]}
+{"kind":"shape","slide":14,"id":"33","role":"metric label PII 유형","shapeType":"rect","bbox":[382,566,214,30]}
+{"kind":"textbox","slide":14,"id":"33","role":"metric label PII 유형","text":"PII 유형","textChars":6,"textLines":1,"bbox":[382,566,214,30]}
+{"kind":"shape","slide":14,"id":"34","role":"metric 실제 무해화 기준","shapeType":"roundRect","bbox":[636,492,250,118]}
+{"kind":"shape","slide":14,"id":"35","role":"metric accent 실제 무해화 기준","shapeType":"rect","bbox":[636,492,250,6]}
+{"kind":"shape","slide":14,"id":"36","role":"metric value 실제 무해화 기준","shapeType":"rect","bbox":[654,510,214,52]}
+{"kind":"textbox","slide":14,"id":"36","role":"metric value 실제 무해화 기준","text":"TRUE","textChars":4,"textLines":1,"bbox":[654,510,214,52]}
+{"kind":"shape","slide":14,"id":"37","role":"metric label 실제 무해화 기준","shapeType":"rect","bbox":[654,566,214,30]}
+{"kind":"textbox","slide":14,"id":"37","role":"metric label 실제 무해화 기준","text":"실제 무해화 기준","textChars":9,"textLines":1,"bbox":[654,566,214,30]}
+{"kind":"shape","slide":14,"id":"38","role":"metric 유효성 우선 벤치마크","shapeType":"roundRect","bbox":[908,492,250,118]}
+{"kind":"shape","slide":14,"id":"39","role":"metric accent 유효성 우선 벤치마크","shapeType":"rect","bbox":[908,492,250,6]}
+{"kind":"shape","slide":14,"id":"40","role":"metric value 유효성 우선 벤치마크","shapeType":"rect","bbox":[926,510,214,52]}
+{"kind":"textbox","slide":14,"id":"40","role":"metric value 유효성 우선 벤치마크","text":"v4","textChars":2,"textLines":1,"bbox":[926,510,214,52]}
+{"kind":"shape","slide":14,"id":"41","role":"metric label 유효성 우선 벤치마크","shapeType":"rect","bbox":[926,566,214,30]}
+{"kind":"textbox","slide":14,"id":"41","role":"metric label 유효성 우선 벤치마크","text":"유효성 우선 벤치마크","textChars":11,"textLines":1,"bbox":[926,566,214,30]}
+{"kind":"shape","slide":15,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":15,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":15,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":15,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":15,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":15,"id":"6","role":"header section","text":"평가","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":15,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":15,"id":"7","role":"header index","text":"15 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":15,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":15,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":15,"id":"9","role":"title","text":"벤치마크 구성","textChars":7,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":15,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":15,"id":"10","role":"subtitle","text":"10k 계층 표본에서 영어·한국어·유효성 그룹 분포를 고정했다","textChars":34,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":15,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,540,40]}
+{"kind":"shape","slide":15,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":15,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,506,22]}
+{"kind":"textbox","slide":15,"id":"13","role":"takeaway text","text":"발표의 핵심 slice는 한국어 의미형 1,302건이다.","textChars":31,"textLines":1,"bbox":[94,169,506,22]}
+{"kind":"shape","slide":15,"id":"14","role":"metric EN 체크섬","shapeType":"roundRect","bbox":[74,252,214,154]}
+{"kind":"shape","slide":15,"id":"15","role":"metric accent EN 체크섬","shapeType":"rect","bbox":[74,252,214,6]}
+{"kind":"shape","slide":15,"id":"16","role":"metric value EN 체크섬","shapeType":"rect","bbox":[92,270,178,52]}
+{"kind":"textbox","slide":15,"id":"16","role":"metric value EN 체크섬","text":"2,603","textChars":5,"textLines":1,"bbox":[92,270,178,52]}
+{"kind":"shape","slide":15,"id":"17","role":"metric label EN 체크섬","shapeType":"rect","bbox":[92,326,178,30]}
+{"kind":"textbox","slide":15,"id":"17","role":"metric label EN 체크섬","text":"EN 체크섬","textChars":6,"textLines":1,"bbox":[92,326,178,30]}
+{"kind":"shape","slide":15,"id":"18","role":"metric EN 형식","shapeType":"roundRect","bbox":[300,252,214,154]}
+{"kind":"shape","slide":15,"id":"19","role":"metric accent EN 형식","shapeType":"rect","bbox":[300,252,214,6]}
+{"kind":"shape","slide":15,"id":"20","role":"metric value EN 형식","shapeType":"rect","bbox":[318,270,178,52]}
+{"kind":"textbox","slide":15,"id":"20","role":"metric value EN 형식","text":"884","textChars":3,"textLines":1,"bbox":[318,270,178,52]}
+{"kind":"shape","slide":15,"id":"21","role":"metric label EN 형식","shapeType":"rect","bbox":[318,326,178,30]}
+{"kind":"textbox","slide":15,"id":"21","role":"metric label EN 형식","text":"EN 형식","textChars":5,"textLines":1,"bbox":[318,326,178,30]}
+{"kind":"shape","slide":15,"id":"22","role":"metric KR 체크섬","shapeType":"roundRect","bbox":[526,252,214,154]}
+{"kind":"shape","slide":15,"id":"23","role":"metric accent KR 체크섬","shapeType":"rect","bbox":[526,252,214,6]}
+{"kind":"shape","slide":15,"id":"24","role":"metric value KR 체크섬","shapeType":"rect","bbox":[544,270,178,52]}
+{"kind":"textbox","slide":15,"id":"24","role":"metric value KR 체크섬","text":"522","textChars":3,"textLines":1,"bbox":[544,270,178,52]}
+{"kind":"shape","slide":15,"id":"25","role":"metric label KR 체크섬","shapeType":"rect","bbox":[544,326,178,30]}
+{"kind":"textbox","slide":15,"id":"25","role":"metric label KR 체크섬","text":"KR 체크섬","textChars":6,"textLines":1,"bbox":[544,326,178,30]}
+{"kind":"shape","slide":15,"id":"26","role":"metric KR 형식","shapeType":"roundRect","bbox":[752,252,214,154]}
+{"kind":"shape","slide":15,"id":"27","role":"metric accent KR 형식","shapeType":"rect","bbox":[752,252,214,6]}
+{"kind":"shape","slide":15,"id":"28","role":"metric value KR 형식","shapeType":"rect","bbox":[770,270,178,52]}
+{"kind":"textbox","slide":15,"id":"28","role":"metric value KR 형식","text":"4,689","textChars":5,"textLines":1,"bbox":[770,270,178,52]}
+{"kind":"shape","slide":15,"id":"29","role":"metric label KR 형식","shapeType":"rect","bbox":[770,326,178,30]}
+{"kind":"textbox","slide":15,"id":"29","role":"metric label KR 형식","text":"KR 형식","textChars":5,"textLines":1,"bbox":[770,326,178,30]}
+{"kind":"shape","slide":15,"id":"30","role":"metric KR 의미형","shapeType":"roundRect","bbox":[978,252,214,154]}
+{"kind":"shape","slide":15,"id":"31","role":"metric accent KR 의미형","shapeType":"rect","bbox":[978,252,214,6]}
+{"kind":"shape","slide":15,"id":"32","role":"metric value KR 의미형","shapeType":"rect","bbox":[996,270,178,52]}
+{"kind":"textbox","slide":15,"id":"32","role":"metric value KR 의미형","text":"1,302","textChars":5,"textLines":1,"bbox":[996,270,178,52]}
+{"kind":"shape","slide":15,"id":"33","role":"metric label KR 의미형","shapeType":"rect","bbox":[996,326,178,30]}
+{"kind":"textbox","slide":15,"id":"33","role":"metric label KR 의미형","text":"KR 의미형","textChars":6,"textLines":1,"bbox":[996,326,178,30]}
+{"kind":"shape","slide":15,"id":"34","role":"benchmark notes","shapeType":"roundRect","bbox":[74,452,1128,140]}
+{"kind":"shape","slide":15,"id":"35","role":"bullet dot","shapeType":"ellipse","bbox":[100,486,8,8]}
+{"kind":"shape","slide":15,"id":"36","role":"benchmark bullets","shapeType":"rect","bbox":[120,476,1048,24.4]}
+{"kind":"textbox","slide":15,"id":"36","role":"benchmark bullets","text":"전체 10,000건 중 영어는 3,487건, 한국어는 6,513건이다.","textChars":39,"textLines":1,"bbox":[120,476,1048,24.4]}
+{"kind":"shape","slide":15,"id":"37","role":"bullet dot","shapeType":"ellipse","bbox":[100,520.4,8,8]}
+{"kind":"shape","slide":15,"id":"38","role":"benchmark bullets","shapeType":"rect","bbox":[120,510.4,1048,24.4]}
+{"kind":"textbox","slide":15,"id":"38","role":"benchmark bullets","text":"그중 한국어 의미형 1,302건이 발표의 메인 타깃이며 취약성이 가장 강하게 드러나는 구간이다.","textChars":53,"textLines":1,"bbox":[120,510.4,1048,24.4]}
+{"kind":"shape","slide":15,"id":"39","role":"bullet dot","shapeType":"ellipse","bbox":[100,554.8,8,8]}
+{"kind":"shape","slide":15,"id":"40","role":"benchmark bullets","shapeType":"rect","bbox":[120,544.8,1048,24.4]}
+{"kind":"textbox","slide":15,"id":"40","role":"benchmark bullets","text":"모든 4-way 구성은 동일한 payload를 공유한다.","textChars":31,"textLines":1,"bbox":[120,544.8,1048,24.4]}
+{"kind":"shape","slide":16,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":16,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":16,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":16,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":16,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":16,"id":"6","role":"header section","text":"결과","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":16,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":16,"id":"7","role":"header index","text":"16 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":16,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":16,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":16,"id":"9","role":"title","text":"핵심 문제 데이터: 영어 vs 한국어","textChars":20,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":16,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":16,"id":"10","role":"subtitle","text":"기준선 A만 놓고 보면 영어와 한국어 사이의 격차가 바로 보인다","textChars":35,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":16,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,700,40]}
+{"kind":"shape","slide":16,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":16,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,666,22]}
+{"kind":"textbox","slide":16,"id":"13","role":"takeaway text","text":"영어는 잘 막지만 한국어 의미형 PII는 절반 수준까지 떨어진다.","textChars":36,"textLines":1,"bbox":[94,169,666,22]}
+{"kind":"shape","slide":16,"id":"14","role":"chip 영어","shapeType":"roundRect","bbox":[74,218,88,30]}
+{"kind":"shape","slide":16,"id":"15","role":"chip dot","shapeType":"ellipse","bbox":[86,228,10,10]}
+{"kind":"shape","slide":16,"id":"16","role":"chip label 영어","shapeType":"rect","bbox":[104,225,50,16]}
+{"kind":"textbox","slide":16,"id":"16","role":"chip label 영어","text":"영어","textChars":2,"textLines":1,"bbox":[104,225,50,16]}
+{"kind":"shape","slide":16,"id":"17","role":"chip 한국어","shapeType":"roundRect","bbox":[172,218,88,30]}
+{"kind":"shape","slide":16,"id":"18","role":"chip dot","shapeType":"ellipse","bbox":[184,228,10,10]}
+{"kind":"shape","slide":16,"id":"19","role":"chip label 한국어","shapeType":"rect","bbox":[202,225,50,16]}
+{"kind":"textbox","slide":16,"id":"19","role":"chip label 한국어","text":"한국어","textChars":3,"textLines":1,"bbox":[202,225,50,16]}
+{"kind":"shape","slide":16,"id":"20","role":"chip 한국어 의미형","shapeType":"roundRect","bbox":[270,218,88,30]}
+{"kind":"shape","slide":16,"id":"21","role":"chip dot","shapeType":"ellipse","bbox":[282,228,10,10]}
+{"kind":"shape","slide":16,"id":"22","role":"chip label 한국어 의미형","shapeType":"rect","bbox":[300,225,50,16]}
+{"kind":"textbox","slide":16,"id":"22","role":"chip label 한국어 의미형","text":"한국어 의미형","textChars":7,"textLines":1,"bbox":[300,225,50,16]}
+{"kind":"shape","slide":16,"id":"23","role":"lang gap chart panel","shapeType":"roundRect","bbox":[74,252,720,350]}
+{"kind":"chart","slide":16,"id":"24","role":"lang gap chart","bbox":[96,286,676,286]}
+{"kind":"shape","slide":16,"id":"25","role":"metric 한국어 vs 영어 격차","shapeType":"roundRect","bbox":[828,282,360,132]}
+{"kind":"shape","slide":16,"id":"26","role":"metric accent 한국어 vs 영어 격차","shapeType":"rect","bbox":[828,282,360,6]}
+{"kind":"shape","slide":16,"id":"27","role":"metric value 한국어 vs 영어 격차","shapeType":"rect","bbox":[846,300,324,52]}
+{"kind":"textbox","slide":16,"id":"27","role":"metric value 한국어 vs 영어 격차","text":"-29.51%p","textChars":8,"textLines":1,"bbox":[846,300,324,52]}
+{"kind":"shape","slide":16,"id":"28","role":"metric label 한국어 vs 영어 격차","shapeType":"rect","bbox":[846,356,324,30]}
+{"kind":"textbox","slide":16,"id":"28","role":"metric label 한국어 vs 영어 격차","text":"한국어 vs 영어 격차","textChars":12,"textLines":1,"bbox":[846,356,324,30]}
+{"kind":"shape","slide":16,"id":"29","role":"metric 의미형 vs 영어 격차","shapeType":"roundRect","bbox":[828,438,360,132]}
+{"kind":"shape","slide":16,"id":"30","role":"metric accent 의미형 vs 영어 격차","shapeType":"rect","bbox":[828,438,360,6]}
+{"kind":"shape","slide":16,"id":"31","role":"metric value 의미형 vs 영어 격차","shapeType":"rect","bbox":[846,456,324,52]}
+{"kind":"textbox","slide":16,"id":"31","role":"metric value 의미형 vs 영어 격차","text":"-49.75%p","textChars":8,"textLines":1,"bbox":[846,456,324,52]}
+{"kind":"shape","slide":16,"id":"32","role":"metric label 의미형 vs 영어 격차","shapeType":"rect","bbox":[846,512,324,30]}
+{"kind":"textbox","slide":16,"id":"32","role":"metric label 의미형 vs 영어 격차","text":"의미형 vs 영어 격차","textChars":12,"textLines":1,"bbox":[846,512,324,30]}
+{"kind":"shape","slide":17,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":17,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":17,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":17,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":17,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":17,"id":"6","role":"header section","text":"결과","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":17,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":17,"id":"7","role":"header index","text":"17 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":17,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":17,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":17,"id":"9","role":"title","text":"무엇을 특히 놓치는가","textChars":11,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":17,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":17,"id":"10","role":"subtitle","text":"Baseline이 특히 취약한 PII 유형은 대부분 한국어 텍스트형 PII다","textChars":42,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":17,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,760,40]}
+{"kind":"shape","slide":17,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":17,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,726,22]}
+{"kind":"textbox","slide":17,"id":"13","role":"takeaway text","text":"session, court, allergy, company, job_title에서 실패율이 극단적으로 높다.","textChars":60,"textLines":1,"bbox":[94,169,726,22]}
+{"kind":"shape","slide":17,"id":"14","role":"hardest chart panel","shapeType":"roundRect","bbox":[74,248,838,370]}
+{"kind":"chart","slide":17,"id":"15","role":"hardest misses chart","bbox":[98,280,790,310]}
+{"kind":"shape","slide":17,"id":"16","role":"hardest note panel","shapeType":"roundRect","bbox":[944,248,258,370]}
+{"kind":"shape","slide":17,"id":"17","role":"hardest note label","shapeType":"rect","bbox":[970,276,90,20]}
+{"kind":"textbox","slide":17,"id":"17","role":"hardest note label","text":"읽는 법","textChars":4,"textLines":1,"bbox":[970,276,90,20]}
+{"kind":"shape","slide":17,"id":"18","role":"bullet dot","shapeType":"ellipse","bbox":[970,316,8,8]}
+{"kind":"shape","slide":17,"id":"19","role":"hardest note bullets","shapeType":"rect","bbox":[990,306,180,44.8]}
+{"kind":"textbox","slide":17,"id":"19","role":"hardest note bullets","text":"막대는 baseline A의 real\nbypass rate(%)다.","textChars":37,"textLines":2,"bbox":[990,306,180,44.8]}
+{"kind":"shape","slide":17,"id":"20","role":"bullet dot","shapeType":"ellipse","bbox":[970,372.8,8,8]}
+{"kind":"shape","slide":17,"id":"21","role":"hardest note bullets","shapeType":"rect","bbox":[990,362.8,180,24.4]}
+{"kind":"textbox","slide":17,"id":"21","role":"hardest note bullets","text":"높을수록 기존 스택이 놓치는 비율이 크다.","textChars":23,"textLines":1,"bbox":[990,362.8,180,24.4]}
+{"kind":"shape","slide":17,"id":"22","role":"bullet dot","shapeType":"ellipse","bbox":[970,409.2,8,8]}
+{"kind":"shape","slide":17,"id":"23","role":"hardest note bullets","shapeType":"rect","bbox":[990,399.2,180,44.8]}
+{"kind":"textbox","slide":17,"id":"23","role":"hardest note bullets","text":"상위 유형 대부분이 한국어 의미형 또는\n문맥형 PII다.","textChars":31,"textLines":2,"bbox":[990,399.2,180,44.8]}
+{"kind":"shape","slide":17,"id":"24","role":"metric session bypass","shapeType":"roundRect","bbox":[970,506,180,86]}
+{"kind":"shape","slide":17,"id":"25","role":"metric accent session bypass","shapeType":"rect","bbox":[970,506,180,6]}
+{"kind":"shape","slide":17,"id":"26","role":"metric value session bypass","shapeType":"rect","bbox":[988,518,144,28]}
+{"kind":"textbox","slide":17,"id":"26","role":"metric value session bypass","text":"95.89%","textChars":6,"textLines":1,"bbox":[988,518,144,28]}
+{"kind":"shape","slide":17,"id":"27","role":"metric label session bypass","shapeType":"rect","bbox":[988,546,144,16]}
+{"kind":"textbox","slide":17,"id":"27","role":"metric label session bypass","text":"session bypass","textChars":14,"textLines":1,"bbox":[988,546,144,16]}
+{"kind":"shape","slide":18,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":18,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":18,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":18,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":18,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":18,"id":"6","role":"header section","text":"결과","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":18,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":18,"id":"7","role":"header index","text":"18 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":18,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":18,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":18,"id":"9","role":"title","text":"4-way 전체 비교","textChars":11,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":18,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":18,"id":"10","role":"subtitle","text":"L0 포함 구성이 LLM Judge 포함 기준선보다 높다","textChars":31,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":18,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,620,40]}
+{"kind":"shape","slide":18,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":18,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,586,22]}
+{"kind":"textbox","slide":18,"id":"13","role":"takeaway text","text":"전체 10k 기준에서도 C(+L0)가 B(+Judge)보다 높다.","textChars":36,"textLines":1,"bbox":[94,169,586,22]}
+{"kind":"shape","slide":18,"id":"14","role":"chip A 기준선","shapeType":"roundRect","bbox":[74,218,88,30]}
+{"kind":"shape","slide":18,"id":"15","role":"chip dot","shapeType":"ellipse","bbox":[86,228,10,10]}
+{"kind":"shape","slide":18,"id":"16","role":"chip label A 기준선","shapeType":"rect","bbox":[104,225,50,16]}
+{"kind":"textbox","slide":18,"id":"16","role":"chip label A 기준선","text":"A 기준선","textChars":5,"textLines":1,"bbox":[104,225,50,16]}
+{"kind":"shape","slide":18,"id":"17","role":"chip B + Judge","shapeType":"roundRect","bbox":[172,218,100,30]}
+{"kind":"shape","slide":18,"id":"18","role":"chip dot","shapeType":"ellipse","bbox":[184,228,10,10]}
+{"kind":"shape","slide":18,"id":"19","role":"chip label B + Judge","shapeType":"rect","bbox":[202,225,62,16]}
+{"kind":"textbox","slide":18,"id":"19","role":"chip label B + Judge","text":"B + Judge","textChars":9,"textLines":1,"bbox":[202,225,62,16]}
+{"kind":"shape","slide":18,"id":"20","role":"chip C + L0","shapeType":"roundRect","bbox":[282,218,88,30]}
+{"kind":"shape","slide":18,"id":"21","role":"chip dot","shapeType":"ellipse","bbox":[294,228,10,10]}
+{"kind":"shape","slide":18,"id":"22","role":"chip label C + L0","shapeType":"rect","bbox":[312,225,50,16]}
+{"kind":"textbox","slide":18,"id":"22","role":"chip label C + L0","text":"C + L0","textChars":6,"textLines":1,"bbox":[312,225,50,16]}
+{"kind":"shape","slide":18,"id":"23","role":"chip D 전체","shapeType":"roundRect","bbox":[380,218,88,30]}
+{"kind":"shape","slide":18,"id":"24","role":"chip dot","shapeType":"ellipse","bbox":[392,228,10,10]}
+{"kind":"shape","slide":18,"id":"25","role":"chip label D 전체","shapeType":"rect","bbox":[410,225,50,16]}
+{"kind":"textbox","slide":18,"id":"25","role":"chip label D 전체","text":"D 전체","textChars":4,"textLines":1,"bbox":[410,225,50,16]}
+{"kind":"shape","slide":18,"id":"26","role":"overall chart panel","shapeType":"roundRect","bbox":[74,252,760,336]}
+{"kind":"chart","slide":18,"id":"27","role":"overall 4way chart","bbox":[98,292,712,268]}
+{"kind":"shape","slide":18,"id":"28","role":"metric C = L0 + 기존 스택","shapeType":"roundRect","bbox":[870,272,310,120]}
+{"kind":"shape","slide":18,"id":"29","role":"metric accent C = L0 + 기존 스택","shapeType":"rect","bbox":[870,272,310,6]}
+{"kind":"shape","slide":18,"id":"30","role":"metric value C = L0 + 기존 스택","shapeType":"rect","bbox":[888,290,274,52]}
+{"kind":"textbox","slide":18,"id":"30","role":"metric value C = L0 + 기존 스택","text":"94.32%","textChars":6,"textLines":1,"bbox":[888,290,274,52]}
+{"kind":"shape","slide":18,"id":"31","role":"metric label C = L0 + 기존 스택","shapeType":"rect","bbox":[888,346,274,30]}
+{"kind":"textbox","slide":18,"id":"31","role":"metric label C = L0 + 기존 스택","text":"C = L0 + 기존 스택","textChars":14,"textLines":1,"bbox":[888,346,274,30]}
+{"kind":"shape","slide":18,"id":"32","role":"metric C가 B보다 높음","shapeType":"roundRect","bbox":[870,414,310,120]}
+{"kind":"shape","slide":18,"id":"33","role":"metric accent C가 B보다 높음","shapeType":"rect","bbox":[870,414,310,6]}
+{"kind":"shape","slide":18,"id":"34","role":"metric value C가 B보다 높음","shapeType":"rect","bbox":[888,432,274,52]}
+{"kind":"textbox","slide":18,"id":"34","role":"metric value C가 B보다 높음","text":"+3.36%p","textChars":7,"textLines":1,"bbox":[888,432,274,52]}
+{"kind":"shape","slide":18,"id":"35","role":"metric label C가 B보다 높음","shapeType":"rect","bbox":[888,488,274,30]}
+{"kind":"textbox","slide":18,"id":"35","role":"metric label C가 B보다 높음","text":"C가 B보다 높음","textChars":9,"textLines":1,"bbox":[888,488,274,30]}
+{"kind":"shape","slide":19,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":19,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":19,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":19,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":19,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":19,"id":"6","role":"header section","text":"결과","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":19,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":19,"id":"7","role":"header index","text":"19 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":19,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":19,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":19,"id":"9","role":"title","text":"4-way 한국어/영어 분리 비교","textChars":18,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":19,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":19,"id":"10","role":"subtitle","text":"개선의 대부분은 영어가 아니라 한국어에서 나온다","textChars":26,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":19,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,620,40]}
+{"kind":"shape","slide":19,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":19,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,586,22]}
+{"kind":"textbox","slide":19,"id":"13","role":"takeaway text","text":"영어는 이미 포화 상태고, 한국어가 실제 개선 구간이다.","textChars":31,"textLines":1,"bbox":[94,169,586,22]}
+{"kind":"shape","slide":19,"id":"14","role":"chip A 기준선","shapeType":"roundRect","bbox":[74,218,88,30]}
+{"kind":"shape","slide":19,"id":"15","role":"chip dot","shapeType":"ellipse","bbox":[86,228,10,10]}
+{"kind":"shape","slide":19,"id":"16","role":"chip label A 기준선","shapeType":"rect","bbox":[104,225,50,16]}
+{"kind":"textbox","slide":19,"id":"16","role":"chip label A 기준선","text":"A 기준선","textChars":5,"textLines":1,"bbox":[104,225,50,16]}
+{"kind":"shape","slide":19,"id":"17","role":"chip B + Judge","shapeType":"roundRect","bbox":[172,218,100,30]}
+{"kind":"shape","slide":19,"id":"18","role":"chip dot","shapeType":"ellipse","bbox":[184,228,10,10]}
+{"kind":"shape","slide":19,"id":"19","role":"chip label B + Judge","shapeType":"rect","bbox":[202,225,62,16]}
+{"kind":"textbox","slide":19,"id":"19","role":"chip label B + Judge","text":"B + Judge","textChars":9,"textLines":1,"bbox":[202,225,62,16]}
+{"kind":"shape","slide":19,"id":"20","role":"chip C + L0","shapeType":"roundRect","bbox":[282,218,88,30]}
+{"kind":"shape","slide":19,"id":"21","role":"chip dot","shapeType":"ellipse","bbox":[294,228,10,10]}
+{"kind":"shape","slide":19,"id":"22","role":"chip label C + L0","shapeType":"rect","bbox":[312,225,50,16]}
+{"kind":"textbox","slide":19,"id":"22","role":"chip label C + L0","text":"C + L0","textChars":6,"textLines":1,"bbox":[312,225,50,16]}
+{"kind":"shape","slide":19,"id":"23","role":"chip D 전체","shapeType":"roundRect","bbox":[380,218,88,30]}
+{"kind":"shape","slide":19,"id":"24","role":"chip dot","shapeType":"ellipse","bbox":[392,228,10,10]}
+{"kind":"shape","slide":19,"id":"25","role":"chip label D 전체","shapeType":"rect","bbox":[410,225,50,16]}
+{"kind":"textbox","slide":19,"id":"25","role":"chip label D 전체","text":"D 전체","textChars":4,"textLines":1,"bbox":[410,225,50,16]}
+{"kind":"shape","slide":19,"id":"26","role":"lang split chart panel","shapeType":"roundRect","bbox":[74,252,850,350]}
+{"kind":"chart","slide":19,"id":"27","role":"lang split chart","bbox":[98,286,802,286]}
+{"kind":"shape","slide":19,"id":"28","role":"metric 영어는 이미 포화","shapeType":"roundRect","bbox":[954,274,236,130]}
+{"kind":"shape","slide":19,"id":"29","role":"metric accent 영어는 이미 포화","shapeType":"rect","bbox":[954,274,236,6]}
+{"kind":"shape","slide":19,"id":"30","role":"metric value 영어는 이미 포화","shapeType":"rect","bbox":[972,292,200,52]}
+{"kind":"textbox","slide":19,"id":"30","role":"metric value 영어는 이미 포화","text":"99.37%","textChars":6,"textLines":1,"bbox":[972,292,200,52]}
+{"kind":"shape","slide":19,"id":"31","role":"metric label 영어는 이미 포화","shapeType":"rect","bbox":[972,348,200,30]}
+{"kind":"textbox","slide":19,"id":"31","role":"metric label 영어는 이미 포화","text":"영어는 이미 포화","textChars":9,"textLines":1,"bbox":[972,348,200,30]}
+{"kind":"shape","slide":19,"id":"32","role":"metric 한국어 전체 스택","shapeType":"roundRect","bbox":[954,426,236,130]}
+{"kind":"shape","slide":19,"id":"33","role":"metric accent 한국어 전체 스택","shapeType":"rect","bbox":[954,426,236,6]}
+{"kind":"shape","slide":19,"id":"34","role":"metric value 한국어 전체 스택","shapeType":"rect","bbox":[972,444,200,52]}
+{"kind":"textbox","slide":19,"id":"34","role":"metric value 한국어 전체 스택","text":"96.08%","textChars":6,"textLines":1,"bbox":[972,444,200,52]}
+{"kind":"shape","slide":19,"id":"35","role":"metric label 한국어 전체 스택","shapeType":"rect","bbox":[972,500,200,30]}
+{"kind":"textbox","slide":19,"id":"35","role":"metric label 한국어 전체 스택","text":"한국어 전체 스택","textChars":9,"textLines":1,"bbox":[972,500,200,30]}
+{"kind":"shape","slide":20,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":20,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":20,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":20,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":20,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":20,"id":"6","role":"header section","text":"결과","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":20,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":20,"id":"7","role":"header index","text":"20 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":20,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":20,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":20,"id":"9","role":"title","text":"한국어 의미형 정면 비교","textChars":13,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":20,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":20,"id":"10","role":"subtitle","text":"이 발표의 핵심 figure","textChars":15,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":20,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,760,40]}
+{"kind":"shape","slide":20,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":20,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,726,22]}
+{"kind":"textbox","slide":20,"id":"13","role":"takeaway text","text":"L0가 GPT-4o-mini Judge를 한국어 의미형에서 +8.99%p 능가한다.","textChars":46,"textLines":1,"bbox":[94,169,726,22]}
+{"kind":"shape","slide":20,"id":"14","role":"chip A 기준선","shapeType":"roundRect","bbox":[74,218,88,30]}
+{"kind":"shape","slide":20,"id":"15","role":"chip dot","shapeType":"ellipse","bbox":[86,228,10,10]}
+{"kind":"shape","slide":20,"id":"16","role":"chip label A 기준선","shapeType":"rect","bbox":[104,225,50,16]}
+{"kind":"textbox","slide":20,"id":"16","role":"chip label A 기준선","text":"A 기준선","textChars":5,"textLines":1,"bbox":[104,225,50,16]}
+{"kind":"shape","slide":20,"id":"17","role":"chip B + Judge","shapeType":"roundRect","bbox":[172,218,100,30]}
+{"kind":"shape","slide":20,"id":"18","role":"chip dot","shapeType":"ellipse","bbox":[184,228,10,10]}
+{"kind":"shape","slide":20,"id":"19","role":"chip label B + Judge","shapeType":"rect","bbox":[202,225,62,16]}
+{"kind":"textbox","slide":20,"id":"19","role":"chip label B + Judge","text":"B + Judge","textChars":9,"textLines":1,"bbox":[202,225,62,16]}
+{"kind":"shape","slide":20,"id":"20","role":"chip C + L0","shapeType":"roundRect","bbox":[282,218,88,30]}
+{"kind":"shape","slide":20,"id":"21","role":"chip dot","shapeType":"ellipse","bbox":[294,228,10,10]}
+{"kind":"shape","slide":20,"id":"22","role":"chip label C + L0","shapeType":"rect","bbox":[312,225,50,16]}
+{"kind":"textbox","slide":20,"id":"22","role":"chip label C + L0","text":"C + L0","textChars":6,"textLines":1,"bbox":[312,225,50,16]}
+{"kind":"shape","slide":20,"id":"23","role":"chip D 전체","shapeType":"roundRect","bbox":[380,218,88,30]}
+{"kind":"shape","slide":20,"id":"24","role":"chip dot","shapeType":"ellipse","bbox":[392,228,10,10]}
+{"kind":"shape","slide":20,"id":"25","role":"chip label D 전체","shapeType":"rect","bbox":[410,225,50,16]}
+{"kind":"textbox","slide":20,"id":"25","role":"chip label D 전체","text":"D 전체","textChars":4,"textLines":1,"bbox":[410,225,50,16]}
+{"kind":"shape","slide":20,"id":"26","role":"kr semantic chart panel","shapeType":"roundRect","bbox":[74,252,760,336]}
+{"kind":"chart","slide":20,"id":"27","role":"kr semantic chart","bbox":[98,292,712,268]}
+{"kind":"shape","slide":20,"id":"28","role":"metric C = L0 + 기존 스택","shapeType":"roundRect","bbox":[864,272,326,120]}
+{"kind":"shape","slide":20,"id":"29","role":"metric accent C = L0 + 기존 스택","shapeType":"rect","bbox":[864,272,326,6]}
+{"kind":"shape","slide":20,"id":"30","role":"metric value C = L0 + 기존 스택","shapeType":"rect","bbox":[882,290,290,52]}
+{"kind":"textbox","slide":20,"id":"30","role":"metric value C = L0 + 기존 스택","text":"96.39%","textChars":6,"textLines":1,"bbox":[882,290,290,52]}
+{"kind":"shape","slide":20,"id":"31","role":"metric label C = L0 + 기존 스택","shapeType":"rect","bbox":[882,346,290,30]}
+{"kind":"textbox","slide":20,"id":"31","role":"metric label C = L0 + 기존 스택","text":"C = L0 + 기존 스택","textChars":14,"textLines":1,"bbox":[882,346,290,30]}
+{"kind":"shape","slide":20,"id":"32","role":"metric C가 B보다 높음","shapeType":"roundRect","bbox":[864,414,326,120]}
+{"kind":"shape","slide":20,"id":"33","role":"metric accent C가 B보다 높음","shapeType":"rect","bbox":[864,414,326,6]}
+{"kind":"shape","slide":20,"id":"34","role":"metric value C가 B보다 높음","shapeType":"rect","bbox":[882,432,290,52]}
+{"kind":"textbox","slide":20,"id":"34","role":"metric value C가 B보다 높음","text":"+8.99%p","textChars":7,"textLines":1,"bbox":[882,432,290,52]}
+{"kind":"shape","slide":20,"id":"35","role":"metric label C가 B보다 높음","shapeType":"rect","bbox":[882,488,290,30]}
+{"kind":"textbox","slide":20,"id":"35","role":"metric label C가 B보다 높음","text":"C가 B보다 높음","textChars":9,"textLines":1,"bbox":[882,488,290,30]}
+{"kind":"shape","slide":21,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":21,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":21,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":21,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":21,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":21,"id":"6","role":"header section","text":"결과","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":21,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":21,"id":"7","role":"header index","text":"21 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":21,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":21,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":21,"id":"9","role":"title","text":"L0 단독 성능","textChars":8,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":21,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":21,"id":"10","role":"subtitle","text":"단독 수치를 따로 보여줘야 보강 계층이라는 해석이 정직해진다","textChars":33,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":21,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,720,40]}
+{"kind":"shape","slide":21,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":21,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,686,22]}
+{"kind":"textbox","slide":21,"id":"13","role":"takeaway text","text":"L0는 단독 엔진이 아니라 한국어 보강 계층으로 보는 것이 맞다.","textChars":36,"textLines":1,"bbox":[94,169,686,22]}
+{"kind":"shape","slide":21,"id":"14","role":"metric 전체","shapeType":"roundRect","bbox":[92,264,250,160]}
+{"kind":"shape","slide":21,"id":"15","role":"metric accent 전체","shapeType":"rect","bbox":[92,264,250,6]}
+{"kind":"shape","slide":21,"id":"16","role":"metric value 전체","shapeType":"rect","bbox":[110,282,214,52]}
+{"kind":"textbox","slide":21,"id":"16","role":"metric value 전체","text":"30.96%","textChars":6,"textLines":1,"bbox":[110,282,214,52]}
+{"kind":"shape","slide":21,"id":"17","role":"metric label 전체","shapeType":"rect","bbox":[110,338,214,30]}
+{"kind":"textbox","slide":21,"id":"17","role":"metric label 전체","text":"전체","textChars":2,"textLines":1,"bbox":[110,338,214,30]}
+{"kind":"shape","slide":21,"id":"18","role":"metric 한국어","shapeType":"roundRect","bbox":[368,264,250,160]}
+{"kind":"shape","slide":21,"id":"19","role":"metric accent 한국어","shapeType":"rect","bbox":[368,264,250,6]}
+{"kind":"shape","slide":21,"id":"20","role":"metric value 한국어","shapeType":"rect","bbox":[386,282,214,52]}
+{"kind":"textbox","slide":21,"id":"20","role":"metric value 한국어","text":"47.54%","textChars":6,"textLines":1,"bbox":[386,282,214,52]}
+{"kind":"shape","slide":21,"id":"21","role":"metric label 한국어","shapeType":"rect","bbox":[386,338,214,30]}
+{"kind":"textbox","slide":21,"id":"21","role":"metric label 한국어","text":"한국어","textChars":3,"textLines":1,"bbox":[386,338,214,30]}
+{"kind":"shape","slide":21,"id":"22","role":"metric 한국어 의미형","shapeType":"roundRect","bbox":[644,264,250,160]}
+{"kind":"shape","slide":21,"id":"23","role":"metric accent 한국어 의미형","shapeType":"rect","bbox":[644,264,250,6]}
+{"kind":"shape","slide":21,"id":"24","role":"metric value 한국어 의미형","shapeType":"rect","bbox":[662,282,214,52]}
+{"kind":"textbox","slide":21,"id":"24","role":"metric value 한국어 의미형","text":"80.65%","textChars":6,"textLines":1,"bbox":[662,282,214,52]}
+{"kind":"shape","slide":21,"id":"25","role":"metric label 한국어 의미형","shapeType":"rect","bbox":[662,338,214,30]}
+{"kind":"textbox","slide":21,"id":"25","role":"metric label 한국어 의미형","text":"한국어 의미형","textChars":7,"textLines":1,"bbox":[662,338,214,30]}
+{"kind":"shape","slide":21,"id":"26","role":"metric 영어","shapeType":"roundRect","bbox":[920,264,250,160]}
+{"kind":"shape","slide":21,"id":"27","role":"metric accent 영어","shapeType":"rect","bbox":[920,264,250,6]}
+{"kind":"shape","slide":21,"id":"28","role":"metric value 영어","shapeType":"rect","bbox":[938,282,214,52]}
+{"kind":"textbox","slide":21,"id":"28","role":"metric value 영어","text":"0.00%","textChars":5,"textLines":1,"bbox":[938,282,214,52]}
+{"kind":"shape","slide":21,"id":"29","role":"metric label 영어","shapeType":"rect","bbox":[938,338,214,30]}
+{"kind":"textbox","slide":21,"id":"29","role":"metric label 영어","text":"영어","textChars":2,"textLines":1,"bbox":[938,338,214,30]}
+{"kind":"shape","slide":21,"id":"30","role":"standalone notes","shapeType":"roundRect","bbox":[92,468,1078,136]}
+{"kind":"shape","slide":21,"id":"31","role":"bullet dot","shapeType":"ellipse","bbox":[116,502,8,8]}
+{"kind":"shape","slide":21,"id":"32","role":"standalone bullets","shapeType":"rect","bbox":[136,492,1012,24.4]}
+{"kind":"textbox","slide":21,"id":"32","role":"standalone bullets","text":"한국어 의미형만 놓고 보면 80.65%로 강한 편이다.","textChars":30,"textLines":1,"bbox":[136,492,1012,24.4]}
+{"kind":"shape","slide":21,"id":"33","role":"bullet dot","shapeType":"ellipse","bbox":[116,538.4,8,8]}
+{"kind":"shape","slide":21,"id":"34","role":"standalone bullets","shapeType":"rect","bbox":[136,528.4,1012,24.4]}
+{"kind":"textbox","slide":21,"id":"34","role":"standalone bullets","text":"하지만 영어 0.00%, 전체 30.96%이기 때문에 전체 보호 엔진으로 말하면 과장이다.","textChars":50,"textLines":1,"bbox":[136,528.4,1012,24.4]}
+{"kind":"shape","slide":21,"id":"35","role":"bullet dot","shapeType":"ellipse","bbox":[116,574.8,8,8]}
+{"kind":"shape","slide":21,"id":"36","role":"standalone bullets","shapeType":"rect","bbox":[136,564.8,1012,24.4]}
+{"kind":"textbox","slide":21,"id":"36","role":"standalone bullets","text":"따라서 L0의 정체성은 '한국어 보강 계층'이 가장 정확하다.","textChars":34,"textLines":1,"bbox":[136,564.8,1012,24.4]}
+{"kind":"shape","slide":22,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":22,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":22,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":22,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":22,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":22,"id":"6","role":"header section","text":"결과","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":22,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":22,"id":"7","role":"header index","text":"22 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":22,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":22,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":22,"id":"9","role":"title","text":"L0 단독 성능의 해석","textChars":12,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":22,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":22,"id":"10","role":"subtitle","text":"무엇을 잘하고 무엇을 의도적으로 하지 않는지 분리한다","textChars":29,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":22,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,640,40]}
+{"kind":"shape","slide":22,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":22,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,606,22]}
+{"kind":"textbox","slide":22,"id":"13","role":"takeaway text","text":"L0의 강점과 한계를 같이 보여줘야 발표 논리가 정직해진다.","textChars":33,"textLines":1,"bbox":[94,169,606,22]}
+{"kind":"shape","slide":22,"id":"14","role":"triple card 잘하는 것","shapeType":"roundRect","bbox":[72,236,368,188]}
+{"kind":"shape","slide":22,"id":"15","role":"triple accent 잘하는 것","shapeType":"rect","bbox":[72,236,10,188]}
+{"kind":"shape","slide":22,"id":"16","role":"triple title 잘하는 것","shapeType":"rect","bbox":[96,260,328,28]}
+{"kind":"textbox","slide":22,"id":"16","role":"triple title 잘하는 것","text":"잘하는 것","textChars":5,"textLines":1,"bbox":[96,260,328,28]}
+{"kind":"shape","slide":22,"id":"17","role":"triple body 잘하는 것","shapeType":"rect","bbox":[96,308,326,92]}
+{"kind":"textbox","slide":22,"id":"17","role":"triple body 잘하는 것","text":"한국어 의미형 80.65% 한국어 의미형 PII\n보강","textChars":29,"textLines":2,"bbox":[96,308,326,92]}
+{"kind":"shape","slide":22,"id":"18","role":"triple card 의도적으로 안 하는 것","shapeType":"roundRect","bbox":[464,236,368,188]}
+{"kind":"shape","slide":22,"id":"19","role":"triple accent 의도적으로 안 하는 것","shapeType":"rect","bbox":[464,236,10,188]}
+{"kind":"shape","slide":22,"id":"20","role":"triple title 의도적으로 안 하는 것","shapeType":"rect","bbox":[488,260,328,28]}
+{"kind":"textbox","slide":22,"id":"20","role":"triple title 의도적으로 안 하는 것","text":"의도적으로 안 하는 것","textChars":12,"textLines":1,"bbox":[488,260,328,28]}
+{"kind":"shape","slide":22,"id":"21","role":"triple body 의도적으로 안 하는 것","shapeType":"rect","bbox":[488,308,326,92]}
+{"kind":"textbox","slide":22,"id":"21","role":"triple body 의도적으로 안 하는 것","text":"영어 0.00% 영어는 기존 스택에 맡김","textChars":22,"textLines":1,"bbox":[488,308,326,92]}
+{"kind":"shape","slide":22,"id":"22","role":"triple card 약한 것","shapeType":"roundRect","bbox":[856,236,368,188]}
+{"kind":"shape","slide":22,"id":"23","role":"triple accent 약한 것","shapeType":"rect","bbox":[856,236,10,188]}
+{"kind":"shape","slide":22,"id":"24","role":"triple title 약한 것","shapeType":"rect","bbox":[880,260,328,28]}
+{"kind":"textbox","slide":22,"id":"24","role":"triple title 약한 것","text":"약한 것","textChars":4,"textLines":1,"bbox":[880,260,328,28]}
+{"kind":"shape","slide":22,"id":"25","role":"triple body 약한 것","shapeType":"rect","bbox":[880,308,326,92]}
+{"kind":"textbox","slide":22,"id":"25","role":"triple body 약한 것","text":"KR checksum 18.58% 체크섬형은 기존\n스택이 더 강함","textChars":36,"textLines":2,"bbox":[880,308,326,92]}
+{"kind":"shape","slide":22,"id":"26","role":"metric 발표 해석","shapeType":"roundRect","bbox":[408,506,464,84]}
+{"kind":"shape","slide":22,"id":"27","role":"metric accent 발표 해석","shapeType":"rect","bbox":[408,506,464,6]}
+{"kind":"shape","slide":22,"id":"28","role":"metric value 발표 해석","shapeType":"rect","bbox":[426,518,428,28]}
+{"kind":"textbox","slide":22,"id":"28","role":"metric value 발표 해석","text":"한국어 보호 엔진이 아니라 한국어 보강 계층","textChars":24,"textLines":1,"bbox":[426,518,428,28]}
+{"kind":"shape","slide":22,"id":"29","role":"metric label 발표 해석","shapeType":"rect","bbox":[426,546,428,16]}
+{"kind":"textbox","slide":22,"id":"29","role":"metric label 발표 해석","text":"발표 해석","textChars":5,"textLines":1,"bbox":[426,546,428,16]}
+{"kind":"shape","slide":23,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":23,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":23,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":23,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":23,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":23,"id":"6","role":"header section","text":"검정","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":23,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":23,"id":"7","role":"header index","text":"23 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":23,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":23,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":23,"id":"9","role":"title","text":"통계 검정","textChars":5,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":23,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":23,"id":"10","role":"subtitle","text":"숫자 차이가 우연이 아니라는 점을 B vs C 한 장으로 정리한다","textChars":36,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":23,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,680,40]}
+{"kind":"shape","slide":23,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":23,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,646,22]}
+{"kind":"textbox","slide":23,"id":"13","role":"takeaway text","text":"B(+judge)보다 C(+L0)만 맞힌 케이스가 훨씬 더 많다.","textChars":36,"textLines":1,"bbox":[94,169,646,22]}
+{"kind":"shape","slide":23,"id":"14","role":"mcnemar chart panel","shapeType":"roundRect","bbox":[74,252,690,320]}
+{"kind":"chart","slide":23,"id":"15","role":"mcnemar chart","bbox":[104,290,630,248]}
+{"kind":"shape","slide":23,"id":"16","role":"mcnemar stats panel","shapeType":"roundRect","bbox":[804,252,386,320]}
+{"kind":"shape","slide":23,"id":"17","role":"metric B only","shapeType":"roundRect","bbox":[838,286,150,92]}
+{"kind":"shape","slide":23,"id":"18","role":"metric accent B only","shapeType":"rect","bbox":[838,286,150,6]}
+{"kind":"shape","slide":23,"id":"19","role":"metric value B only","shapeType":"rect","bbox":[856,300,114,38]}
+{"kind":"textbox","slide":23,"id":"19","role":"metric value B only","text":"291","textChars":3,"textLines":1,"bbox":[856,300,114,38]}
+{"kind":"shape","slide":23,"id":"20","role":"metric label B only","shapeType":"rect","bbox":[856,338,114,18]}
+{"kind":"textbox","slide":23,"id":"20","role":"metric label B only","text":"B only","textChars":6,"textLines":1,"bbox":[856,338,114,18]}
+{"kind":"shape","slide":23,"id":"21","role":"metric C only","shapeType":"roundRect","bbox":[1006,286,150,92]}
+{"kind":"shape","slide":23,"id":"22","role":"metric accent C only","shapeType":"rect","bbox":[1006,286,150,6]}
+{"kind":"shape","slide":23,"id":"23","role":"metric value C only","shapeType":"rect","bbox":[1024,300,114,38]}
+{"kind":"textbox","slide":23,"id":"23","role":"metric value C only","text":"627","textChars":3,"textLines":1,"bbox":[1024,300,114,38]}
+{"kind":"shape","slide":23,"id":"24","role":"metric label C only","shapeType":"rect","bbox":[1024,338,114,18]}
+{"kind":"textbox","slide":23,"id":"24","role":"metric label C only","text":"C only","textChars":6,"textLines":1,"bbox":[1024,338,114,18]}
+{"kind":"shape","slide":23,"id":"25","role":"metric 차이","shapeType":"roundRect","bbox":[838,404,318,92]}
+{"kind":"shape","slide":23,"id":"26","role":"metric accent 차이","shapeType":"rect","bbox":[838,404,318,6]}
+{"kind":"shape","slide":23,"id":"27","role":"metric value 차이","shapeType":"rect","bbox":[856,418,282,38]}
+{"kind":"textbox","slide":23,"id":"27","role":"metric value 차이","text":"336건","textChars":4,"textLines":1,"bbox":[856,418,282,38]}
+{"kind":"shape","slide":23,"id":"28","role":"metric label 차이","shapeType":"rect","bbox":[856,456,282,18]}
+{"kind":"textbox","slide":23,"id":"28","role":"metric label 차이","text":"차이","textChars":2,"textLines":1,"bbox":[856,456,282,18]}
+{"kind":"shape","slide":23,"id":"29","role":"mcnemar p","shapeType":"rect","bbox":[838,530,318,22]}
+{"kind":"textbox","slide":23,"id":"29","role":"mcnemar p","text":"p < 2.04e-28","textChars":12,"textLines":1,"bbox":[838,530,318,22]}
+{"kind":"shape","slide":24,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":24,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":24,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":24,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":24,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":24,"id":"6","role":"header section","text":"검정","textChars":2,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":24,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":24,"id":"7","role":"header index","text":"24 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":24,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":24,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":24,"id":"9","role":"title","text":"구성 요소 분석","textChars":8,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":24,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":24,"id":"10","role":"subtitle","text":"효과의 대부분이 정규화보다 사전에서 나온다는 점을 분리해 보여준다","textChars":36,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":24,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,700,40]}
+{"kind":"shape","slide":24,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":24,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,666,22]}
+{"kind":"textbox","slide":24,"id":"13","role":"takeaway text","text":"한국어 의미형 개선의 약 96%가 사전에서 발생했다.","textChars":29,"textLines":1,"bbox":[94,169,666,22]}
+{"kind":"shape","slide":24,"id":"14","role":"ablation chart panel","shapeType":"roundRect","bbox":[74,252,760,338]}
+{"kind":"chart","slide":24,"id":"15","role":"ablation chart","bbox":[100,290,708,270]}
+{"kind":"shape","slide":24,"id":"16","role":"metric 정규화만 적용","shapeType":"roundRect","bbox":[870,266,300,90]}
+{"kind":"shape","slide":24,"id":"17","role":"metric accent 정규화만 적용","shapeType":"rect","bbox":[870,266,300,6]}
+{"kind":"shape","slide":24,"id":"18","role":"metric value 정규화만 적용","shapeType":"rect","bbox":[888,278,264,28]}
+{"kind":"textbox","slide":24,"id":"18","role":"metric value 정규화만 적용","text":"+0.31%p","textChars":7,"textLines":1,"bbox":[888,278,264,28]}
+{"kind":"shape","slide":24,"id":"19","role":"metric label 정규화만 적용","shapeType":"rect","bbox":[888,306,264,16]}
+{"kind":"textbox","slide":24,"id":"19","role":"metric label 정규화만 적용","text":"정규화만 적용","textChars":7,"textLines":1,"bbox":[888,306,264,16]}
+{"kind":"shape","slide":24,"id":"20","role":"metric 사전만 적용","shapeType":"roundRect","bbox":[870,380,300,90]}
+{"kind":"shape","slide":24,"id":"21","role":"metric accent 사전만 적용","shapeType":"rect","bbox":[870,380,300,6]}
+{"kind":"shape","slide":24,"id":"22","role":"metric value 사전만 적용","shapeType":"rect","bbox":[888,392,264,28]}
+{"kind":"textbox","slide":24,"id":"22","role":"metric value 사전만 적용","text":"+38.10%p","textChars":8,"textLines":1,"bbox":[888,392,264,28]}
+{"kind":"shape","slide":24,"id":"23","role":"metric label 사전만 적용","shapeType":"rect","bbox":[888,420,264,16]}
+{"kind":"textbox","slide":24,"id":"23","role":"metric label 사전만 적용","text":"사전만 적용","textChars":6,"textLines":1,"bbox":[888,420,264,16]}
+{"kind":"shape","slide":24,"id":"24","role":"metric 시너지","shapeType":"roundRect","bbox":[870,494,300,90]}
+{"kind":"shape","slide":24,"id":"25","role":"metric accent 시너지","shapeType":"rect","bbox":[870,494,300,6]}
+{"kind":"shape","slide":24,"id":"26","role":"metric value 시너지","shapeType":"rect","bbox":[888,506,264,28]}
+{"kind":"textbox","slide":24,"id":"26","role":"metric value 시너지","text":"+1.14%p","textChars":7,"textLines":1,"bbox":[888,506,264,28]}
+{"kind":"shape","slide":24,"id":"27","role":"metric label 시너지","shapeType":"rect","bbox":[888,534,264,16]}
+{"kind":"textbox","slide":24,"id":"27","role":"metric label 시너지","text":"시너지","textChars":3,"textLines":1,"bbox":[888,534,264,16]}
+{"kind":"shape","slide":25,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":25,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":25,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":25,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":25,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":25,"id":"6","role":"header section","text":"운영성","textChars":3,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":25,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":25,"id":"7","role":"header index","text":"25 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":25,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":25,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":25,"id":"9","role":"title","text":"지연과 운영 비용","textChars":9,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":25,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":25,"id":"10","role":"subtitle","text":"L0는 Judge보다 빠르고, Judge 호출 자체를 크게 줄일 수 있다","textChars":40,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":25,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,900,40]}
+{"kind":"shape","slide":25,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":25,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,866,22]}
+{"kind":"textbox","slide":25,"id":"13","role":"takeaway text","text":"C(+L0)는 B(+Judge)보다 훨씬 빠르고, Smart Cascade와 결합하면 운영 부담도 낮아진다.","textChars":60,"textLines":1,"bbox":[94,169,866,22]}
+{"kind":"shape","slide":25,"id":"14","role":"latency panel","shapeType":"roundRect","bbox":[74,252,524,336]}
+{"kind":"shape","slide":25,"id":"15","role":"latency title","shapeType":"rect","bbox":[100,282,120,22]}
+{"kind":"textbox","slide":25,"id":"15","role":"latency title","text":"p99 지연","textChars":6,"textLines":1,"bbox":[100,282,120,22]}
+{"kind":"shape","slide":25,"id":"16","role":"metric B + Judge","shapeType":"roundRect","bbox":[100,326,212,126]}
+{"kind":"shape","slide":25,"id":"17","role":"metric accent B + Judge","shapeType":"rect","bbox":[100,326,212,6]}
+{"kind":"shape","slide":25,"id":"18","role":"metric value B + Judge","shapeType":"rect","bbox":[118,344,176,52]}
+{"kind":"textbox","slide":25,"id":"18","role":"metric value B + Judge","text":"4,819ms","textChars":7,"textLines":1,"bbox":[118,344,176,52]}
+{"kind":"shape","slide":25,"id":"19","role":"metric label B + Judge","shapeType":"rect","bbox":[118,400,176,30]}
+{"kind":"textbox","slide":25,"id":"19","role":"metric label B + Judge","text":"B + Judge","textChars":9,"textLines":1,"bbox":[118,400,176,30]}
+{"kind":"shape","slide":25,"id":"20","role":"metric C + L0","shapeType":"roundRect","bbox":[344,326,212,126]}
+{"kind":"shape","slide":25,"id":"21","role":"metric accent C + L0","shapeType":"rect","bbox":[344,326,212,6]}
+{"kind":"shape","slide":25,"id":"22","role":"metric value C + L0","shapeType":"rect","bbox":[362,344,176,52]}
+{"kind":"textbox","slide":25,"id":"22","role":"metric value C + L0","text":"830ms","textChars":5,"textLines":1,"bbox":[362,344,176,52]}
+{"kind":"shape","slide":25,"id":"23","role":"metric label C + L0","shapeType":"rect","bbox":[362,400,176,30]}
+{"kind":"textbox","slide":25,"id":"23","role":"metric label C + L0","text":"C + L0","textChars":6,"textLines":1,"bbox":[362,400,176,30]}
+{"kind":"shape","slide":25,"id":"24","role":"metric L0 단독","shapeType":"roundRect","bbox":[222,476,212,82]}
+{"kind":"shape","slide":25,"id":"25","role":"metric accent L0 단독","shapeType":"rect","bbox":[222,476,212,6]}
+{"kind":"shape","slide":25,"id":"26","role":"metric value L0 단독","shapeType":"rect","bbox":[240,488,176,28]}
+{"kind":"textbox","slide":25,"id":"26","role":"metric value L0 단독","text":"135ms","textChars":5,"textLines":1,"bbox":[240,488,176,28]}
+{"kind":"shape","slide":25,"id":"27","role":"metric label L0 단독","shapeType":"rect","bbox":[240,516,176,16]}
+{"kind":"textbox","slide":25,"id":"27","role":"metric label L0 단독","text":"L0 단독","textChars":5,"textLines":1,"bbox":[240,516,176,16]}
+{"kind":"shape","slide":25,"id":"28","role":"cost panel","shapeType":"roundRect","bbox":[640,252,548,336]}
+{"kind":"shape","slide":25,"id":"29","role":"cost title","shapeType":"rect","bbox":[666,282,260,22]}
+{"kind":"textbox","slide":25,"id":"29","role":"cost title","text":"1만 건 요청 기준 운영비","textChars":14,"textLines":1,"bbox":[666,282,260,22]}
+{"kind":"shape","slide":25,"id":"30","role":"metric L4 호출 절감","shapeType":"roundRect","bbox":[666,326,226,126]}
+{"kind":"shape","slide":25,"id":"31","role":"metric accent L4 호출 절감","shapeType":"rect","bbox":[666,326,226,6]}
+{"kind":"shape","slide":25,"id":"32","role":"metric value L4 호출 절감","shapeType":"rect","bbox":[684,344,190,52]}
+{"kind":"textbox","slide":25,"id":"32","role":"metric value L4 호출 절감","text":"94.32%","textChars":6,"textLines":1,"bbox":[684,344,190,52]}
+{"kind":"shape","slide":25,"id":"33","role":"metric label L4 호출 절감","shapeType":"rect","bbox":[684,400,190,30]}
+{"kind":"textbox","slide":25,"id":"33","role":"metric label L4 호출 절감","text":"L4 호출 절감","textChars":8,"textLines":1,"bbox":[684,400,190,30]}
+{"kind":"shape","slide":25,"id":"34","role":"metric 1만 건 기준 추정 절감액","shapeType":"roundRect","bbox":[926,326,226,126]}
+{"kind":"shape","slide":25,"id":"35","role":"metric accent 1만 건 기준 추정 절감액","shapeType":"rect","bbox":[926,326,226,6]}
+{"kind":"shape","slide":25,"id":"36","role":"metric value 1만 건 기준 추정 절감액","shapeType":"rect","bbox":[944,344,190,52]}
+{"kind":"textbox","slide":25,"id":"36","role":"metric value 1만 건 기준 추정 절감액","text":"$1.27","textChars":5,"textLines":1,"bbox":[944,344,190,52]}
+{"kind":"shape","slide":25,"id":"37","role":"metric label 1만 건 기준 추정 절감액","shapeType":"rect","bbox":[944,400,190,30]}
+{"kind":"textbox","slide":25,"id":"37","role":"metric label 1만 건 기준 추정 절감액","text":"1만 건 기준 추정 절감액","textChars":14,"textLines":1,"bbox":[944,400,190,30]}
+{"kind":"shape","slide":25,"id":"38","role":"metric 최종 TRUE 유지","shapeType":"roundRect","bbox":[796,476,226,82]}
+{"kind":"shape","slide":25,"id":"39","role":"metric accent 최종 TRUE 유지","shapeType":"rect","bbox":[796,476,226,6]}
+{"kind":"shape","slide":25,"id":"40","role":"metric value 최종 TRUE 유지","shapeType":"rect","bbox":[814,488,190,28]}
+{"kind":"textbox","slide":25,"id":"40","role":"metric value 최종 TRUE 유지","text":"97.23%","textChars":6,"textLines":1,"bbox":[814,488,190,28]}
+{"kind":"shape","slide":25,"id":"41","role":"metric label 최종 TRUE 유지","shapeType":"rect","bbox":[814,516,190,16]}
+{"kind":"textbox","slide":25,"id":"41","role":"metric label 최종 TRUE 유지","text":"최종 TRUE 유지","textChars":10,"textLines":1,"bbox":[814,516,190,16]}
+{"kind":"shape","slide":25,"id":"42","role":"cost footnote","shapeType":"rect","bbox":[676,566,466,16]}
+{"kind":"textbox","slide":25,"id":"42","role":"cost footnote","text":"동일 Judge 호출 가정 기준 추정치","textChars":21,"textLines":1,"bbox":[676,566,466,16]}
+{"kind":"shape","slide":26,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":26,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":26,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":26,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":26,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":26,"id":"6","role":"header section","text":"운영성","textChars":3,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":26,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":26,"id":"7","role":"header index","text":"26 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":26,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":26,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":26,"id":"9","role":"title","text":"스마트 캐스케이드","textChars":9,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":26,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":26,"id":"10","role":"subtitle","text":"L4 Judge를 필요한 경우에만 호출해 비용과 지연을 줄인다","textChars":34,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":26,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,840,40]}
+{"kind":"shape","slide":26,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":26,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,806,22]}
+{"kind":"textbox","slide":26,"id":"13","role":"takeaway text","text":"10,000건 중 568건에만 Judge를 호출해도 최종 TRUE rate는 그대로 유지된다.","textChars":52,"textLines":1,"bbox":[94,169,806,22]}
+{"kind":"shape","slide":26,"id":"14","role":"funnel 전체 케이스","shapeType":"roundRect","bbox":[100,280,1020,72]}
+{"kind":"shape","slide":26,"id":"15","role":"funnel value 전체 케이스","shapeType":"rect","bbox":[132,294,160,36]}
+{"kind":"textbox","slide":26,"id":"15","role":"funnel value 전체 케이스","text":"10,000","textChars":6,"textLines":1,"bbox":[132,294,160,36]}
+{"kind":"shape","slide":26,"id":"16","role":"funnel label 전체 케이스","shapeType":"rect","bbox":[320,304,760,22]}
+{"kind":"textbox","slide":26,"id":"16","role":"funnel label 전체 케이스","text":"전체 케이스","textChars":6,"textLines":1,"bbox":[320,304,760,22]}
+{"kind":"shape","slide":26,"id":"17","role":"funnel L0~L3에서 neutralized","shapeType":"roundRect","bbox":[170,370,880,72]}
+{"kind":"shape","slide":26,"id":"18","role":"funnel value L0~L3에서 neutralized","shapeType":"rect","bbox":[202,384,160,36]}
+{"kind":"textbox","slide":26,"id":"18","role":"funnel value L0~L3에서 neutralized","text":"9,432","textChars":5,"textLines":1,"bbox":[202,384,160,36]}
+{"kind":"shape","slide":26,"id":"19","role":"funnel label L0~L3에서 neutralized","shapeType":"rect","bbox":[390,394,620,22]}
+{"kind":"textbox","slide":26,"id":"19","role":"funnel label L0~L3에서 neutralized","text":"L0~L3에서 neutralized","textChars":19,"textLines":1,"bbox":[390,394,620,22]}
+{"kind":"shape","slide":26,"id":"20","role":"funnel L4 Judge 호출","shapeType":"roundRect","bbox":[330,460,560,72]}
+{"kind":"shape","slide":26,"id":"21","role":"funnel value L4 Judge 호출","shapeType":"rect","bbox":[362,474,160,36]}
+{"kind":"textbox","slide":26,"id":"21","role":"funnel value L4 Judge 호출","text":"568","textChars":3,"textLines":1,"bbox":[362,474,160,36]}
+{"kind":"shape","slide":26,"id":"22","role":"funnel label L4 Judge 호출","shapeType":"rect","bbox":[550,484,300,22]}
+{"kind":"textbox","slide":26,"id":"22","role":"funnel label L4 Judge 호출","text":"L4 Judge 호출","textChars":11,"textLines":1,"bbox":[550,484,300,22]}
+{"kind":"shape","slide":26,"id":"23","role":"funnel L4가 추가 회수","shapeType":"roundRect","bbox":[450,550,320,72]}
+{"kind":"shape","slide":26,"id":"24","role":"funnel value L4가 추가 회수","shapeType":"rect","bbox":[482,564,160,36]}
+{"kind":"textbox","slide":26,"id":"24","role":"funnel value L4가 추가 회수","text":"291","textChars":3,"textLines":1,"bbox":[482,564,160,36]}
+{"kind":"shape","slide":26,"id":"25","role":"funnel label L4가 추가 회수","shapeType":"rect","bbox":[670,574,60,22]}
+{"kind":"textbox","slide":26,"id":"25","role":"funnel label L4가 추가 회수","text":"L4가 추가 회수","textChars":9,"textLines":1,"bbox":[670,574,60,22]}
+{"kind":"shape","slide":26,"id":"26","role":"metric L4 호출 절감","shapeType":"roundRect","bbox":[930,242,250,100]}
+{"kind":"shape","slide":26,"id":"27","role":"metric accent L4 호출 절감","shapeType":"rect","bbox":[930,242,250,6]}
+{"kind":"shape","slide":26,"id":"28","role":"metric value L4 호출 절감","shapeType":"rect","bbox":[948,256,214,38]}
+{"kind":"textbox","slide":26,"id":"28","role":"metric value L4 호출 절감","text":"94.32%","textChars":6,"textLines":1,"bbox":[948,256,214,38]}
+{"kind":"shape","slide":26,"id":"29","role":"metric label L4 호출 절감","shapeType":"rect","bbox":[948,294,214,18]}
+{"kind":"textbox","slide":26,"id":"29","role":"metric label L4 호출 절감","text":"L4 호출 절감","textChars":8,"textLines":1,"bbox":[948,294,214,18]}
+{"kind":"shape","slide":26,"id":"30","role":"metric 최종 TRUE 유지","shapeType":"roundRect","bbox":[930,356,250,100]}
+{"kind":"shape","slide":26,"id":"31","role":"metric accent 최종 TRUE 유지","shapeType":"rect","bbox":[930,356,250,6]}
+{"kind":"shape","slide":26,"id":"32","role":"metric value 최종 TRUE 유지","shapeType":"rect","bbox":[948,370,214,38]}
+{"kind":"textbox","slide":26,"id":"32","role":"metric value 최종 TRUE 유지","text":"97.23%","textChars":6,"textLines":1,"bbox":[948,370,214,38]}
+{"kind":"shape","slide":26,"id":"33","role":"metric label 최종 TRUE 유지","shapeType":"rect","bbox":[948,408,214,18]}
+{"kind":"textbox","slide":26,"id":"33","role":"metric label 최종 TRUE 유지","text":"최종 TRUE 유지","textChars":10,"textLines":1,"bbox":[948,408,214,18]}
+{"kind":"shape","slide":27,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":27,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":27,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":27,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":27,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":27,"id":"6","role":"header section","text":"운영성","textChars":3,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":27,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":27,"id":"7","role":"header index","text":"27 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":27,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":27,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":27,"id":"9","role":"title","text":"강건성 검증","textChars":6,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":27,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":27,"id":"10","role":"subtitle","text":"데이터를 더 어렵게 바꿔도 L0 우위는 유지된다","textChars":26,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":27,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,900,40]}
+{"kind":"shape","slide":27,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":27,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,866,22]}
+{"kind":"textbox","slide":27,"id":"13","role":"takeaway text","text":"한국어 의미형에서 B-C 격차가 +8.99%p에서 +10.65%p로 오히려 커졌다.","textChars":46,"textLines":1,"bbox":[94,169,866,22]}
+{"kind":"shape","slide":27,"id":"14","role":"robustness chart panel","shapeType":"roundRect","bbox":[74,252,760,336]}
+{"kind":"chart","slide":27,"id":"15","role":"robustness chart","bbox":[98,286,712,270]}
+{"kind":"shape","slide":27,"id":"16","role":"metric v1 격차","shapeType":"roundRect","bbox":[870,266,300,90]}
+{"kind":"shape","slide":27,"id":"17","role":"metric accent v1 격차","shapeType":"rect","bbox":[870,266,300,6]}
+{"kind":"shape","slide":27,"id":"18","role":"metric value v1 격차","shapeType":"rect","bbox":[888,278,264,28]}
+{"kind":"textbox","slide":27,"id":"18","role":"metric value v1 격차","text":"+8.99%p","textChars":7,"textLines":1,"bbox":[888,278,264,28]}
+{"kind":"shape","slide":27,"id":"19","role":"metric label v1 격차","shapeType":"rect","bbox":[888,306,264,16]}
+{"kind":"textbox","slide":27,"id":"19","role":"metric label v1 격차","text":"v1 격차","textChars":5,"textLines":1,"bbox":[888,306,264,16]}
+{"kind":"shape","slide":27,"id":"20","role":"metric v4 격차","shapeType":"roundRect","bbox":[870,380,300,90]}
+{"kind":"shape","slide":27,"id":"21","role":"metric accent v4 격차","shapeType":"rect","bbox":[870,380,300,6]}
+{"kind":"shape","slide":27,"id":"22","role":"metric value v4 격차","shapeType":"rect","bbox":[888,392,264,28]}
+{"kind":"textbox","slide":27,"id":"22","role":"metric value v4 격차","text":"+10.65%p","textChars":8,"textLines":1,"bbox":[888,392,264,28]}
+{"kind":"shape","slide":27,"id":"23","role":"metric label v4 격차","shapeType":"rect","bbox":[888,420,264,16]}
+{"kind":"textbox","slide":27,"id":"23","role":"metric label v4 격차","text":"v4 격차","textChars":5,"textLines":1,"bbox":[888,420,264,16]}
+{"kind":"shape","slide":27,"id":"24","role":"metric v4 전체 C","shapeType":"roundRect","bbox":[870,494,300,90]}
+{"kind":"shape","slide":27,"id":"25","role":"metric accent v4 전체 C","shapeType":"rect","bbox":[870,494,300,6]}
+{"kind":"shape","slide":27,"id":"26","role":"metric value v4 전체 C","shapeType":"rect","bbox":[888,506,264,28]}
+{"kind":"textbox","slide":27,"id":"26","role":"metric value v4 전체 C","text":"94.99%","textChars":6,"textLines":1,"bbox":[888,506,264,28]}
+{"kind":"shape","slide":27,"id":"27","role":"metric label v4 전체 C","shapeType":"rect","bbox":[888,534,264,16]}
+{"kind":"textbox","slide":27,"id":"27","role":"metric label v4 전체 C","text":"v4 전체 C","textChars":7,"textLines":1,"bbox":[888,534,264,16]}
+{"kind":"shape","slide":28,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":28,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":28,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":28,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":28,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":28,"id":"6","role":"header section","text":"운영성","textChars":3,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":28,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":28,"id":"7","role":"header index","text":"28 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":28,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":28,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":28,"id":"9","role":"title","text":"오탐과 운영 가능성","textChars":10,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":28,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":28,"id":"10","role":"subtitle","text":"운영 가능성을 말하려면 정상 문서에서의 오탐부터 보여줘야 한다","textChars":34,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":28,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,560,40]}
+{"kind":"shape","slide":28,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":28,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,526,22]}
+{"kind":"textbox","slide":28,"id":"13","role":"takeaway text","text":"정상 한국어 문서 50건 기준 FP는 2%였다.","textChars":26,"textLines":1,"bbox":[94,169,526,22]}
+{"kind":"shape","slide":28,"id":"14","role":"metric FP 비율","shapeType":"roundRect","bbox":[102,282,290,170]}
+{"kind":"shape","slide":28,"id":"15","role":"metric accent FP 비율","shapeType":"rect","bbox":[102,282,290,6]}
+{"kind":"shape","slide":28,"id":"16","role":"metric value FP 비율","shapeType":"rect","bbox":[120,300,254,52]}
+{"kind":"textbox","slide":28,"id":"16","role":"metric value FP 비율","text":"2%","textChars":2,"textLines":1,"bbox":[120,300,254,52]}
+{"kind":"shape","slide":28,"id":"17","role":"metric label FP 비율","shapeType":"rect","bbox":[120,356,254,30]}
+{"kind":"textbox","slide":28,"id":"17","role":"metric label FP 비율","text":"FP 비율","textChars":5,"textLines":1,"bbox":[120,356,254,30]}
+{"kind":"shape","slide":28,"id":"18","role":"metric 정상 한국어 문서","shapeType":"roundRect","bbox":[494,282,290,170]}
+{"kind":"shape","slide":28,"id":"19","role":"metric accent 정상 한국어 문서","shapeType":"rect","bbox":[494,282,290,6]}
+{"kind":"shape","slide":28,"id":"20","role":"metric value 정상 한국어 문서","shapeType":"rect","bbox":[512,300,254,52]}
+{"kind":"textbox","slide":28,"id":"20","role":"metric value 정상 한국어 문서","text":"50","textChars":2,"textLines":1,"bbox":[512,300,254,52]}
+{"kind":"shape","slide":28,"id":"21","role":"metric label 정상 한국어 문서","shapeType":"rect","bbox":[512,356,254,30]}
+{"kind":"textbox","slide":28,"id":"21","role":"metric label 정상 한국어 문서","text":"정상 한국어 문서","textChars":9,"textLines":1,"bbox":[512,356,254,30]}
+{"kind":"shape","slide":28,"id":"22","role":"metric 오탐 문서","shapeType":"roundRect","bbox":[886,282,290,170]}
+{"kind":"shape","slide":28,"id":"23","role":"metric accent 오탐 문서","shapeType":"rect","bbox":[886,282,290,6]}
+{"kind":"shape","slide":28,"id":"24","role":"metric value 오탐 문서","shapeType":"rect","bbox":[904,300,254,52]}
+{"kind":"textbox","slide":28,"id":"24","role":"metric value 오탐 문서","text":"1","textChars":1,"textLines":1,"bbox":[904,300,254,52]}
+{"kind":"shape","slide":28,"id":"25","role":"metric label 오탐 문서","shapeType":"rect","bbox":[904,356,254,30]}
+{"kind":"textbox","slide":28,"id":"25","role":"metric label 오탐 문서","text":"오탐 문서","textChars":5,"textLines":1,"bbox":[904,356,254,30]}
+{"kind":"shape","slide":28,"id":"26","role":"fp example panel","shapeType":"roundRect","bbox":[102,492,1074,118]}
+{"kind":"shape","slide":28,"id":"27","role":"fp label","shapeType":"rect","bbox":[126,516,120,18]}
+{"kind":"textbox","slide":28,"id":"27","role":"fp label","text":"해석 포인트","textChars":6,"textLines":1,"bbox":[126,516,120,18]}
+{"kind":"shape","slide":28,"id":"28","role":"bullet dot","shapeType":"ellipse","bbox":[126,550,8,8]}
+{"kind":"shape","slide":28,"id":"29","role":"fp bullets","shapeType":"rect","bbox":[146,540,1004,24.4]}
+{"kind":"textbox","slide":28,"id":"29","role":"fp bullets","text":"현재 저장된 결과는 정상 한국어 문서 50건 중 1개 문서에서만 오탐을 기록했다.","textChars":45,"textLines":1,"bbox":[146,540,1004,24.4]}
+{"kind":"shape","slide":28,"id":"30","role":"bullet dot","shapeType":"ellipse","bbox":[126,584.4,8,8]}
+{"kind":"shape","slide":28,"id":"31","role":"fp bullets","shapeType":"rect","bbox":[146,574.4,1004,24.4]}
+{"kind":"textbox","slide":28,"id":"31","role":"fp bullets","text":"오탐 유형은 부서명 계열이었고, 운영 규칙 보정 대상으로 해석할 수 있다.","textChars":41,"textLines":1,"bbox":[146,574.4,1004,24.4]}
+{"kind":"shape","slide":29,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":29,"id":"3","role":"bg orb","shapeType":"ellipse","bbox":[-120,-160,420,300]}
+{"kind":"shape","slide":29,"id":"4","role":"bg orb","shapeType":"ellipse","bbox":[980,520,360,260]}
+{"kind":"shape","slide":29,"id":"5","role":"bg orb","shapeType":"ellipse","bbox":[1080,-40,220,180]}
+{"kind":"shape","slide":29,"id":"6","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":29,"id":"6","role":"header section","text":"중간발표","textChars":4,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":29,"id":"7","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":29,"id":"7","role":"header index","text":"29 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":29,"id":"8","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":29,"id":"9","role":"title","shapeType":"rect","bbox":[72,82,780,76]}
+{"kind":"textbox","slide":29,"id":"9","role":"title","text":"중간발표 시점의 성과와 남은 과제","textChars":18,"textLines":1,"bbox":[72,82,780,76]}
+{"kind":"shape","slide":29,"id":"10","role":"subtitle","shapeType":"rect","bbox":[72,156,780,44]}
+{"kind":"textbox","slide":29,"id":"10","role":"subtitle","text":"이미 증명한 것과 최종발표 전 보강할 것을 분리한다","textChars":28,"textLines":1,"bbox":[72,156,780,44]}
+{"kind":"shape","slide":29,"id":"11","role":"takeaway panel","shapeType":"roundRect","bbox":[72,160,980,40]}
+{"kind":"shape","slide":29,"id":"12","role":"takeaway accent","shapeType":"rect","bbox":[72,160,8,40]}
+{"kind":"shape","slide":29,"id":"13","role":"takeaway text","shapeType":"rect","bbox":[94,169,946,22]}
+{"kind":"textbox","slide":29,"id":"13","role":"takeaway text","text":"중간발표에서는 이미 증명한 부분을 선명하게 말하고, 남은 과제는 과장 없이 적는 것이 중요하다.","textChars":53,"textLines":1,"bbox":[94,169,946,22]}
+{"kind":"shape","slide":29,"id":"14","role":"done panel","shapeType":"roundRect","bbox":[72,236,540,382]}
+{"kind":"shape","slide":29,"id":"15","role":"todo panel","shapeType":"roundRect","bbox":[668,236,540,382]}
+{"kind":"shape","slide":29,"id":"16","role":"done title","shapeType":"rect","bbox":[98,266,180,24]}
+{"kind":"textbox","slide":29,"id":"16","role":"done title","text":"이미 증명한 것","textChars":8,"textLines":1,"bbox":[98,266,180,24]}
+{"kind":"shape","slide":29,"id":"17","role":"bullet dot","shapeType":"ellipse","bbox":[98,320,8,8]}
+{"kind":"shape","slide":29,"id":"18","role":"done bullets","shapeType":"rect","bbox":[118,310,450,25.599999999999998]}
+{"kind":"textbox","slide":29,"id":"18","role":"done bullets","text":"한국어 vs 영어 성능 격차를 10k benchmark로 확인했다.","textChars":37,"textLines":1,"bbox":[118,310,450,25.599999999999998]}
+{"kind":"shape","slide":29,"id":"19","role":"bullet dot","shapeType":"ellipse","bbox":[98,359.6,8,8]}
+{"kind":"shape","slide":29,"id":"20","role":"done bullets","shapeType":"rect","bbox":[118,349.6,450,25.599999999999998]}
+{"kind":"textbox","slide":29,"id":"20","role":"done bullets","text":"한국어 의미형에서 L0가 Judge보다 높다는 점을 증명했다.","textChars":34,"textLines":1,"bbox":[118,349.6,450,25.599999999999998]}
+{"kind":"shape","slide":29,"id":"21","role":"bullet dot","shapeType":"ellipse","bbox":[98,399.20000000000005,8,8]}
+{"kind":"shape","slide":29,"id":"22","role":"done bullets","shapeType":"rect","bbox":[118,389.20000000000005,450,25.599999999999998]}
+{"kind":"textbox","slide":29,"id":"22","role":"done bullets","text":"McNemar로 B vs C 차이가 통계적으로 유의함을 보였다.","textChars":35,"textLines":1,"bbox":[118,389.20000000000005,450,25.599999999999998]}
+{"kind":"shape","slide":29,"id":"23","role":"bullet dot","shapeType":"ellipse","bbox":[98,438.80000000000007,8,8]}
+{"kind":"shape","slide":29,"id":"24","role":"done bullets","shapeType":"rect","bbox":[118,428.80000000000007,450,47.199999999999996]}
+{"kind":"textbox","slide":29,"id":"24","role":"done bullets","text":"latency, cost, smart cascade, FP로\n운영성도 제시했다.","textChars":44,"textLines":2,"bbox":[118,428.80000000000007,450,47.199999999999996]}
+{"kind":"shape","slide":29,"id":"25","role":"todo title","shapeType":"rect","bbox":[694,266,220,24]}
+{"kind":"textbox","slide":29,"id":"25","role":"todo title","text":"최종발표 전 보강할 것","textChars":12,"textLines":1,"bbox":[694,266,220,24]}
+{"kind":"shape","slide":29,"id":"26","role":"bullet dot","shapeType":"ellipse","bbox":[694,320,8,8]}
+{"kind":"shape","slide":29,"id":"27","role":"todo bullets","shapeType":"rect","bbox":[714,310,450,25.599999999999998]}
+{"kind":"textbox","slide":29,"id":"27","role":"todo bullets","text":"output-side leakage 평가 추가","textChars":25,"textLines":1,"bbox":[714,310,450,25.599999999999998]}
+{"kind":"shape","slide":29,"id":"28","role":"bullet dot","shapeType":"ellipse","bbox":[694,359.6,8,8]}
+{"kind":"shape","slide":29,"id":"29","role":"todo bullets","shapeType":"rect","bbox":[714,349.6,450,25.599999999999998]}
+{"kind":"textbox","slide":29,"id":"29","role":"todo bullets","text":"prompt injection 결합 시나리오 확대","textChars":27,"textLines":1,"bbox":[714,349.6,450,25.599999999999998]}
+{"kind":"shape","slide":29,"id":"30","role":"bullet dot","shapeType":"ellipse","bbox":[694,399.20000000000005,8,8]}
+{"kind":"shape","slide":29,"id":"31","role":"todo bullets","shapeType":"rect","bbox":[714,389.20000000000005,450,25.599999999999998]}
+{"kind":"textbox","slide":29,"id":"31","role":"todo bullets","text":"신규 PII 유형과 외부 baseline 비교 보강","textChars":28,"textLines":1,"bbox":[714,389.20000000000005,450,25.599999999999998]}
+{"kind":"shape","slide":29,"id":"32","role":"metric 핵심 가설 검증","shapeType":"roundRect","bbox":[214,556,240,88]}
+{"kind":"shape","slide":29,"id":"33","role":"metric accent 핵심 가설 검증","shapeType":"rect","bbox":[214,556,240,6]}
+{"kind":"shape","slide":29,"id":"34","role":"metric value 핵심 가설 검증","shapeType":"rect","bbox":[232,568,204,28]}
+{"kind":"textbox","slide":29,"id":"34","role":"metric value 핵심 가설 검증","text":"중간발표 완료","textChars":7,"textLines":1,"bbox":[232,568,204,28]}
+{"kind":"shape","slide":29,"id":"35","role":"metric label 핵심 가설 검증","shapeType":"rect","bbox":[232,596,204,16]}
+{"kind":"textbox","slide":29,"id":"35","role":"metric label 핵심 가설 검증","text":"핵심 가설 검증","textChars":8,"textLines":1,"bbox":[232,596,204,16]}
+{"kind":"shape","slide":29,"id":"36","role":"metric 확장 검증","shapeType":"roundRect","bbox":[828,556,220,88]}
+{"kind":"shape","slide":29,"id":"37","role":"metric accent 확장 검증","shapeType":"rect","bbox":[828,556,220,6]}
+{"kind":"shape","slide":29,"id":"38","role":"metric value 확장 검증","shapeType":"rect","bbox":[846,568,184,28]}
+{"kind":"textbox","slide":29,"id":"38","role":"metric value 확장 검증","text":"최종발표 과제","textChars":7,"textLines":1,"bbox":[846,568,184,28]}
+{"kind":"shape","slide":29,"id":"39","role":"metric label 확장 검증","shapeType":"rect","bbox":[846,596,184,16]}
+{"kind":"textbox","slide":29,"id":"39","role":"metric label 확장 검증","text":"확장 검증","textChars":5,"textLines":1,"bbox":[846,596,184,16]}
+{"kind":"shape","slide":30,"id":"2","role":"background","shapeType":"rect","bbox":[0,0,1280,720]}
+{"kind":"shape","slide":30,"id":"3","role":"header section","shapeType":"rect","bbox":[72,28,220,24]}
+{"kind":"textbox","slide":30,"id":"3","role":"header section","text":"마무리","textChars":3,"textLines":1,"bbox":[72,28,220,24]}
+{"kind":"shape","slide":30,"id":"4","role":"header index","shapeType":"rect","bbox":[1080,28,120,24]}
+{"kind":"textbox","slide":30,"id":"4","role":"header index","text":"30 / 30","textChars":7,"textLines":1,"bbox":[1080,28,120,24]}
+{"kind":"shape","slide":30,"id":"5","role":"header rule","shapeType":"rect","bbox":[72,60,1136,1.5]}
+{"kind":"shape","slide":30,"id":"6","role":"final title","shapeType":"rect","bbox":[72,92,320,44]}
+{"kind":"textbox","slide":30,"id":"6","role":"final title","text":"결론 및 Q&A","textChars":8,"textLines":1,"bbox":[72,92,320,44]}
+{"kind":"shape","slide":30,"id":"7","role":"final line 1","shapeType":"roundRect","bbox":[72,170,1136,96]}
+{"kind":"shape","slide":30,"id":"8","role":"final line 2","shapeType":"roundRect","bbox":[72,286,1136,96]}
+{"kind":"shape","slide":30,"id":"9","role":"final line 3","shapeType":"roundRect","bbox":[72,402,1136,96]}
+{"kind":"shape","slide":30,"id":"10","role":"final statement 1","shapeType":"rect","bbox":[104,198,1000,36]}
+{"kind":"textbox","slide":30,"id":"10","role":"final statement 1","text":"영어는 잘 막지만 한국어 텍스트형 PII는 공백이 있다","textChars":30,"textLines":1,"bbox":[104,198,1000,36]}
+{"kind":"shape","slide":30,"id":"11","role":"final statement 2","shapeType":"rect","bbox":[104,314,1000,36]}
+{"kind":"textbox","slide":30,"id":"11","role":"final statement 2","text":"Layer 0가 그 공백을 메운다","textChars":18,"textLines":1,"bbox":[104,314,1000,36]}
+{"kind":"shape","slide":30,"id":"12","role":"final statement 3","shapeType":"rect","bbox":[104,430,1000,36]}
+{"kind":"textbox","slide":30,"id":"12","role":"final statement 3","text":"그리고 LLM Judge보다 더 싸고 빠르며 한국어 의미형에서 더 잘 잡는다","textChars":42,"textLines":1,"bbox":[104,430,1000,36]}
+{"kind":"shape","slide":30,"id":"13","role":"metric 영어 기준선","shapeType":"roundRect","bbox":[164,556,230,102]}
+{"kind":"shape","slide":30,"id":"14","role":"metric accent 영어 기준선","shapeType":"rect","bbox":[164,556,230,6]}
+{"kind":"shape","slide":30,"id":"15","role":"metric value 영어 기준선","shapeType":"rect","bbox":[182,570,194,38]}
+{"kind":"textbox","slide":30,"id":"15","role":"metric value 영어 기준선","text":"99.37%","textChars":6,"textLines":1,"bbox":[182,570,194,38]}
+{"kind":"shape","slide":30,"id":"16","role":"metric label 영어 기준선","shapeType":"rect","bbox":[182,608,194,18]}
+{"kind":"textbox","slide":30,"id":"16","role":"metric label 영어 기준선","text":"영어 기준선","textChars":6,"textLines":1,"bbox":[182,608,194,18]}
+{"kind":"shape","slide":30,"id":"17","role":"metric 한국어 의미형 기준선","shapeType":"roundRect","bbox":[456,556,230,102]}
+{"kind":"shape","slide":30,"id":"18","role":"metric accent 한국어 의미형 기준선","shapeType":"rect","bbox":[456,556,230,6]}
+{"kind":"shape","slide":30,"id":"19","role":"metric value 한국어 의미형 기준선","shapeType":"rect","bbox":[474,570,194,38]}
+{"kind":"textbox","slide":30,"id":"19","role":"metric value 한국어 의미형 기준선","text":"49.62%","textChars":6,"textLines":1,"bbox":[474,570,194,38]}
+{"kind":"shape","slide":30,"id":"20","role":"metric label 한국어 의미형 기준선","shapeType":"rect","bbox":[474,608,194,18]}
+{"kind":"textbox","slide":30,"id":"20","role":"metric label 한국어 의미형 기준선","text":"한국어 의미형 기준선","textChars":11,"textLines":1,"bbox":[474,608,194,18]}
+{"kind":"shape","slide":30,"id":"21","role":"metric L0 적용 후 의미형","shapeType":"roundRect","bbox":[748,556,230,102]}
+{"kind":"shape","slide":30,"id":"22","role":"metric accent L0 적용 후 의미형","shapeType":"rect","bbox":[748,556,230,6]}
+{"kind":"shape","slide":30,"id":"23","role":"metric value L0 적용 후 의미형","shapeType":"rect","bbox":[766,570,194,38]}
+{"kind":"textbox","slide":30,"id":"23","role":"metric value L0 적용 후 의미형","text":"96.39%","textChars":6,"textLines":1,"bbox":[766,570,194,38]}
+{"kind":"shape","slide":30,"id":"24","role":"metric label L0 적용 후 의미형","shapeType":"rect","bbox":[766,608,194,18]}
+{"kind":"textbox","slide":30,"id":"24","role":"metric label L0 적용 후 의미형","text":"L0 적용 후 의미형","textChars":11,"textLines":1,"bbox":[766,608,194,18]}
+{"kind":"shape","slide":30,"id":"25","role":"qa","shapeType":"rect","bbox":[1108,622,70,22]}
+{"kind":"textbox","slide":30,"id":"25","role":"qa","text":"Q&A","textChars":3,"textLines":1,"bbox":[1108,622,70,22]}
+{"kind":"image","slide":4,"id":"26","role":"KDPII screenshot","path":"C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\tmp_old_media\\image1.png","bbox":[572,248,618,238]}
+{"kind":"image","slide":6,"id":"26","role":"Bedrock output","path":"C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\tmp_old_media\\image5.png","bbox":[686,258,506,280]}
+{"kind":"image","slide":6,"id":"27","role":"Bedrock input","path":"C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\tmp_old_media\\image4.png","bbox":[88,258,506,280]}
+{"kind":"image","slide":5,"id":"22","role":"No guardrail gateway diagram","path":"C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\tmp_old_media\\image7.png","bbox":[556,228,634,398]}
+{"kind":"image","slide":9,"id":"22","role":"AI Gateway diagram","path":"C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\tmp_old_media\\image9.png","bbox":[544,226,648,400]}
