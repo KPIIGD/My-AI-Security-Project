@@ -1,0 +1,275 @@
+openapi: 3.1.0
+info:
+  title: Korean PII Guardrail API
+  version: v0.2-single-turn
+  description: Single-turn Korean PII detection and masking API. RAG and multi-turn session features are out of scope.
+paths:
+  /v1/pii/apply:
+    post:
+      summary: Scan and mask a single Korean text input
+      operationId: applyPiiGuardrail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GuardrailRequest'
+      responses:
+        '200':
+          description: Guardrail response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuardrailResponse'
+        '400':
+          description: Invalid request or unsupported v0.2 field
+        '403':
+          description: Unsafe raw span request rejected
+        '413':
+          description: Payload too large
+  /v1/pii/scan:
+    post:
+      summary: Scan a single text input and return safe public spans only
+      operationId: scanPii
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GuardrailRequest'
+      responses:
+        '200':
+          description: Detection result without raw span text
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [request_id, spans, raw_value_logged]
+                properties:
+                  request_id:
+                    type: string
+                  spans:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicPIISpan'
+                  raw_value_logged:
+                    type: boolean
+                    const: false
+  /v1/pii/mask:
+    post:
+      summary: Apply masking to caller-supplied spans
+      operationId: maskPii
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text, spans, output_target, policy_profile]
+              additionalProperties: false
+              properties:
+                text:
+                  type: string
+                spans:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PublicPIISpan'
+                output_target:
+                  $ref: '#/components/schemas/OutputTarget'
+                policy_profile:
+                  type: string
+      responses:
+        '200':
+          description: Masking result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuardrailResponse'
+  /v1/health:
+    get:
+      summary: Health check
+      operationId: health
+      responses:
+        '200':
+          description: Service health
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, version]
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+                  version:
+                    type: string
+                  loaded_profiles:
+                    type: array
+                    items:
+                      type: string
+                  ner_enabled:
+                    type: boolean
+components:
+  schemas:
+    ScanStage:
+      type: string
+      enum: [input, output]
+    OutputTarget:
+      type: string
+      enum: [llm_input, external_output, internal_ui, analytics, audit_log]
+    RiskLevel:
+      type: string
+      enum: [P0, P1, P2, P3]
+    Action:
+      type: string
+      enum: [candidate, pass, mask, pseudonymize, hash, review, block]
+    GuardrailOptions:
+      type: object
+      additionalProperties: false
+      properties:
+        return_spans:
+          type: boolean
+          default: true
+        include_audit_events:
+          type: boolean
+          default: true
+        allow_experimental_entities:
+          type: boolean
+          default: false
+        fail_on_invalid_offset:
+          type: boolean
+          default: true
+        mask_suffix_preserving:
+          type: boolean
+          default: true
+    GuardrailRequest:
+      type: object
+      required: [text]
+      additionalProperties: false
+      properties:
+        text:
+          type: string
+          minLength: 1
+        scan_stage:
+          $ref: '#/components/schemas/ScanStage'
+        output_target:
+          $ref: '#/components/schemas/OutputTarget'
+        policy_profile:
+          type: string
+          enum: [strict, balanced, analytics, analytics_ai_training, audit_log]
+        request_id:
+          type: [string, 'null']
+        document_id:
+          type: [string, 'null']
+        purpose_id:
+          type: [string, 'null']
+        domain:
+          type: [string, 'null']
+        locale:
+          type: string
+          default: ko-KR
+        options:
+          $ref: '#/components/schemas/GuardrailOptions'
+    PublicPIISpan:
+      type: object
+      required: [start, end, span_length, entity_type, score, risk_level, action, sources, reason_codes, raw_value_logged]
+      additionalProperties: false
+      properties:
+        start:
+          type: integer
+          minimum: 0
+        end:
+          type: integer
+          minimum: 0
+        span_length:
+          type: integer
+          minimum: 0
+        entity_type:
+          type: string
+        score:
+          type: number
+          minimum: 0
+          maximum: 1
+        risk_level:
+          $ref: '#/components/schemas/RiskLevel'
+        action:
+          $ref: '#/components/schemas/Action'
+        suffix:
+          type: [string, 'null']
+        is_composite:
+          type: boolean
+          default: false
+        sources:
+          type: array
+          items:
+            type: string
+        detector_ids:
+          type: array
+          items:
+            type: string
+        reason_codes:
+          type: array
+          items:
+            type: string
+        value_hash:
+          type: [string, 'null']
+        raw_value_logged:
+          type: boolean
+          const: false
+    AuditEvent:
+      type: object
+      required: [event_type, entity_type, score, risk_level, action, raw_value_logged]
+      additionalProperties: true
+      properties:
+        event_type:
+          type: string
+        entity_type:
+          type: string
+        score:
+          type: number
+          minimum: 0
+          maximum: 1
+        risk_level:
+          $ref: '#/components/schemas/RiskLevel'
+        action:
+          $ref: '#/components/schemas/Action'
+        value_hash:
+          type: [string, 'null']
+        span_length:
+          type: integer
+        reason_codes:
+          type: array
+          items:
+            type: string
+        raw_value_logged:
+          type: boolean
+          const: false
+    GuardrailResponse:
+      type: object
+      required: [request_id, blocked, spans, policy_profile, output_target, raw_value_logged]
+      additionalProperties: false
+      properties:
+        request_id:
+          type: string
+        blocked:
+          type: boolean
+        masked_text:
+          type: [string, 'null']
+        spans:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicPIISpan'
+        audit_events:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEvent'
+        metrics:
+          type: object
+          additionalProperties: true
+        policy_profile:
+          type: string
+        output_target:
+          $ref: '#/components/schemas/OutputTarget'
+        raw_value_logged:
+          type: boolean
+          const: false

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/detection_result.schema.json",
+  "title": "DetectionResult",
+  "type": "object",
+  "required": ["request_id", "spans", "raw_value_logged"],
+  "additionalProperties": false,
+  "properties": {
+    "request_id": { "type": "string" },
+    "spans": {
+      "type": "array",
+      "items": { "$ref": "pii_span.schema.json" }
+    },
+    "raw_value_logged": { "type": "boolean", "const": false }
+  }
+}

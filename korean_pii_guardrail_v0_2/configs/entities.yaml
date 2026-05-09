@@ -1,0 +1,197 @@
+version: v0.2-single-turn
+entities:
+  RRN:
+    risk_level: P0
+    category: direct_identifier
+    detectors: [regex, validator]
+    default_action: mask
+  FRN:
+    risk_level: P0
+    category: direct_identifier
+    detectors: [regex, validator]
+    default_action: mask
+  PASSPORT:
+    risk_level: P0
+    category: direct_identifier
+    detectors: [regex, validator]
+    default_action: mask
+  DRIVER_LICENSE:
+    risk_level: P0
+    category: direct_identifier
+    detectors: [regex, validator]
+    default_action: mask
+  API_KEY_SECRET:
+    risk_level: P0
+    category: security_secret
+    detectors: [regex, entropy]
+    default_action: block
+  CREDIT_CARD:
+    risk_level: P0
+    category: financial_identifier
+    detectors: [regex, validator]
+    default_action: mask
+  BANK_ACCOUNT:
+    risk_level: P1
+    category: financial_identifier
+    detectors: [regex, dictionary, context]
+    default_action: mask_if_context
+  PHONE_MOBILE:
+    risk_level: P1
+    category: contact_identifier
+    detectors: [regex, validator]
+    default_action: mask
+  PHONE_LANDLINE:
+    risk_level: P1
+    category: contact_identifier
+    detectors: [regex, validator, context]
+    default_action: mask_if_personal
+  EMAIL:
+    risk_level: P1
+    category: contact_identifier
+    detectors: [regex, validator]
+    default_action: mask
+  PERSON_NAME:
+    risk_level: P1
+    category: personal_identifier
+    detectors: [dictionary, ner, context]
+    default_action: mask_if_context
+  ALIAS_HANDLE:
+    risk_level: P1
+    category: personal_identifier
+    detectors: [regex, ner, context]
+    default_action: mask_if_context
+  ADDRESS_FULL:
+    risk_level: P1
+    category: location_identifier
+    detectors: [regex, dictionary, ner, context]
+    default_action: mask
+  ADDRESS_UNIT:
+    risk_level: P2
+    category: quasi_identifier
+    detectors: [dictionary, context]
+    default_action: context_judge
+  ORGANIZATION:
+    risk_level: P2
+    category: affiliation_identifier
+    detectors: [dictionary, ner, context]
+    default_action: context_judge
+  SCHOOL:
+    risk_level: P2
+    category: affiliation_identifier
+    detectors: [dictionary, ner, context]
+    default_action: context_judge
+  HOSPITAL:
+    risk_level: P2
+    category: affiliation_identifier
+    detectors: [dictionary, ner, context]
+    default_action: context_judge
+  DOB:
+    risk_level: P2
+    category: quasi_identifier
+    detectors: [regex, context]
+    default_action: context_judge
+  AGE:
+    risk_level: P3
+    category: quasi_identifier
+    detectors: [regex, context]
+    default_action: pass_unless_composite
+  GENDER:
+    risk_level: P3
+    category: quasi_identifier
+    detectors: [dictionary, context]
+    default_action: pass_unless_composite
+  CUSTOMER_ID:
+    risk_level: P1
+    category: internal_identifier
+    detectors: [regex, context]
+    default_action: mask_if_context
+  EMPLOYEE_ID:
+    risk_level: P1
+    category: internal_identifier
+    detectors: [regex, context]
+    default_action: mask_if_context
+  STUDENT_ID:
+    risk_level: P1
+    category: internal_identifier
+    detectors: [regex, context]
+    default_action: mask_if_context
+  MEDICAL_RECORD_NO:
+    risk_level: P1
+    category: medical_identifier
+    detectors: [regex, context]
+    default_action: mask
+  FAMILY_RELATION:
+    risk_level: P2
+    category: quasi_identifier
+    detectors: [dictionary, context]
+    default_action: context_judge
+  HEALTH_INFO:
+    risk_level: P1
+    category: sensitive_information
+    detectors: [dictionary, ner, context]
+    default_action: policy_dependent
+  IP_ADDRESS:
+    risk_level: P2
+    category: technical_identifier
+    detectors: [regex, validator]
+    default_action: context_judge
+  MAC_ADDRESS:
+    risk_level: P2
+    category: technical_identifier
+    detectors: [regex, validator]
+    default_action: context_judge
+  DEVICE_ID:
+    risk_level: P2
+    category: technical_identifier
+    detectors: [regex, context]
+    default_action: context_judge
+  BUSINESS_REG_NO:
+    risk_level: P1
+    category: business_identifier
+    detectors: [regex, validator]
+    default_action: context_judge
+  CORPORATE_REG_NO:
+    risk_level: P1
+    category: business_identifier
+    detectors: [regex, validator]
+    default_action: context_judge
+  VEHICLE_REG_NO:
+    risk_level: P1
+    category: vehicle_identifier
+    detectors: [regex, ner, context]
+    default_action: mask_if_context
+  COMBINED_QUASI_ID:
+    risk_level: P1
+    category: composite_identifier
+    detectors: [context]
+    default_action: mask
+priority_order:
+  - API_KEY_SECRET
+  - RRN
+  - FRN
+  - PASSPORT
+  - DRIVER_LICENSE
+  - CREDIT_CARD
+  - BANK_ACCOUNT
+  - PHONE_MOBILE
+  - PHONE_LANDLINE
+  - EMAIL
+  - ADDRESS_FULL
+  - MEDICAL_RECORD_NO
+  - CUSTOMER_ID
+  - EMPLOYEE_ID
+  - STUDENT_ID
+  - PERSON_NAME
+  - ALIAS_HANDLE
+  - VEHICLE_REG_NO
+  - ORGANIZATION
+  - SCHOOL
+  - HOSPITAL
+  - ADDRESS_UNIT
+  - DOB
+  - AGE
+  - GENDER
+  - FAMILY_RELATION
+  - IP_ADDRESS
+  - MAC_ADDRESS
+  - DEVICE_ID

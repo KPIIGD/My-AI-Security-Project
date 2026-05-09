@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/guardrail_response.schema.json",
+  "title": "GuardrailResponse",
+  "type": "object",
+  "required": ["request_id", "blocked", "spans", "policy_profile", "output_target", "raw_value_logged"],
+  "additionalProperties": false,
+  "properties": {
+    "request_id": { "type": "string" },
+    "blocked": { "type": "boolean" },
+    "masked_text": { "type": ["string", "null"] },
+    "spans": {
+      "type": "array",
+      "items": { "$ref": "pii_span.schema.json" }
+    },
+    "audit_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["event_type", "entity_type", "score", "risk_level", "action", "raw_value_logged"],
+        "properties": {
+          "event_type": { "type": "string" },
+          "entity_type": { "type": "string" },
+          "score": { "type": "number", "minimum": 0, "maximum": 1 },
+          "risk_level": { "type": "string", "enum": ["P0", "P1", "P2", "P3"] },
+          "action": { "type": "string" },
+          "raw_value_logged": { "type": "boolean", "const": false }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "policy_profile": { "type": "string" },
+    "output_target": { "type": "string" },
+    "raw_value_logged": { "type": "boolean", "const": false }
+  }
+}

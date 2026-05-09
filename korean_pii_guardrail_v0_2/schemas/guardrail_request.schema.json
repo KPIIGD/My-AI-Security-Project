@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/guardrail_request.schema.json",
+  "title": "GuardrailRequest",
+  "type": "object",
+  "required": ["text"],
+  "additionalProperties": false,
+  "properties": {
+    "text": { "type": "string", "minLength": 1 },
+    "scan_stage": { "type": "string", "enum": ["input", "output"], "default": "input" },
+    "output_target": {
+      "type": "string",
+      "enum": ["llm_input", "external_output", "internal_ui", "analytics", "audit_log"],
+      "default": "llm_input"
+    },
+    "policy_profile": {
+      "type": "string",
+      "enum": ["strict", "balanced", "analytics", "analytics_ai_training", "audit_log"],
+      "default": "strict"
+    },
+    "request_id": { "type": ["string", "null"] },
+    "document_id": { "type": ["string", "null"] },
+    "purpose_id": { "type": ["string", "null"] },
+    "domain": { "type": ["string", "null"] },
+    "locale": { "type": "string", "default": "ko-KR" },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "return_spans": { "type": "boolean", "default": true },
+        "include_audit_events": { "type": "boolean", "default": true },
+        "allow_experimental_entities": { "type": "boolean", "default": false },
+        "fail_on_invalid_offset": { "type": "boolean", "default": true },
+        "mask_suffix_preserving": { "type": "boolean", "default": true }
+      }
+    }
+  },
+  "not": {
+    "required": ["session_id"]
+  }
+}
