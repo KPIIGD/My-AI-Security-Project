@@ -31,3 +31,13 @@ PII/fuzzer/corpus_build/korean_addresses/raw/*.zip
 PII/fuzzer/data/*.jsonl
 PII/fuzzer/seeds/name/name_input_queue_202604_v1.jsonl
 PII/fuzzer/smoke_*.json
+
+# Regeneratable build and presentation scratch artifacts
+build/**/node_modules/
+tmp/
+tmp_old_media/
+tmp_old_ppt_media.txt
+tmp_capstone_review*.txt
+tmp_capstone_review*.pptx
+outputs/**/output.pptx
+outputs/**/output_updated.pptx
