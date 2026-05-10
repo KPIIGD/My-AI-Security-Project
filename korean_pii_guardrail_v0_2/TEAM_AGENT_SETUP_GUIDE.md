@@ -6,6 +6,7 @@
 
 - v0.2 단일 턴 범위 유지
 - 기존 `PII/` 연구 스택과 새 패키지 분리
+- M1에서는 기존 L0를 reference로만 활용하고 offset-aware variant engine으로 재구현
 - raw PII 안전 규칙 준수
 - raw text offset 계약 준수
 - 작업별 문서와 config를 먼저 읽고 구현
@@ -43,6 +44,8 @@ These instructions apply only to `korean_pii_guardrail_v0_2`.
 
 Do not treat sibling directories such as `PII/`, `paper/`, `build/`, `outputs/`, or `tmp/` as part of this package unless explicitly asked.
 
+For M1 L0-derived preprocessing work, `PII/layer_0` may be read as reference material only. Do not edit it, import it from the v0.2 package, or copy its code into the package.
+
 ## Start Of Work
 
 Before code changes, read:
@@ -64,6 +67,8 @@ Always inspect existing source, tests, schemas, and configs before editing.
 - Keep entity, scoring, context, and policy behavior config-driven.
 - Do not promote dictionary-only `PERSON_NAME` matches to high confidence without context.
 - Preserve Korean suffixes during masking: replace only the PII body and keep josa/honorific/ending text outside the replacement.
+- Reimplement L0-derived Korean variant handling as offset-aware variants; every final span must still satisfy `span.text == raw_text[span.start:span.end]`.
+- Kiwi/kiwipiepy is optional reference/benchmark material only. Do not copy Kiwi source, models, or dictionaries into this package.
 
 ## Change Protocol
 
@@ -108,6 +113,7 @@ korean-pii-guardrail-dev
 
 - 작업이 preprocess인지, masking인지, audit인지에 따라 어떤 문서를 먼저 읽을지 안내
 - 기존 `PII/` 연구 스택과 새 패키지를 분리
+- M1에서 L0를 reference로만 활용하고 offset-aware variant로 재구현하도록 안내
 - v0.2 금지 범위와 raw PII 안전 규칙을 재확인
 
 ## 4. Claude 사용자 설정
@@ -139,7 +145,8 @@ Before implementation, inspect relevant docs, configs, schemas, source, and test
 | Work area | Read these first |
 |---|---|
 | Schema/API/contracts | `docs/06_INTERFACE_SPEC.md`, `schemas/*.schema.json`, `api/openapi.yaml`, `src/pii_guardrail/schema.py`, `src/pii_guardrail/enums.py` |
-| Preprocess/raw offset map | `docs/01_REQUIREMENTS_SPEC.md`, `docs/02_ARCHITECTURE_SPEC.md`, `docs/07_IMPLEMENTATION_ROADMAP.md`, `src/pii_guardrail/interfaces.py` |
+| Preprocess/raw offset map | `docs/01_REQUIREMENTS_SPEC.md`, `docs/02_ARCHITECTURE_SPEC.md`, `docs/07_IMPLEMENTATION_ROADMAP.md`, `docs/10_DEVELOPMENT_HANDOFF.md`, `src/pii_guardrail/interfaces.py` |
+| Preprocess/L0-derived variants | `docs/01_REQUIREMENTS_SPEC.md`, `docs/02_ARCHITECTURE_SPEC.md`, `docs/07_IMPLEMENTATION_ROADMAP.md`, `docs/10_DEVELOPMENT_HANDOFF.md`, `PII/layer_0/korean_normalizer.py`, `PII/layer_0/tests/test_normalizer.py` |
 | Regex detectors/validators | `configs/entities.yaml`, `configs/scoring.yaml`, `data/eval/hard_cases_v0.jsonl`, `docs/03_SCORING_POLICY_SPEC.md` |
 | Korean boundary correction | `configs/josa_rules.yaml`, `docs/05_MASKING_POLICY_SPEC.md`, `docs/11_ANNOTATION_GUIDELINE.md`, `data/eval/hard_cases_v0.jsonl` |
 | Dictionary/context scoring | `docs/03_SCORING_POLICY_SPEC.md`, `docs/04_CONTEXT_POLICY_SPEC.md`, `configs/context_rules.yaml`, `configs/scoring.yaml` |
@@ -180,4 +187,12 @@ Codex에서 스킬을 설치한 경우:
 
 ```text
 $korean-pii-guardrail-dev 를 사용해서 다음 milestone을 구현해줘.
+```
+
+M1 전처리를 요청할 때는 다음 제약을 함께 명시한다.
+
+```text
+기존 L0는 reference로만 읽고, v0.2 package에서 import하지 말아줘.
+L0-derived 변형은 raw span으로 복원 가능한 TextVariant로 재구현해줘.
+복원된 span은 반드시 span.text == raw_text[span.start:span.end]를 만족해야 해.
 ```
