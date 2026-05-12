@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Protocol
 
 from .schema import GuardrailRequest, PIISpan
@@ -13,6 +13,7 @@ class TextVariant:
     name: str
     text: str
     variant_to_raw: tuple[int | None, ...]
+    variant_to_raw_span: tuple[tuple[int, int] | None, ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)
