@@ -8,6 +8,8 @@ These instructions apply only to this project:
 
 Do not treat sibling directories such as `PII/`, `paper/`, `build/`, `outputs/`, or `tmp/` as part of this package unless the user explicitly asks for integration.
 
+Exception: for M1 L0-derived preprocessing work, agents may read `PII/layer_0/korean_normalizer.py`, `PII/layer_0/korean_pii_detector.py`, and their tests as reference material only. Do not edit those files, import them from `korean_pii_guardrail_v0_2`, or copy their code into the package.
+
 ## Start Of Work
 
 Before code changes, read:
@@ -33,6 +35,9 @@ Always inspect existing source, tests, schemas, and configs before editing.
 - Keep entity, scoring, context, and policy behavior config-driven.
 - Do not promote dictionary-only `PERSON_NAME` matches to high confidence without context.
 - Preserve Korean suffixes during masking: replace only the PII body and keep josa/honorific/ending text outside the replacement.
+- M1 must treat Layer 0 as a reference source for Korean variant-attack coverage, then reimplement the needed behavior as offset-aware normalized text and `TextVariant` outputs.
+- L0-derived variants must be restorable to raw spans; reject candidates when raw span restoration cannot prove `span.text == raw_text[span.start:span.end]`.
+- Kiwi/kiwipiepy may be used only as an optional reference or benchmark for sentence/token boundaries. Do not copy Kiwi source, models, or dictionaries into this package.
 
 ## Change Protocol
 
@@ -62,3 +67,5 @@ python -m pytest
 ```
 
 At minimum, cover relevant cases from `data/eval/hard_cases_v0.jsonl`, including boundary, hard negative, context/composite, overlap, and raw-PII safety scenarios.
+
+For M1 preprocessing, also cover L0-derived variant cases such as jamo composition, choseong restoration, yaminjeongeum restoration, romanized Korean restoration, Korean digit restoration, and raw span restoration failures.

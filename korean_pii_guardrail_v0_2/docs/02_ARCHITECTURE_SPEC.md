@@ -67,9 +67,11 @@ GuardrailResponse
 
 #### 책임
 
-- 입력 텍스트를 탐지 가능한 variant로 변환한다.
+- 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0.2 offset contract에 맞게 재구현한다.
+- 입력 텍스트를 탐지 가능한 normalized text와 variant로 변환한다.
 - 각 variant의 위치를 raw text offset으로 복원할 수 있게 한다.
 - detector가 normalized text에서 탐지하더라도 raw offset으로 결과를 반환할 수 있게 한다.
+- 원문을 영구 저장하거나 public response/audit event에 노출하지 않는다.
 
 #### 입력
 
@@ -91,17 +93,53 @@ PreprocessResult(
 )
 ```
 
+#### 설계 결정
+
+`normalized_text`는 보수적 정규화 결과다. 전각 숫자, zero-width 문자, dash, 수학/원문자 숫자처럼 offset 복원이 비교적 안정적인 변환을 포함한다.
+
+L0-derived 고급 복원은 기본 본문을 대체하지 않고 탐지용 `variants`로 생성한다. 예를 들어 `ㅈㅁㅂㅎ`, `jumin`, `즈민뜽록`, `공일공` 같은 입력은 별도 variant에서 복원하고, 탐지 결과는 raw text span으로 되돌린다.
+
+#### TextVariant mapping
+
+고급 변형은 입력과 출력의 길이가 달라질 수 있다. 따라서 variant mapping은 단순히 "variant 문자 index → raw 문자 index"만 가정하지 않는다.
+
+권장 표현:
+
+```python
+TextVariant(
+    name: str,
+    text: str,
+    variant_to_raw: tuple[int | None, ...],
+    variant_to_raw_span: tuple[tuple[int, int] | None, ...],
+)
+```
+
+`variant_to_raw`는 1:1 또는 제거 문자 중심 변환에 사용한다. `variant_to_raw_span`은 `jumin` → `주민`, `ㅈㅁㅂㅎ` → `주민번호`처럼 여러 raw 문자가 하나 이상의 variant 문자로 대응되는 경우 사용한다.
+
 #### 필수 기능
 
 | 기능 | 설명 |
 |---|---|
-| NFKC | 전각 숫자/문자 정규화 |
+| NFKC | 전각 숫자/문자 정규화, raw offset map 유지 |
 | dash normalization | `‐`, `‑`, `–`, `—`, `−` 등을 `-`로 통합 |
-| zero-width handling | zero-width char 제거 variant 생성 |
+| zero-width handling | zero-width char 제거, 제거 위치 mapping 유지 |
+| mathematical/circled digit normalization | `𝟘`, `①` 등 숫자형 동형문자 정규화 |
 | digit compact | 전화번호/계좌번호 후보 탐지용 compact variant |
-| Hangul digit variant | `공일공` 등 연락처 문맥 숫자화 |
+| digit-space compact | 숫자 사이 공백 제거 variant |
+| Korean keyword spacing compact | PII keyword 띄어쓰기 변형 대응 |
+| jamo composition variant | `ㅈㅜㅁㅣㄴ` 등 자모 분해 입력 복원 |
+| choseong restoration variant | `ㅈㅁㅂㅎ` 등 초성 축약 입력 복원 |
+| yaminjeongeum restoration variant | `즈민뜽록` 등 야민정음 입력 복원 |
+| romanized Korean restoration variant | `jumin`, `jeonhwa` 등 로마자 한국어 입력 복원 |
+| Korean digit variant | `공일공` 등 연락처 문맥 숫자화 |
 | sentence split | context window boundary |
 | eojeol split | context window 단위 |
+
+#### Kiwi 활용 원칙
+
+Kiwi/kiwipiepy는 문장 분리, 형태소/조사/어미 분석, 어절 경계 품질 비교를 위한 optional reference 또는 benchmark로 사용할 수 있다.
+
+단, Kiwi의 `space()`처럼 원문 문자열을 재작성하는 기능은 기본 `normalized_text`로 직접 사용하지 않는다. 사용할 경우 offset-aware 탐지용 variant로만 사용하고 raw span 복원 실패 시 해당 candidate를 reject한다.
 
 ### L1. Regex Detectors
 
