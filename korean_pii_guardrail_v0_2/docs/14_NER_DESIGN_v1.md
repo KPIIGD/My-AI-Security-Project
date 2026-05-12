@@ -8,9 +8,10 @@
 | **Last updated** | 2026-05-13 |
 | **Status** | ★ **Production-ready** (모델 v3 채택) |
 | **Final model** | `models/pii_ner_v3/final/` (klue/roberta-large) |
+| **HuggingFace Hub** | [`vmaca123/korean-pii-ner-v3`](https://huggingface.co/vmaca123/korean-pii-ner-v3) |
 | **대상 통합** | `korean_pii_guardrail_v0_2` (M5/M6/M9/M10) |
 | **참조** | `docs/06_INTERFACE_SPEC.md`, `docs/03_SCORING_POLICY_SPEC.md`, `configs/scoring.yaml`, `configs/josa_rules.yaml`, `data/eval/hard_cases_v0.jsonl` |
-| **결과 보고** | [`TRAINING_RESULTS_v1.md`](../../../PII/ner/TRAINING_RESULTS_v1.md), [`TRAINING_RESULTS_v3.md`](../../../PII/ner/TRAINING_RESULTS_v3.md) |
+| **결과 보고** | `TRAINING_RESULTS_v1.md`, `TRAINING_RESULTS_v3.md` (로컬 학습 산출물; PR 본문 댓글 참조) |
 
 > **변경 요약 (v1 계획안 → v2 문서)**
 > 초기 v1 설계서(2026-05-09 작성)는 학습 *직전* 계획. 이후 4회 모델 비교 → v3 production 채택. 본 문서는 14개 항목 답변을 v3 실측값으로 업데이트한 최종 spec.
@@ -89,7 +90,7 @@ ADDRESS     →  ADDRESS_FULL    (ADDRESS_UNIT 은 후처리 dict 분기)
 ORG         →  ORGANIZATION    (SCHOOL / HOSPITAL 은 후처리 dict reclassify)
 ```
 
-`label_map.json` 산출물 ([`models/pii_ner_v3/final/label_map.json`](../../../PII/ner/models/pii_ner_v3/final/label_map.json)):
+`label_map.json` 산출물: `models/pii_ner_v3/final/label_map.json` (HF Hub 패키지 포함):
 ```json
 {
   "id_to_label": { "0": "O", "1": "B-NAME", "2": "I-NAME", "3": "B-ADDRESS",
@@ -127,7 +128,7 @@ ORG         →  ORGANIZATION    (SCHOOL / HOSPITAL 은 후처리 dict reclassif
 [7] PIISpan(start=char_start, end=char_end, text=raw_text[char_start:char_end], ...)
 ```
 
-**v0.2 계약 보장**: `span.text == raw_text[span.start:span.end]` 100% 성립. 구현체: [`ner_wrapper.py`](../../../PII/ner/ner_wrapper.py) `_infer_single_window` + `_bio_to_spans`.
+**v0.2 계약 보장**: `span.text == raw_text[span.start:span.end]` 100% 성립. 구현체: `ner_wrapper.py` `_infer_single_window` + `_bio_to_spans`.
 
 ---
 
@@ -280,6 +281,8 @@ ner.heuristic_split_v1   # (v3에서는 거의 트리거 안 됨)
 
 ## 14. 제출 산출물 — v3 완성
 
+HF Hub 배포: [`vmaca123/korean-pii-ner-v3`](https://huggingface.co/vmaca123/korean-pii-ner-v3)
+
 ```
 PII/ner/
 ├── models/pii_ner_v3/final/
@@ -361,7 +364,7 @@ v1과 v3 사이 시도된 Run 5:
 - 원인: 어절 단위 라벨의 char-level 노이즈 + multi-source distribution shift
 - 결론: v1 setup 그대로 + 데이터 augment만 추가하는 conservative pivot이 효과적
 
-자세한 내용은 [`TRAINING_RESULTS_v3.md`](../../../PII/ner/TRAINING_RESULTS_v3.md) §2 참조.
+자세한 내용은 `TRAINING_RESULTS_v3.md` §2 참조.
 
 ---
 
