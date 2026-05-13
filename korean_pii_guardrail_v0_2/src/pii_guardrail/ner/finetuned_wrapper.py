@@ -124,12 +124,12 @@ class FinetunedNERDetector:
             return self._backend
 
         try:
-            module = importlib.import_module("ner_wrapper")
+            module = importlib.import_module("pii_guardrail.ner.owner_wrapper")
             detector_cls = getattr(module, "FinetunedKoreanNERDetector")
         except (ImportError, AttributeError) as exc:
             raise NERDependencyError(
                 "Fine-tuned NER v3 runtime is unavailable. Install the optional 'ner' extra "
-                "and provide the NER owner's ner_wrapper.py artifact or inject a backend."
+                "and ensure pii_guardrail.ner.owner_wrapper is importable, or inject a backend."
             ) from exc
 
         try:
