@@ -113,10 +113,10 @@ EMAIL이 내부 username 후보보다 우선해야 한다.
 ### L0-derived variant
 
 ```text
-ㅈㅜㅁㅣㄴ번호 900101-1234567
-ㅈㅁㅂㅎ는 900101-1234567
-즈민뜽록볜훟 900101-1234567
-jumin beonho 900101-1234567
+ㅈㅜㅁㅣㄴ번호 900101-1234568
+ㅈㅁㅂㅎ는 900101-1234568
+즈민뜽록볜훟 900101-1234568
+jumin beonho 900101-1234568
 연락처는 공일공 일이삼사 오육칠팔입니다.
 ```
 
@@ -154,7 +154,7 @@ jumin beonho 900101-1234567
 
 | Item | Owner | Status |
 |---|---|---|
-| business registration checksum 정확 구현 | Pipeline | Open |
+| business registration checksum 정확 구현 | Pipeline | Done in M2 validator |
 | Korean digit normalization 범위 | Pipeline | Open |
 | NER temperature scaling dataset | NER | Open |
 | evaluation gold set 구축 | Eval | Open |
