@@ -42,6 +42,15 @@ dictionary_base_scores:
   organization_suffix: 0.50
   school_suffix: 0.55
   hospital_suffix: 0.60
+ner_v3:
+  direct_entities: [PERSON_NAME, ADDRESS_FULL, ORGANIZATION]
+  temperature: 1.0
+  calibration_status: uncalibrated_threshold_only
+  emit_low_confidence_candidates: true
+  per_entity_thresholds:
+    PERSON_NAME: 0.85
+    ADDRESS_FULL: 0.80
+    ORGANIZATION: 0.75
 context_boosts:
   field_label_name: 0.25
   field_label_phone: 0.15

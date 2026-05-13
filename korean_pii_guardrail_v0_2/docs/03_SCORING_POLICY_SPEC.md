@@ -131,7 +131,7 @@ NER detector는 pipeline에 calibrated confidence를 제공해야 한다.
 PIISpan.score = P(candidate span is correct | model raw confidence, entity type)
 ```
 
-### 6.2 v0.2 calibration 방식
+### 6.2 v0.2 target calibration 방식
 
 v0.2 기준 방식은 temperature scaling이다.
 
@@ -144,7 +144,23 @@ calibrated_score = softmax(logits / T)
 - entity별 데이터가 부족하면 shared temperature를 사용한다.
 - calibration이 불가능한 mock NER는 명시적으로 `reason_codes += mock_ner.uncalibrated`를 붙인다.
 
-### 6.3 검증 지표
+### 6.3 NER v3 현재 상태
+
+fine-tuned NER v3는 production candidate로 채택되었지만, 현재 scoring 관점에서는 `temperature=1.0`이며 사실상 uncalibrated 상태다. M5 이후 문서와 구현은 이를 calibration 완료로 간주하지 않는다.
+
+v3는 `calibration.json`의 per-entity threshold를 임시 운영 기준으로 사용한다.
+
+| Pipeline entity | NER v3 threshold |
+|---|---:|
+| PERSON_NAME | 0.85 |
+| ADDRESS_FULL | 0.80 |
+| ORGANIZATION | 0.75 |
+
+NER raw score는 `[0, 1]` score band에 그대로 투입한다. threshold 미만의 low-confidence span도 raw offset 계약을 만족하면 candidate로 남길 수 있으며, dictionary/context 보강 또는 resolver 판단의 입력으로 사용할 수 있다. 단, NER v3는 `NAME`, `ADDRESS`, `ORG` 이외 entity를 직접 생성하지 않는다.
+
+ECE, reliability diagram, temperature scaling 또는 isotonic calibration은 M10 evaluation/tuning 후속 작업으로 남긴다.
+
+### 6.4 검증 지표
 
 | Metric | 목적 |
 |---|---|

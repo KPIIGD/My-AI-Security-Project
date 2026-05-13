@@ -139,7 +139,8 @@ RAG와 멀티턴은 평가 범위에서 제외한다.
 
 | Metric | 설명 |
 |---|---|
-| p50/p95/p99 latency | 처리 지연 |
+| deterministic p50/p95/p99 latency | regex/dictionary/boundary/resolver CPU path 처리 지연 |
+| real NER p50/p95/p99 latency | NER v3 adapter 포함 처리 지연, deterministic path와 별도 집계 |
 | raw PII logging count | 0이어야 함 |
 | invalid offset count | detector 품질 |
 | context override ratio | context로 action 변경된 비율 |
@@ -153,11 +154,14 @@ RAG와 멀티턴은 평가 범위에서 제외한다.
 | B | A + validator | 구조형 FP 감소 |
 | C | B + dictionary | 주소/조직/이름 후보 recall 증가 |
 | D | C + boundary correction | 한국어 조사 결합 exact span F1 증가 |
-| E | D + mock/real NER | 자유형 이름/주소 recall 증가 |
-| F | E + context scorer | 중의적 이름/일반명사 FP 감소 및 composite recall 증가 |
+| E1 | D + mock NER | NER interface와 downstream resolver/policy 연결 검증 |
+| E2 | D + real v3 NER | 자유형 이름/주소/조직 recall 증가 및 NER FP 확인 |
+| F | E1 또는 E2 + context scorer | 중의적 이름/일반명사 FP 감소 및 composite recall 증가 |
 | G | F + policy router/masker | output target별 masking 품질 검증 |
 
 초기 슬라이드의 session monitor ablation은 v0.2에서 제거한다.
+
+Real NER v3 평가는 local model artifact가 있거나 HuggingFace Hub에서 모델을 받을 수 있을 때만 실행한다. 모델 산출물 접근이 불가능한 환경에서는 E2를 skipped로 기록하고 E1 mock NER 결과를 기본 integration evidence로 사용한다.
 
 ## 8. Release criteria
 
@@ -171,6 +175,7 @@ RAG와 멀티턴은 평가 범위에서 제외한다.
 | Raw PII logging count | 0 |
 | Invalid offset count | 0 |
 | p95 latency | 100ms 이하, NER 제외 CPU path 기준 |
+| Real NER latency | 별도 측정, CPU/GPU/ONNX 배포 방식별 report |
 | Ablation report | 작성 완료 |
 
 ## 9. Error analysis template
