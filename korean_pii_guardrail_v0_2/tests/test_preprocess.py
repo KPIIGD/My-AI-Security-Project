@@ -327,6 +327,30 @@ def test_use_kiwi_accepts_text_sentences_and_length_tokens(monkeypatch: pytest.M
     assert result.eojeols[0].text == raw[:4]
 
 
+def test_use_kiwi_reuses_cached_instance(monkeypatch: pytest.MonkeyPatch) -> None:
+    init_count = 0
+
+    class FakeKiwi:
+        def __init__(self) -> None:
+            nonlocal init_count
+            init_count += 1
+
+        def split_into_sents(self, raw_text: str) -> list[object]:
+            return []
+
+        def tokenize(self, raw_text: str) -> list[object]:
+            return []
+
+    fake_module = types.ModuleType("kiwipiepy")
+    fake_module.Kiwi = FakeKiwi
+    monkeypatch.setitem(sys.modules, "kiwipiepy", fake_module)
+
+    preprocess_text("홍길동이 신청했습니다.", use_kiwi=True)
+    preprocess_text("김민수에게 연락하세요.", use_kiwi=True)
+
+    assert init_count == 1
+
+
 def test_use_kiwi_does_not_change_normalized_text() -> None:
     raw = "주 민 번 호 ９００１０１－１２３４５６７"
 

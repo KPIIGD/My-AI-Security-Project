@@ -123,6 +123,8 @@ SPACED_KEYWORDS = (
     "이름",
 )
 
+_KIWI_CACHE: tuple[object, object] | None = None
+
 
 def preprocess_text(raw_text: str, *, use_kiwi: bool = False) -> PreprocessResult:
     """Return normalized text, variants, and raw-offset maps for ``raw_text``."""
@@ -473,17 +475,25 @@ def _split_eojeols(raw_text: str) -> tuple[TokenSpan, ...]:
 
 def _try_kiwi_boundaries(raw_text: str) -> tuple[tuple[SentenceSpan, ...], tuple[TokenSpan, ...]]:
     try:
-        from kiwipiepy import Kiwi  # type: ignore[import-not-found]
-    except Exception:
-        return (), ()
-
-    try:
-        kiwi = Kiwi()
+        kiwi = _get_kiwi()
         sentences = _kiwi_sentences(kiwi, raw_text)
         tokens = _kiwi_tokens(kiwi, raw_text)
     except Exception:
         return (), ()
     return sentences, tokens
+
+
+def _get_kiwi() -> object:
+    global _KIWI_CACHE
+
+    from kiwipiepy import Kiwi  # type: ignore[import-not-found]
+
+    if _KIWI_CACHE is not None and _KIWI_CACHE[0] is Kiwi:
+        return _KIWI_CACHE[1]
+
+    kiwi = Kiwi()
+    _KIWI_CACHE = (Kiwi, kiwi)
+    return kiwi
 
 
 def _kiwi_sentences(kiwi: object, raw_text: str) -> tuple[SentenceSpan, ...]:
