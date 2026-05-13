@@ -5,7 +5,7 @@ Date: 2026-05-09
 
 ## 1. 구현 전략
 
-v0.2는 NER fine-tuning을 기다리지 않고 deterministic core를 먼저 구현한다. NER는 mock interface로 연결하고, pipeline의 raw offset, boundary correction, resolver, masking, audit, evaluation이 안정화된 뒤 실제 모델로 교체한다.
+v0.2는 deterministic core를 먼저 구현한다. fine-tuned NER v3 모델은 준비되어 있으나, pipeline의 raw offset, boundary correction, resolver, masking, audit, evaluation이 안정화되기 전까지는 mock NER와 동일한 `BaseNERDetector` 계약 뒤에 둔다. M5에서는 NER v3 계약과 adapter 요구사항을 문서화하고, real model activation은 M9 pipeline integration 또는 M10 evaluation의 gated task로 처리한다.
 
 ## 2. Milestones
 
@@ -171,14 +171,20 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 
 - Protocol 정의
 - mock output
-- label mapping
-- calibration metadata field
+- NER v3 label mapping: `NAME -> PERSON_NAME`, `ADDRESS -> ADDRESS_FULL`, `ORG -> ORGANIZATION`
+- `SCHOOL`/`HOSPITAL`/`ADDRESS_UNIT`/`CUSTOMER_ID`/`MEDICAL_RECORD_NO`는 NER 직접 output이 아니라 dictionary, regex, context, resolver 후속 처리 책임으로 문서화
+- `label_map.json`과 `calibration.json` adapter 요구사항 정리
+- per-entity threshold metadata field
+- local model artifact가 없을 때 HuggingFace Hub 또는 별도 산출물 전달이 필요하다는 운영 전제 명시
+- real NER optional dependency와 activation gate 문서화
 
 #### Acceptance criteria
 
 - real NER 없이 pipeline end-to-end 실행 가능
 - NER output offset validation 통과
 - NER output이 boundary/context/resolver를 통과
+- NER v3가 직접 emit하는 entity가 PERSON_NAME, ADDRESS_FULL, ORGANIZATION으로 제한됨
+- 현재 v3 calibration은 temperature scaling 완료가 아니라 threshold 기반 임시 운영 상태로 표시됨
 
 ### M6. Span resolver
 
@@ -194,12 +200,16 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 - source list preservation
 - overlap priority
 - ADDRESS_FULL merge
+- NER ADDRESS_FULL과 dictionary ADDRESS_UNIT 후보가 충돌할 때의 후속 분기 정책 검토
+- NER ORGANIZATION과 dictionary SCHOOL/HOSPITAL 후보가 충돌할 때의 후속 reclassify 정책 검토
+- source 우선순위를 `regex > validator > NER > dictionary > context`처럼 단순 채택하지 않고, entity priority와 resolver rule로 overlap 결정
 - single-turn composite escalation
 
 #### Acceptance criteria
 
 - EMAIL > PERSON substring
 - ADDRESS fragments merge
+- SCHOOL/HOSPITAL/ADDRESS_UNIT 후속 분기에 필요한 config/code 변경 후보 식별
 - PERSON + PHONE same sentence composite
 - source/reason_codes 보존
 
@@ -261,6 +271,8 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 
 - preprocess → detector → boundary → context → resolver → policy/mask 순서 구현
 - config loading
+- real NER v3는 feature/config gate 뒤에 연결
+- local model artifact가 없으면 HF Hub 다운로드 또는 별도 산출물 전달 전까지 mock/disabled NER path 유지
 - request/response generation
 - error handling
 
@@ -287,12 +299,15 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 - entity F1
 - boundary accuracy
 - high-risk recall
-- latency metric
+- deterministic CPU path latency metric
+- real NER v3 latency metric 별도 측정
+- mock NER ablation과 real v3 NER ablation 분리
 - ablation config
 
 #### Acceptance criteria
 
 - ablation A~F 실행 가능
+- D + mock NER와 D + real v3 NER 결과를 구분 가능
 - entity별 FP/FN report 생성
 - release gate 자동 체크
 
@@ -319,11 +334,11 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 | W-014 | pipeline integration | Pipeline | W-003a~W-013 |
 | W-015 | eval harness | Eval | W-014 |
 | W-016 | ablation report | Eval | W-015 |
-| W-017 | NER wrapper 교체 | NER | W-009,W-014 |
+| W-017 | NER v3 adapter activation/evaluation | NER | W-009,W-014,W-015 |
 
 ## 4. Stop conditions
 
-다음이 완료되기 전에는 real NER fine-tuning integration 또는 v1 기능으로 넘어가지 않는다.
+다음이 완료되기 전에는 real NER v3 activation 또는 v1 기능으로 넘어가지 않는다.
 
 - raw offset mapping 안정화
 - L0-derived 변형 variant의 raw span 복원 안정화
@@ -333,6 +348,7 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 - masker suffix preservation 통과
 - audit logger raw PII zero 검증
 - evaluation harness ablation 실행 가능
+- real NER 산출물 접근 방식 확정(HF Hub 또는 별도 artifact 전달)
 
 ## 5. Definition of Done
 

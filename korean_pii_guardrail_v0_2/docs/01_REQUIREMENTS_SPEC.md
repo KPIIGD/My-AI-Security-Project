@@ -110,17 +110,17 @@ span.text == raw_text[span.start:span.end]
 
 ### FR-005. 의미형 개인정보 후보 탐지
 
-시스템은 다음 의미형 entity를 dictionary와 NER interface로 탐지할 수 있어야 한다.
+시스템은 다음 의미형 entity를 dictionary와 NER interface로 탐지할 수 있어야 한다. Fine-tuned NER v3는 `NAME`, `ADDRESS`, `ORG` 3종만 직접 emit하며, 다른 의미형 entity는 dictionary, regex, context, resolver 후속 처리로 탐지 또는 재분류한다.
 
 | Entity | 기본 detector |
 |---|---|
 | PERSON_NAME | NER + dictionary + context |
-| ALIAS_HANDLE | regex + NER + context |
+| ALIAS_HANDLE | regex + context |
 | ADDRESS_FULL | pattern + dictionary + NER |
-| ADDRESS_UNIT | pattern + dictionary |
+| ADDRESS_UNIT | pattern + dictionary + resolver 분기 |
 | ORGANIZATION | dictionary + NER |
-| SCHOOL | dictionary + NER |
-| HOSPITAL | dictionary + NER |
+| SCHOOL | dictionary + resolver reclassify |
+| HOSPITAL | dictionary + resolver reclassify |
 | FAMILY_RELATION | dictionary + context |
 | CUSTOMER_ID | regex + context |
 | EMPLOYEE_ID | regex + context |
@@ -262,6 +262,8 @@ API_KEY_SECRET > RRN/FRN/PASSPORT/DRIVER_LICENSE > CREDIT_CARD/BANK_ACCOUNT > PH
 | regex + dictionary + boundary + resolver | p95 100ms 이하 |
 | mock NER 포함 | p95 120ms 이하 |
 | real NER 포함 | 모델 배포 방식에 따라 별도 SLA |
+
+`real NER 포함` latency는 deterministic CPU path 목표와 분리해 측정한다. NER v3의 실제 serving latency는 PyTorch CPU/GPU/ONNX 등 배포 방식별로 별도 report에 기록한다.
 
 ### NFR-003. Config driven
 

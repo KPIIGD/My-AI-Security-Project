@@ -95,19 +95,17 @@ class BaseNERDetector(Protocol):
 
 ### 5.1 NER label mapping
 
-NER 모델 고유 label은 pipeline label로 매핑해야 한다.
+v0.2의 실제 fine-tuned NER v3 모델은 `NAME`, `ADDRESS`, `ORG` 3개 entity만 BIO token classification으로 출력한다. NER 모델 고유 label은 다음 pipeline label로만 매핑한다.
 
-| Model label 예시 | Pipeline entity |
-|---|---|
-| `PER`, `PERSON`, `PS_NAME` | PERSON_NAME |
-| `LOC`, `ADDRESS`, `LC_ADDRESS` | ADDRESS_FULL |
-| `ORG`, `OGG` | ORGANIZATION |
-| `SCHOOL` | SCHOOL |
-| `HOSPITAL` | HOSPITAL |
-| `ID`, `CUSTOMER_NO` | CUSTOMER_ID |
-| `MEDICAL_NO` | MEDICAL_RECORD_NO |
+| NER v3 label | Pipeline entity | 후속 처리 책임 |
+|---|---|---|
+| `NAME` | PERSON_NAME | boundary/context/resolver |
+| `ADDRESS` | ADDRESS_FULL | ADDRESS_UNIT 분기는 dictionary/resolver 후속 처리 |
+| `ORG` | ORGANIZATION | SCHOOL/HOSPITAL 세분화는 dictionary/resolver 후속 처리 |
 
-NER label이 pipeline taxonomy에 없으면 detector는 해당 span을 반환하지 않거나 `experimental` config가 켜진 경우에만 반환한다.
+NER v3는 `SCHOOL`, `HOSPITAL`, `ADDRESS_UNIT`, `CUSTOMER_ID`, `MEDICAL_RECORD_NO`를 직접 emit하지 않는다. 해당 entity는 dictionary, regex, context scorer, resolver의 책임으로 처리한다.
+
+NER label이 위 매핑에 없으면 detector는 해당 span을 반환하지 않는다. v3 통합에서는 `allow_experimental_entities=True`여도 NER 단독으로 새 entity type을 만들지 않는다.
 
 ## 6. Dataclass contracts
 
