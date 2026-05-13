@@ -155,29 +155,29 @@ def test_digit_compact_variant_restores_phone_with_separators() -> None:
 
 
 def test_digit_space_compact_variant_restores_spaced_digits() -> None:
-    raw = "9 0 0 1 0 1 - 1 2 3 4 5 6 7"
+    raw = "9 0 0 1 0 1 - 1 2 3 4 5 6 8"
     result = preprocess_text(raw)
     variant = _variant(result, "digit_space_compact")
 
-    assert "900101-1234567" in variant.text
+    assert "900101-1234568" in variant.text
     start = variant.text.index("900101")
     raw_start, raw_end = restore_variant_span(variant, start, start + len("900101"))
     assert raw[raw_start:raw_end] == "9 0 0 1 0 1"
 
 
 def test_digit_space_compact_variant_restores_full_rrn_candidate() -> None:
-    raw = "9 0 0 1 0 1 - 1 2 3 4 5 6 7"
+    raw = "9 0 0 1 0 1 - 1 2 3 4 5 6 8"
     result = preprocess_text(raw)
     variant = _variant(result, "digit_space_compact")
 
-    assert "900101-1234567" in variant.text
-    start = variant.text.index("900101-1234567")
-    raw_start, raw_end = restore_variant_span(variant, start, start + len("900101-1234567"))
+    assert "900101-1234568" in variant.text
+    start = variant.text.index("900101-1234568")
+    raw_start, raw_end = restore_variant_span(variant, start, start + len("900101-1234568"))
     assert raw[raw_start:raw_end] == raw
 
 
 def test_korean_keyword_spacing_variant_restores_keyword() -> None:
-    raw = "주 민 번 호 900101-1234567"
+    raw = "주 민 번 호 900101-1234568"
     result = preprocess_text(raw)
     variant = _variant(result, "korean_keyword_spacing_compact")
 
@@ -190,10 +190,10 @@ def test_korean_keyword_spacing_variant_restores_keyword() -> None:
 @pytest.mark.parametrize(
     ("raw", "variant_name", "needle", "expected_raw"),
     [
-        ("ㅈㅜㅁㅣㄴ번호 900101-1234567", "jamo_composed", "주민번호", "ㅈㅜㅁㅣㄴ번호"),
-        ("ㅈㅁㅂㅎ는 900101-1234567", "choseong_restored", "주민번호", "ㅈㅁㅂㅎ"),
-        ("즈민뜽록볜훟 900101-1234567", "yamin_restored", "주민등록번호", "즈민뜽록볜훟"),
-        ("jumin beonho 900101-1234567", "romanized_restored", "주민번호", "jumin beonho"),
+        ("ㅈㅜㅁㅣㄴ번호 900101-1234568", "jamo_composed", "주민번호", "ㅈㅜㅁㅣㄴ번호"),
+        ("ㅈㅁㅂㅎ는 900101-1234568", "choseong_restored", "주민번호", "ㅈㅁㅂㅎ"),
+        ("즈민뜽록볜훟 900101-1234568", "yamin_restored", "주민등록번호", "즈민뜽록볜훟"),
+        ("jumin beonho 900101-1234568", "romanized_restored", "주민번호", "jumin beonho"),
     ],
 )
 def test_l0_derived_text_variants_restore_raw_span(

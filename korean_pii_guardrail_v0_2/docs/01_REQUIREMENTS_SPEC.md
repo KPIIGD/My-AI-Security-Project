@@ -96,8 +96,8 @@ span.text == raw_text[span.start:span.end]
 
 | Entity | 필수 여부 | validator |
 |---|---:|---|
-| RRN | 필수 | 날짜/성별 digit/길이 |
-| FRN | 필수 | 날짜/성별 digit/길이 |
+| RRN | 필수 | 날짜/성별 digit/길이 + checksum |
+| FRN | 필수 | 날짜/성별 digit/길이 + checksum |
 | PHONE_MOBILE | 필수 | 길이/국번 |
 | PHONE_LANDLINE | 필수 | 지역번호/길이 |
 | EMAIL | 필수 | domain 구조 |

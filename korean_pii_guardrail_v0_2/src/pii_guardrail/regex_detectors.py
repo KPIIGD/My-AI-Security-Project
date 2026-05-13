@@ -12,10 +12,8 @@ from .interfaces import PreprocessResult, TextVariant
 from .preprocess import NormalizationMapError, restore_variant_span
 from .schema import GuardrailRequest, PIISpan
 from .validators import (
-    ValidationResult,
-    digits_only,
-    is_repeated_or_placeholder_digits,
     validate_api_secret,
+    validate_bank_account_profile,
     validate_business_reg_no,
     validate_credit_card,
     validate_email,
@@ -267,18 +265,20 @@ class BankAccountCandidateDetector(BaseRegexDetector):
 
     def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
         for match in iter_restored_matches(preprocessed, self._pattern):
-            digits = digits_only(match.matched_text)
-            if len(digits) < 9 or len(digits) > 16 or is_repeated_or_placeholder_digits(digits):
+            if _is_order_id_context(preprocessed.raw_text, match.start):
+                continue
+            validation = validate_bank_account_profile(match.matched_text)
+            if not validation.is_valid or validation.score_key is None:
                 continue
             yield self._make_span(
                 preprocessed.raw_text,
                 match,
                 CandidateSpec(
                     EntityType.BANK_ACCOUNT,
-                    "BANK_ACCOUNT_PATTERN_ONLY",
-                    ("regex.bank_account.pattern_only",),
+                    validation.score_key,
+                    ("regex.bank_account.pattern_only", *validation.reason_codes),
                     self.detector_id,
-                    (Source.REGEX.value,),
+                    (Source.REGEX.value, Source.VALIDATOR.value),
                 ),
             )
 
@@ -335,6 +335,17 @@ def _scan_variants(preprocessed: PreprocessResult) -> tuple[TextVariant, ...]:
             ),
         )
     return tuple(variants)
+
+
+_ORDER_ID_CONTEXT_PATTERN = re.compile(
+    r"(?:주문\s*(?:번호|ID)|거래\s*번호|예약\s*번호|order\s*(?:id|no|number))\s*[:#-]?\s*$",
+    re.IGNORECASE,
+)
+
+
+def _is_order_id_context(raw_text: str, start: int) -> bool:
+    prefix = raw_text[max(0, start - 32) : start]
+    return bool(_ORDER_ID_CONTEXT_PATTERN.search(prefix))
 
 
 def deduplicate_spans(spans: Iterable[PIISpan]) -> list[PIISpan]:

@@ -82,8 +82,8 @@ test@example.com
 | Entity | 조건 | Base score | 설명 |
 |---|---|---:|---|
 | API_KEY_SECRET | prefix + length + entropy 통과 | 0.99 | 보안비밀, block 후보 |
-| RRN | 날짜/성별 digit/길이 통과 | 0.98 | P0 recall 우선 |
-| FRN | 날짜/성별 digit/길이 통과 | 0.98 | P0 recall 우선 |
+| RRN | 날짜/성별 digit/길이 + checksum 통과 | 0.98 | P0 recall 우선 |
+| FRN | 날짜/성별 digit/길이 + checksum 통과 | 0.98 | P0 recall 우선 |
 | CREDIT_CARD | Luhn 통과 | 0.96 | 금융 직접식별 |
 | CREDIT_CARD | Luhn 미통과 but 카드형 패턴 | 0.45 | candidate만 유지 가능 |
 | EMAIL | domain 구조 통과 | 0.92 | suffix trim 필요 |

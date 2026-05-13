@@ -48,7 +48,7 @@ def test_deduplicate_spans_keeps_max_score_and_unions_metadata() -> None:
     left = PIISpan(
         start=0,
         end=13,
-        text="9001011234567",
+        text="9001011234568",
         entity_type=EntityType.RRN,
         score=0.50,
         sources=("regex",),
@@ -59,7 +59,7 @@ def test_deduplicate_spans_keeps_max_score_and_unions_metadata() -> None:
     right = PIISpan(
         start=0,
         end=13,
-        text="9001011234567",
+        text="9001011234568",
         entity_type=EntityType.RRN,
         score=0.98,
         sources=("validator",),
@@ -77,12 +77,12 @@ def test_deduplicate_spans_keeps_max_score_and_unions_metadata() -> None:
 
 
 def test_rrn_detector_returns_raw_candidate_span() -> None:
-    raw = "주민번호는 900101-1234567 입니다."
+    raw = "주민번호는 900101-1234568 입니다."
     spans = _detect(RRNRegexDetector(), raw)
 
     assert len(spans) == 1
     _assert_span_contract(raw, spans[0], EntityType.RRN)
-    assert spans[0].text == "900101-1234567"
+    assert spans[0].text == "900101-1234568"
     assert spans[0].score == 0.98
     assert "validator" in spans[0].sources
 
@@ -93,29 +93,31 @@ def test_rrn_detector_rejects_invalid_date_gender_and_length() -> None:
     assert _detect(detector, "991332-1234567") == []
     assert _detect(detector, "900101-5234567") == []
     assert _detect(detector, "900101-123456") == []
+    assert _detect(detector, "900101-1234567") == []
 
 
 def test_frn_detector_returns_raw_candidate_span() -> None:
-    raw = "외국인등록번호 900101-5123456"
+    raw = "외국인등록번호 900101-5123450"
     spans = _detect(FRNRegexDetector(), raw)
 
     assert len(spans) == 1
     _assert_span_contract(raw, spans[0], EntityType.FRN)
-    assert spans[0].text == "900101-5123456"
+    assert spans[0].text == "900101-5123450"
     assert spans[0].score == 0.98
     assert "validator" in spans[0].sources
 
 
 def test_frn_detector_rejects_rrn_gender_digit() -> None:
-    assert _detect(FRNRegexDetector(), "900101-1234567") == []
+    assert _detect(FRNRegexDetector(), "900101-1234568") == []
+    assert _detect(FRNRegexDetector(), "900101-5123456") == []
 
 
 @pytest.mark.parametrize(
     ("detector", "raw", "entity_type", "expected_text"),
     [
-        (RRNRegexDetector(), "９００１０１－１２３４５６７", EntityType.RRN, "９００１０１－１２３４５６７"),
-        (RRNRegexDetector(), "9 0 0 1 0 1 - 1 2 3 4 5 6 7", EntityType.RRN, "9 0 0 1 0 1 - 1 2 3 4 5 6 7"),
-        (FRNRegexDetector(), "９００１０１－５１２３４５６", EntityType.FRN, "９００１０１－５１２３４５６"),
+        (RRNRegexDetector(), "９００１０１－１２３４５６８", EntityType.RRN, "９００１０１－１２３４５６８"),
+        (RRNRegexDetector(), "9 0 0 1 0 1 - 1 2 3 4 5 6 8", EntityType.RRN, "9 0 0 1 0 1 - 1 2 3 4 5 6 8"),
+        (FRNRegexDetector(), "９００１０１－５１２３４５０", EntityType.FRN, "９００１０１－５１２３４５０"),
     ],
 )
 def test_rrn_frn_detectors_restore_m1_variant_spans(
@@ -230,7 +232,7 @@ def test_bank_account_detector_emits_low_score_pattern_only_candidate() -> None:
     _assert_span_contract(raw, spans[0], EntityType.BANK_ACCOUNT)
     assert spans[0].text == "110-123-456789"
     assert spans[0].score == 0.42
-    assert spans[0].sources == ("regex",)
+    assert spans[0].sources == ("regex", "validator")
 
 
 def test_bank_account_detector_rejects_short_or_placeholder_numbers() -> None:
@@ -238,6 +240,22 @@ def test_bank_account_detector_rejects_short_or_placeholder_numbers() -> None:
 
     assert _detect(detector, "계좌 12-345") == []
     assert _detect(detector, "계좌 000-000-0000") == []
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "연락처 010-1234-5678",
+        "연락처 010\u200b-1234\u200b-5678",
+        "카드 4111-1111-1111-1111",
+        "사업자 123-45-67891",
+        "주민번호 900101-1234568",
+        "외국인등록번호 900101-5123450",
+        "주문번호 2026-0001-1234",
+    ],
+)
+def test_bank_account_detector_rejects_non_account_structured_identifiers(raw: str) -> None:
+    assert _detect(BankAccountCandidateDetector(), raw) == []
 
 
 def test_secret_detector_accepts_synthetic_secret_only() -> None:
@@ -278,10 +296,10 @@ def test_phone_detector_restores_m1_variant_spans(raw: str, expected: str) -> No
 @pytest.mark.parametrize(
     "raw",
     [
-        "주 민 번 호 900101-1234567",
-        "ㅈㅁㅂㅎ는 900101-1234567",
-        "jumin beonho 900101-1234567",
-        "즈민뜽록볜훟 900101-1234567",
+        "주 민 번 호 900101-1234568",
+        "ㅈㅁㅂㅎ는 900101-1234568",
+        "jumin beonho 900101-1234568",
+        "즈민뜽록볜훟 900101-1234568",
     ],
 )
 def test_rrn_detector_finds_structured_pii_near_m1_restored_keywords(raw: str) -> None:
@@ -289,7 +307,7 @@ def test_rrn_detector_finds_structured_pii_near_m1_restored_keywords(raw: str) -
 
     assert len(spans) == 1
     _assert_span_contract(raw, spans[0], EntityType.RRN)
-    assert spans[0].text == "900101-1234567"
+    assert spans[0].text == "900101-1234568"
 
 
 def test_m2_detectors_do_not_classify_restored_korean_keywords_themselves() -> None:
