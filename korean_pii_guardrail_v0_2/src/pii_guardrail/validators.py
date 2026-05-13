@@ -40,7 +40,96 @@ LANDLINE_PREFIXES = {
 }
 SERVICE_PHONE_PREFIXES = ("050", "070", "080", "15", "16", "18")
 BUSINESS_REG_WEIGHTS = (1, 3, 7, 1, 3, 7, 1, 3, 5)
+RRN_CHECKSUM_WEIGHTS = (2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5)
 SECRET_PREFIXES = ("sk-", "ghp_", "gho_", "xoxb-", "xoxp-", "AKIA")
+
+
+@dataclass(frozen=True)
+class BankAccountPattern:
+    pattern_id: str
+    segments: tuple[int, ...]
+    prefixes: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class BankAccountProfile:
+    bank: str
+    bank_code: str
+    aliases: tuple[str, ...]
+    patterns: tuple[BankAccountPattern, ...]
+
+
+BANK_ACCOUNT_PROFILES = (
+    BankAccountProfile(
+        bank="국민은행",
+        bank_code="004",
+        aliases=("국민", "KB", "KB국민은행"),
+        patterns=(
+            BankAccountPattern("kb_6_2_6", (6, 2, 6)),
+            BankAccountPattern("kb_3_2_4_3", (3, 2, 4, 3)),
+        ),
+    ),
+    BankAccountProfile(
+        bank="신한은행",
+        bank_code="088",
+        aliases=("신한", "SHINHAN"),
+        patterns=(BankAccountPattern("shinhan_3_3_6", (3, 3, 6)),),
+    ),
+    BankAccountProfile(
+        bank="우리은행",
+        bank_code="020",
+        aliases=("우리", "WOORI"),
+        patterns=(
+            BankAccountPattern("woori_3_6_2_3", (3, 6, 2, 3)),
+            BankAccountPattern("woori_4_3_6", (4, 3, 6)),
+        ),
+    ),
+    BankAccountProfile(
+        bank="하나은행",
+        bank_code="081",
+        aliases=("하나", "KEB하나", "HANA"),
+        patterns=(
+            BankAccountPattern("hana_3_6_5", (3, 6, 5)),
+            BankAccountPattern("hana_3_2_5_1", (3, 2, 5, 1)),
+        ),
+    ),
+    BankAccountProfile(
+        bank="농협은행",
+        bank_code="011",
+        aliases=("농협", "NH", "NH농협은행"),
+        patterns=(
+            BankAccountPattern("nh_3_2_6", (3, 2, 6)),
+            BankAccountPattern("nh_3_4_4_2", (3, 4, 4, 2)),
+        ),
+    ),
+    BankAccountProfile(
+        bank="기업은행",
+        bank_code="003",
+        aliases=("기업", "IBK", "IBK기업은행"),
+        patterns=(BankAccountPattern("ibk_3_6_2_3", (3, 6, 2, 3)),),
+    ),
+    BankAccountProfile(
+        bank="카카오뱅크",
+        bank_code="090",
+        aliases=("카뱅", "카카오", "KAKAO"),
+        patterns=(BankAccountPattern("kakao_4_2_7", (4, 2, 7), ("3333", "7979", "7942", "7777")),),
+    ),
+    BankAccountProfile(
+        bank="토스뱅크",
+        bank_code="092",
+        aliases=("토스", "TOSS"),
+        patterns=(BankAccountPattern("toss_4_4_4", (4, 4, 4), ("1000", "1001")),),
+    ),
+    BankAccountProfile(
+        bank="케이뱅크",
+        bank_code="089",
+        aliases=("케이", "KBANK", "K뱅크"),
+        patterns=(
+            BankAccountPattern("kbank_3_3_6", (3, 3, 6)),
+            BankAccountPattern("kbank_4_4_4", (4, 4, 4), ("1001", "1020")),
+        ),
+    ),
+)
 
 
 def digits_only(value: str) -> str:
@@ -61,14 +150,29 @@ def validate_rrn(value: str) -> ValidationResult:
     digits = digits_only(value)
     if len(digits) != 13 or not _valid_birth_date(digits[:6], digits[6], rrn=True):
         return ValidationResult(False, digits, reason_codes=("validator.rrn.invalid",))
-    return ValidationResult(True, digits, "RRN", ("validator.rrn.valid",))
+    if not rrn_checksum_valid(digits):
+        return ValidationResult(False, digits, reason_codes=("validator.rrn.checksum_invalid",))
+    return ValidationResult(True, digits, "RRN", ("validator.rrn.valid", "validator.rrn.checksum_valid"))
 
 
 def validate_frn(value: str) -> ValidationResult:
     digits = digits_only(value)
     if len(digits) != 13 or not _valid_birth_date(digits[:6], digits[6], rrn=False):
         return ValidationResult(False, digits, reason_codes=("validator.frn.invalid",))
-    return ValidationResult(True, digits, "FRN", ("validator.frn.valid",))
+    if not rrn_checksum_valid(digits):
+        return ValidationResult(False, digits, reason_codes=("validator.frn.checksum_invalid",))
+    return ValidationResult(True, digits, "FRN", ("validator.frn.valid", "validator.frn.checksum_valid"))
+
+
+def rrn_check_digit(digits_12: str) -> str:
+    if len(digits_12) != 12 or not digits_12.isdigit():
+        raise ValueError("RRN checksum input must be the first 12 digits")
+    weighted_sum = sum(int(digit) * weight for digit, weight in zip(digits_12, RRN_CHECKSUM_WEIGHTS, strict=True))
+    return str((11 - (weighted_sum % 11)) % 10)
+
+
+def rrn_checksum_valid(digits: str) -> bool:
+    return len(digits) == 13 and digits.isdigit() and rrn_check_digit(digits[:12]) == digits[12]
 
 
 def _valid_birth_date(yymmdd: str, gender_digit: str, *, rrn: bool) -> bool:
@@ -192,6 +296,61 @@ def business_reg_no_checksum_valid(digits: str) -> bool:
     weighted_sum += ninth_product // 10 + ninth_product % 10
     check_digit = (10 - (weighted_sum % 10)) % 10
     return check_digit == int(digits[9])
+
+
+def validate_bank_account_profile(
+    value: str,
+    *,
+    bank: str | None = None,
+    bank_code: str | None = None,
+) -> ValidationResult:
+    digits = digits_only(value)
+    if len(digits) < 9 or len(digits) > 16 or is_repeated_or_placeholder_digits(digits):
+        return ValidationResult(False, digits, reason_codes=("validator.bank_account.invalid_format",))
+
+    profiles = _candidate_bank_profiles(bank)
+    for profile in profiles:
+        if bank_code and bank_code != profile.bank_code:
+            continue
+        for pattern in profile.patterns:
+            if _match_bank_account_pattern(value, pattern):
+                return ValidationResult(
+                    True,
+                    digits,
+                    "BANK_ACCOUNT_PATTERN_ONLY",
+                    (f"validator.bank_account.profile.{pattern.pattern_id}",),
+                )
+
+    return ValidationResult(False, digits, reason_codes=("validator.bank_account.profile_mismatch",))
+
+
+def _candidate_bank_profiles(bank: str | None) -> tuple[BankAccountProfile, ...]:
+    if bank is None or not bank.strip():
+        return BANK_ACCOUNT_PROFILES
+    normalized_bank = bank.strip()
+    return tuple(
+        profile
+        for profile in BANK_ACCOUNT_PROFILES
+        if normalized_bank == profile.bank or normalized_bank in profile.aliases
+    )
+
+
+def _match_bank_account_pattern(value: str, pattern: BankAccountPattern) -> bool:
+    stripped = value.strip().replace(" ", "")
+    if "-" in stripped:
+        parts = stripped.split("-")
+        if len(parts) != len(pattern.segments):
+            return False
+        if any(not part.isdigit() for part in parts):
+            return False
+        if any(len(part) != pattern.segments[index] for index, part in enumerate(parts)):
+            return False
+        return not pattern.prefixes or any(parts[0].startswith(prefix) for prefix in pattern.prefixes)
+
+    digits = digits_only(stripped)
+    if digits != stripped or len(digits) != sum(pattern.segments):
+        return False
+    return not pattern.prefixes or any(digits.startswith(prefix) for prefix in pattern.prefixes)
 
 
 def validate_ip_address(value: str) -> ValidationResult:
