@@ -1,3 +1,5 @@
+import pytest
+
 from pii_guardrail.enums import Action, EntityType, RiskLevel
 from pii_guardrail.korean_boundary import KoreanBoundaryCorrector
 from pii_guardrail.preprocess import preprocess_text
@@ -100,6 +102,78 @@ def test_captures_email_lookahead_ending_without_changing_offsets() -> None:
     assert corrected.end == span.end
     assert corrected.suffix == "입니다"
     assert corrected.reason_codes[-2:] == ("boundary.suffix_lookahead", "suffix.ending")
+
+
+@pytest.mark.parametrize(
+    ("detector", "raw", "expected_text"),
+    (
+        (PhoneRegexDetector(), "연락처 010-1234-5678입니다.", "010-1234-5678"),
+        (EmailRegexDetector(), "메일 test@example.com입니다.", "test@example.com"),
+        (BankAccountCandidateDetector(), "계좌 신한은행 110-123-456789입니다.", "110-123-456789"),
+    ),
+)
+def test_terminal_punctuation_is_not_included_in_ending_suffix(
+    detector: object,
+    raw: str,
+    expected_text: str,
+) -> None:
+    _, corrected = _detect_and_correct(detector, raw)
+
+    assert corrected.text == expected_text
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix == "입니다"
+    assert raw[corrected.end :].startswith("입니다.")
+    assert corrected.reason_codes[-2:] == ("boundary.suffix_lookahead", "suffix.ending")
+
+
+@pytest.mark.parametrize(
+    ("entity_type", "raw", "body"),
+    (
+        (EntityType.HOSPITAL, "병원은 서울중앙병원입니다.", "서울중앙병원"),
+        (EntityType.ORGANIZATION, "기관은 한국정보보호원입니다.", "한국정보보호원"),
+        (EntityType.SCHOOL, "학교는 한국대학교입니다.", "한국대학교"),
+        (EntityType.ADDRESS_FULL, "주소는 서울시 강남구 테헤란로 123입니다.", "서울시 강남구 테헤란로 123"),
+        (EntityType.ADDRESS_UNIT, "동네는 역삼동입니다.", "역삼동"),
+    ),
+)
+def test_text_entities_capture_ending_suffix_without_terminal_punctuation(
+    entity_type: EntityType,
+    raw: str,
+    body: str,
+) -> None:
+    span = _span(raw, body, entity_type)
+    corrected = _correct(raw, span)
+
+    assert corrected.text == body
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix == "입니다"
+    assert raw[corrected.end :].startswith("입니다.")
+    assert corrected.reason_codes[-2:] == ("boundary.suffix_lookahead", "suffix.ending")
+
+
+@pytest.mark.parametrize(
+    ("entity_type", "raw", "body"),
+    (
+        (EntityType.HOSPITAL, "병원은 서울중앙병원입니다.", "서울중앙병원"),
+        (EntityType.ORGANIZATION, "기관은 한국정보보호원입니다.", "한국정보보호원"),
+        (EntityType.SCHOOL, "학교는 한국대학교입니다.", "한국대학교"),
+        (EntityType.ADDRESS_FULL, "주소는 서울시 강남구 테헤란로 123입니다.", "서울시 강남구 테헤란로 123"),
+        (EntityType.ADDRESS_UNIT, "동네는 역삼동입니다.", "역삼동"),
+    ),
+)
+def test_text_entities_trim_internal_ending_suffix(
+    entity_type: EntityType,
+    raw: str,
+    body: str,
+) -> None:
+    span = _span(raw, f"{body}입니다", entity_type)
+    corrected = _correct(raw, span)
+
+    assert corrected.text == body
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix == "입니다"
+    assert corrected.normalized is None
+    assert corrected.reason_codes[-2:] == ("boundary.suffix_trim", "suffix.ending")
 
 
 def test_does_not_apply_disallowed_honorific_to_email() -> None:

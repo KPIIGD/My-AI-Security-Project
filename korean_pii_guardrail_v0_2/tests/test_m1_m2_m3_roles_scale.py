@@ -89,23 +89,23 @@ def _m2_bank_account_cases() -> list[tuple[str, str]]:
 
 
 def _m3_phone_suffix_cases() -> list[tuple[str, str, str]]:
-    suffixes = ("로", "으로", "입니다", "라고", "입니다.")
+    suffixes = (("로", "로"), ("으로", "으로"), ("입니다", "입니다"), ("라고", "라고"), ("입니다.", "입니다"))
     cases: list[tuple[str, str, str]] = []
     for index in range(90):
         prefix, middle, last = _phone_number(index)
         phone = f"{prefix}-{middle}-{last}"
-        suffix = suffixes[index % len(suffixes)]
-        cases.append((f"연락처 {phone}{suffix} 확인", phone, suffix))
+        raw_suffix, expected_suffix = suffixes[index % len(suffixes)]
+        cases.append((f"연락처 {phone}{raw_suffix} 확인", phone, expected_suffix))
     return cases
 
 
 def _m3_email_suffix_cases() -> list[tuple[str, str, str]]:
-    suffixes = ("로", "입니다", "라고", "입니다.")
+    suffixes = (("로", "로"), ("입니다", "입니다"), ("라고", "라고"), ("입니다.", "입니다"))
     cases: list[tuple[str, str, str]] = []
     for index in range(70):
         email = f"user{index}@example{index % 40}.com"
-        suffix = suffixes[index % len(suffixes)]
-        cases.append((f"메일 {email}{suffix} 확인", email, suffix))
+        raw_suffix, expected_suffix = suffixes[index % len(suffixes)]
+        cases.append((f"메일 {email}{raw_suffix} 확인", email, expected_suffix))
     return cases
 
 

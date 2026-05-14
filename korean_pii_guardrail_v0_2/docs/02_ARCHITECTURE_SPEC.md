@@ -202,6 +202,7 @@ list[PIISpan]
 - 전처리 단계에서 전역적으로 suffix를 제거하지 않는다.
 - detector가 생성한 candidate에만 후처리로 적용한다.
 - suffix는 마스킹에서 보존한다.
+- suffix에는 조사·호칭·어미만 포함하고, 문장부호(`.`, `,` 등)는 포함하지 않는다.
 - raw text 밖의 문자를 변경하지 않는다.
 
 #### Entity별 적용
@@ -209,9 +210,9 @@ list[PIISpan]
 | Entity | 처리 |
 |---|---|
 | PERSON_NAME | 조사/호칭/호격 분리 |
-| ADDRESS_FULL | 조사/위치격 분리 |
-| ORGANIZATION | 조사/호칭 분리 |
-| SCHOOL/HOSPITAL | 조사 분리 |
+| ADDRESS_FULL/ADDRESS_UNIT | 조사/위치격/종결어미 분리 |
+| ORGANIZATION | 조사/종결어미 분리 |
+| SCHOOL/HOSPITAL | 조사/종결어미 분리 |
 | PHONE/EMAIL/RRN | 후행 조사/종결어미 trim |
 | API_KEY_SECRET | suffix 분리보다 block 우선 |
 

@@ -102,6 +102,10 @@ Date: 2026-05-09
 |---|---|---|
 | test@example.com입니다 | test@example.com | 입니다 |
 | 010-1234-5678입니다 | 010-1234-5678 | 입니다 |
+| test@example.com입니다. | test@example.com | 입니다 |
+| 서울중앙병원입니다. | 서울중앙병원 | 입니다 |
+
+마침표와 쉼표 같은 문장부호는 suffix에 포함하지 않는다.
 
 ## 6. Ambiguous names
 

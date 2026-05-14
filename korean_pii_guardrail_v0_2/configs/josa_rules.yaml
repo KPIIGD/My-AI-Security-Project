@@ -30,18 +30,16 @@ suffix_groups:
   ending:
     - 입니다
     - 였습니다
-    - 입니다.
-    - 입니다,
     - 라고
     - 라는
     - 하고
 entity_application:
   PERSON_NAME: [josa, honorific]
-  ADDRESS_FULL: [josa]
-  ADDRESS_UNIT: [josa]
-  ORGANIZATION: [josa]
-  SCHOOL: [josa]
-  HOSPITAL: [josa]
+  ADDRESS_FULL: [josa, ending]
+  ADDRESS_UNIT: [josa, ending]
+  ORGANIZATION: [josa, ending]
+  SCHOOL: [josa, ending]
+  HOSPITAL: [josa, ending]
   PHONE_MOBILE: [josa, ending]
   PHONE_LANDLINE: [josa, ending]
   EMAIL: [josa, ending]
