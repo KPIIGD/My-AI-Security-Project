@@ -203,7 +203,7 @@ ECE, reliability diagram, temperature scaling 또는 isotonic calibration은 M10
 | Score band | 기본 의미 |
 |---|---|
 | `>= 0.90` | high confidence, mask/block |
-| `0.75 <= score < 0.90` | mask 또는 review |
+| `0.75 <= score < 0.90` | context judge 또는 safety-first mask |
 | `0.55 <= score < 0.75` | context judge 대상 |
 | `< 0.55` | pass, 단 composite 또는 P0 특례 제외 |
 
@@ -212,15 +212,17 @@ ECE, reliability diagram, temperature scaling 또는 isotonic calibration은 M10
 | Risk | Score | Action |
 |---|---:|---|
 | P0 | `>= 0.55` | mask 또는 block |
-| P0 | `< 0.55` | review if structured-like |
+| P0 | `< 0.55` | structured-like이면 safety-first mask/block 후보, 아니면 pass |
 | P1 | `>= 0.75` | mask |
 | P1 | `0.55~0.75` | context judge, 안전 우선 mask 가능 |
 | P1 | `<0.55` | pass unless composite |
-| P2 | `>=0.90` | mask/review |
-| P2 | `0.75~0.90` | review 또는 context judge |
+| P2 | `>=0.90` | context/composite가 있으면 mask |
+| P2 | `0.75~0.90` | context judge |
 | P2 | `<0.75` | pass unless composite |
-| P3 | `>=0.90` | review |
+| P3 | `>=0.90` | context/composite가 있으면 mask, 아니면 pass |
 | P3 | `<0.90` | pass unless composite |
+
+LLM Gateway MVP의 M7 action은 `pass`, `mask`, `hash`, `block` 중심이다. `review`는 human review workflow가 도입될 때의 future extension으로만 다룬다.
 
 ### 8.3 P0 action policy
 

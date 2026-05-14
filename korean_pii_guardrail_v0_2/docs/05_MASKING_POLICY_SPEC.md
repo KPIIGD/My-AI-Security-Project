@@ -1,143 +1,123 @@
 # Masking Policy Selection 명세서
 
 Version: v0.2-single-turn  
-Date: 2026-05-09
+Date: 2026-05-09  
+MVP scope note: 2026-05-14, LLM Gateway policy simplification
 
 ## 1. 목적
 
-본 문서는 Korean PII Guardrail v0.2에서 최종 PII span에 적용할 보호 조치의 선택 기준을 정의한다.
+본 문서는 Korean PII Guardrail v0.2의 M7 단계에서 최종 PII span에 적용할 보호 조치의 선택 기준을 정의한다.
 
-초기 자료에서 누락되었던 다음 의사결정 변수를 명시한다.
+v0.2 MVP는 LLM Gateway에 붙는 deterministic guardrail이다. 따라서 M7은 범용 개인정보 정책 플랫폼이 아니라, 다음 세 경로를 안전하게 처리하는 얇은 policy router와 masker로 제한한다.
 
-- entity 위험도
-- output target
-- policy profile
-- composite 여부
-- domain/sensitive context
-- audit log 목적
+1. LLM에 보내기 전 입력 보호
+2. 사용자 또는 외부 API로 나가기 전 출력 보호
+3. raw PII 없는 감사 로그 추적
 
-## 2. 보호 조치 종류
+## 2. M7 MVP 범위
 
-| Action | 설명 | 예시 |
-|---|---|---|
-| `pass` | 원문 유지 | `서울` 단독 |
-| `mask` | label 또는 partial로 치환 | `[PERSON_1]` |
-| `pseudonymize` | 분석용 가명값으로 치환 | `사람A` |
-| `hash` | HMAC 등 digest로 변환 | `hmac-sha256:...` |
-| `review` | 호출자에게 검토 필요 표시 | response flag |
-| `block` | 출력 전체 또는 해당 요청 차단 | API key |
-
-## 3. Transformation methods
-
-| Method | Reversible | 사용처 | 예시 |
-|---|---:|---|---|
-| label_mask | No | LLM input, external output | `[PERSON_1]` |
-| partial_mask | No | internal UI | `010-****-5678` |
-| pseudonym | No by default | analytics | `사람A`, `기관A` |
-| hmac_hash | No | audit/log duplicate tracking | `hmac-sha256:...` |
-| full_redact | No | secret/P0 | `[REDACTED]` |
-| block | N/A | high-risk secret | response blocked |
-
-복원형 tokenization은 v0.2 기본 범위가 아니다. 필요한 경우 `TokenizationProvider` interface를 별도 추가한다.
-
-## 4. Output target
+### 2.1 포함 target
 
 | Output target | 의미 | 기본 transformation |
 |---|---|---|
-| `llm_input` | LLM에 전달하기 전 텍스트 | label_mask |
-| `external_output` | 사용자 또는 외부 API 응답 | label_mask/block |
-| `internal_ui` | 내부 상담/운영 화면 | partial_mask |
-| `analytics` | 분석/통계/품질평가용 데이터 | pseudonym/generalization |
-| `audit_log` | 감사/추적 로그 | hmac_hash |
+| `llm_input` | LLM에 전달하기 전 텍스트 | `label_mask` |
+| `external_output` | 사용자 또는 외부 API 응답 | `label_mask` 또는 `block` |
+| `audit_log` | 감사/추적 로그 | `hmac_hash` |
 
-## 5. Policy profile
+### 2.2 기본 policy profile
 
-| Profile | 목적 | 기본 성향 |
+MVP 기본 profile은 `strict` 하나로 본다.
+
+`strict`는 LLM Gateway 안전 우선 정책이다. PII 과소마스킹을 피하고, P0 secret 또는 API key처럼 위험도가 높은 값은 마스킹보다 차단을 우선한다.
+
+현재 config/API/schema에는 확장용 profile 또는 target이 남아 있을 수 있다. 이번 문서 정리에서는 계약 파일을 변경하지 않으며, 실제 계약 축소 또는 비활성화 방식은 후속 PR에서 결정한다.
+
+## 3. 보호 조치 종류
+
+MVP action은 다음 네 가지로 제한한다.
+
+| Action | 설명 | 예시 |
 |---|---|---|
-| `strict` | 외부 출력/고위험 도메인 | recall 우선, 과소마스킹 방지 |
-| `balanced` | 일반 내부 사용 | recall/precision 균형 |
-| `analytics` | 분석용 데이터 | 유틸리티 보존 + 가명화 |
-| `analytics_ai_training` | AI 평가/학습용 가명 데이터 | 엄격 필터링 + 샘플 검수 |
-| `audit_log` | 로깅 | HMAC만 허용 |
+| `pass` | 원문 유지 | PII로 보기 어려운 단독 일반어 |
+| `mask` | label mask 또는 full redact로 치환 | `[PERSON_1]`, `[REDACTED]` |
+| `hash` | HMAC digest로 변환 | `hmac-sha256:key-v1:...` |
+| `block` | 출력 전체 또는 해당 요청 차단 | API key 포함 응답 차단 |
 
-## 6. Policy selection matrix
+`pseudonymize`, `review`, 내부 UI용 partial masking, 분석용 generalization은 v0.2 LLM Gateway MVP의 1차 구현 범위가 아니다. 필요한 제품 범위가 생기면 future extension으로 별도 설계한다.
 
-| Risk | Entity 예시 | llm_input | external_output | internal_ui | analytics | audit_log |
-|---|---|---|---|---|---|---|
-| P0 | RRN, FRN, API key | mask/block | block 또는 full mask | full mask | 제거/비포함 | hash only |
-| P1 | PHONE, EMAIL, ADDRESS_FULL, BANK_ACCOUNT | label_mask | label_mask | partial_mask | pseudonym/generalize | hash only |
-| P2 | SCHOOL, ORG, DOB, ADDRESS_UNIT | context 기반 mask | context 기반 mask | partial/pass | generalize | hash only |
-| P3 | AGE, GENDER 단독 | pass/review | pass/review | pass | aggregate/generalize | hash only |
+## 4. Transformation methods
 
-## 7. Entity별 기본 정책
+| Method | Reversible | MVP 사용처 | 예시 |
+|---|---:|---|---|
+| `label_mask` | No | `llm_input`, `external_output` | `[PERSON_1]` |
+| `hmac_hash` | No | `audit_log` duplicate tracking | `hmac-sha256:key-v1:...` |
+| `full_redact` | No | P0 secret fallback | `[REDACTED]` |
+| `block` | N/A | high-risk secret | response blocked |
 
-| Entity | Risk | Default action | Default method |
-|---|---|---|---|
-| API_KEY_SECRET | P0 | block | block |
-| RRN | P0 | mask/block | label_mask/full_redact |
-| FRN | P0 | mask/block | label_mask/full_redact |
-| CREDIT_CARD | P0/P1 | mask | label_mask/partial_mask |
-| BANK_ACCOUNT | P1 | mask if context | label_mask/partial_mask |
-| PHONE_MOBILE | P1 | mask | label_mask/partial_mask |
-| PHONE_LANDLINE | P1/P2 | mask if personal, pass if public representative | label_mask/partial_mask |
-| EMAIL | P1 | mask | label_mask |
-| PERSON_NAME | P1/P2 | context mask | label_mask/pseudonym |
-| ADDRESS_FULL | P1 | mask | label_mask/generalize |
-| ADDRESS_UNIT | P2/P3 | context mask/review | generalize |
-| ORGANIZATION | P2 | context mask/review | pseudonym/pass |
-| SCHOOL | P2 | context mask/review | pseudonym/generalize |
-| HOSPITAL | P2/P1 | context mask | pseudonym/generalize |
-| MEDICAL_RECORD_NO | P1 | mask | label_mask/hash |
-| CUSTOMER_ID | P1/P2 | context mask | label_mask/hash |
-| EMPLOYEE_ID | P1/P2 | context mask | label_mask/hash |
-| STUDENT_ID | P1/P2 | context mask | label_mask/hash |
-| DOB | P2 | composite mask | generalize |
-| AGE | P3 | pass unless composite | generalize |
-| GENDER | P3 | pass unless composite | aggregate |
-| HEALTH_INFO | P1/P2 | domain policy | redact/generalize |
+복원형 tokenization은 v0.2 기본 범위가 아니다. 요청 간 복원 가능한 token mapping도 M7 MVP에 포함하지 않는다.
 
-## 8. Policy selection 의사코드
+## 5. Policy selection matrix
+
+| Risk | Entity 예시 | `llm_input` | `external_output` | `audit_log` |
+|---|---|---|---|---|
+| P0 | RRN, FRN, API key, credential secret | label mask 또는 full redact | API key/secret은 block, 그 외 full redact 가능 | hash only |
+| P1 | PHONE, EMAIL, ADDRESS_FULL, BANK_ACCOUNT | label_mask | label_mask | hash only |
+| P2 | SCHOOL, ORG, DOB, ADDRESS_UNIT | context/composite 기반 mask 또는 pass | context/composite 기반 mask 또는 pass | hash only |
+| P3 | AGE, GENDER 단독 | pass unless composite | pass unless composite | hash only |
+
+## 6. Entity별 기본 정책
+
+| Entity | Risk | MVP 기본 처리 |
+|---|---|---|
+| API_KEY_SECRET | P0 | `block` |
+| RRN, FRN, PASSPORT, DRIVER_LICENSE | P0 | `mask` 또는 `full_redact`; 외부 출력 strict 조건에서는 `block` 가능 |
+| CREDIT_CARD | P0/P1 | `mask` |
+| BANK_ACCOUNT | P1 | context가 있으면 `mask` |
+| PHONE_MOBILE, PHONE_LANDLINE | P1 | 개인 연락처이면 `mask` |
+| EMAIL | P1 | `mask` |
+| PERSON_NAME | P1/P2 | context 또는 composite가 있으면 `mask` |
+| ADDRESS_FULL | P1 | `mask` |
+| ADDRESS_UNIT, ORGANIZATION, SCHOOL, HOSPITAL | P2 | context 또는 composite가 있으면 `mask`, 아니면 `pass` 가능 |
+| DOB, AGE, GENDER, FAMILY_RELATION | P2/P3 | composite가 있으면 `mask`, 단독이면 `pass` 가능 |
+| CUSTOMER_ID, EMPLOYEE_ID, STUDENT_ID, MEDICAL_RECORD_NO | P1/P2 | context가 있으면 `mask` |
+| HEALTH_INFO | P1/P2 | domain policy가 정해질 때까지 strict에서는 안전 우선 `mask` |
+
+## 7. Policy selection 의사코드
 
 ```python
 def select_policy(span, request_context):
-    if span.entity_type == "API_KEY_SECRET":
-        return Action.BLOCK, Method.BLOCK
-
     if request_context.output_target == "audit_log":
         return Action.HASH, Method.HMAC_HASH
 
+    if span.entity_type == "API_KEY_SECRET":
+        return Action.BLOCK, Method.BLOCK
+
     if span.risk_level == "P0":
-        if request_context.policy_profile == "strict":
+        if request_context.output_target == "external_output":
             return Action.BLOCK, Method.BLOCK
         return Action.MASK, Method.FULL_REDACT
 
     if span.is_composite:
-        span = upgrade_policy(span)
-
-    if request_context.output_target == "llm_input":
         return Action.MASK, Method.LABEL_MASK
 
-    if request_context.output_target == "external_output":
+    if span.risk_level in {"P1"}:
         return Action.MASK, Method.LABEL_MASK
 
-    if request_context.output_target == "internal_ui":
-        return Action.MASK, Method.PARTIAL_MASK
+    if span.risk_level in {"P2", "P3"} and has_strong_context(span):
+        return Action.MASK, Method.LABEL_MASK
 
-    if request_context.output_target == "analytics":
-        return Action.PSEUDONYMIZE, Method.PSEUDONYM
-
-    return Action.MASK, Method.LABEL_MASK
+    return Action.PASS, None
 ```
 
-## 9. Composite policy upgrade
+## 8. Composite policy upgrade
 
 단일 입력 텍스트 내부에서 composite가 확인되면 policy를 강화한다.
 
 | 기존 | Composite 후 |
 |---|---|
-| P3 pass | P2 review 또는 mask |
-| P2 review | P1 mask |
-| P1 mask | P1 mask 유지, method 강화 가능 |
+| P3 pass | P2 mask 가능 |
+| P2 pass | P1 수준 mask 가능 |
+| P1 mask | P1 mask 유지 |
 | P0 | P0 유지 |
 
 예:
@@ -146,11 +126,11 @@ def select_policy(span, request_context):
 성별: 남, 나이: 42세, 학교: OO고, 거주지: 강남구
 ```
 
-- 각 항목 단독은 P2/P3일 수 있음
-- 조합되면 준식별 위험이 커짐
-- v0.2에서는 같은 입력 텍스트 내부 조합만 고려
+- 각 항목 단독은 P2/P3일 수 있다.
+- 같은 입력 안에서 조합되면 준식별 위험이 커진다.
+- v0.2에서는 같은 입력 텍스트 내부 조합만 고려한다.
 
-## 10. 한국어 suffix 보존
+## 9. 한국어 suffix 보존
 
 마스킹은 반드시 PII 본체만 치환하고 suffix를 보존한다.
 
@@ -161,9 +141,9 @@ def select_policy(span, request_context):
 | `010-1234-5678로` | `[PHONE_1]` | `[PHONE_1]로` |
 | `test@example.com입니다` | `[EMAIL_1]` | `[EMAIL_1]입니다` |
 
-## 11. Placeholder indexing
+## 10. Placeholder indexing
 
-### 11.1 문서 내부 안정성
+### 10.1 요청 내부 안정성
 
 동일 raw value는 같은 요청 내에서 같은 placeholder를 받아야 한다.
 
@@ -172,19 +152,19 @@ def select_policy(span, request_context):
 → [PERSON_1]이 왔고 [PERSON_1]에게 전화했다.
 ```
 
-### 11.2 Entity별 index
+### 10.2 Entity별 index
 
 ```text
 [PERSON_1], [PERSON_2], [PHONE_1], [ADDRESS_1]
 ```
 
-### 11.3 Cross-request stability
+### 10.3 Cross-request stability
 
-v0.2 기본값은 요청 내부 안정성만 제공한다. cross-request stable pseudonym은 HMAC 기반 별도 profile에서만 허용한다.
+v0.2 LLM Gateway MVP는 요청 내부 안정성만 제공한다. 요청 간 안정적인 pseudonym 또는 복원형 token mapping은 후속 범위다.
 
-## 12. Audit log policy
+## 11. Audit log policy
 
-감사 로그는 transformation method를 `hmac_hash`로 고정한다.
+감사 로그 target은 transformation method를 `hmac_hash`로 고정한다.
 
 허용 예:
 
@@ -193,7 +173,7 @@ v0.2 기본값은 요청 내부 안정성만 제공한다. cross-request stable 
   "event_type": "pii_detection",
   "entity_type": "PHONE_MOBILE",
   "score": 0.94,
-  "action": "mask",
+  "action": "hash",
   "value_hash": "hmac-sha256:key-v1:...",
   "span_length": 13,
   "reason_codes": ["regex.phone.kr", "suffix.josa.ro"],
@@ -210,12 +190,38 @@ v0.2 기본값은 요청 내부 안정성만 제공한다. cross-request stable 
 }
 ```
 
-## 13. 구현 위치
+## 12. Future extensions
+
+다음 기능은 현재 LLM Gateway MVP에 포함하지 않는다.
+
+- `internal_ui` target과 partial masking
+- `analytics` 또는 `analytics_ai_training` target
+- `balanced`, `analytics`, `audit_log` 전용 profile 분리
+- `pseudonymize` action과 요청 간 stable pseudonym
+- `review` action, human review queue, 운영 콘솔 workflow
+- domain-specific policy profile
+
+## 13. Contract alignment TODO
+
+이번 문서 정리 브랜치에서는 Python code, OpenAPI, JSON Schema, config 파일을 수정하지 않는다. 후속 PR에서 다음 중 하나를 결정해야 한다.
+
+1. 실제 계약에서 MVP target/profile만 남긴다.
+2. 확장용 enum/config 값은 유지하되 v0.2 MVP에서는 비활성 또는 unsupported로 처리한다.
+
+확인 대상:
+
+- `configs/policy_profiles.yaml`
+- `api/openapi.yaml`
+- `schemas/guardrail_request.schema.json`
+- `src/pii_guardrail/enums.py`
+
+## 14. 구현 위치
 
 | 항목 | 파일 |
 |---|---|
 | policy config | `configs/policy_profiles.yaml` |
 | entity risk | `configs/entities.yaml` |
 | schema fields | `schemas/pii_span.schema.json` |
+| policy router | `src/pii_guardrail/policy.py` 예정 |
 | masking engine | `src/pii_guardrail/masker.py` 예정 |
 | audit logger | `src/pii_guardrail/audit_logger.py` 예정 |

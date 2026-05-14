@@ -71,7 +71,7 @@ v0.2에서는 RAG와 멀티턴을 제외하므로 context는 **현재 입력 텍
 
 - 숫자 패턴만으로는 BANK_ACCOUNT score 낮음
 - context 없음
-- action은 pass/review.
+- action은 pass.
 
 ```text
 신한은행 계좌 110-123-456789로 입금해 주세요.
@@ -185,7 +185,7 @@ def judge(span, context):
         return "mask"  # safety-first
 
     if span.risk_level == "P2":
-        return "review"
+        return "pass"
 
     return "pass"
 ```

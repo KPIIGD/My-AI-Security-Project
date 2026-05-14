@@ -9,7 +9,7 @@
 1. 한국어 개인정보 후보를 raw text offset 기준으로 안정적으로 탐지한다.
 2. 조사·호칭·어미가 붙은 한국어 span을 PII 본체와 suffix로 분리한다.
 3. detector별 점수를 통일된 score 체계로 변환하고, 겹침·중복 span을 결정론적으로 병합한다.
-4. output target과 policy profile에 따라 label mask, partial mask, pseudonym, HMAC hash, block을 선택한다.
+4. LLM Gateway MVP 기준으로 입력/출력/감사 로그 target에 대해 label mask, HMAC hash, block을 선택한다.
 5. raw PII가 로그, 평가 리포트, telemetry에 저장되지 않도록 한다.
 
 ## 명시적 제외 범위
