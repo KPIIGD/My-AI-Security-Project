@@ -52,7 +52,7 @@ L6 Span Resolver
 L7 Policy Router + Masker
   ├─ action selection
   ├─ placeholder assignment
-  ├─ label/partial/pseudonym/hash/block
+  ├─ label mask / hash / block
   └─ Korean suffix-preserving reconstruction
       ↓
 GuardrailResponse
@@ -279,12 +279,11 @@ list[PIISpan]
 | Method | 예시 |
 |---|---|
 | label_mask | `[PERSON_1]` |
-| partial_mask | `010-****-5678` |
-| pseudonym | `사람A`, `기관A` |
 | hmac_hash | `hmac-sha256:...` |
 | block | 응답 차단 |
 | pass | 원문 유지 |
-| review | 호출자에게 review 필요 표시 |
+
+v0.2 LLM Gateway MVP에서 L7은 `llm_input`, `external_output`, `audit_log` target을 우선 지원한다. 내부 UI partial masking, 분석용 pseudonymization, review workflow는 future extension이다.
 
 ## 4. 데이터 객체
 

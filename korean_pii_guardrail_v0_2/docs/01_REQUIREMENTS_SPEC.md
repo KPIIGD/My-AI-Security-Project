@@ -171,7 +171,7 @@ Context judge는 다음 순서로 판단한다.
 2. entity-specific context 확인
 3. negative context 확인
 4. single-turn composite 확인
-5. P0/P1이면 안전 우선 mask, P2/P3이면 review/pass 정책 적용
+5. P0/P1이면 안전 우선 mask/block, P2/P3이면 context/composite 여부에 따라 mask/pass 정책 적용
 
 ### FR-010. Span resolver
 
@@ -192,15 +192,15 @@ API_KEY_SECRET > RRN/FRN/PASSPORT/DRIVER_LICENSE > CREDIT_CARD/BANK_ACCOUNT > PH
 
 ### FR-011. Masking policy
 
-시스템은 `output_target`과 `policy_profile`에 따라 마스킹 방식을 선택해야 한다.
+시스템은 LLM Gateway MVP 기준으로 `output_target`과 기본 `strict` profile에 따라 마스킹 방식을 선택해야 한다.
 
 | Output target | 기본 policy |
 |---|---|
 | `llm_input` | label mask |
 | `external_output` | label mask 또는 block |
-| `internal_ui` | partial mask |
-| `analytics` | pseudonym/generalization |
 | `audit_log` | HMAC hash |
+
+`internal_ui`, `analytics`, `analytics_ai_training`, pseudonymization, human review workflow는 v0.2 LLM Gateway MVP의 1차 범위가 아니며 후속 확장으로 다룬다.
 
 ### FR-012. 감사 로그
 

@@ -157,7 +157,7 @@ RAG와 멀티턴은 평가 범위에서 제외한다.
 | E1 | D + mock NER | NER interface와 downstream resolver/policy 연결 검증 |
 | E2 | D + real v3 NER | 자유형 이름/주소/조직 recall 증가 및 NER FP 확인 |
 | F | E1 또는 E2 + context scorer | 중의적 이름/일반명사 FP 감소 및 composite recall 증가 |
-| G | F + policy router/masker | output target별 masking 품질 검증 |
+| G | F + policy router/masker | LLM Gateway target별 masking/hash/block 품질 검증 |
 
 초기 슬라이드의 session monitor ablation은 v0.2에서 제거한다.
 

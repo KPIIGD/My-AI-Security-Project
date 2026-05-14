@@ -224,13 +224,13 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 
 #### 작업
 
-- output target별 policy selection
+- LLM Gateway MVP target별 policy selection: `llm_input`, `external_output`, `audit_log`
+- MVP 기본 profile `strict` 기준 action selection
 - placeholder index
 - label mask
-- partial mask
-- pseudonym skeleton
 - HMAC hash provider
 - block response
+- `internal_ui`, `analytics`, pseudonymization은 future extension으로 분리
 
 #### Acceptance criteria
 
@@ -238,6 +238,7 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 - `audit_log` target은 hash only
 - API key는 block
 - 동일 값은 요청 내 동일 placeholder
+- config/API/schema에 남은 확장 target/profile은 후속 계약 정리 TODO로 기록
 
 ### M8. Audit logger
 
