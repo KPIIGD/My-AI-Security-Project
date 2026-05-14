@@ -1,62 +1,28 @@
 version: v0.2-single-turn
+mvp_scope: llm_gateway
 profiles:
   strict:
-    description: 외부 출력 또는 고위험 도메인용 recall 우선 정책
+    description: LLM Gateway MVP 안전 우선 정책
     p0_default: block_or_full_redact
     p1_default: label_mask
     p2_default: context_judge
     p3_default: pass_unless_composite
-  balanced:
-    description: 일반 내부 사용용 균형 정책
-    p0_default: full_redact
-    p1_default: label_mask
-    p2_default: review_or_mask
-    p3_default: pass
-  analytics:
-    description: 분석/통계용 가명처리 정책
-    p0_default: remove_or_full_redact
-    p1_default: pseudonym_or_generalize
-    p2_default: generalize
-    p3_default: aggregate_or_pass
-  analytics_ai_training:
-    description: AI 평가/학습용 가명 데이터 정책
-    p0_default: remove_or_full_redact
-    p1_default: label_mask
-    p2_default: label_mask_or_generalize
-    p3_default: aggregate_or_pass
-    require_sample_verification: true
-  audit_log:
-    description: 감사 로그 전용 정책
-    all_entities_default: hmac_hash
 output_targets:
   llm_input:
     default_method: label_mask
   external_output:
     default_method: label_mask
     block_entities: [API_KEY_SECRET]
-  internal_ui:
-    default_method: partial_mask
-  analytics:
-    default_method: pseudonym
   audit_log:
     default_method: hmac_hash
 entity_overrides:
   API_KEY_SECRET:
     strict: block
-    balanced: block
     external_output: block
   RRN:
     strict: full_redact
-    balanced: full_redact
   FRN:
     strict: full_redact
-    balanced: full_redact
-  CREDIT_CARD:
-    internal_ui: partial_mask
-  PHONE_MOBILE:
-    internal_ui: partial_mask
-  EMAIL:
-    internal_ui: partial_mask
 placeholder:
   stable_within_request: true
   cross_request_stable: false

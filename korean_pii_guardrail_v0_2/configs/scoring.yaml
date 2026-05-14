@@ -1,7 +1,7 @@
 version: v0.2-single-turn
 score_bands:
   high_confidence: 0.90
-  mask_or_review: 0.75
+  safety_mask: 0.75
   context_judge: 0.55
 combination:
   same_span_strategy: max
@@ -72,15 +72,15 @@ context_penalties:
 risk_action_thresholds:
   P0:
     mask_min_score: 0.55
-    review_below_score: 0.55
+    structured_like_min_score: 0.55
   P1:
     mask_min_score: 0.75
     context_judge_min_score: 0.55
   P2:
     mask_min_score: 0.90
-    review_min_score: 0.75
+    context_judge_min_score: 0.75
   P3:
-    review_min_score: 0.90
+    composite_mask_min_score: 0.90
 single_turn_composite:
   enabled: true
   same_sentence_only: true

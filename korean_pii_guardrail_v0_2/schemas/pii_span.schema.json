@@ -33,7 +33,7 @@
     },
     "score": { "type": "number", "minimum": 0, "maximum": 1 },
     "risk_level": { "type": "string", "enum": ["P0", "P1", "P2", "P3"] },
-    "action": { "type": "string", "enum": ["candidate", "pass", "mask", "pseudonymize", "hash", "review", "block"] },
+    "action": { "type": "string", "enum": ["candidate", "pass", "mask", "hash", "block"] },
     "suffix": { "type": ["string", "null"] },
     "is_composite": { "type": "boolean", "default": false },
     "sources": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
