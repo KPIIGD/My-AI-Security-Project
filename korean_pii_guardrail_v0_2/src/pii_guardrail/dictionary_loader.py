@@ -60,6 +60,18 @@ def load_honorific_terms(path: Path | None = None) -> dict[str, tuple[str, ...]]
     return _read_flow_list_section(config_path, "honorifics_and_titles")
 
 
+def load_entity_priority(path: Path | None = None) -> tuple[str, ...]:
+    """Load ``priority_order`` block list from ``configs/entities.yaml``.
+
+    Returns entity name strings in priority order (most important first).
+    The caller is responsible for wrapping each name in ``EntityType``.
+    """
+
+    config_path = path or DEFAULT_CONFIG_DIR / "entities.yaml"
+    lists = _read_block_list_yaml(config_path)
+    return lists.get("priority_order", ())
+
+
 def load_composite_upgrades(path: Path | None = None) -> dict[frozenset[str], str]:
     """Parse ``single_turn_composite.upgrades`` from scoring.yaml.
 
