@@ -238,7 +238,7 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 - `audit_log` target은 hash only
 - API key는 block
 - 동일 값은 요청 내 동일 placeholder
-- config/API/schema에 남은 확장 target/profile은 후속 계약 정리 TODO로 기록
+- config/API/schema/enum의 supported target/profile/action은 M7 MVP 범위와 일치
 
 ### M8. Audit logger
 

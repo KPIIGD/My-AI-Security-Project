@@ -10,12 +10,12 @@
     "scan_stage": { "type": "string", "enum": ["input", "output"], "default": "input" },
     "output_target": {
       "type": "string",
-      "enum": ["llm_input", "external_output", "internal_ui", "analytics", "audit_log"],
+      "enum": ["llm_input", "external_output", "audit_log"],
       "default": "llm_input"
     },
     "policy_profile": {
       "type": "string",
-      "enum": ["strict", "balanced", "analytics", "analytics_ai_training", "audit_log"],
+      "enum": ["strict"],
       "default": "strict"
     },
     "request_id": { "type": ["string", "null"] },

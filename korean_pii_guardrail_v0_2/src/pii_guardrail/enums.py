@@ -52,9 +52,7 @@ class Action(StrEnum):
     CANDIDATE = "candidate"
     PASS = "pass"
     MASK = "mask"
-    PSEUDONYMIZE = "pseudonymize"
     HASH = "hash"
-    REVIEW = "review"
     BLOCK = "block"
 
 
@@ -66,8 +64,6 @@ class ScanStage(StrEnum):
 class OutputTarget(StrEnum):
     LLM_INPUT = "llm_input"
     EXTERNAL_OUTPUT = "external_output"
-    INTERNAL_UI = "internal_ui"
-    ANALYTICS = "analytics"
     AUDIT_LOG = "audit_log"
 
 
