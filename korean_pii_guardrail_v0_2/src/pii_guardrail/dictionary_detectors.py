@@ -22,12 +22,62 @@ from .schema import GuardrailRequest, PIISpan
 
 
 _HANGUL_SYLLABLE_RANGE = ("가", "힣")
+# Apartment unit must come with a 동 prefix to avoid false positives such as
+# `2호선`, `3호점`, `1호기`. Trailing lookahead rejects further digits; non-
+# particle Hangul after 호 is filtered in ``_detect_addresses`` so that
+# josa/honorific (`호로`, `호와`, `호도`) still pass.
 _APARTMENT_UNIT_PATTERN = re.compile(
-    r"(?<!\d)(?:\d{1,3}\s*동\s+)?\d{1,4}\s*호(?!\d)"
+    r"(?<!\d)\d{1,3}\s*동\s+\d{1,4}\s*호(?!\d)"
 )
 _ROAD_TRAILER_PATTERN = re.compile(
     r"\s*\d{1,4}(?:\s*-\s*\d{1,4})?(?:\s*번지)?(?:\s+\d{1,3}\s*동)?(?:\s+\d{1,4}\s*호)?"
 )
+# Characters that legitimately follow a Korean given name as a particle or
+# honorific suffix. Anything else in Hangul is treated as a word continuation
+# and rejected by the boundary check below.
+_GIVEN_NAME_TRAILING_HANGUL = frozenset(
+    "이가은는을를에와과도만한께서으로랑님씨군양"
+)
+
+
+def _has_word_boundary_before(raw_text: str, start: int) -> bool:
+    """True when ``start`` does not sit inside a longer Hangul word."""
+
+    if start <= 0:
+        return True
+    prev_char = raw_text[start - 1]
+    low, high = _HANGUL_SYLLABLE_RANGE
+    return not (low <= prev_char <= high)
+
+
+def _has_word_boundary_after(raw_text: str, end: int) -> bool:
+    """True when ``end`` ends the Hangul word (or is followed by a particle)."""
+
+    if end >= len(raw_text):
+        return True
+    next_char = raw_text[end]
+    low, high = _HANGUL_SYLLABLE_RANGE
+    if not (low <= next_char <= high):
+        return True
+    return next_char in _GIVEN_NAME_TRAILING_HANGUL
+
+
+# Characters that may follow an address unit and still keep it a valid address:
+# josa particles (`로`, `에`, `에서`, `와`, `과`, `의`, `이`, `가`, `은`, `는`, `도`, `만`)
+# and Korean sentence terminators. Anything else in Hangul (e.g. `선`, `점`,
+# `차`, `실`, `기`) signals that the digit+호 sequence is part of a different
+# word (subway line `2호선`, store `3호점`, etc.) and the match is rejected.
+_ADDRESS_UNIT_TRAILING_HANGUL = frozenset("로에서와과의이가은는도만으한라까지부터")
+
+
+def _is_address_unit_boundary(raw_text: str, end: int) -> bool:
+    if end >= len(raw_text):
+        return True
+    next_char = raw_text[end]
+    low, high = _HANGUL_SYLLABLE_RANGE
+    if not (low <= next_char <= high):
+        return True
+    return next_char in _ADDRESS_UNIT_TRAILING_HANGUL
 
 
 @dataclass(frozen=True)
@@ -150,6 +200,10 @@ class DictionaryDetector:
                         continue
                     if any(cs <= span_start and span_end <= ce for (cs, ce) in consumed):
                         continue
+                    if not _has_word_boundary_before(raw_text, span_start):
+                        continue
+                    if not _has_word_boundary_after(raw_text, span_end):
+                        continue
                     emitted.add(key)
                     yield _Candidate(
                         start=span_start,
@@ -169,6 +223,10 @@ class DictionaryDetector:
                 if any(es <= index and given_end <= ee for (es, ee) in emitted):
                     continue
                 if any(cs <= index and given_end <= ce for (cs, ce) in consumed):
+                    continue
+                if not _has_word_boundary_before(raw_text, index):
+                    continue
+                if not _has_word_boundary_after(raw_text, given_end):
                     continue
                 emitted.add(key)
                 yield _Candidate(
@@ -200,7 +258,10 @@ class DictionaryDetector:
                     end=end,
                     entity_type=EntityType.FAMILY_RELATION,
                     score_key="relation_term",
-                    reason_codes=("dictionary.family_relation", f"dictionary.family_relation.{term}"),
+                    reason_codes=(
+                        "dictionary.family_relation",
+                        "dictionary.family_relation.match",
+                    ),
                 )
 
     # ------------------------------------------------------------------ Address
@@ -240,6 +301,8 @@ class DictionaryDetector:
 
         for match in _APARTMENT_UNIT_PATTERN.finditer(raw_text):
             if any(cs <= match.start() and match.end() <= ce for (cs, ce) in consumed_ranges):
+                continue
+            if not _is_address_unit_boundary(raw_text, match.end()):
                 continue
             yield _Candidate(
                 start=match.start(),
@@ -365,7 +428,7 @@ class DictionaryDetector:
                     end=end,
                     entity_type=entity_type,
                     score_key=score_key,
-                    reason_codes=(reason_prefix, f"{reason_prefix}.suffix:{suffix}"),
+                    reason_codes=(reason_prefix, f"{reason_prefix}.suffix_match"),
                 )
 
     # ------------------------------------------------------------------ Helpers

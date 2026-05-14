@@ -164,3 +164,54 @@ def test_dictionary_detector_emits_no_spans_for_unrelated_korean_text() -> None:
     spans = _detect(DictionaryDetector(), raw)
 
     assert spans == []
+
+
+# ----------------------------------------------------------- review-fix regressions
+
+
+def test_given_name_inside_longer_korean_word_is_not_matched() -> None:
+    """Issue from PR #10 review: '유진' inside '유진학교' must not be emitted."""
+
+    raw = "유진학교에 다닙니다."
+    persons = _by_entity(_detect(DictionaryDetector(), raw), EntityType.PERSON_NAME)
+
+    assert persons == []
+
+
+def test_given_name_followed_by_josa_still_matches() -> None:
+    """Boundary check must still allow josa particles such as '이' or '에게'."""
+
+    raw = "고객명 하늘이 신청했습니다."
+    persons = _by_entity(_detect(DictionaryDetector(), raw), EntityType.PERSON_NAME)
+
+    assert len(persons) == 1
+    assert persons[0].text == "하늘"
+
+
+def test_apartment_unit_does_not_match_subway_line_pattern() -> None:
+    """Issue from PR #10 review: '2호선' must not be classified as ADDRESS_UNIT."""
+
+    raw = "지하철 2호선 타고 갑니다."
+    units = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_UNIT)
+
+    assert units == []
+
+
+def test_apartment_unit_still_matches_when_followed_by_josa() -> None:
+    raw = "택배는 101동 1203호로 받겠습니다."
+    units = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_UNIT)
+
+    assert any(span.text == "101동 1203호" for span in units)
+
+
+def test_reason_codes_do_not_leak_matched_term() -> None:
+    """Issue 1: rule ids only, no matched text such as '어머니' or term names."""
+
+    raw = "어머니께서 보내주셨습니다. 서울중앙병원에서 만났습니다."
+    spans = _detect(DictionaryDetector(), raw)
+
+    for span in spans:
+        for code in span.reason_codes:
+            assert "어머니" not in code, code
+            assert "서울중앙" not in code, code
+            assert ":" not in code or code.endswith("match"), code

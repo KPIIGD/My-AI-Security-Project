@@ -165,34 +165,37 @@ class ContextScorer:
             evidence = self._evaluate_boost(rule, span, sentence_text, peers, raw_text)
             if evidence is not None:
                 delta += self.boosts.get(rule, 0.0)
-                evidence_codes.append(f"context.boost.{rule}:{evidence}")
+                evidence_codes.append(f"context.boost.{rule}")
 
         for rule in _PENALTY_RULES_BY_ENTITY.get(span.entity_type, ()):
             evidence = self._evaluate_penalty(rule, span, sentence_text)
             if evidence is not None:
                 delta += self.penalties.get(rule, 0.0)
-                evidence_codes.append(f"context.penalty.{rule}:{evidence}")
+                evidence_codes.append(f"context.penalty.{rule}")
 
-        example_evidence = self._match_term_in_group(
+        if self._match_term_in_group(
             sentence_text, self.negative_terms, _EXAMPLE_NEGATIVE_GROUP
-        )
-        if example_evidence is not None:
+        ) is not None:
             delta += self.penalties.get(_EXAMPLE_PENALTY_RULE, 0.0)
-            evidence_codes.append(
-                f"context.penalty.{_EXAMPLE_PENALTY_RULE}:{example_evidence}"
-            )
+            evidence_codes.append(f"context.penalty.{_EXAMPLE_PENALTY_RULE}")
 
         is_composite = span.is_composite
         composite_marked = False
-        for peer in peers:
-            pair = frozenset({span.entity_type.value, peer.entity_type.value})
-            if pair in self.composite_upgrades:
+        if self.composite_upgrades and peers:
+            peer_types = {p.entity_type.value for p in peers}
+            sentence_types = peer_types | {span.entity_type.value}
+            for upgrade_key in self.composite_upgrades:
+                if span.entity_type.value not in upgrade_key:
+                    continue
+                if not upgrade_key.issubset(sentence_types):
+                    continue
                 is_composite = True
                 if not composite_marked:
-                    evidence_codes.append(
-                        f"context.composite.{peer.entity_type.value}"
-                    )
+                    peers_in_key = sorted(upgrade_key - {span.entity_type.value})
+                    for peer_type in peers_in_key:
+                        evidence_codes.append(f"context.composite.{peer_type}")
                     composite_marked = True
+                    break
 
         final_score = max(0.0, min(1.0, span.score + delta))
         merged_sources = self._append_unique(span.sources, Source.CONTEXT.value)
