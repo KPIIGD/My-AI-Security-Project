@@ -1,0 +1,166 @@
+from pii_guardrail.dictionary_detectors import DictionaryDetector
+from pii_guardrail.dictionary_loader import (
+    load_dictionary_base_scores,
+    load_dictionary_lists,
+)
+from pii_guardrail.enums import Action, EntityType
+from pii_guardrail.preprocess import preprocess_text
+from pii_guardrail.schema import GuardrailRequest, PIISpan
+
+
+def _request(raw: str) -> GuardrailRequest:
+    return GuardrailRequest(text=raw)
+
+
+def _detect(detector: DictionaryDetector, raw: str) -> list[PIISpan]:
+    return detector.detect(preprocess_text(raw), _request(raw))
+
+
+def _by_entity(spans: list[PIISpan], entity_type: EntityType) -> list[PIISpan]:
+    return [span for span in spans if span.entity_type is entity_type]
+
+
+def _assert_dict_span_contract(raw: str, span: PIISpan, entity_type: EntityType) -> None:
+    span.validate_against(raw)
+    assert span.text == raw[span.start : span.end]
+    assert span.entity_type is entity_type
+    assert span.action is Action.CANDIDATE
+    assert "dictionary" in span.sources
+    assert span.detector_ids == ("dictionary.korean",)
+    assert span.reason_codes
+
+
+def test_dictionary_lists_loads_expected_categories() -> None:
+    lists = load_dictionary_lists()
+
+    for category in (
+        "surnames",
+        "given_name_candidates",
+        "relation_terms",
+        "address_si_gu_dong",
+        "road_names",
+        "organization_suffixes",
+        "brand_organizations",
+        "school_suffixes",
+        "hospital_suffixes",
+        "bank_names",
+    ):
+        assert category in lists, category
+        assert lists[category]
+
+    assert "김" in lists["surnames"]
+    assert "하늘" in lists["given_name_candidates"]
+    assert "신한은행" in lists["bank_names"]
+
+
+def test_dictionary_base_scores_match_spec() -> None:
+    scores = load_dictionary_base_scores()
+
+    assert scores["surname"] == 0.25
+    assert scores["given_name_candidate"] == 0.35
+    assert scores["full_name_pattern"] == 0.55
+    assert scores["road_name"] == 0.65
+    assert scores["hospital_suffix"] == 0.60
+
+
+def test_person_name_detected_via_full_name_pattern() -> None:
+    raw = "담당자 김민수에게 전달했습니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.PERSON_NAME)
+
+    assert len(spans) == 1
+    _assert_dict_span_contract(raw, spans[0], EntityType.PERSON_NAME)
+    assert spans[0].text == "김민수"
+    assert spans[0].score == 0.55
+    assert "dictionary.surname_given.match" in spans[0].reason_codes
+
+
+def test_person_name_detected_via_given_name_candidate() -> None:
+    raw = "고객명 하늘, 연락처 010-1111-2222."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.PERSON_NAME)
+
+    assert len(spans) == 1
+    _assert_dict_span_contract(raw, spans[0], EntityType.PERSON_NAME)
+    assert spans[0].text == "하늘"
+    assert spans[0].score == 0.35
+    assert "dictionary.given_name_candidate" in spans[0].reason_codes
+
+
+def test_person_name_skipped_when_first_char_not_surname() -> None:
+    raw = "테헤란로에서 만났습니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.PERSON_NAME)
+
+    assert spans == []
+
+
+def test_family_relation_detected() -> None:
+    raw = "어머니께서 보내주셨습니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.FAMILY_RELATION)
+
+    assert len(spans) == 1
+    _assert_dict_span_contract(raw, spans[0], EntityType.FAMILY_RELATION)
+    assert spans[0].text == "어머니"
+    assert spans[0].score == 0.40
+
+
+def test_address_si_gu_dong_chain_emits_address_unit() -> None:
+    raw = "서울특별시 강남구 역삼동에 살아요."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_UNIT)
+
+    assert len(spans) == 1
+    _assert_dict_span_contract(raw, spans[0], EntityType.ADDRESS_UNIT)
+    assert spans[0].text == "서울특별시 강남구 역삼동"
+    assert spans[0].score == 0.45
+
+
+def test_address_full_combines_si_gu_dong_road_and_number() -> None:
+    raw = "서울시 강남구 테헤란로 152에 거주합니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_FULL)
+
+    assert len(spans) == 1
+    _assert_dict_span_contract(raw, spans[0], EntityType.ADDRESS_FULL)
+    assert spans[0].text.startswith("서울시 강남구 테헤란로")
+    assert "152" in spans[0].text
+    assert spans[0].score == 0.65
+
+
+def test_apartment_unit_pattern_emits_address_unit() -> None:
+    raw = "택배는 101동 1203호로 받겠습니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_UNIT)
+
+    assert any(span.text == "101동 1203호" for span in spans)
+
+
+def test_organization_brand_match_emits_organization() -> None:
+    raw = "삼성전자에 입사했습니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ORGANIZATION)
+
+    assert len(spans) == 1
+    _assert_dict_span_contract(raw, spans[0], EntityType.ORGANIZATION)
+    assert spans[0].text == "삼성전자"
+    assert "dictionary.organization.brand" in spans[0].reason_codes
+
+
+def test_school_suffix_expands_korean_head() -> None:
+    raw = "졸업한 곳은 서울대학교입니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.SCHOOL)
+
+    assert spans
+    _assert_dict_span_contract(raw, spans[0], EntityType.SCHOOL)
+    assert spans[0].text.endswith("대학교")
+    assert "서울" in spans[0].text
+
+
+def test_hospital_suffix_expands_korean_head() -> None:
+    raw = "환자는 서울중앙병원에서 치료받았습니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.HOSPITAL)
+
+    assert spans
+    _assert_dict_span_contract(raw, spans[0], EntityType.HOSPITAL)
+    assert spans[0].text == "서울중앙병원"
+
+
+def test_dictionary_detector_emits_no_spans_for_unrelated_korean_text() -> None:
+    raw = "오늘 점심은 무엇을 먹을까요?"
+    spans = _detect(DictionaryDetector(), raw)
+
+    assert spans == []
