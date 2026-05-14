@@ -202,18 +202,22 @@ list[PIISpan]
 - 전처리 단계에서 전역적으로 suffix를 제거하지 않는다.
 - detector가 생성한 candidate에만 후처리로 적용한다.
 - suffix는 마스킹에서 보존한다.
+- suffix에는 조사·호칭·어미만 포함하고, 문장부호(`.`, `,` 등)는 포함하지 않는다.
+- 전체 한국어 조사·어미를 모두 지원하지 않고, 평가 가능한 PII suffix cluster만 설정으로 지원한다.
 - raw text 밖의 문자를 변경하지 않는다.
 
 #### Entity별 적용
 
 | Entity | 처리 |
 |---|---|
-| PERSON_NAME | 조사/호칭/호격 분리 |
-| ADDRESS_FULL | 조사/위치격 분리 |
-| ORGANIZATION | 조사/호칭 분리 |
-| SCHOOL/HOSPITAL | 조사 분리 |
-| PHONE/EMAIL/RRN | 후행 조사/종결어미 trim |
+| PERSON_NAME | 조사/복합조사/호칭/종결어미/인용형 분리 |
+| ADDRESS_FULL/ADDRESS_UNIT | 조사/복합조사/종결어미/인용형 분리 |
+| ORGANIZATION | 조사/복합조사/종결어미/인용형 분리 |
+| SCHOOL/HOSPITAL | 조사/복합조사/종결어미/인용형 분리 |
+| PHONE/EMAIL/RRN | 후행 조사/복합조사/종결어미/인용형 trim |
 | API_KEY_SECRET | suffix 분리보다 block 우선 |
+
+TODO: `이라고요`, `이라구요`, `라네요`, `랍니다`, `이라면서요` 같은 존댓말·구어체 확장은 hard case와 annotation guideline을 먼저 추가한 뒤 별도 PR에서 다룬다.
 
 ### L4. NER Detector Interface
 
