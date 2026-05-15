@@ -1,0 +1,260 @@
+"""M9 end-to-end Korean PII Guardrail pipeline.
+
+Wires together every stage of the v0.2 single-turn flow:
+
+    GuardrailRequest
+        │
+        ▼
+    M1 preprocess  ──────►  PreprocessResult (raw + normalized + offset map)
+        │
+        ▼
+    M2 regex detectors + M2.5 dictionary detector + M5 NER (optional)
+        │              candidate PIISpan[] (raw-offset contract)
+        ▼
+    M3 boundary corrector  ──►  trim josa/honorific/ending suffix on each span
+        │
+        ▼
+    M4 context scorer       ──►  boost/penalty + is_composite hints
+        │
+        ▼
+    M6 span resolver        ──►  duplicate merge / overlap winner / address fragments / composite escalation
+        │
+        ▼
+    M7 policy router        ──►  Action + TransformationMethod per span
+        │
+        ▼
+    M7 masker               ──►  masked_text | None (BLOCK)
+        │
+        ▼
+    M8 audit logger         ──►  per-span AuditEvent (optional, fail-closed)
+        │
+        ▼
+    GuardrailResponse
+
+The pipeline accepts an optional ``BaseNERDetector`` (default: ``MockNERDetector``)
+so callers can swap in the v3 finetuned model without touching pipeline code.
+"""
+
+from __future__ import annotations
+
+import time
+from collections.abc import Sequence
+from dataclasses import dataclass
+
+from .audit_logger import AuditLogger, AuditPayloadLeakError
+from .context_scorer import ContextScorer
+from .dictionary_detectors import DictionaryDetector
+from .enums import Action
+from .korean_boundary import KoreanBoundaryCorrector
+from .masker import SuffixPreservingMasker
+from .ner import BaseNERDetector, MockNERDetector
+from .policy import PolicyRouter
+from .preprocess import preprocess_text
+from .regex_detectors import (
+    BankAccountCandidateDetector,
+    BusinessRegNoDetector,
+    CreditCardRegexDetector,
+    EmailRegexDetector,
+    FRNRegexDetector,
+    NetworkIdentifierDetector,
+    PhoneRegexDetector,
+    RRNRegexDetector,
+    SecretRegexDetector,
+    deduplicate_spans,
+)
+from .schema import (
+    AuditEvent,
+    GuardrailRequest,
+    GuardrailResponse,
+    PIISpan,
+    PublicPIISpan,
+    ResponseMetrics,
+)
+from .span_resolver import SpanResolver
+
+
+@dataclass(frozen=True)
+class PipelineComponents:
+    """Container for swappable pipeline stages.
+
+    Kept as a frozen dataclass so test fixtures and production callers can
+    construct a ``GuardrailPipeline`` from a curated set of detectors
+    without reaching into private attributes.
+    """
+
+    regex_detectors: tuple[object, ...]
+    dictionary_detector: DictionaryDetector
+    boundary_corrector: KoreanBoundaryCorrector
+    context_scorer: ContextScorer
+    ner_detector: BaseNERDetector | None
+    span_resolver: SpanResolver
+    policy_router: PolicyRouter
+    masker: SuffixPreservingMasker
+    audit_logger: AuditLogger | None
+
+
+def _default_regex_detectors() -> tuple[object, ...]:
+    return (
+        RRNRegexDetector(),
+        FRNRegexDetector(),
+        PhoneRegexDetector(),
+        EmailRegexDetector(),
+        NetworkIdentifierDetector(),
+        CreditCardRegexDetector(),
+        BusinessRegNoDetector(),
+        BankAccountCandidateDetector(),
+        SecretRegexDetector(),
+    )
+
+
+def default_components(
+    *,
+    ner_detector: BaseNERDetector | None = None,
+    audit_logger: AuditLogger | None = None,
+) -> PipelineComponents:
+    """Build a stock set of v0.2 pipeline components.
+
+    ``ner_detector`` defaults to ``MockNERDetector`` so the pipeline is
+    self-contained without the v3 finetuned model. Pass an instance of
+    ``FinetunedKoreanNERDetector`` to enable real NER at the M5 stage.
+    """
+    policy_router = PolicyRouter()
+    masker = SuffixPreservingMasker(policy_router=policy_router)
+    return PipelineComponents(
+        regex_detectors=_default_regex_detectors(),
+        dictionary_detector=DictionaryDetector(),
+        boundary_corrector=KoreanBoundaryCorrector(),
+        context_scorer=ContextScorer(),
+        ner_detector=ner_detector if ner_detector is not None else MockNERDetector(),
+        span_resolver=SpanResolver(),
+        policy_router=policy_router,
+        masker=masker,
+        audit_logger=audit_logger,
+    )
+
+
+class GuardrailPipeline:
+    """Stateless single-turn Korean PII guardrail.
+
+    Stateless = no per-request mutation of components. A single
+    ``GuardrailPipeline`` instance can be shared across concurrent
+    requests as long as the underlying detectors are themselves
+    stateless (the v0.2 detectors are).
+    """
+
+    def __init__(self, components: PipelineComponents | None = None) -> None:
+        self._components = components or default_components()
+
+    @property
+    def components(self) -> PipelineComponents:
+        return self._components
+
+    def process(self, request: GuardrailRequest) -> GuardrailResponse:
+        """Run the full M1→M8 flow and return a GuardrailResponse.
+
+        Always builds a valid response — even if the policy router
+        marks the request as ``BLOCK``, the response shape stays
+        consistent (``blocked=True``, ``masked_text=None``,
+        ``spans`` carries the routed candidates).
+        """
+        t0 = time.perf_counter()
+        preprocessed = preprocess_text(request.text)
+
+        # --- Detect (M2 regex + M2.5 dictionary + M5 NER) ---
+        candidates: list[PIISpan] = []
+        for detector in self._components.regex_detectors:
+            candidates.extend(detector.detect(preprocessed, request))
+        candidates.extend(self._components.dictionary_detector.detect(preprocessed, request))
+        if self._components.ner_detector is not None:
+            candidates.extend(
+                self._components.ner_detector.detect(
+                    raw_text=request.text,
+                    preprocessed=preprocessed,
+                    request=request,
+                )
+            )
+
+        # --- M3 boundary correction (per-span) ---
+        corrected = [
+            self._components.boundary_corrector.correct(span, preprocessed)
+            for span in candidates
+        ]
+
+        # --- Dedup before context scoring so identical (start,end,type)
+        # spans don't double-count for is_composite peer-detection ---
+        corrected = deduplicate_spans(corrected)
+
+        # --- M4 context scoring ---
+        scored = self._components.context_scorer.score(corrected, preprocessed)
+
+        # --- M6 span resolver (duplicate merge / overlap / address / composite) ---
+        resolved = self._components.span_resolver.resolve(scored, preprocessed, request)
+
+        # --- M7 policy routing (per-span Action + method) ---
+        routed = self._components.policy_router.route(resolved, request)
+
+        # --- M7 masker (text reconstruction) ---
+        # If any span resolved to BLOCK, masked_text is None.
+        masked_text = self._components.masker.apply(request.text, routed, request)
+        blocked = masked_text is None
+
+        # --- M8 audit (per-span, fail-closed) ---
+        audit_events = self._emit_audit_events(routed, request)
+
+        # --- Build public response ---
+        public_spans = tuple(span.to_public() for span in routed)
+        masked_count = sum(
+            1
+            for span in routed
+            if span.action in {Action.MASK, Action.HASH}
+        )
+        latency_ms = (time.perf_counter() - t0) * 1000.0
+
+        return GuardrailResponse(
+            request_id=request.effective_request_id,
+            blocked=blocked,
+            masked_text=masked_text,
+            spans=public_spans,
+            audit_events=audit_events,
+            metrics=ResponseMetrics(
+                latency_ms=latency_ms,
+                detected_span_count=len(routed),
+                masked_span_count=masked_count,
+            ),
+            policy_profile=request.policy_profile,
+            output_target=request.output_target,
+            raw_value_logged=False,
+        )
+
+    def _emit_audit_events(
+        self, spans: Sequence[PIISpan], request: GuardrailRequest
+    ) -> tuple[AuditEvent, ...]:
+        """Emit audit events for actionable spans only.
+
+        ``Action.PASS`` and ``Action.CANDIDATE`` spans are skipped so the
+        audit log stays focused on policy-driven actions. A leak in a
+        single event is logged as ``AuditPayloadLeakError`` and dropped
+        (fail-closed); the pipeline continues so the caller still
+        receives a usable masked response.
+        """
+        if self._components.audit_logger is None:
+            return ()
+        events: list[AuditEvent] = []
+        for span in spans:
+            if span.action not in {Action.MASK, Action.HASH, Action.BLOCK}:
+                continue
+            try:
+                events.append(
+                    self._components.audit_logger.emit(span=span, request=request)
+                )
+            except AuditPayloadLeakError:
+                # Fail-closed: drop this event but keep going.
+                continue
+        return tuple(events)
+
+
+__all__ = [
+    "GuardrailPipeline",
+    "PipelineComponents",
+    "default_components",
+]
