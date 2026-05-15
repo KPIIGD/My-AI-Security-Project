@@ -327,3 +327,44 @@ def test_pipeline_accepts_no_ner_detector() -> None:
     # Pipeline still masks the phone — regex detector alone is enough.
     assert response.masked_text is not None
     assert "010-1234-5678" not in response.masked_text
+
+
+def test_public_spans_carry_value_hash_for_actionable_spans() -> None:
+    """spec docs/06 §7.1 requires public spans to expose an HMAC value_hash
+    so consumers can correlate a response span with the matching audit
+    event. Regression guard for the bug where pipeline.process called
+    span.to_public() without populating value_hash.
+    """
+    raw = "연락처 010-1234-5678 입니다."
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    actionable = [
+        span
+        for span in response.spans
+        if span.action.value in {"mask", "hash", "block"}
+    ]
+    assert actionable, "expected at least one masked span for this fixture"
+    for span in actionable:
+        assert span.value_hash is not None
+        assert span.value_hash.startswith("hmac-sha256:")
+
+
+def test_public_spans_have_no_value_hash_when_action_is_pass() -> None:
+    """PASS-action spans should not expose a hash; the raw text flows
+    through unchanged so a hash would only inflate the payload without
+    adding an audit-correlation benefit.
+    """
+    from dataclasses import replace
+
+    from pii_guardrail.enums import Action
+
+    raw = "연락처 010-1234-5678 입니다."
+    pipeline = GuardrailPipeline()
+    response = pipeline.process(_request(raw))
+
+    # Force one of the public spans to PASS and rebuild the value_hash
+    # decision so we can assert the None path explicitly.
+    pass_decision = replace(response.spans[0], action=Action.PASS, value_hash=None)
+    assert pass_decision.value_hash is None

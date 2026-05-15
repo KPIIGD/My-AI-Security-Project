@@ -202,7 +202,17 @@ class GuardrailPipeline:
         audit_events = self._emit_audit_events(routed, request)
 
         # --- Build public response ---
-        public_spans = tuple(span.to_public() for span in routed)
+        # value_hash is populated only for actionable spans (MASK/HASH/BLOCK)
+        # so callers can correlate a public span with the matching audit
+        # event without exposing raw text. PASS spans intentionally omit the
+        # hash to keep the public payload small. The masker's HmacHashProvider
+        # is reused here; aligning it with the M8 HMACKeyRing across both
+        # surfaces is a separate consolidation task (see inspection report
+        # P2 #9).
+        public_spans = tuple(
+            span.to_public(value_hash=self._public_value_hash(span))
+            for span in routed
+        )
         masked_count = sum(
             1
             for span in routed
@@ -225,6 +235,18 @@ class GuardrailPipeline:
             output_target=request.output_target,
             raw_value_logged=False,
         )
+
+    def _public_value_hash(self, span: PIISpan) -> str | None:
+        """Return the HMAC value_hash for actionable spans, else None.
+
+        Actionable = the policy router decided to MASK, HASH, or BLOCK the
+        span. PASS / CANDIDATE spans get ``None`` because exposing a hash
+        for content that flows through unchanged offers no audit benefit
+        and just enlarges the response.
+        """
+        if span.action not in {Action.MASK, Action.HASH, Action.BLOCK}:
+            return None
+        return self._components.masker.hash_provider.digest(span.text)
 
     def _emit_audit_events(
         self, spans: Sequence[PIISpan], request: GuardrailRequest
