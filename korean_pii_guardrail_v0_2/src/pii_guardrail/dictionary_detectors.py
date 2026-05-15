@@ -22,21 +22,80 @@ from .schema import GuardrailRequest, PIISpan
 
 
 _HANGUL_SYLLABLE_RANGE = ("가", "힣")
-# Apartment unit must come with a 동 prefix to avoid false positives such as
-# `2호선`, `3호점`, `1호기`. Trailing lookahead rejects further digits; non-
-# particle Hangul after 호 is filtered in ``_detect_addresses`` so that
-# josa/honorific (`호로`, `호와`, `호도`) still pass.
+# Apartment unit can appear either as `101동 1203호` or bare `1203호`.
+# False positives such as `2호선`, `3호점`, and `1호기` are filtered by the
+# suffix boundary check in ``_detect_addresses``.
 _APARTMENT_UNIT_PATTERN = re.compile(
-    r"(?<!\d)\d{1,3}\s*동\s+\d{1,4}\s*호(?!\d)"
+    r"(?<!\d)(?:\d{1,3}\s*동\s+)?\d{1,4}\s*호(?!\d)"
 )
 _ROAD_TRAILER_PATTERN = re.compile(
     r"\s*\d{1,4}(?:\s*-\s*\d{1,4})?(?:\s*번지)?(?:\s+\d{1,3}\s*동)?(?:\s+\d{1,4}\s*호)?"
 )
-# Characters that legitimately follow a Korean given name as a particle or
-# honorific suffix. Anything else in Hangul is treated as a word continuation
-# and rejected by the boundary check below.
-_GIVEN_NAME_TRAILING_HANGUL = frozenset(
-    "이가은는을를에와과도만한께서으로랑님씨군양"
+_GIVEN_NAME_TRAILING_SUFFIXES = tuple(
+    sorted(
+        (
+            "에게",
+            "한테",
+            "께서",
+            "으로",
+            "이랑",
+            "이",
+            "가",
+            "은",
+            "는",
+            "을",
+            "를",
+            "에",
+            "의",
+            "께",
+            "로",
+            "와",
+            "과",
+            "랑",
+            "도",
+            "만",
+            "님",
+            "씨",
+            "군",
+            "양",
+        ),
+        key=len,
+        reverse=True,
+    )
+)
+_ADDRESS_UNIT_TRAILING_SUFFIXES = tuple(
+    sorted(
+        (
+            "에게",
+            "한테",
+            "에서",
+            "으로",
+            "이랑",
+            "부터",
+            "까지",
+            "입니다",
+            "였습니다",
+            "라고",
+            "라는",
+            "하고",
+            "이",
+            "가",
+            "은",
+            "는",
+            "을",
+            "를",
+            "에",
+            "께",
+            "로",
+            "와",
+            "과",
+            "랑",
+            "도",
+            "만",
+        ),
+        key=len,
+        reverse=True,
+    )
 )
 
 
@@ -51,33 +110,36 @@ def _has_word_boundary_before(raw_text: str, start: int) -> bool:
 
 
 def _has_word_boundary_after(raw_text: str, end: int) -> bool:
-    """True when ``end`` ends the Hangul word (or is followed by a particle)."""
+    """True when ``end`` ends the Hangul word or has a full suffix boundary."""
 
-    if end >= len(raw_text):
-        return True
-    next_char = raw_text[end]
-    low, high = _HANGUL_SYLLABLE_RANGE
-    if not (low <= next_char <= high):
-        return True
-    return next_char in _GIVEN_NAME_TRAILING_HANGUL
-
-
-# Characters that may follow an address unit and still keep it a valid address:
-# josa particles (`로`, `에`, `에서`, `와`, `과`, `의`, `이`, `가`, `은`, `는`, `도`, `만`)
-# and Korean sentence terminators. Anything else in Hangul (e.g. `선`, `점`,
-# `차`, `실`, `기`) signals that the digit+호 sequence is part of a different
-# word (subway line `2호선`, store `3호점`, etc.) and the match is rejected.
-_ADDRESS_UNIT_TRAILING_HANGUL = frozenset("로에서와과의이가은는도만으한라까지부터")
+    return _has_full_suffix_boundary(raw_text, end, _GIVEN_NAME_TRAILING_SUFFIXES)
 
 
 def _is_address_unit_boundary(raw_text: str, end: int) -> bool:
-    if end >= len(raw_text):
+    return _has_full_suffix_boundary(raw_text, end, _ADDRESS_UNIT_TRAILING_SUFFIXES)
+
+
+def _has_full_suffix_boundary(
+    raw_text: str, start: int, suffixes: tuple[str, ...]
+) -> bool:
+    if start >= len(raw_text):
         return True
-    next_char = raw_text[end]
     low, high = _HANGUL_SYLLABLE_RANGE
-    if not (low <= next_char <= high):
+    if not (low <= raw_text[start] <= high):
         return True
-    return next_char in _ADDRESS_UNIT_TRAILING_HANGUL
+
+    cursor = start
+    while cursor < len(raw_text):
+        if not (low <= raw_text[cursor] <= high):
+            return True
+
+        for suffix in suffixes:
+            if raw_text.startswith(suffix, cursor):
+                cursor += len(suffix)
+                break
+        else:
+            return False
+    return True
 
 
 @dataclass(frozen=True)
