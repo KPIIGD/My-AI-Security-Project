@@ -5,12 +5,15 @@ Implements ``docs/02_ARCHITECTURE_SPEC`` §L6 in four ordered steps:
 1. **Duplicate merge** — collapse spans sharing ``(start, end, entity_type)``
    into a single span carrying ``max(score)`` and the union of
    ``sources``/``detector_ids``/``reason_codes``.
-2. **Overlap resolution** — for spans that overlap on the raw text but
-   have different ``entity_type``, keep the span with the lower
-   ``priority_order`` index (from ``configs/entities.yaml``). Same-type
-   overlaps prefer the longer span. This automatically handles
-   ``EMAIL > PERSON_NAME substring`` and
-   ``SCHOOL/HOSPITAL > ORGANIZATION reclassify`` cases.
+2. **Overlap resolution** — group overlapping spans into connected
+   components (Union-Find on the overlap graph), then iteratively pick
+   the best winner inside each component using
+   ``(priority_index asc, length desc, score desc, start asc)`` until
+   no candidates remain. This handles ``EMAIL > PERSON_NAME substring``
+   and ``SCHOOL/HOSPITAL > ORGANIZATION reclassify`` cases automatically.
+   It also avoids the greedy pitfall where a broad mid-span eliminates
+   a valid non-overlapping span via chain overlap, and never folds
+   metadata across different raw offsets in same-type ties.
 3. **ADDRESS fragment merge** — adjacent ``ADDRESS_UNIT``/``ADDRESS_FULL``
    spans separated only by whitespace are folded into a single
    ``ADDRESS_FULL`` span with a fresh ``resolver.address.fragment_merge``
@@ -101,43 +104,85 @@ class SpanResolver:
         return list(bucket.values())
 
     def _resolve_overlaps(self, spans: list[PIISpan]) -> list[PIISpan]:
-        ordered = sorted(
-            spans,
-            key=lambda s: (
-                s.start,
-                -(s.end - s.start),
-                self._priority_index.get(s.entity_type, len(self.priority_order)),
-            ),
+        if not spans:
+            return []
+        components = self._build_overlap_components(spans)
+        result: list[PIISpan] = []
+        for comp in components:
+            if len(comp) == 1:
+                # No conflict in this component — preserve span unchanged.
+                # resolver.overlap.kept is reserved for spans that actually
+                # survived an overlap conflict (PR #14 P3 fix).
+                result.append(comp[0])
+                continue
+            winners = self._select_winners_in_component(comp)
+            for winner in winners:
+                result.append(self._mark_kept(winner))
+        return result
+
+    def _build_overlap_components(self, spans: list[PIISpan]) -> list[list[PIISpan]]:
+        """Group spans into connected components by overlap graph.
+
+        Two spans are in the same component if any chain of pairwise overlaps
+        connects them. Used to avoid the greedy chain-overlap pitfall where
+        A-B overlap, B-C overlap, A-C disjoint leads to A being dropped when
+        B loses to C (PR #14 P1-2 fix).
+        """
+        n = len(spans)
+        parent = list(range(n))
+
+        def find(x: int) -> int:
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]
+                x = parent[x]
+            return x
+
+        def union(x: int, y: int) -> None:
+            rx, ry = find(x), find(y)
+            if rx != ry:
+                parent[rx] = ry
+
+        for i in range(n):
+            for j in range(i + 1, n):
+                if _overlaps(spans[i], spans[j]):
+                    union(i, j)
+
+        groups: dict[int, list[PIISpan]] = {}
+        for i, span in enumerate(spans):
+            groups.setdefault(find(i), []).append(span)
+        return list(groups.values())
+
+    def _select_winners_in_component(self, comp: list[PIISpan]) -> list[PIISpan]:
+        """Iteratively pick non-overlapping winners within a connected component.
+
+        Sort remaining by (priority_index asc, length desc, score desc, start asc),
+        pick best, remove all overlapping with it, repeat. This guarantees that
+        when a broad mid-span is eliminated by a higher-priority winner, the
+        other valid spans that only overlapped via that mid-span are recovered
+        (PR #14 P1-2 fix). Same-type same-length ties are broken by score then
+        start, never by folding metadata across different offsets
+        (PR #14 P1-1 fix).
+        """
+        remaining = list(comp)
+        winners: list[PIISpan] = []
+        while remaining:
+            remaining.sort(key=self._win_key)
+            winner = remaining.pop(0)
+            winners.append(winner)
+            remaining = [s for s in remaining if not _overlaps(s, winner)]
+        return winners
+
+    def _win_key(self, span: PIISpan) -> tuple[int, int, float, int]:
+        # Lower priority_index wins → ascending.
+        # Longer span wins → invert with negative length.
+        # Higher score wins → invert with negative score.
+        # Earlier start as deterministic tie-break.
+        return (
+            self._priority_index.get(span.entity_type, len(self.priority_order)),
+            -(span.end - span.start),
+            -span.score,
+            span.start,
         )
-        kept: list[PIISpan] = []
-        for candidate in ordered:
-            new_kept: list[PIISpan] = []
-            drop_candidate = False
-            for existing in kept:
-                if not _overlaps(candidate, existing):
-                    new_kept.append(existing)
-                    continue
-                if candidate.entity_type == existing.entity_type:
-                    cand_len = candidate.end - candidate.start
-                    ex_len = existing.end - existing.start
-                    if cand_len > ex_len:
-                        # candidate covers existing → drop existing
-                        continue
-                    if ex_len > cand_len:
-                        drop_candidate = True
-                        new_kept.append(existing)
-                        continue
-                    new_kept.append(self._fold(existing, candidate))
-                    drop_candidate = True
-                    continue
-                if self._wins(candidate, existing):
-                    continue
-                drop_candidate = True
-                new_kept.append(existing)
-            if not drop_candidate:
-                new_kept.append(self._mark_kept(candidate))
-            kept = new_kept
-        return kept
 
     def _merge_address_fragments(
         self, spans: list[PIISpan], raw_text: str
@@ -209,27 +254,49 @@ class SpanResolver:
                 if j != i and sentence_idx[j] == sentence_idx[i]
             }
             sentence_types = same_sentence_peer_types | {span.entity_type.value}
-            upgrade_level: str | None = None
+
+            # Collect every composite rule that matches in this sentence,
+            # independent of whether it would raise the risk level. The
+            # is_composite flag must reflect membership in any composite,
+            # because downstream policy/audit/evaluation may key off it
+            # even when the risk level cannot increase further
+            # (PR #14 P2 fix).
+            matched_levels: list[str] = []
             for upgrade_key, level in self.composite_upgrades.items():
                 if span.entity_type.value not in upgrade_key:
                     continue
                 if not upgrade_key.issubset(sentence_types):
                     continue
-                if not self._is_higher(level, span.risk_level):
-                    continue
-                if upgrade_level is None or self._is_higher(level, RiskLevel(upgrade_level)):
-                    upgrade_level = level
-            if upgrade_level is None:
+                matched_levels.append(level)
+
+            if not matched_levels:
                 result.append(span)
                 continue
+
+            # Risk level upgrade is conditional: only when the highest
+            # matched level is strictly higher than the current level.
+            best_upgrade: str | None = None
+            for level in matched_levels:
+                if not self._is_higher(level, span.risk_level):
+                    continue
+                if best_upgrade is None or self._is_higher(level, RiskLevel(best_upgrade)):
+                    best_upgrade = level
+
+            if best_upgrade is not None:
+                new_risk = RiskLevel(best_upgrade)
+                new_reason = _append(
+                    span.reason_codes,
+                    f"resolver.composite.upgrade:{best_upgrade}",
+                )
+            else:
+                new_risk = span.risk_level
+                new_reason = _append(span.reason_codes, "resolver.composite.match")
+
             result.append(
                 replace(
                     span,
-                    risk_level=RiskLevel(upgrade_level),
-                    reason_codes=_append(
-                        span.reason_codes,
-                        f"resolver.composite.upgrade:{upgrade_level}",
-                    ),
+                    risk_level=new_risk,
+                    reason_codes=new_reason,
                     detector_ids=_append(span.detector_ids, self.detector_id),
                     is_composite=True,
                 )
@@ -248,17 +315,6 @@ class SpanResolver:
             is_composite=a.is_composite or b.is_composite,
             suffix=a.suffix or b.suffix,
         )
-
-    def _wins(self, a: PIISpan, b: PIISpan) -> bool:
-        ia = self._priority_index.get(a.entity_type, len(self.priority_order))
-        ib = self._priority_index.get(b.entity_type, len(self.priority_order))
-        if ia != ib:
-            return ia < ib
-        a_len = a.end - a.start
-        b_len = b.end - b.start
-        if a_len != b_len:
-            return a_len > b_len
-        return a.score > b.score
 
     def _mark_kept(self, span: PIISpan) -> PIISpan:
         return replace(

@@ -328,5 +328,184 @@ def test_resolver_does_not_touch_score_or_action_on_passthrough() -> None:
 
     assert resolved.score == 0.42
     assert resolved.action is Action.CANDIDATE
-    # resolver may append its own detector id but the original must be preserved
+    # The original detector id is preserved. After PR #14 P3 fix the resolver
+    # no longer stamps its own id on spans that never saw an overlap conflict.
     assert "test" in resolved.detector_ids
+
+
+# --------------------------------------------------- PR #14 review fixes
+
+
+def test_same_type_same_length_overlap_picks_higher_score_without_folding_metadata() -> None:
+    """P1-1 fix: same entity_type + same length but different offsets must not fold metadata.
+
+    Before the fix, equal-length same-type overlap called ``_fold(existing, candidate)``
+    which attached the candidate's higher score/sources/reason_codes onto the
+    existing span's ``start``/``end``/``text``. The final span's metadata then
+    described a position different from its raw offsets.
+    """
+    raw = "박정민수정"  # 5 chars: 박(0) 정(1) 민(2) 수(3) 정(4)
+    pre = preprocess_text(raw)
+    a = _make_span(
+        raw, "박정민", EntityType.PERSON_NAME,
+        score=0.55, sources=("dictionary",),
+        reason_codes=("dictionary.surname_given.match",),
+        detector_ids=("dictionary.korean",),
+    )
+    b = _make_span(
+        raw, "정민수", EntityType.PERSON_NAME,
+        score=0.85, sources=("ner",),
+        reason_codes=("ner.argmax",),
+        detector_ids=("ner.finetuned",),
+    )
+
+    [resolved] = SpanResolver().resolve([a, b], pre, _request(raw))
+
+    # Higher-score wins → b survives, a is dropped wholesale (no metadata folding).
+    assert resolved.text == "정민수"
+    assert resolved.start == 1
+    assert resolved.end == 4
+    # Critically: a's metadata must NOT leak into b's span.
+    assert "dictionary" not in resolved.sources
+    assert "dictionary.surname_given.match" not in resolved.reason_codes
+    assert "dictionary.korean" not in resolved.detector_ids
+    # b's own metadata is preserved.
+    assert "ner" in resolved.sources
+    assert "ner.argmax" in resolved.reason_codes
+
+
+def test_chain_overlap_recovers_non_conflicting_spans() -> None:
+    """P1-2 fix: A-B overlap, B-C overlap, A-C disjoint. Removing B must not drop A.
+
+    In the old greedy algorithm, the broad mid-span B would eliminate A
+    (priority/length) on first pass, then C would eliminate B → A was lost
+    permanently. Connected-component winner selection picks the highest-priority
+    survivor first and only drops spans that actually overlap it, so A and C
+    both survive after B drops.
+    """
+    # ASCII raw keeps offsets transparent for the test.
+    raw = "0123456789012345678901234"  # 25 chars
+    pre = preprocess_text(raw)
+    a = PIISpan(
+        start=0, end=8, text=raw[0:8],
+        entity_type=EntityType.SCHOOL, score=0.7,
+        sources=("dictionary",), risk_level=RiskLevel.P1, action=Action.CANDIDATE,
+        reason_codes=("dictionary.school.match",), detector_ids=("dict",),
+    )
+    # B (broad ORG) overlaps both A and C, but A and C do NOT overlap each other.
+    b = PIISpan(
+        start=5, end=15, text=raw[5:15],
+        entity_type=EntityType.ORGANIZATION, score=0.4,
+        sources=("dictionary",), risk_level=RiskLevel.P2, action=Action.CANDIDATE,
+        reason_codes=("dictionary.org.broad",), detector_ids=("dict",),
+    )
+    c = PIISpan(
+        start=10, end=25, text=raw[10:25],
+        entity_type=EntityType.EMAIL, score=0.92,
+        sources=("regex",), risk_level=RiskLevel.P1, action=Action.CANDIDATE,
+        reason_codes=("regex.email",), detector_ids=("regex.email",),
+    )
+
+    resolved = SpanResolver().resolve([a, b, c], pre, _request(raw))
+    types = {s.entity_type for s in resolved}
+
+    assert EntityType.SCHOOL in types
+    assert EntityType.EMAIL in types
+    assert EntityType.ORGANIZATION not in types
+    # Both survivors lived through a real overlap conflict, so the kept reason fires.
+    school_out = next(s for s in resolved if s.entity_type is EntityType.SCHOOL)
+    email_out = next(s for s in resolved if s.entity_type is EntityType.EMAIL)
+    assert "resolver.overlap.kept" in school_out.reason_codes
+    assert "resolver.overlap.kept" in email_out.reason_codes
+
+
+def test_composite_match_marks_is_composite_even_when_risk_level_does_not_upgrade() -> None:
+    """P2 fix: composite rule match always sets is_composite=True, regardless of risk upgrade.
+
+    Before the fix, ``_escalate_composites()`` skipped marking when
+    ``self._is_higher(level, span.risk_level)`` was False, so a
+    ``PERSON_NAME + PHONE_MOBILE → P1`` match with both spans already at P1
+    left ``is_composite=False``. Downstream policy/audit could not tell the
+    span participated in a same-sentence composite.
+    """
+    raw = "고객명 박정민 연락처 010-1111-2222."
+    pre = preprocess_text(raw)
+    person = _make_span(
+        raw, "박정민", EntityType.PERSON_NAME,
+        score=0.55, risk_level=RiskLevel.P1, is_composite=False,
+    )
+    phone = _make_span(
+        raw, "010-1111-2222", EntityType.PHONE_MOBILE,
+        score=0.94, risk_level=RiskLevel.P1, is_composite=False,
+    )
+
+    resolved = SpanResolver().resolve([person, phone], pre, _request(raw))
+    by_type = {s.entity_type: s for s in resolved}
+
+    # Risk level stays at P1 (already top for this composite), but is_composite flips.
+    assert by_type[EntityType.PERSON_NAME].risk_level is RiskLevel.P1
+    assert by_type[EntityType.PERSON_NAME].is_composite is True
+    assert by_type[EntityType.PHONE_MOBILE].is_composite is True
+    # Composite match reason fires, upgrade reason does not.
+    assert "resolver.composite.match" in by_type[EntityType.PERSON_NAME].reason_codes
+    assert not any(
+        code.startswith("resolver.composite.upgrade:")
+        for code in by_type[EntityType.PERSON_NAME].reason_codes
+    )
+
+
+def test_non_overlapping_spans_do_not_get_resolver_kept_reason_code() -> None:
+    """P3 fix: resolver.overlap.kept only fires when an overlap conflict actually happened."""
+    raw = "박정민이 학생이다. 김지훈도 학생이다."
+    pre = preprocess_text(raw)
+    # Two PERSON_NAME spans, different offsets, no overlap, no cross-entity composite.
+    p1 = _make_span(
+        raw, "박정민", EntityType.PERSON_NAME,
+        score=0.55, risk_level=RiskLevel.P1,
+    )
+    p2 = _make_span(
+        raw, "김지훈", EntityType.PERSON_NAME,
+        score=0.55, risk_level=RiskLevel.P1,
+    )
+
+    resolved = SpanResolver().resolve([p1, p2], pre, _request(raw))
+
+    for span in resolved:
+        assert "resolver.overlap.kept" not in span.reason_codes
+
+
+def test_disjoint_overlap_components_resolve_independently() -> None:
+    """Two separate overlap clusters do not interfere — each picks its own winner."""
+    raw = "AAAAAA BBBBB              CCCCC DDDDDD"  # 38 chars
+    pre = preprocess_text(raw)
+    # Cluster 1: SCHOOL beats ORG.
+    a = PIISpan(
+        start=0, end=6, text=raw[0:6],
+        entity_type=EntityType.SCHOOL, score=0.7,
+        sources=("dict",), risk_level=RiskLevel.P1, action=Action.CANDIDATE,
+        reason_codes=("dict.school",), detector_ids=("dict",),
+    )
+    b = PIISpan(
+        start=3, end=12, text=raw[3:12],
+        entity_type=EntityType.ORGANIZATION, score=0.4,
+        sources=("dict",), risk_level=RiskLevel.P2, action=Action.CANDIDATE,
+        reason_codes=("dict.org",), detector_ids=("dict",),
+    )
+    # Cluster 2: HOSPITAL beats ORG. Disjoint from cluster 1.
+    c = PIISpan(
+        start=26, end=31, text=raw[26:31],
+        entity_type=EntityType.HOSPITAL, score=0.6,
+        sources=("dict",), risk_level=RiskLevel.P1, action=Action.CANDIDATE,
+        reason_codes=("dict.hosp",), detector_ids=("dict",),
+    )
+    d = PIISpan(
+        start=29, end=38, text=raw[29:38],
+        entity_type=EntityType.ORGANIZATION, score=0.4,
+        sources=("dict",), risk_level=RiskLevel.P2, action=Action.CANDIDATE,
+        reason_codes=("dict.org",), detector_ids=("dict",),
+    )
+
+    resolved = SpanResolver().resolve([a, b, c, d], pre, _request(raw))
+    types = sorted(s.entity_type.value for s in resolved)
+
+    assert types == sorted([EntityType.SCHOOL.value, EntityType.HOSPITAL.value])
