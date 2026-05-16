@@ -7,18 +7,18 @@ Implements ``docs/09_COMPLIANCE_AND_AUDIT_SPEC`` with four guarantees:
    config and are loaded into ``HMACKeyRing`` once at startup. The keyring
    never re-injects values into ``os.environ``. Multiple keys can co-exist
    for rotation; ``key_id`` is recorded in every event.
-2. **Isolated audit logger** — uses ``logging.getLogger("audit")`` with
-   ``propagate=False`` so audit records never reach root logger handlers
-   (preventing cross-mix with ``app.log``). JSONL is written to a
+2. **Isolated audit logger** — uses file-scoped loggers under the ``audit``
+   namespace with ``propagate=False`` so audit records never reach root logger
+   handlers and never cross-write between log files. JSONL is written to a
    ``RotatingFileHandler`` (size-based) for disk safety. Retention
    (spec §4 ``retention_ttl_days``) is a separate concern handled by
    ``scripts/cleanup_audit_logs.py``.
 3. **Two-layer raw PII zero defense** — ``AuditEvent`` dataclass enforces
    ``raw_value_logged=False`` and HMAC-prefixed ``value_hash`` at the
    structural layer. Immediately before each write the *serialized* payload
-   is scanned with a high-precision Audit-Safe regex subset (phone / RRN /
-   credit_card / email). A match raises ``AuditPayloadLeakError`` and the
-   event is dropped (fail-closed).
+   is scanned with a high-precision Audit-Safe regex subset for structured
+   PII and secrets. A match raises ``AuditPayloadLeakError`` and the event is
+   dropped (fail-closed).
 4. **detector_ids vs reason_codes split** — ``detector_ids`` carries detailed
    matcher ids for analyst-level forensics; ``reason_codes`` only contains
    generalized rule families. Default emission excludes ``detector_ids`` so
@@ -43,7 +43,6 @@ from dataclasses import dataclass
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from .enums import Action, EntityType, OutputTarget, RiskLevel, Source
 from .schema import AuditEvent, GuardrailRequest, PIISpan
 
 
@@ -95,6 +94,7 @@ class HMACKeyRing:
 
     ENV_ACTIVE_KEY_ID = "AUDIT_HMAC_KEY_ACTIVE"
     ENV_KEY_PATH_PREFIX = "AUDIT_HMAC_KEY_PATH_"
+    MIN_KEY_BYTES = 32
 
     def __init__(self, *, keys: Mapping[str, HMACKey], active_id: str) -> None:
         if not keys:
@@ -103,6 +103,13 @@ class HMACKeyRing:
         active_normalized = active_id.lower()
         if active_normalized not in normalized:
             raise AuditKeyringError("Active HMAC key id is not present in the ring")
+        for key_id, key in normalized.items():
+            if not key.secret:
+                raise AuditKeyringError("HMAC key secret is empty")
+            if len(key.secret) < self.MIN_KEY_BYTES:
+                raise AuditKeyringError(
+                    f"HMAC key {key_id} must be at least {self.MIN_KEY_BYTES} bytes"
+                )
         self._keys: dict[str, HMACKey] = dict(normalized)
         self._active_id: str = active_normalized
 
@@ -129,7 +136,7 @@ class HMACKeyRing:
                 raise AuditKeyringError(
                     f"HMAC key file referenced by {env_name} does not exist"
                 )
-            secret = path.read_bytes().strip()
+            secret = path.read_bytes()
             if not secret:
                 raise AuditKeyringError(
                     f"HMAC key file referenced by {env_name} is empty"
@@ -165,6 +172,10 @@ class HMACKeyRing:
         digest = hmac.new(secret, value.encode("utf-8"), hashlib.sha256).hexdigest()
         return f"hmac-sha256:{chosen}:{digest}"
 
+    def digest(self, value: str) -> str:
+        """Return the active-key digest expected by M7 masker's hash provider."""
+        return self.sign(value)
+
 
 # ============================================================
 # Audit-Safe regex scan — high-precision PII subset + field whitelist
@@ -180,58 +191,78 @@ class AuditPayloadLeakError(ValueError):
     """
 
 
-# High-precision Korean PII patterns. Deliberately NOT the full Layer 0 set:
+# High-precision structured PII patterns. Deliberately NOT the full Layer 0 set:
 # the Layer 0 regex bank includes broad NAME and ADDRESS patterns that would
-# false-positive against value hashes, request ids, and entity_type / source
-# enum strings inside audit payloads.
+# false-positive against value hashes and entity_type / source enum strings
+# inside audit payloads.
 _AUDIT_SAFE_PATTERNS: dict[str, re.Pattern[str]] = {
+    "api_key_secret": re.compile(
+        r"(?<![A-Za-z0-9_=-])sk-"
+        r"(?=[A-Za-z0-9_=-]{16,}(?![A-Za-z0-9_=-]))"
+        r"(?=[A-Za-z0-9_=-]*[A-Z])"
+        r"(?=[A-Za-z0-9_=-]*[a-z])"
+        r"(?=[A-Za-z0-9_=-]*\d)"
+        r"[A-Za-z0-9_=-]{16,}(?![A-Za-z0-9_=-])"
+    ),
     "phone_mobile_kr": re.compile(r"\b01[016789][-\s]?\d{3,4}[-\s]?\d{4}\b"),
     "phone_landline_kr": re.compile(r"\b0[2-6]\d?[-\s]?\d{3,4}[-\s]?\d{4}\b"),
     "rrn_kr": re.compile(r"\b\d{6}[-\s][1-4]\d{6}\b"),
     "credit_card": re.compile(r"\b\d{4}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}\b"),
     "email": re.compile(r"\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b"),
+    "bank_account": re.compile(r"\b\d{3}-\d{3}-\d{6}\b"),
+    "business_reg_no": re.compile(r"\b\d{3}-\d{2}-\d{5}\b"),
+    "ip_address": re.compile(
+        r"(?<![\d.])"
+        r"(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}"
+        r"(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)"
+        r"(?![\d.])"
+    ),
+    "mac_address": re.compile(
+        r"(?<![0-9A-Fa-f])"
+        r"(?:[0-9A-Fa-f]{2}([:-]))(?:[0-9A-Fa-f]{2}\1){4}[0-9A-Fa-f]{2}"
+        r"(?![0-9A-Fa-f])"
+    ),
 }
 
 
-# Fields excluded from regex scan. These are controlled metadata that never
+# String fields excluded from regex scan. These are controlled values that never
 # carry raw PII but can trigger false positives against the patterns above:
 #   - value_hash: 64-char hex digest that may include 13-digit numeric runs
-#   - request_id / key_id: opaque ids that may include 16-digit numeric runs
-#   - timestamp_epoch / score / span_length: numeric, not regex-relevant
+#   - key_id: local keyring version id, not caller-controlled metadata
 _SCAN_EXCLUDED_FIELDS: frozenset[str] = frozenset({
     "value_hash",
-    "request_id",
     "key_id",
-    "timestamp_epoch",
-    "score",
-    "span_length",
 })
 
 
 def _scannable_text(event_dict: Mapping[str, object]) -> str:
     """Concatenate audit fields that can carry raw PII for regex scan.
 
-    Numeric metadata and hash-style ids are excluded to avoid false positives
-    against value hashes whose hex digits could otherwise match the credit
-    card or phone patterns.
+    Only actual string fields and string items inside list/tuple values are
+    scanned. Numeric metadata is skipped by type, and hash/key fields are
+    excluded to avoid false positives against values that are already safe.
     """
     parts: list[str] = []
     for key, value in event_dict.items():
         if key in _SCAN_EXCLUDED_FIELDS:
             continue
-        if isinstance(value, (list, tuple)):
-            parts.extend(str(item) for item in value)
-        elif isinstance(value, bool):
-            parts.append(str(value))
-        else:
-            parts.append(str(value))
+        parts.extend(_iter_scannable_strings(value))
     return " ".join(parts)
+
+
+def _iter_scannable_strings(value: object) -> tuple[str, ...]:
+    if isinstance(value, str):
+        return (value,)
+    if isinstance(value, (list, tuple)):
+        return tuple(item for item in value if isinstance(item, str))
+    return ()
 
 
 def scan_audit_payload(event_dict: Mapping[str, object]) -> None:
     """Fail-closed PII leak scan over an audit event dict.
 
-    Applied to controlled fields only (see ``_SCAN_EXCLUDED_FIELDS``).
+    Applied to caller-controlled string fields and string list/tuple items by
+    default (see ``_SCAN_EXCLUDED_FIELDS`` for explicit safe exclusions).
     Raises ``AuditPayloadLeakError`` with the pattern *name* — never the
     matched text — so the exception itself cannot leak the offending value.
     """
@@ -251,8 +282,9 @@ def scan_audit_payload(event_dict: Mapping[str, object]) -> None:
 class AuditLogger:
     """Emit audit events to an isolated JSONL log file.
 
-    ``logging.getLogger("audit")`` with ``propagate=False`` keeps audit
-    records out of root logger handlers, so an accidental
+    A file-scoped ``audit.<path-hash>`` logger with ``propagate=False`` keeps
+    audit records out of root logger handlers and prevents records for one
+    ``log_path`` from being written to another ``log_path``. An accidental
     ``logger.info(raw_text)`` elsewhere in the application cannot leak raw
     PII into the audit stream. The sink is size-rotating; calendar-based
     retention is enforced by ``scripts/cleanup_audit_logs.py``.
@@ -282,13 +314,17 @@ class AuditLogger:
         self._log_path = Path(log_path)
         self._log_path.parent.mkdir(parents=True, exist_ok=True)
 
-        logger = logging.getLogger(self.LOGGER_NAME)
+        base_logger = logging.getLogger(self.LOGGER_NAME)
+        base_logger.setLevel(logging.INFO)
+        base_logger.propagate = False
+
+        target = _normalized_log_path(self._log_path)
+        logger = logging.getLogger(self._logger_name_for_path(target))
         logger.setLevel(logging.INFO)
         logger.propagate = False
 
-        target = str(self._log_path.resolve())
         existing = any(
-            getattr(handler, "baseFilename", None) == target
+            _handler_base_filename(handler) == target
             for handler in logger.handlers
         )
         if not existing:
@@ -302,6 +338,11 @@ class AuditLogger:
             logger.addHandler(handler)
 
         self._logger = logger
+
+    @classmethod
+    def _logger_name_for_path(cls, normalized_log_path: str) -> str:
+        digest = hashlib.sha256(normalized_log_path.encode("utf-8")).hexdigest()[:16]
+        return f"{cls.LOGGER_NAME}.{digest}"
 
     @property
     def log_path(self) -> Path:
@@ -324,8 +365,8 @@ class AuditLogger:
         is used only as the input to the HMAC function and is never stored
         on the event or referenced by the dict view.
         """
+        span.validate_against(request.text)
         value_hash = self._keyring.sign(span.text)
-        sources_with_audit = _append_unique(span.sources, Source.VALIDATOR.value)
         return AuditEvent(
             event_type=event_type,
             entity_type=span.entity_type,
@@ -336,8 +377,8 @@ class AuditLogger:
             timestamp_epoch=time.time(),
             policy_profile=request.policy_profile,
             output_target=request.output_target,
-            sources=sources_with_audit,
-            detector_ids=span.detector_ids,
+            sources=span.sources,
+            detector_ids=span.detector_ids if self._verbose else (),
             value_hash=value_hash,
             span_length=span.end - span.start,
             reason_codes=span.reason_codes,
@@ -379,11 +420,15 @@ class AuditLogger:
             data.pop("detector_ids", None)
         return data
 
+def _normalized_log_path(log_path: Path) -> str:
+    return os.path.normcase(str(Path(log_path).resolve()))
 
-def _append_unique(existing: tuple[str, ...], value: str) -> tuple[str, ...]:
-    if value in existing:
-        return existing
-    return (*existing, value)
+
+def _handler_base_filename(handler: logging.Handler) -> str | None:
+    base_filename = getattr(handler, "baseFilename", None)
+    if base_filename is None:
+        return None
+    return _normalized_log_path(Path(base_filename))
 
 
 __all__ = [

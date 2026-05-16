@@ -1,5 +1,6 @@
 import pytest
 
+from pii_guardrail.audit_logger import HMACKey, HMACKeyRing
 from pii_guardrail.enums import EntityType, OutputTarget, RiskLevel
 from pii_guardrail.masker import HmacHashProvider, MaskingError, SuffixPreservingMasker
 from pii_guardrail.schema import GuardrailRequest, InvalidOffsetError, PIISpan
@@ -94,6 +95,26 @@ def test_audit_log_target_replaces_value_with_hmac_digest() -> None:
     assert "010-1234-5678" not in masked
     assert masked.startswith("연락처는 hmac-sha256:key-v1:")
     assert masked.endswith("입니다.")
+
+
+def test_audit_log_target_accepts_hmac_keyring_hash_provider() -> None:
+    raw = "phone 010-1234-5678 done"
+    span = _span(raw, "010-1234-5678", EntityType.PHONE_MOBILE, RiskLevel.P1)
+    keyring = HMACKeyRing(
+        keys={
+            "v1": HMACKey(
+                key_id="v1",
+                secret=b"a" * HMACKeyRing.MIN_KEY_BYTES,
+            )
+        },
+        active_id="v1",
+    )
+    masker = SuffixPreservingMasker(hash_provider=keyring)
+
+    masked = masker.apply(raw, [span], _request(raw, target=OutputTarget.AUDIT_LOG))
+
+    assert masked == f"phone {keyring.sign('010-1234-5678')} done"
+    assert keyring.digest("010-1234-5678") == keyring.sign("010-1234-5678")
 
 
 def test_api_key_secret_blocks_response() -> None:

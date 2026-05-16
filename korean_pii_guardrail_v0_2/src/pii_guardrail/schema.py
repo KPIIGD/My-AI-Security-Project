@@ -112,16 +112,18 @@ class GuardrailRequest:
     domain: str | None = None
     locale: str = "ko-KR"
     options: GuardrailOptions = field(default_factory=GuardrailOptions)
+    _effective_request_id: str = field(init=False, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         if not self.text:
             raise ValueError("GuardrailRequest.text must not be empty")
         if self.scan_stage not in {ScanStage.INPUT, ScanStage.OUTPUT}:
             raise ValueError("v0.2 supports input/output scan_stage only")
+        object.__setattr__(self, "_effective_request_id", self.request_id or str(uuid4()))
 
     @property
     def effective_request_id(self) -> str:
-        return self.request_id or str(uuid4())
+        return self._effective_request_id
 
 
 @dataclass(frozen=True)
@@ -150,7 +152,10 @@ class AuditEvent:
         if self.output_target is not None:
             data["output_target"] = self.output_target.value
         data["sources"] = list(self.sources)
-        data["detector_ids"] = list(self.detector_ids)
+        if self.detector_ids:
+            data["detector_ids"] = list(self.detector_ids)
+        else:
+            data.pop("detector_ids", None)
         data["reason_codes"] = list(self.reason_codes)
         data["raw_value_logged"] = False
         return data
