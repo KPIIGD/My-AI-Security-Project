@@ -17,6 +17,7 @@ from .dictionary_loader import (
 )
 from .enums import Action, EntityType, RiskLevel, Source
 from .interfaces import PreprocessResult
+from .korean_boundary import load_suffix_rules
 from .regex_detectors import deduplicate_spans, load_entity_risk_levels
 from .schema import GuardrailRequest, PIISpan
 
@@ -31,71 +32,12 @@ _APARTMENT_UNIT_PATTERN = re.compile(
 _ROAD_TRAILER_PATTERN = re.compile(
     r"\s*\d{1,4}(?:\s*-\s*\d{1,4})?(?:\s*번지)?(?:\s+\d{1,3}\s*동)?(?:\s+\d{1,4}\s*호)?"
 )
+_BOUNDARY_SUFFIX_RULES = load_suffix_rules()
 _GIVEN_NAME_TRAILING_SUFFIXES = tuple(
-    sorted(
-        (
-            "에게",
-            "한테",
-            "께서",
-            "으로",
-            "이랑",
-            "이",
-            "가",
-            "은",
-            "는",
-            "을",
-            "를",
-            "에",
-            "의",
-            "께",
-            "로",
-            "와",
-            "과",
-            "랑",
-            "도",
-            "만",
-            "님",
-            "씨",
-            "군",
-            "양",
-        ),
-        key=len,
-        reverse=True,
-    )
+    rule.suffix for rule in _BOUNDARY_SUFFIX_RULES.get(EntityType.PERSON_NAME, ())
 )
 _ADDRESS_UNIT_TRAILING_SUFFIXES = tuple(
-    sorted(
-        (
-            "에게",
-            "한테",
-            "에서",
-            "으로",
-            "이랑",
-            "부터",
-            "까지",
-            "입니다",
-            "였습니다",
-            "라고",
-            "라는",
-            "하고",
-            "이",
-            "가",
-            "은",
-            "는",
-            "을",
-            "를",
-            "에",
-            "께",
-            "로",
-            "와",
-            "과",
-            "랑",
-            "도",
-            "만",
-        ),
-        key=len,
-        reverse=True,
-    )
+    rule.suffix for rule in _BOUNDARY_SUFFIX_RULES.get(EntityType.ADDRESS_UNIT, ())
 )
 
 

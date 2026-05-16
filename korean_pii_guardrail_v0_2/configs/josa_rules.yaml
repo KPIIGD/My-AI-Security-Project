@@ -32,20 +32,54 @@ suffix_groups:
     - 였습니다
     - 입니다.
     - 입니다,
+  quotative:
+    - 이라고
+    - 이라는
     - 라고
     - 라는
     - 하고
+  compound_josa:
+    - 에게서
+    - 한테서
+    - 께서
+    - 께서는
+    - 께서도
+    - 에서는
+    - 에서도
+    - 에는
+    - 에도
+    - 에만
+    - 에게는
+    - 에게도
+    - 에게만
+    - 한테는
+    - 한테도
+    - 한테만
+    - 으로는
+    - 으로도
+    - 으로만
+    - 로는
+    - 로도
+    - 로만
+    - 와는
+    - 와도
+    - 과는
+    - 과도
+    - 부터는
+    - 부터도
+    - 까지는
+    - 까지도
 entity_application:
-  PERSON_NAME: [josa, honorific]
-  ADDRESS_FULL: [josa]
-  ADDRESS_UNIT: [josa]
-  ORGANIZATION: [josa]
-  SCHOOL: [josa]
-  HOSPITAL: [josa]
-  PHONE_MOBILE: [josa, ending]
-  PHONE_LANDLINE: [josa, ending]
-  EMAIL: [josa, ending]
-  BANK_ACCOUNT: [josa, ending]
-  RRN: [josa, ending]
-  FRN: [josa, ending]
-  CREDIT_CARD: [josa, ending]
+  PERSON_NAME: [josa, compound_josa, honorific, ending, quotative]
+  ADDRESS_FULL: [josa, compound_josa, ending, quotative]
+  ADDRESS_UNIT: [josa, compound_josa, ending, quotative]
+  ORGANIZATION: [josa, compound_josa, ending, quotative]
+  SCHOOL: [josa, compound_josa, ending, quotative]
+  HOSPITAL: [josa, compound_josa, ending, quotative]
+  PHONE_MOBILE: [josa, compound_josa, ending, quotative]
+  PHONE_LANDLINE: [josa, compound_josa, ending, quotative]
+  EMAIL: [josa, compound_josa, ending, quotative]
+  BANK_ACCOUNT: [josa, compound_josa, ending, quotative]
+  RRN: [josa, compound_josa, ending, quotative]
+  FRN: [josa, compound_josa, ending, quotative]
+  CREDIT_CARD: [josa, compound_josa, ending, quotative]

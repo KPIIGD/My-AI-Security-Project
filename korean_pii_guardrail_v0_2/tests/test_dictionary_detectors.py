@@ -188,7 +188,12 @@ def test_given_name_followed_by_josa_still_matches() -> None:
     cases = (
         ("고객명 유진한테 연락했습니다.", "유진", DictionaryDetector()),
         ("담당자 김민수에게 전달했습니다.", "김민수", DictionaryDetector()),
+        ("담당자 김민수에게서 확인했습니다.", "김민수", DictionaryDetector()),
+        ("담당자 김민수에게는 전달했습니다.", "김민수", DictionaryDetector()),
+        ("담당자 김민수한테서 확인했습니다.", "김민수", DictionaryDetector()),
+        ("담당자 김민수께서는 확인했습니다.", "김민수", DictionaryDetector()),
         ("고객명 하늘이 신청했습니다.", "하늘", DictionaryDetector()),
+        ("고객명 하늘입니다.", "하늘", DictionaryDetector()),
     )
 
     for raw, expected, detector in cases:
@@ -231,8 +236,11 @@ def test_apartment_unit_still_matches_when_followed_by_josa() -> None:
         ("주소는 1203호입니다.", "1203호"),
         ("택배는 1203호로 받겠습니다.", "1203호"),
         ("택배는 1203호에서 받겠습니다.", "1203호"),
+        ("택배는 1203호에서는 받겠습니다.", "1203호"),
+        ("택배는 1203호에서도 받겠습니다.", "1203호"),
         ("택배는 1203호부터 보관합니다.", "1203호"),
         ("택배는 1203호까지 보내주세요.", "1203호"),
+        ("택배는 1203호까지도 보내주세요.", "1203호"),
         ("택배는 101동 1203호로 받겠습니다.", "101동 1203호"),
         ("주소는 역삼동 1203호입니다.", "1203호"),
     )
