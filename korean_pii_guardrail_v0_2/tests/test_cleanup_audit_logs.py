@@ -100,3 +100,66 @@ def test_cleanup_expired_backups_deletes_only_expired_exact_backups(
     assert active.exists()
     assert retained_backup.exists()
     assert non_backup.exists()
+
+
+def _touch_relative_to_now(path: Path, *, age_days: float) -> Path:
+    """Touch ``path`` with mtime ``age_days`` ago relative to ``time.time()``.
+
+    CLI tests cannot inject ``now_epoch`` (only the library API can), so
+    fixtures used through ``cleanup.main`` must use real-time-relative
+    mtimes.
+    """
+    import time as _time
+
+    path.write_text("x\n", encoding="utf-8")
+    mtime = _time.time() - age_days * DAY_SECONDS
+    os.utime(path, (mtime, mtime))
+    return path
+
+
+def test_cli_main_default_does_not_print_retained_files(
+    tmp_path: Path, capsys,
+) -> None:
+    """Without --verbose, CLI lists only removed/would-remove targets.
+
+    Retained backups are kept implicit by default to keep the cron output
+    short. This is the contract operators see in their nightly job log.
+    """
+    base = tmp_path / "audit.log.jsonl"
+    _touch_relative_to_now(base, age_days=365)
+    _touch_relative_to_now(tmp_path / "audit.log.jsonl.1", age_days=91)
+    _touch_relative_to_now(tmp_path / "audit.log.jsonl.2", age_days=3)
+
+    exit_code = cleanup.main(["--log-path", str(base), "--dry-run"])
+    captured = capsys.readouterr().out
+
+    assert exit_code == 0
+    assert "would remove: " in captured
+    assert "audit.log.jsonl.1" in captured
+    assert "audit.log.jsonl.2" not in captured  # retained — not surfaced by default
+    assert "retained:" not in captured
+
+
+def test_cli_main_verbose_lists_retained_backups(
+    tmp_path: Path, capsys,
+) -> None:
+    """With --verbose, CLI also lists retained rotated backups.
+
+    Operators verifying that the right files were spared can opt into
+    this output mode.
+    """
+    base = tmp_path / "audit.log.jsonl"
+    _touch_relative_to_now(base, age_days=365)
+    _touch_relative_to_now(tmp_path / "audit.log.jsonl.1", age_days=91)
+    _touch_relative_to_now(tmp_path / "audit.log.jsonl.2", age_days=3)
+
+    exit_code = cleanup.main(
+        ["--log-path", str(base), "--dry-run", "--verbose"]
+    )
+    captured = capsys.readouterr().out
+
+    assert exit_code == 0
+    assert "would remove: " in captured
+    assert "audit.log.jsonl.1" in captured
+    assert "retained: " in captured
+    assert "audit.log.jsonl.2" in captured

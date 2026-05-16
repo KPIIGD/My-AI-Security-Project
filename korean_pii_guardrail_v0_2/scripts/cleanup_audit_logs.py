@@ -123,6 +123,15 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="List candidates without deleting them.",
     )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help=(
+            "Also list rotated backups that are kept because they are still "
+            "inside the retention window. Useful for ops verifying that the "
+            "right files were spared."
+        ),
+    )
     args = parser.parse_args(argv)
 
     log_path: Path = args.log_path
@@ -130,14 +139,18 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: parent directory does not exist: {log_path.parent}", file=sys.stderr)
         return 2
 
-    removed_or_would_remove, _retained = cleanup_expired_backups(
+    removed_or_would_remove, retained = cleanup_expired_backups(
         log_path, args.retention_days, dry_run=args.dry_run
     )
     action = "would remove" if args.dry_run else "removed"
-    targets = removed_or_would_remove
-    for path in targets:
+    for path in removed_or_would_remove:
         print(f"{action}: {path}")
-    print(f"total: {len(targets)}")
+    print(f"total {action}: {len(removed_or_would_remove)}")
+
+    if args.verbose:
+        for path in retained:
+            print(f"retained: {path}")
+        print(f"total retained: {len(retained)}")
     return 0
 
 

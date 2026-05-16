@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from .enums import Action, EntityType
 from .policy import PolicyDecision, PolicyRouter, TransformationMethod
@@ -16,8 +16,16 @@ class MaskingError(ValueError):
     """Raised when resolved spans cannot be masked deterministically."""
 
 
+@runtime_checkable
 class HashProvider(Protocol):
-    """Minimal hash provider interface consumed by SuffixPreservingMasker."""
+    """Minimal hash provider interface consumed by SuffixPreservingMasker.
+
+    ``@runtime_checkable`` is applied so callers can use
+    ``isinstance(provider, HashProvider)`` for adapter selection without
+    a ``TypeError``. The check is structural (only the presence of
+    ``digest`` is verified, not its signature), so subclasses and ad-hoc
+    objects with a ``digest`` callable both satisfy it.
+    """
 
     def digest(self, value: str) -> str:
         """Return a deterministic digest for a raw PII value."""

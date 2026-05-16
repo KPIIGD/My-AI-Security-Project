@@ -2,7 +2,7 @@ import pytest
 
 from pii_guardrail.audit_logger import HMACKey, HMACKeyRing
 from pii_guardrail.enums import EntityType, OutputTarget, RiskLevel
-from pii_guardrail.masker import HmacHashProvider, MaskingError, SuffixPreservingMasker
+from pii_guardrail.masker import HashProvider, HmacHashProvider, MaskingError, SuffixPreservingMasker
 from pii_guardrail.schema import GuardrailRequest, InvalidOffsetError, PIISpan
 
 
@@ -176,3 +176,20 @@ def test_invalid_offset_rejects_without_raw_value_in_error() -> None:
 
     assert "홍길동" not in str(exc_info.value)
     assert "김민수" not in str(exc_info.value)
+
+
+def test_hash_provider_protocol_supports_isinstance_check() -> None:
+    """HashProvider is ``@runtime_checkable`` so callers can do
+    ``isinstance(provider, HashProvider)`` without TypeError.
+
+    Without ``@runtime_checkable`` the isinstance call raises:
+    ``TypeError: Instance and class checks can only be used with
+    @runtime_checkable protocols``.
+    """
+    keyring = HMACKeyRing(
+        keys={"v1": HMACKey(key_id="v1", secret=b"a" * HMACKeyRing.MIN_KEY_BYTES)},
+        active_id="v1",
+    )
+    assert isinstance(keyring, HashProvider)
+    assert isinstance(HmacHashProvider(), HashProvider)
+    assert not isinstance(object(), HashProvider)
