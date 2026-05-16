@@ -294,6 +294,24 @@ class AuditLogger:
     privileged reviewers with original-data access; storing them in the
     default audit file would defeat the purpose of the generalized
     ``reason_codes`` field.
+
+    Concurrency limitation:
+        ``RotatingFileHandler`` is the stdlib size-rotating sink and is
+        safe within a single process. Deploying the gateway with multiple
+        OS-level workers (e.g. ``uvicorn --workers 4``) writing to the
+        *same* ``log_path`` is NOT safe — rotation rename races and
+        interleaved writes can corrupt or drop lines. For multi-process
+        deployments, either pin a single audit writer worker, give each
+        worker a distinct ``log_path``, or swap to a concurrent rotating
+        handler (e.g. ``concurrent-log-handler``).
+
+    Input validation:
+        ``log_path.parent`` must already exist. The logger no longer
+        auto-creates arbitrary parent directories — that would let a
+        caller-controlled path silently create directories anywhere the
+        process has write access (e.g. ``/var/log/foo/bar/audit.log``
+        materializing ``/var/log/foo/bar`` on first use). Pre-create the
+        log directory at deploy time and pass a path inside it.
     """
 
     LOGGER_NAME = "audit"
@@ -312,7 +330,17 @@ class AuditLogger:
         self._keyring = keyring
         self._verbose = verbose
         self._log_path = Path(log_path)
-        self._log_path.parent.mkdir(parents=True, exist_ok=True)
+        parent = self._log_path.parent
+        if not parent.exists():
+            raise FileNotFoundError(
+                f"Audit log parent directory does not exist: {parent}. "
+                "Pre-create the directory before instantiating AuditLogger "
+                "so the logger never materializes caller-controlled paths."
+            )
+        if not parent.is_dir():
+            raise NotADirectoryError(
+                f"Audit log parent is not a directory: {parent}"
+            )
 
         base_logger = logging.getLogger(self.LOGGER_NAME)
         base_logger.setLevel(logging.INFO)

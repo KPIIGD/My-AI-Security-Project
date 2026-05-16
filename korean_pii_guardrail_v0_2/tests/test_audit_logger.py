@@ -809,3 +809,33 @@ def test_emit_event_span_length_matches_raw_offset_window(
     event = logger.emit(span=span, request=_request(raw))
 
     assert event.span_length == 3  # 3 Hangul chars
+
+
+def test_audit_logger_rejects_missing_parent_directory(
+    keyring: HMACKeyRing, tmp_path: Path
+) -> None:
+    """Parent directory must exist before AuditLogger is constructed.
+
+    Auto-creating arbitrary parents would let a caller-controlled log_path
+    silently materialize a directory tree anywhere the process can write
+    (e.g. ``/var/log/foo/bar/audit.log`` instantiating ``/var/log/foo/bar``).
+    """
+    missing_parent = tmp_path / "does" / "not" / "exist"
+    log_path = missing_parent / "audit.log.jsonl"
+
+    with pytest.raises(FileNotFoundError, match="parent directory does not exist"):
+        AuditLogger(keyring=keyring, log_path=log_path)
+
+    assert not missing_parent.exists()
+
+
+def test_audit_logger_rejects_parent_that_is_not_a_directory(
+    keyring: HMACKeyRing, tmp_path: Path
+) -> None:
+    """Parent must be a directory, not a regular file."""
+    not_a_dir = tmp_path / "actually_a_file"
+    not_a_dir.write_text("oops", encoding="utf-8")
+    log_path = not_a_dir / "audit.log.jsonl"
+
+    with pytest.raises((NotADirectoryError, FileNotFoundError)):
+        AuditLogger(keyring=keyring, log_path=log_path)
