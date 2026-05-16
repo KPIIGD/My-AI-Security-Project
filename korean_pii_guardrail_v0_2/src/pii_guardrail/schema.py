@@ -152,10 +152,7 @@ class AuditEvent:
         if self.output_target is not None:
             data["output_target"] = self.output_target.value
         data["sources"] = list(self.sources)
-        if self.detector_ids:
-            data["detector_ids"] = list(self.detector_ids)
-        else:
-            data.pop("detector_ids", None)
+        data["detector_ids"] = list(self.detector_ids)
         data["reason_codes"] = list(self.reason_codes)
         data["raw_value_logged"] = False
         return data

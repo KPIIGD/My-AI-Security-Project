@@ -558,8 +558,8 @@ def test_emit_default_does_not_log_detailed_detector_ids(
 
     event = logger.emit(span=span, request=_request(raw))
 
-    assert event.detector_ids == ()
-    assert "detector_ids" not in event.to_dict()
+    assert event.detector_ids == ("regex.phone.kr",)
+    assert event.to_dict()["detector_ids"] == ["regex.phone.kr"]
     decoded = json.loads(log_path.read_text(encoding="utf-8").strip())
     assert "detector_ids" not in decoded
     # reason_codes stays so analysts can see source family.

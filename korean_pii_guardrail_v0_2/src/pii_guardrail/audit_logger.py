@@ -378,7 +378,7 @@ class AuditLogger:
             policy_profile=request.policy_profile,
             output_target=request.output_target,
             sources=span.sources,
-            detector_ids=span.detector_ids if self._verbose else (),
+            detector_ids=span.detector_ids,
             value_hash=value_hash,
             span_length=span.end - span.start,
             reason_codes=span.reason_codes,
