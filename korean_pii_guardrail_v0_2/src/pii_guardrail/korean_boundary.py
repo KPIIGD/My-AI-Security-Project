@@ -13,12 +13,19 @@ from .schema import PIISpan
 
 DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "configs" / "josa_rules.yaml"
 _UNSET = object()
+_SUFFIX_BOUNDARY_CHARS = frozenset(".,!?;:)]}\"'、。，，？！…/\\|")
 
 
 @dataclass(frozen=True)
 class SuffixRule:
     suffix: str
     group: str
+
+
+@dataclass(frozen=True)
+class SuffixMatch:
+    suffix: str
+    groups: tuple[str, ...]
 
 
 class KoreanBoundaryCorrector:
@@ -53,41 +60,41 @@ class KoreanBoundaryCorrector:
         return span
 
     def _trim_internal_suffix(self, span: PIISpan, raw_text: str, rules: tuple[SuffixRule, ...]) -> PIISpan | None:
-        for rule in rules:
-            if not span.text.endswith(rule.suffix) or len(span.text) <= len(rule.suffix):
-                continue
-            corrected = _copy_span(
-                span,
-                end=span.end - len(rule.suffix),
-                text=span.text[: -len(rule.suffix)],
-                suffix=rule.suffix,
-                normalized=None,
-                reason_codes=_append_reason_codes(
-                    span.reason_codes,
-                    "boundary.suffix_trim",
-                    f"suffix.{rule.group}",
-                ),
-            )
-            corrected.validate_against(raw_text)
-            return corrected
-        return None
+        match = _consume_internal_suffix(span.text, rules)
+        if match is None:
+            return None
+
+        corrected = _copy_span(
+            span,
+            end=span.end - len(match.suffix),
+            text=span.text[: -len(match.suffix)],
+            suffix=match.suffix,
+            normalized=None,
+            reason_codes=_append_reason_codes(
+                span.reason_codes,
+                "boundary.suffix_trim",
+                *(f"suffix.{group}" for group in match.groups),
+            ),
+        )
+        corrected.validate_against(raw_text)
+        return corrected
 
     def _capture_lookahead_suffix(self, span: PIISpan, raw_text: str, rules: tuple[SuffixRule, ...]) -> PIISpan | None:
-        for rule in rules:
-            if not raw_text.startswith(rule.suffix, span.end):
-                continue
-            corrected = _copy_span(
-                span,
-                suffix=rule.suffix,
-                reason_codes=_append_reason_codes(
-                    span.reason_codes,
-                    "boundary.suffix_lookahead",
-                    f"suffix.{rule.group}",
-                ),
-            )
-            corrected.validate_against(raw_text)
-            return corrected
-        return None
+        match = _consume_lookahead_suffix(raw_text, span.end, rules)
+        if match is None:
+            return None
+
+        corrected = _copy_span(
+            span,
+            suffix=match.suffix,
+            reason_codes=_append_reason_codes(
+                span.reason_codes,
+                "boundary.suffix_lookahead",
+                *(f"suffix.{group}" for group in match.groups),
+            ),
+        )
+        corrected.validate_against(raw_text)
+        return corrected
 
 
 def load_suffix_rules(path: Path | None = None) -> dict[EntityType, tuple[SuffixRule, ...]]:
@@ -165,6 +172,71 @@ def _parse_inline_list(value: str) -> tuple[str, ...]:
 def _sort_rules(rules: tuple[SuffixRule, ...]) -> tuple[SuffixRule, ...]:
     indexed_rules = tuple(enumerate(rules))
     return tuple(rule for _, rule in sorted(indexed_rules, key=lambda item: (-len(item[1].suffix), item[0])))
+
+
+def _consume_internal_suffix(text: str, rules: tuple[SuffixRule, ...]) -> SuffixMatch | None:
+    end = len(text)
+    suffix_parts: list[str] = []
+    groups: list[str] = []
+
+    while end > 0:
+        rule = _find_internal_rule(text, end, rules)
+        if rule is None:
+            break
+        suffix_parts.append(rule.suffix)
+        groups.append(rule.group)
+        end -= len(rule.suffix)
+
+    if not suffix_parts or end <= 0:
+        return None
+
+    return SuffixMatch(
+        suffix="".join(reversed(suffix_parts)),
+        groups=tuple(reversed(groups)),
+    )
+
+
+def _consume_lookahead_suffix(raw_text: str, start: int, rules: tuple[SuffixRule, ...]) -> SuffixMatch | None:
+    position = start
+    suffix_parts: list[str] = []
+    groups: list[str] = []
+
+    while position < len(raw_text):
+        rule = _find_lookahead_rule(raw_text, position, rules)
+        if rule is None:
+            break
+        suffix_parts.append(rule.suffix)
+        groups.append(rule.group)
+        position += len(rule.suffix)
+
+        if _is_suffix_boundary(raw_text, position):
+            return SuffixMatch(suffix="".join(suffix_parts), groups=tuple(groups))
+
+    if suffix_parts and _is_suffix_boundary(raw_text, position):
+        return SuffixMatch(suffix="".join(suffix_parts), groups=tuple(groups))
+    return None
+
+
+def _find_internal_rule(text: str, end: int, rules: tuple[SuffixRule, ...]) -> SuffixRule | None:
+    fragment = text[:end]
+    for rule in rules:
+        if fragment.endswith(rule.suffix) and len(fragment) > len(rule.suffix):
+            return rule
+    return None
+
+
+def _find_lookahead_rule(raw_text: str, position: int, rules: tuple[SuffixRule, ...]) -> SuffixRule | None:
+    for rule in rules:
+        if raw_text.startswith(rule.suffix, position):
+            return rule
+    return None
+
+
+def _is_suffix_boundary(raw_text: str, position: int) -> bool:
+    if position >= len(raw_text):
+        return True
+    char = raw_text[position]
+    return char.isspace() or char in _SUFFIX_BOUNDARY_CHARS
 
 
 def _append_reason_codes(existing: tuple[str, ...], *new_codes: str) -> tuple[str, ...]:

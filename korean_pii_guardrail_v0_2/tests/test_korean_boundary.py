@@ -1,3 +1,5 @@
+import pytest
+
 from pii_guardrail.enums import Action, EntityType, RiskLevel
 from pii_guardrail.korean_boundary import KoreanBoundaryCorrector
 from pii_guardrail.preprocess import preprocess_text
@@ -100,6 +102,151 @@ def test_captures_email_lookahead_ending_without_changing_offsets() -> None:
     assert corrected.end == span.end
     assert corrected.suffix == "입니다"
     assert corrected.reason_codes[-2:] == ("boundary.suffix_lookahead", "suffix.ending")
+
+
+@pytest.mark.parametrize(
+    ("detector", "raw", "expected_text"),
+    (
+        (PhoneRegexDetector(), "연락처 010-1234-5678입니다.", "010-1234-5678"),
+        (EmailRegexDetector(), "메일 test@example.com입니다.", "test@example.com"),
+        (BankAccountCandidateDetector(), "계좌 신한은행 110-123-456789입니다.", "110-123-456789"),
+    ),
+)
+def test_terminal_punctuation_is_not_included_in_ending_suffix(
+    detector: object,
+    raw: str,
+    expected_text: str,
+) -> None:
+    _, corrected = _detect_and_correct(detector, raw)
+
+    assert corrected.text == expected_text
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix == "입니다"
+    assert raw[corrected.end :].startswith("입니다.")
+    assert corrected.reason_codes[-2:] == ("boundary.suffix_lookahead", "suffix.ending")
+
+
+@pytest.mark.parametrize(
+    ("entity_type", "raw", "body"),
+    (
+        (EntityType.HOSPITAL, "병원은 서울중앙병원입니다.", "서울중앙병원"),
+        (EntityType.ORGANIZATION, "기관은 한국정보보호원입니다.", "한국정보보호원"),
+        (EntityType.SCHOOL, "학교는 한국대학교입니다.", "한국대학교"),
+        (EntityType.ADDRESS_FULL, "주소는 서울시 강남구 테헤란로 123입니다.", "서울시 강남구 테헤란로 123"),
+        (EntityType.ADDRESS_UNIT, "동네는 역삼동입니다.", "역삼동"),
+    ),
+)
+def test_text_entities_capture_ending_suffix_without_terminal_punctuation(
+    entity_type: EntityType,
+    raw: str,
+    body: str,
+) -> None:
+    span = _span(raw, body, entity_type)
+    corrected = _correct(raw, span)
+
+    assert corrected.text == body
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix == "입니다"
+    assert raw[corrected.end :].startswith("입니다.")
+    assert corrected.reason_codes[-2:] == ("boundary.suffix_lookahead", "suffix.ending")
+
+
+@pytest.mark.parametrize(
+    ("entity_type", "raw", "body"),
+    (
+        (EntityType.HOSPITAL, "병원은 서울중앙병원입니다.", "서울중앙병원"),
+        (EntityType.ORGANIZATION, "기관은 한국정보보호원입니다.", "한국정보보호원"),
+        (EntityType.SCHOOL, "학교는 한국대학교입니다.", "한국대학교"),
+        (EntityType.ADDRESS_FULL, "주소는 서울시 강남구 테헤란로 123입니다.", "서울시 강남구 테헤란로 123"),
+        (EntityType.ADDRESS_UNIT, "동네는 역삼동입니다.", "역삼동"),
+    ),
+)
+def test_text_entities_trim_internal_ending_suffix(
+    entity_type: EntityType,
+    raw: str,
+    body: str,
+) -> None:
+    span = _span(raw, f"{body}입니다", entity_type)
+    corrected = _correct(raw, span)
+
+    assert corrected.text == body
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix == "입니다"
+    assert corrected.normalized is None
+    assert corrected.reason_codes[-2:] == ("boundary.suffix_trim", "suffix.ending")
+
+
+@pytest.mark.parametrize(
+    ("raw", "value", "body", "entity_type", "expected_suffix", "expected_reason_tail"),
+    (
+        ("김민수에게서 확인했습니다.", "김민수에게서", "김민수", EntityType.PERSON_NAME, "에게서", ("suffix.compound_josa",)),
+        ("김민수께서는 확인했습니다.", "김민수께서는", "김민수", EntityType.PERSON_NAME, "께서는", ("suffix.compound_josa",)),
+        ("병원은 서울중앙병원에서도 확인했습니다.", "서울중앙병원에서도", "서울중앙병원", EntityType.HOSPITAL, "에서도", ("suffix.compound_josa",)),
+        ("기관은 한국정보보호원이라고 확인했습니다.", "한국정보보호원이라고", "한국정보보호원", EntityType.ORGANIZATION, "이라고", ("suffix.quotative",)),
+        ("홍길동입니다", "홍길동입니다", "홍길동", EntityType.PERSON_NAME, "입니다", ("suffix.ending",)),
+    ),
+)
+def test_trims_curated_compound_suffix_from_overextended_spans(
+    raw: str,
+    value: str,
+    body: str,
+    entity_type: EntityType,
+    expected_suffix: str,
+    expected_reason_tail: tuple[str, ...],
+) -> None:
+    corrected = _correct(raw, _span(raw, value, entity_type))
+
+    assert corrected.text == body
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix == expected_suffix
+    assert corrected.normalized is None
+    assert corrected.reason_codes[1] == "boundary.suffix_trim"
+    assert corrected.reason_codes[-len(expected_reason_tail) :] == expected_reason_tail
+
+
+@pytest.mark.parametrize(
+    ("raw", "body", "entity_type", "expected_suffix", "expected_reason_tail"),
+    (
+        ("메일 test@example.com이라는 값입니다.", "test@example.com", EntityType.EMAIL, "이라는", ("suffix.quotative",)),
+        ("기관은 한국정보보호원이라고 했습니다.", "한국정보보호원", EntityType.ORGANIZATION, "이라고", ("suffix.quotative",)),
+        ("병원은 서울중앙병원에서도 확인했습니다.", "서울중앙병원", EntityType.HOSPITAL, "에서도", ("suffix.compound_josa",)),
+        ("담당자는 김민수에게서 확인했습니다.", "김민수", EntityType.PERSON_NAME, "에게서", ("suffix.compound_josa",)),
+        ("담당자는 김민수에게서도 확인했습니다.", "김민수", EntityType.PERSON_NAME, "에게서도", ("suffix.compound_josa", "suffix.josa")),
+    ),
+)
+def test_captures_curated_compound_suffix_by_lookahead(
+    raw: str,
+    body: str,
+    entity_type: EntityType,
+    expected_suffix: str,
+    expected_reason_tail: tuple[str, ...],
+) -> None:
+    corrected = _correct(raw, _span(raw, body, entity_type))
+
+    assert corrected.text == body
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix == expected_suffix
+    assert corrected.reason_codes[1] == "boundary.suffix_lookahead"
+    assert corrected.reason_codes[-len(expected_reason_tail) :] == expected_reason_tail
+
+
+@pytest.mark.parametrize(
+    ("raw", "body", "entity_type"),
+    (
+        ("홍길동이라면 확인이 필요합니다.", "홍길동", EntityType.PERSON_NAME),
+        ("메일 test@example.com이라고요 확인했습니다.", "test@example.com", EntityType.EMAIL),
+    ),
+)
+def test_does_not_capture_partial_unsupported_suffix(
+    raw: str,
+    body: str,
+    entity_type: EntityType,
+) -> None:
+    span = _span(raw, body, entity_type)
+    corrected = _correct(raw, span)
+
+    assert corrected == span
+    assert corrected.suffix is None
 
 
 def test_does_not_apply_disallowed_honorific_to_email() -> None:

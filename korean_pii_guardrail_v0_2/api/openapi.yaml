@@ -78,6 +78,7 @@ paths:
                   $ref: '#/components/schemas/OutputTarget'
                 policy_profile:
                   type: string
+                  enum: [strict]
       responses:
         '200':
           description: Masking result
@@ -116,13 +117,13 @@ components:
       enum: [input, output]
     OutputTarget:
       type: string
-      enum: [llm_input, external_output, internal_ui, analytics, audit_log]
+      enum: [llm_input, external_output, audit_log]
     RiskLevel:
       type: string
       enum: [P0, P1, P2, P3]
     Action:
       type: string
-      enum: [candidate, pass, mask, pseudonymize, hash, review, block]
+      enum: [candidate, pass, mask, hash, block]
     GuardrailOptions:
       type: object
       additionalProperties: false
@@ -156,7 +157,7 @@ components:
           $ref: '#/components/schemas/OutputTarget'
         policy_profile:
           type: string
-          enum: [strict, balanced, analytics, analytics_ai_training, audit_log]
+          enum: [strict]
         request_id:
           type: [string, 'null']
         document_id:

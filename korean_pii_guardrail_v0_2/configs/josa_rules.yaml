@@ -30,8 +30,6 @@ suffix_groups:
   ending:
     - 입니다
     - 였습니다
-    - 입니다.
-    - 입니다,
   quotative:
     - 이라고
     - 이라는

@@ -102,6 +102,23 @@ Date: 2026-05-09
 |---|---|---|
 | test@example.com입니다 | test@example.com | 입니다 |
 | 010-1234-5678입니다 | 010-1234-5678 | 입니다 |
+| test@example.com입니다. | test@example.com | 입니다 |
+| 서울중앙병원입니다. | 서울중앙병원 | 입니다 |
+
+마침표와 쉼표 같은 문장부호는 suffix에 포함하지 않는다.
+
+### 5.4 복합 suffix cluster
+
+| 원문 | label span | suffix |
+|---|---|---|
+| 김민수에게서 | 김민수 | 에게서 |
+| 서울중앙병원에서도 | 서울중앙병원 | 에서도 |
+| test@example.com이라는 | test@example.com | 이라는 |
+| 한국정보보호원이라고 | 한국정보보호원 | 이라고 |
+
+v0.2는 전체 한국어 조사·어미가 아니라 검증된 PII suffix cluster만 라벨링 기준으로 삼는다.
+
+TODO: `이라고요`, `이라구요`, `라네요`, `랍니다`, `이라면서요` 같은 존댓말·구어체 suffix는 별도 hard case를 만든 뒤 확장한다.
 
 ## 6. Ambiguous names
 

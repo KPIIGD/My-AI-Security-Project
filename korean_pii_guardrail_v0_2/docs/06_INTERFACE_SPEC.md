@@ -273,7 +273,7 @@ class GuardrailResponse:
 {
   "status": "ok",
   "version": "v0.2-single-turn",
-  "loaded_profiles": ["strict", "balanced", "analytics", "audit_log"],
+  "loaded_profiles": ["strict"],
   "ner_enabled": false
 }
 ```

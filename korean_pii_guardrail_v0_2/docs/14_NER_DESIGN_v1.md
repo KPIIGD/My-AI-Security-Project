@@ -202,7 +202,7 @@ ner.heuristic_split_v1   # (v3에서는 거의 트리거 안 됨)
 | 3 | per-entity threshold 미세 조정 |
 
 **v0.2 scoring.yaml 호환**:
-- `score_bands`: high_confidence 0.90 / mask_or_review 0.75 / context_judge 0.55
+- `score_bands`: high_confidence 0.90 / safety_mask 0.75 / context_judge 0.55
 - NER raw score → 그대로 `[0,1]` band 투입
 - low-conf span 도 candidate 로 emit → dict/context 보강 기회
 
