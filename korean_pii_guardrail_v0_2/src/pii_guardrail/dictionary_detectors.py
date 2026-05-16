@@ -17,17 +17,71 @@ from .dictionary_loader import (
 )
 from .enums import Action, EntityType, RiskLevel, Source
 from .interfaces import PreprocessResult
+from .korean_boundary import load_suffix_rules
 from .regex_detectors import deduplicate_spans, load_entity_risk_levels
 from .schema import GuardrailRequest, PIISpan
 
 
 _HANGUL_SYLLABLE_RANGE = ("가", "힣")
+# Apartment unit can appear either as `101동 1203호` or bare `1203호`.
+# False positives such as `2호선`, `3호점`, and `1호기` are filtered by the
+# suffix boundary check in ``_detect_addresses``.
 _APARTMENT_UNIT_PATTERN = re.compile(
     r"(?<!\d)(?:\d{1,3}\s*동\s+)?\d{1,4}\s*호(?!\d)"
 )
 _ROAD_TRAILER_PATTERN = re.compile(
     r"\s*\d{1,4}(?:\s*-\s*\d{1,4})?(?:\s*번지)?(?:\s+\d{1,3}\s*동)?(?:\s+\d{1,4}\s*호)?"
 )
+_BOUNDARY_SUFFIX_RULES = load_suffix_rules()
+_GIVEN_NAME_TRAILING_SUFFIXES = tuple(
+    rule.suffix for rule in _BOUNDARY_SUFFIX_RULES.get(EntityType.PERSON_NAME, ())
+)
+_ADDRESS_UNIT_TRAILING_SUFFIXES = tuple(
+    rule.suffix for rule in _BOUNDARY_SUFFIX_RULES.get(EntityType.ADDRESS_UNIT, ())
+)
+
+
+def _has_word_boundary_before(raw_text: str, start: int) -> bool:
+    """True when ``start`` does not sit inside a longer Hangul word."""
+
+    if start <= 0:
+        return True
+    prev_char = raw_text[start - 1]
+    low, high = _HANGUL_SYLLABLE_RANGE
+    return not (low <= prev_char <= high)
+
+
+def _has_word_boundary_after(raw_text: str, end: int) -> bool:
+    """True when ``end`` ends the Hangul word or has a full suffix boundary."""
+
+    return _has_full_suffix_boundary(raw_text, end, _GIVEN_NAME_TRAILING_SUFFIXES)
+
+
+def _is_address_unit_boundary(raw_text: str, end: int) -> bool:
+    return _has_full_suffix_boundary(raw_text, end, _ADDRESS_UNIT_TRAILING_SUFFIXES)
+
+
+def _has_full_suffix_boundary(
+    raw_text: str, start: int, suffixes: tuple[str, ...]
+) -> bool:
+    if start >= len(raw_text):
+        return True
+    low, high = _HANGUL_SYLLABLE_RANGE
+    if not (low <= raw_text[start] <= high):
+        return True
+
+    cursor = start
+    while cursor < len(raw_text):
+        if not (low <= raw_text[cursor] <= high):
+            return True
+
+        for suffix in suffixes:
+            if raw_text.startswith(suffix, cursor):
+                cursor += len(suffix)
+                break
+        else:
+            return False
+    return True
 
 
 @dataclass(frozen=True)
@@ -150,6 +204,10 @@ class DictionaryDetector:
                         continue
                     if any(cs <= span_start and span_end <= ce for (cs, ce) in consumed):
                         continue
+                    if not _has_word_boundary_before(raw_text, span_start):
+                        continue
+                    if not _has_word_boundary_after(raw_text, span_end):
+                        continue
                     emitted.add(key)
                     yield _Candidate(
                         start=span_start,
@@ -169,6 +227,10 @@ class DictionaryDetector:
                 if any(es <= index and given_end <= ee for (es, ee) in emitted):
                     continue
                 if any(cs <= index and given_end <= ce for (cs, ce) in consumed):
+                    continue
+                if not _has_word_boundary_before(raw_text, index):
+                    continue
+                if not _has_word_boundary_after(raw_text, given_end):
                     continue
                 emitted.add(key)
                 yield _Candidate(
@@ -200,7 +262,10 @@ class DictionaryDetector:
                     end=end,
                     entity_type=EntityType.FAMILY_RELATION,
                     score_key="relation_term",
-                    reason_codes=("dictionary.family_relation", f"dictionary.family_relation.{term}"),
+                    reason_codes=(
+                        "dictionary.family_relation",
+                        "dictionary.family_relation.match",
+                    ),
                 )
 
     # ------------------------------------------------------------------ Address
@@ -240,6 +305,8 @@ class DictionaryDetector:
 
         for match in _APARTMENT_UNIT_PATTERN.finditer(raw_text):
             if any(cs <= match.start() and match.end() <= ce for (cs, ce) in consumed_ranges):
+                continue
+            if not _is_address_unit_boundary(raw_text, match.end()):
                 continue
             yield _Candidate(
                 start=match.start(),
@@ -365,7 +432,7 @@ class DictionaryDetector:
                     end=end,
                     entity_type=entity_type,
                     score_key=score_key,
-                    reason_codes=(reason_prefix, f"{reason_prefix}.suffix:{suffix}"),
+                    reason_codes=(reason_prefix, f"{reason_prefix}.suffix_match"),
                 )
 
     # ------------------------------------------------------------------ Helpers

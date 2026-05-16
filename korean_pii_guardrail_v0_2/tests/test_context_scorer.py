@@ -119,10 +119,7 @@ def test_bank_account_boosted_by_field_label_and_bank_cooccurrence() -> None:
         code.startswith("context.boost.field_label_account")
         for code in account.reason_codes
     )
-    assert any(
-        code.startswith("context.boost.bank_cooccur:신한은행")
-        for code in account.reason_codes
-    )
+    assert "context.boost.bank_cooccur" in account.reason_codes
 
 
 def test_example_context_penalises_every_entity_in_sentence() -> None:
@@ -168,3 +165,60 @@ def test_context_scorer_appends_context_source_and_detector_id() -> None:
     person = persons[0]
     assert "context" in person.sources
     assert "context.korean" in person.detector_ids
+
+
+# ---------------------------------------------------------- review-fix regressions
+
+
+def test_reason_codes_never_contain_matched_term() -> None:
+    """Issue 1: every reason_code must be a rule id, not raw matched text."""
+
+    raw = "고객명 하늘이 신한은행 110-123-456789로 송금했습니다."
+    spans, preprocessed = _detect_all(raw)
+    scored = ContextScorer().score(spans, preprocessed)
+
+    for span in scored:
+        for code in span.reason_codes:
+            assert "신한은행" not in code, code
+            assert "하늘" not in code, code
+            assert "송금" not in code, code
+            assert "고객명" not in code, code
+            # `:` allowed only for composite entity-type tagging
+            if ":" in code:
+                assert code.startswith("context.composite") or code.endswith("match"), code
+
+
+def test_three_way_composite_marks_is_composite_in_scorer() -> None:
+    """Issue 4: DOB + ADDRESS_UNIT + SCHOOL composite must be marked by scorer."""
+
+    from pii_guardrail.context_scorer import ContextScorer
+    from pii_guardrail.enums import Action, RiskLevel
+    from pii_guardrail.schema import PIISpan
+
+    raw = "1995년 3월 1일, 서울 강남구 역삼동, 서울고등학교."
+    preprocessed = preprocess_text(raw)
+
+    def _span(value: str, entity: EntityType, score: float, risk: RiskLevel) -> PIISpan:
+        start = raw.index(value)
+        return PIISpan(
+            start=start,
+            end=start + len(value),
+            text=value,
+            entity_type=entity,
+            score=score,
+            sources=("test",),
+            risk_level=risk,
+            action=Action.CANDIDATE,
+            reason_codes=("test",),
+            detector_ids=("test",),
+        )
+
+    spans = [
+        _span("1995년 3월 1일", EntityType.DOB, 0.65, RiskLevel.P2),
+        _span("서울 강남구 역삼동", EntityType.ADDRESS_UNIT, 0.45, RiskLevel.P2),
+        _span("서울고등학교", EntityType.SCHOOL, 0.55, RiskLevel.P2),
+    ]
+    scored = ContextScorer().score(spans, preprocessed)
+
+    for span in scored:
+        assert span.is_composite is True, span.entity_type
