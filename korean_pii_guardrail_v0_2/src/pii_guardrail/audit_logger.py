@@ -123,6 +123,10 @@ class HMACKeyRing:
             )
 
         keys: dict[str, HMACKey] = {}
+        # Track the original env var name that defined each normalized key
+        # id so a case-insensitive collision can be reported as
+        # ``AUDIT_HMAC_KEY_PATH_V1`` vs ``..._v1`` instead of just "v1".
+        env_name_for_id: dict[str, str] = {}
         for env_name, raw_path in env_map.items():
             if not env_name.startswith(cls.ENV_KEY_PATH_PREFIX):
                 continue
@@ -131,6 +135,12 @@ class HMACKeyRing:
                     f"Env var {env_name} is empty — must point to a key file"
                 )
             key_id = env_name[len(cls.ENV_KEY_PATH_PREFIX) :].lower()
+            if key_id in keys:
+                raise AuditKeyringError(
+                    f"Duplicate HMAC key id {key_id!r} after case normalization: "
+                    f"{env_name_for_id[key_id]} and {env_name} both map to the "
+                    f"same key id. Use distinct key ids to avoid silent overwrite."
+                )
             path = Path(raw_path)
             if not path.is_file():
                 raise AuditKeyringError(
@@ -142,6 +152,7 @@ class HMACKeyRing:
                     f"HMAC key file referenced by {env_name} is empty"
                 )
             keys[key_id] = HMACKey(key_id=key_id, secret=secret)
+            env_name_for_id[key_id] = env_name
 
         if not keys:
             raise AuditKeyringError(
@@ -369,7 +380,13 @@ class AuditLogger:
 
     @classmethod
     def _logger_name_for_path(cls, normalized_log_path: str) -> str:
-        digest = hashlib.sha256(normalized_log_path.encode("utf-8")).hexdigest()[:16]
+        # Full SHA-256 hex (64 chars). Truncating to 16 hex chars (64 bits)
+        # was attractive for log readability but exposed a ~2^32 birthday
+        # collision bound — adversarial paths could share a logger namespace
+        # and bypass the per-path handler isolation guarantee. Full digest
+        # adds 48 hex chars to a single internal logger name string, which
+        # is negligible vs. the safety win.
+        digest = hashlib.sha256(normalized_log_path.encode("utf-8")).hexdigest()
         return f"{cls.LOGGER_NAME}.{digest}"
 
     @property

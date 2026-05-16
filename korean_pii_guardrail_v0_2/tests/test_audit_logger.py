@@ -839,3 +839,48 @@ def test_audit_logger_rejects_parent_that_is_not_a_directory(
 
     with pytest.raises((NotADirectoryError, FileNotFoundError)):
         AuditLogger(keyring=keyring, log_path=log_path)
+
+
+def test_logger_name_uses_full_sha256_digest(
+    keyring: HMACKeyRing, tmp_path: Path
+) -> None:
+    """``_logger_name_for_path`` must use full SHA-256, not a truncated prefix.
+
+    A 64-bit truncation gives a birthday collision around ~2^32 paths and
+    would let two distinct log_paths share the same internal logger
+    namespace, breaking the per-path handler isolation guarantee.
+    """
+    log_path = tmp_path / "audit.log.jsonl"
+    AuditLogger(keyring=keyring, log_path=log_path)
+
+    # logger name = "audit." + 64-hex SHA-256 = total 70 chars
+    name = AuditLogger._logger_name_for_path(str(log_path.resolve()))
+    digest = name.removeprefix(f"{AuditLogger.LOGGER_NAME}.")
+    assert len(digest) == 64
+    assert all(c in "0123456789abcdef" for c in digest)
+
+
+def test_keyring_from_env_rejects_case_insensitive_duplicate_key_id(
+    tmp_path: Path,
+) -> None:
+    """Two env vars normalizing to the same key_id must fail fast.
+
+    ``AUDIT_HMAC_KEY_PATH_V1`` and ``AUDIT_HMAC_KEY_PATH_v1`` both map to
+    ``v1`` after lowercasing. On case-sensitive OS (Linux) both can coexist
+    and the previous implementation silently overwrote one entry. The
+    fix raises ``AuditKeyringError`` with both env var names so the
+    operator sees which collision to resolve.
+    """
+    key_a = tmp_path / "audit_a.key"
+    key_b = tmp_path / "audit_b.key"
+    key_a.write_bytes(b"A" * HMACKeyRing.MIN_KEY_BYTES)
+    key_b.write_bytes(b"B" * HMACKeyRing.MIN_KEY_BYTES)
+
+    env = {
+        "AUDIT_HMAC_KEY_ACTIVE": "v1",
+        "AUDIT_HMAC_KEY_PATH_V1": str(key_a),
+        "AUDIT_HMAC_KEY_PATH_v1": str(key_b),
+    }
+
+    with pytest.raises(AuditKeyringError, match="Duplicate HMAC key id 'v1'"):
+        HMACKeyRing.from_env(env=env)
