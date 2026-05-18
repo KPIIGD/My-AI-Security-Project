@@ -47,6 +47,13 @@ processing_context:
   human_review_required: false
 ```
 
+Implementation note (M8): `retention_ttl_days: 90` remains the target
+retention requirement. The current cleanup script only handles exact
+`RotatingFileHandler` backup files by file mtime; event-level TTL enforcement
+for individual audit events requires a separate follow-up design. The active
+audit log is not removed by the script, and `backupCount` can evict rotated
+backups before 90 days under high log volume.
+
 ## 5. Raw PII 금지 원칙
 
 ### 5.1 금지 위치

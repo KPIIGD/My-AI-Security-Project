@@ -1,7 +1,8 @@
 import pytest
 
+from pii_guardrail.audit_logger import HMACKey, HMACKeyRing
 from pii_guardrail.enums import EntityType, OutputTarget, RiskLevel
-from pii_guardrail.masker import HmacHashProvider, MaskingError, SuffixPreservingMasker
+from pii_guardrail.masker import HashProvider, HmacHashProvider, MaskingError, SuffixPreservingMasker
 from pii_guardrail.schema import GuardrailRequest, InvalidOffsetError, PIISpan
 
 
@@ -96,6 +97,26 @@ def test_audit_log_target_replaces_value_with_hmac_digest() -> None:
     assert masked.endswith("입니다.")
 
 
+def test_audit_log_target_accepts_hmac_keyring_hash_provider() -> None:
+    raw = "phone 010-1234-5678 done"
+    span = _span(raw, "010-1234-5678", EntityType.PHONE_MOBILE, RiskLevel.P1)
+    keyring = HMACKeyRing(
+        keys={
+            "v1": HMACKey(
+                key_id="v1",
+                secret=b"a" * HMACKeyRing.MIN_KEY_BYTES,
+            )
+        },
+        active_id="v1",
+    )
+    masker = SuffixPreservingMasker(hash_provider=keyring)
+
+    masked = masker.apply(raw, [span], _request(raw, target=OutputTarget.AUDIT_LOG))
+
+    assert masked == f"phone {keyring.sign('010-1234-5678')} done"
+    assert keyring.digest("010-1234-5678") == keyring.sign("010-1234-5678")
+
+
 def test_api_key_secret_blocks_response() -> None:
     raw = "token sk-AbC123xYz987TokenValue"
     span = _span(raw, "sk-AbC123xYz987TokenValue", EntityType.API_KEY_SECRET, RiskLevel.P0)
@@ -155,3 +176,20 @@ def test_invalid_offset_rejects_without_raw_value_in_error() -> None:
 
     assert "홍길동" not in str(exc_info.value)
     assert "김민수" not in str(exc_info.value)
+
+
+def test_hash_provider_protocol_supports_isinstance_check() -> None:
+    """HashProvider is ``@runtime_checkable`` so callers can do
+    ``isinstance(provider, HashProvider)`` without TypeError.
+
+    Without ``@runtime_checkable`` the isinstance call raises:
+    ``TypeError: Instance and class checks can only be used with
+    @runtime_checkable protocols``.
+    """
+    keyring = HMACKeyRing(
+        keys={"v1": HMACKey(key_id="v1", secret=b"a" * HMACKeyRing.MIN_KEY_BYTES)},
+        active_id="v1",
+    )
+    assert isinstance(keyring, HashProvider)
+    assert isinstance(HmacHashProvider(), HashProvider)
+    assert not isinstance(object(), HashProvider)
