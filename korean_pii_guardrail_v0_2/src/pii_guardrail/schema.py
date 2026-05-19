@@ -96,8 +96,6 @@ class GuardrailOptions:
     return_spans: bool = True
     include_audit_events: bool = True
     allow_experimental_entities: bool = False
-    fail_on_invalid_offset: bool = True
-    mask_suffix_preserving: bool = True
 
 
 @dataclass(frozen=True)
