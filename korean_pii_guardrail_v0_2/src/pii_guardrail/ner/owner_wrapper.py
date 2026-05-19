@@ -17,7 +17,7 @@ v0.2 통합 경로:
     "entity_type": str (PERSON_NAME/ADDRESS_FULL/ORGANIZATION),
     "score": float,
     "sources": ("ner",), "risk_level": str (P1/P2),
-    "detector_ids": ("ner.finetuned.klue-bert-v1",),
+    "detector_ids": ("ner.finetuned.klue-roberta-large-v3",),
     "reason_codes": (...)
   }, ...]
 
@@ -101,7 +101,7 @@ class FinetunedKoreanNERDetector:
         spans = det.detect(raw_text, preprocessed, request)
     """
 
-    detector_id = "ner.finetuned.klue-bert-v1"
+    detector_id = "ner.finetuned.klue-roberta-large-v3"
 
     def __init__(
         self,
@@ -156,7 +156,7 @@ class FinetunedKoreanNERDetector:
               "start": int, "end": int, "text": str,
               "entity_type": str, "score": float,
               "sources": ("ner",), "risk_level": str,
-              "detector_ids": ("ner.finetuned.klue-bert-v1",),
+              "detector_ids": ("ner.finetuned.klue-roberta-large-v3",),
               "reason_codes": (...)
             }, ...]
         """

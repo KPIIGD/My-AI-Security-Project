@@ -164,3 +164,101 @@ def test_dictionary_detector_emits_no_spans_for_unrelated_korean_text() -> None:
     spans = _detect(DictionaryDetector(), raw)
 
     assert spans == []
+
+
+# ----------------------------------------------------------- review-fix regressions
+
+
+def test_given_name_inside_longer_korean_word_is_not_matched() -> None:
+    """Issue from PR #10 review: names inside longer words must not be emitted."""
+
+    for raw in (
+        "유진학교에 다닙니다.",
+        "유진한국어 수업입니다.",
+        "김민수학교에 다닙니다.",
+    ):
+        persons = _by_entity(_detect(DictionaryDetector(), raw), EntityType.PERSON_NAME)
+
+        assert persons == []
+
+
+def test_given_name_followed_by_josa_still_matches() -> None:
+    """Boundary check must still allow full josa/honorific suffixes."""
+
+    cases = (
+        ("고객명 유진한테 연락했습니다.", "유진", DictionaryDetector()),
+        ("담당자 김민수에게 전달했습니다.", "김민수", DictionaryDetector()),
+        ("담당자 김민수에게서 확인했습니다.", "김민수", DictionaryDetector()),
+        ("담당자 김민수에게는 전달했습니다.", "김민수", DictionaryDetector()),
+        ("담당자 김민수한테서 확인했습니다.", "김민수", DictionaryDetector()),
+        ("담당자 김민수께서는 확인했습니다.", "김민수", DictionaryDetector()),
+        ("고객명 하늘이 신청했습니다.", "하늘", DictionaryDetector()),
+        ("고객명 하늘입니다.", "하늘", DictionaryDetector()),
+    )
+
+    for raw, expected, detector in cases:
+        persons = _by_entity(_detect(detector, raw), EntityType.PERSON_NAME)
+
+        assert len(persons) == 1
+        assert persons[0].text == expected
+
+    dictionaries = dict(load_dictionary_lists())
+    dictionaries["given_name_candidates"] = (
+        *dictionaries["given_name_candidates"],
+        "윤정",
+    )
+    raw = "고객명 윤정씨가 신청했습니다."
+    persons = _by_entity(
+        _detect(DictionaryDetector(dictionaries=dictionaries), raw),
+        EntityType.PERSON_NAME,
+    )
+
+    assert len(persons) == 1
+    assert persons[0].text == "윤정"
+
+
+def test_apartment_unit_does_not_match_subway_line_pattern() -> None:
+    """Issue from PR #10 review: non-address 호 continuations are rejected."""
+
+    for raw in (
+        "지하철 2호선 타고 갑니다.",
+        "매장은 3호점입니다.",
+        "장비는 1호기입니다.",
+        "부대 앞 101동 1203호부대에서 만났습니다.",
+    ):
+        units = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_UNIT)
+
+        assert units == []
+
+
+def test_apartment_unit_still_matches_when_followed_by_josa() -> None:
+    cases = (
+        ("주소는 1203호입니다.", "1203호"),
+        ("택배는 1203호로 받겠습니다.", "1203호"),
+        ("택배는 1203호에서 받겠습니다.", "1203호"),
+        ("택배는 1203호에서는 받겠습니다.", "1203호"),
+        ("택배는 1203호에서도 받겠습니다.", "1203호"),
+        ("택배는 1203호부터 보관합니다.", "1203호"),
+        ("택배는 1203호까지 보내주세요.", "1203호"),
+        ("택배는 1203호까지도 보내주세요.", "1203호"),
+        ("택배는 101동 1203호로 받겠습니다.", "101동 1203호"),
+        ("주소는 역삼동 1203호입니다.", "1203호"),
+    )
+
+    for raw, expected in cases:
+        units = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_UNIT)
+
+        assert any(span.text == expected for span in units), raw
+
+
+def test_reason_codes_do_not_leak_matched_term() -> None:
+    """Issue 1: rule ids only, no matched text such as '어머니' or term names."""
+
+    raw = "어머니께서 보내주셨습니다. 서울중앙병원에서 만났습니다."
+    spans = _detect(DictionaryDetector(), raw)
+
+    for span in spans:
+        for code in span.reason_codes:
+            assert "어머니" not in code, code
+            assert "서울중앙" not in code, code
+            assert ":" not in code or code.endswith("match"), code
