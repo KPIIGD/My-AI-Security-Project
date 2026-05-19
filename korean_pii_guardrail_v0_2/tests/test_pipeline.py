@@ -25,7 +25,7 @@ from pii_guardrail.pipeline import (
     PipelineComponents,
     default_components,
 )
-from pii_guardrail.schema import GuardrailRequest
+from pii_guardrail.schema import GuardrailOptions, GuardrailRequest
 
 
 def _request(
@@ -33,13 +33,17 @@ def _request(
     *,
     target: OutputTarget = OutputTarget.LLM_INPUT,
     profile: str = "strict",
+    options: GuardrailOptions | None = None,
 ) -> GuardrailRequest:
-    return GuardrailRequest(
-        text=raw,
-        output_target=target,
-        policy_profile=profile,
-        request_id="req-pipeline-test",
-    )
+    kwargs = {
+        "text": raw,
+        "output_target": target,
+        "policy_profile": profile,
+        "request_id": "req-pipeline-test",
+    }
+    if options is not None:
+        kwargs["options"] = options
+    return GuardrailRequest(**kwargs)
 
 
 @pytest.fixture
@@ -242,6 +246,44 @@ def test_pipeline_emits_audit_events_for_masked_spans_only(
     for event in response.audit_events:
         assert event.action in {Action.MASK, Action.HASH, Action.BLOCK}
         assert event.value_hash is not None and event.value_hash.startswith("hmac-sha256:v1:")
+    actionable_spans = [
+        span
+        for span in response.spans
+        if span.action in {Action.MASK, Action.HASH, Action.BLOCK}
+    ]
+    assert [span.value_hash for span in actionable_spans] == [
+        event.value_hash for event in response.audit_events
+    ]
+
+
+def test_pipeline_honors_include_audit_events_response_option(
+    keyring: HMACKeyRing, audit_log_path: Path
+) -> None:
+    raw = "phone 010-1234-5678"
+    audit_logger = AuditLogger(keyring=keyring, log_path=audit_log_path)
+    components = default_components(audit_logger=audit_logger)
+    pipeline = GuardrailPipeline(components=components)
+
+    response = pipeline.process(
+        _request(raw, options=GuardrailOptions(include_audit_events=False))
+    )
+
+    assert response.audit_events == ()
+    assert audit_log_path.read_text(encoding="utf-8").strip()
+
+
+def test_pipeline_honors_return_spans_response_option() -> None:
+    raw = "phone 010-1234-5678"
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(
+        _request(raw, options=GuardrailOptions(return_spans=False))
+    )
+
+    assert response.spans == ()
+    assert response.metrics.detected_span_count >= 1
+    assert response.masked_text is not None
+    assert "010-1234-5678" not in response.masked_text
 
 
 def test_audit_file_contents_omit_detector_ids_by_default(

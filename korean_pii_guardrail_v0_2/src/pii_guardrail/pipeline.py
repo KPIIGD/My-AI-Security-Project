@@ -119,7 +119,10 @@ def default_components(
     ``FinetunedKoreanNERDetector`` to enable real NER at the M5 stage.
     """
     policy_router = PolicyRouter()
-    masker = SuffixPreservingMasker(policy_router=policy_router)
+    masker = SuffixPreservingMasker(
+        policy_router=policy_router,
+        hash_provider=audit_logger,
+    )
     return PipelineComponents(
         regex_detectors=_default_regex_detectors(),
         dictionary_detector=DictionaryDetector(),
@@ -205,13 +208,14 @@ class GuardrailPipeline:
         # value_hash is populated only for actionable spans (MASK/HASH/BLOCK)
         # so callers can correlate a public span with the matching audit
         # event without exposing raw text. PASS spans intentionally omit the
-        # hash to keep the public payload small. The masker's HmacHashProvider
-        # is reused here; aligning it with the M8 HMACKeyRing across both
-        # surfaces is a separate consolidation task (see inspection report
-        # P2 #9).
-        public_spans = tuple(
+        # hash to keep the public payload small.
+        public_spans_all = tuple(
             span.to_public(value_hash=self._public_value_hash(span))
             for span in routed
+        )
+        public_spans = public_spans_all if request.options.return_spans else ()
+        response_audit_events = (
+            audit_events if request.options.include_audit_events else ()
         )
         masked_count = sum(
             1
@@ -225,7 +229,7 @@ class GuardrailPipeline:
             blocked=blocked,
             masked_text=masked_text,
             spans=public_spans,
-            audit_events=audit_events,
+            audit_events=response_audit_events,
             metrics=ResponseMetrics(
                 latency_ms=latency_ms,
                 detected_span_count=len(routed),
@@ -246,6 +250,8 @@ class GuardrailPipeline:
         """
         if span.action not in {Action.MASK, Action.HASH, Action.BLOCK}:
             return None
+        if self._components.audit_logger is not None:
+            return self._components.audit_logger.digest(span.text)
         return self._components.masker.hash_provider.digest(span.text)
 
     def _emit_audit_events(

@@ -397,6 +397,10 @@ class AuditLogger:
     def verbose(self) -> bool:
         return self._verbose
 
+    def digest(self, value: str) -> str:
+        """Return the active audit HMAC digest for response/audit correlation."""
+        return self._keyring.digest(value)
+
     def build_event(
         self,
         *,
