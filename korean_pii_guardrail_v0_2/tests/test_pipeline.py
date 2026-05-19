@@ -46,6 +46,28 @@ def _request(
     return GuardrailRequest(**kwargs)
 
 
+def test_public_api_matches_interface_spec_example() -> None:
+    from pii_guardrail import GuardrailPipeline as PublicGuardrailPipeline
+    from pii_guardrail import GuardrailRequest as PublicGuardrailRequest
+
+    pipeline = PublicGuardrailPipeline.from_config_dir(
+        Path(__file__).resolve().parents[1] / "configs"
+    )
+
+    response = pipeline.apply(
+        PublicGuardrailRequest(
+            text="홍길동이 010-1234-5678로 연락했습니다.",
+            scan_stage="input",
+            output_target="llm_input",
+            policy_profile="strict",
+            request_id="req-interface-spec-example",
+        )
+    )
+
+    assert response.output_target is OutputTarget.LLM_INPUT
+    assert response.masked_text == "[PERSON_1]이 [PHONE_1]로 연락했습니다."
+
+
 @pytest.fixture
 def keyring(tmp_path: Path) -> HMACKeyRing:
     key_file = tmp_path / "audit_v1.key"

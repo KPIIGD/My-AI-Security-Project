@@ -103,8 +103,8 @@ class GuardrailOptions:
 @dataclass(frozen=True)
 class GuardrailRequest:
     text: str
-    scan_stage: ScanStage = ScanStage.INPUT
-    output_target: OutputTarget = OutputTarget.LLM_INPUT
+    scan_stage: ScanStage | str = ScanStage.INPUT
+    output_target: OutputTarget | str = OutputTarget.LLM_INPUT
     policy_profile: str = "strict"
     request_id: str | None = None
     document_id: str | None = None
@@ -117,8 +117,18 @@ class GuardrailRequest:
     def __post_init__(self) -> None:
         if not self.text:
             raise ValueError("GuardrailRequest.text must not be empty")
-        if self.scan_stage not in {ScanStage.INPUT, ScanStage.OUTPUT}:
+        try:
+            scan_stage = ScanStage(self.scan_stage)
+        except ValueError as exc:
+            raise ValueError("v0.2 supports input/output scan_stage only") from exc
+        if scan_stage not in {ScanStage.INPUT, ScanStage.OUTPUT}:
             raise ValueError("v0.2 supports input/output scan_stage only")
+        try:
+            output_target = OutputTarget(self.output_target)
+        except ValueError as exc:
+            raise ValueError("Unsupported output_target") from exc
+        object.__setattr__(self, "scan_stage", scan_stage)
+        object.__setattr__(self, "output_target", output_target)
         object.__setattr__(self, "_effective_request_id", self.request_id or str(uuid4()))
 
     @property

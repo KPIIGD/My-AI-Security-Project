@@ -40,15 +40,27 @@ from __future__ import annotations
 import time
 from collections.abc import Sequence
 from dataclasses import dataclass
+from pathlib import Path
 
 from .audit_logger import AuditLogger, AuditPayloadLeakError
 from .context_scorer import ContextScorer
+from .dictionary_loader import (
+    load_composite_upgrades,
+    load_context_boosts,
+    load_context_penalties,
+    load_dictionary_base_scores,
+    load_dictionary_lists,
+    load_entity_priority,
+    load_field_label_terms,
+    load_honorific_terms,
+    load_negative_context_terms,
+)
 from .dictionary_detectors import DictionaryDetector
-from .enums import Action
+from .enums import Action, EntityType, RiskLevel
 from .korean_boundary import KoreanBoundaryCorrector
 from .masker import SuffixPreservingMasker
 from .ner import BaseNERDetector, MockNERDetector
-from .policy import PolicyRouter
+from .policy import PolicyRouter, load_policy_config, load_risk_action_thresholds
 from .preprocess import preprocess_text
 from .regex_detectors import (
     BankAccountCandidateDetector,
@@ -61,6 +73,8 @@ from .regex_detectors import (
     RRNRegexDetector,
     SecretRegexDetector,
     deduplicate_spans,
+    load_entity_risk_levels,
+    load_regex_base_scores,
 )
 from .schema import (
     AuditEvent,
@@ -71,6 +85,17 @@ from .schema import (
     ResponseMetrics,
 )
 from .span_resolver import SpanResolver
+
+
+@dataclass(frozen=True)
+class _ConfigPaths:
+    root: Path
+    dictionaries: Path
+    scoring: Path
+    policy_profiles: Path
+    josa_rules: Path
+    entities: Path
+    context_rules: Path
 
 
 @dataclass(frozen=True)
@@ -93,22 +118,65 @@ class PipelineComponents:
     audit_logger: AuditLogger | None
 
 
-def _default_regex_detectors() -> tuple[object, ...]:
+def _default_regex_detectors(
+    *,
+    scores: dict[str, float] | None = None,
+    risk_levels: dict[EntityType, RiskLevel] | None = None,
+) -> tuple[object, ...]:
+    kwargs = {"scores": scores, "risk_levels": risk_levels}
     return (
-        RRNRegexDetector(),
-        FRNRegexDetector(),
-        PhoneRegexDetector(),
-        EmailRegexDetector(),
-        NetworkIdentifierDetector(),
-        CreditCardRegexDetector(),
-        BusinessRegNoDetector(),
-        BankAccountCandidateDetector(),
-        SecretRegexDetector(),
+        RRNRegexDetector(**kwargs),
+        FRNRegexDetector(**kwargs),
+        PhoneRegexDetector(**kwargs),
+        EmailRegexDetector(**kwargs),
+        NetworkIdentifierDetector(**kwargs),
+        CreditCardRegexDetector(**kwargs),
+        BusinessRegNoDetector(**kwargs),
+        BankAccountCandidateDetector(**kwargs),
+        SecretRegexDetector(**kwargs),
     )
+
+
+def _resolve_config_dir(config_dir: str | Path) -> _ConfigPaths:
+    root = Path(config_dir).expanduser()
+    if not root.is_dir():
+        package_relative = Path(__file__).resolve().parents[2] / root
+        if package_relative.is_dir():
+            root = package_relative
+    if not root.is_dir():
+        raise ValueError(f"config_dir does not exist: {config_dir}")
+
+    paths = _ConfigPaths(
+        root=root.resolve(),
+        dictionaries=root / "dictionaries.yaml",
+        scoring=root / "scoring.yaml",
+        policy_profiles=root / "policy_profiles.yaml",
+        josa_rules=root / "josa_rules.yaml",
+        entities=root / "entities.yaml",
+        context_rules=root / "context_rules.yaml",
+    )
+    missing = [
+        path.name
+        for path in (
+            paths.dictionaries,
+            paths.scoring,
+            paths.policy_profiles,
+            paths.josa_rules,
+            paths.entities,
+            paths.context_rules,
+        )
+        if not path.is_file()
+    ]
+    if missing:
+        raise ValueError(
+            "config_dir is missing required config files: " + ", ".join(missing)
+        )
+    return paths
 
 
 def default_components(
     *,
+    config_dir: str | Path | None = None,
     ner_detector: BaseNERDetector | None = None,
     audit_logger: AuditLogger | None = None,
 ) -> PipelineComponents:
@@ -118,18 +186,60 @@ def default_components(
     self-contained without the v3 finetuned model. Pass an instance of
     ``FinetunedKoreanNERDetector`` to enable real NER at the M5 stage.
     """
-    policy_router = PolicyRouter()
+    if config_dir is None:
+        policy_router = PolicyRouter()
+        dictionary_detector = DictionaryDetector()
+        boundary_corrector = KoreanBoundaryCorrector()
+        context_scorer = ContextScorer()
+        span_resolver = SpanResolver()
+        regex_detectors = _default_regex_detectors()
+    else:
+        paths = _resolve_config_dir(config_dir)
+        risk_levels = load_entity_risk_levels(paths.entities)
+        dictionaries = load_dictionary_lists(paths.dictionaries)
+        composite_upgrades = load_composite_upgrades(paths.scoring)
+        policy_router = PolicyRouter(
+            policy_config=load_policy_config(paths.policy_profiles),
+            thresholds=load_risk_action_thresholds(paths.scoring),
+        )
+        dictionary_detector = DictionaryDetector(
+            dictionaries=dictionaries,
+            scores=load_dictionary_base_scores(paths.scoring),
+            risk_levels=risk_levels,
+        )
+        boundary_corrector = KoreanBoundaryCorrector(config_path=paths.josa_rules)
+        context_scorer = ContextScorer(
+            boosts=load_context_boosts(paths.scoring),
+            penalties=load_context_penalties(paths.scoring),
+            field_label_terms=load_field_label_terms(paths.context_rules),
+            negative_terms=load_negative_context_terms(paths.context_rules),
+            honorifics=load_honorific_terms(paths.context_rules),
+            bank_names=dictionaries.get("bank_names", ()),
+            composite_upgrades=composite_upgrades,
+        )
+        span_resolver = SpanResolver(
+            priority_order=tuple(
+                EntityType(name) for name in load_entity_priority(paths.entities)
+            ),
+            composite_upgrades=composite_upgrades,
+            risk_levels=risk_levels,
+        )
+        regex_detectors = _default_regex_detectors(
+            scores=load_regex_base_scores(paths.scoring),
+            risk_levels=risk_levels,
+        )
+
     masker = SuffixPreservingMasker(
         policy_router=policy_router,
         hash_provider=audit_logger,
     )
     return PipelineComponents(
-        regex_detectors=_default_regex_detectors(),
-        dictionary_detector=DictionaryDetector(),
-        boundary_corrector=KoreanBoundaryCorrector(),
-        context_scorer=ContextScorer(),
+        regex_detectors=regex_detectors,
+        dictionary_detector=dictionary_detector,
+        boundary_corrector=boundary_corrector,
+        context_scorer=context_scorer,
         ner_detector=ner_detector if ner_detector is not None else MockNERDetector(),
-        span_resolver=SpanResolver(),
+        span_resolver=span_resolver,
         policy_router=policy_router,
         masker=masker,
         audit_logger=audit_logger,
@@ -148,9 +258,32 @@ class GuardrailPipeline:
     def __init__(self, components: PipelineComponents | None = None) -> None:
         self._components = components or default_components()
 
+    @classmethod
+    def from_config_dir(
+        cls,
+        config_dir: str | Path,
+        *,
+        ner_detector: BaseNERDetector | None = None,
+        audit_logger: AuditLogger | None = None,
+    ) -> "GuardrailPipeline":
+        """Build a pipeline from the documented v0.2 config directory."""
+
+        return cls(
+            default_components(
+                config_dir=config_dir,
+                ner_detector=ner_detector,
+                audit_logger=audit_logger,
+            )
+        )
+
     @property
     def components(self) -> PipelineComponents:
         return self._components
+
+    def apply(self, request: GuardrailRequest) -> GuardrailResponse:
+        """Public API alias for running the full guardrail flow."""
+
+        return self.process(request)
 
     def process(self, request: GuardrailRequest) -> GuardrailResponse:
         """Run the full M1→M8 flow and return a GuardrailResponse.
