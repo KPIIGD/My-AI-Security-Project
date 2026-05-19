@@ -42,6 +42,7 @@ SERVICE_PHONE_PREFIXES = ("050", "070", "080", "15", "16", "18")
 BUSINESS_REG_WEIGHTS = (1, 3, 7, 1, 3, 7, 1, 3, 5)
 RRN_CHECKSUM_WEIGHTS = (2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5)
 SECRET_PREFIXES = ("sk-", "ghp_", "gho_", "xoxb-", "xoxp-", "AKIA")
+SUPPORTED_CHECKSUM_MODES = frozenset({"strict", "warn", "off"})
 
 
 @dataclass(frozen=True)
@@ -146,22 +147,56 @@ def is_repeated_or_placeholder_digits(digits: str) -> bool:
     return not digits or len(set(digits)) == 1 or digits in {"1234567890", "0123456789"}
 
 
-def validate_rrn(value: str) -> ValidationResult:
+def validate_rrn(value: str, *, checksum_mode: str = "strict") -> ValidationResult:
+    checksum_mode = _normalize_checksum_mode(checksum_mode)
     digits = digits_only(value)
     if len(digits) != 13 or not _valid_birth_date(digits[:6], digits[6], rrn=True):
         return ValidationResult(False, digits, reason_codes=("validator.rrn.invalid",))
-    if not rrn_checksum_valid(digits):
+
+    if checksum_mode == "off":
+        return ValidationResult(
+            True,
+            digits,
+            "RRN_PATTERN_ONLY",
+            ("validator.rrn.structure_valid", "validator.rrn.checksum_skipped"),
+        )
+    if rrn_checksum_valid(digits):
+        return ValidationResult(True, digits, "RRN", ("validator.rrn.valid", "validator.rrn.checksum_valid"))
+    if checksum_mode == "warn":
+        return ValidationResult(
+            True,
+            digits,
+            "RRN_PATTERN_ONLY",
+            ("validator.rrn.structure_valid", "validator.rrn.checksum_warn"),
+        )
+    else:
         return ValidationResult(False, digits, reason_codes=("validator.rrn.checksum_invalid",))
-    return ValidationResult(True, digits, "RRN", ("validator.rrn.valid", "validator.rrn.checksum_valid"))
 
 
-def validate_frn(value: str) -> ValidationResult:
+def validate_frn(value: str, *, checksum_mode: str = "strict") -> ValidationResult:
+    checksum_mode = _normalize_checksum_mode(checksum_mode)
     digits = digits_only(value)
     if len(digits) != 13 or not _valid_birth_date(digits[:6], digits[6], rrn=False):
         return ValidationResult(False, digits, reason_codes=("validator.frn.invalid",))
-    if not rrn_checksum_valid(digits):
+
+    if checksum_mode == "off":
+        return ValidationResult(
+            True,
+            digits,
+            "FRN_PATTERN_ONLY",
+            ("validator.frn.structure_valid", "validator.frn.checksum_skipped"),
+        )
+    if rrn_checksum_valid(digits):
+        return ValidationResult(True, digits, "FRN", ("validator.frn.valid", "validator.frn.checksum_valid"))
+    if checksum_mode == "warn":
+        return ValidationResult(
+            True,
+            digits,
+            "FRN_PATTERN_ONLY",
+            ("validator.frn.structure_valid", "validator.frn.checksum_warn"),
+        )
+    else:
         return ValidationResult(False, digits, reason_codes=("validator.frn.checksum_invalid",))
-    return ValidationResult(True, digits, "FRN", ("validator.frn.valid", "validator.frn.checksum_valid"))
 
 
 def rrn_check_digit(digits_12: str) -> str:
@@ -242,13 +277,30 @@ def _valid_domain_label(label: str) -> bool:
     return bool(label) and len(label) <= 63 and not label.startswith("-") and not label.endswith("-")
 
 
-def validate_credit_card(value: str) -> ValidationResult:
+def validate_credit_card(value: str, *, checksum_mode: str = "strict") -> ValidationResult:
+    checksum_mode = _normalize_checksum_mode(checksum_mode)
     digits = digits_only(value)
     if len(digits) < 13 or len(digits) > 19 or is_repeated_or_placeholder_digits(digits):
         return ValidationResult(False, digits, "CREDIT_CARD_PATTERN_ONLY", ("validator.credit_card.invalid",))
-    if not luhn_checksum_valid(digits):
+
+    if checksum_mode == "off":
+        return ValidationResult(
+            True,
+            digits,
+            "CREDIT_CARD_PATTERN_ONLY",
+            ("validator.credit_card.pattern_only", "validator.credit_card.luhn_skipped"),
+        )
+    if luhn_checksum_valid(digits):
+        return ValidationResult(True, digits, "CREDIT_CARD_VALID", ("validator.credit_card.luhn_valid",))
+    if checksum_mode == "warn":
+        return ValidationResult(
+            True,
+            digits,
+            "CREDIT_CARD_PATTERN_ONLY",
+            ("validator.credit_card.pattern_only", "validator.credit_card.luhn_warn"),
+        )
+    else:
         return ValidationResult(False, digits, "CREDIT_CARD_PATTERN_ONLY", ("validator.credit_card.luhn_failed",))
-    return ValidationResult(True, digits, "CREDIT_CARD_VALID", ("validator.credit_card.luhn_valid",))
 
 
 def luhn_checksum_valid(digits: str) -> bool:
@@ -266,25 +318,33 @@ def luhn_checksum_valid(digits: str) -> bool:
     return total % 10 == 0
 
 
-def validate_business_reg_no(value: str) -> ValidationResult:
+def validate_business_reg_no(value: str, *, checksum_mode: str = "warn") -> ValidationResult:
+    checksum_mode = _normalize_checksum_mode(checksum_mode)
     if "-" in value and not re.fullmatch(r"\d{3}-\d{2}-\d{5}", value):
         return ValidationResult(False, digits_only(value), reason_codes=("validator.business_reg_no.invalid_format",))
 
     digits = digits_only(value)
     if len(digits) != 10 or is_repeated_or_placeholder_digits(digits):
         return ValidationResult(False, digits, reason_codes=("validator.business_reg_no.invalid_format",))
-    if business_reg_no_checksum_valid(digits):
+    if checksum_mode != "off" and business_reg_no_checksum_valid(digits):
         return ValidationResult(
             True,
             digits,
             "BUSINESS_REG_NO_VALID",
             ("validator.business_reg_no.checksum_valid",),
         )
+    if checksum_mode == "strict":
+        return ValidationResult(False, digits, reason_codes=("validator.business_reg_no.checksum_invalid",))
+    reason_code = (
+        "validator.business_reg_no.checksum_skipped"
+        if checksum_mode == "off"
+        else "validator.business_reg_no.pattern_only"
+    )
     return ValidationResult(
         True,
         digits,
         "BUSINESS_REG_NO_PATTERN_ONLY",
-        ("validator.business_reg_no.pattern_only",),
+        (reason_code,),
     )
 
 
@@ -400,3 +460,10 @@ def shannon_entropy(value: str) -> float:
         probability = value.count(char) / len(value)
         entropy -= probability * math.log2(probability)
     return entropy
+
+
+def _normalize_checksum_mode(mode: str) -> str:
+    normalized = mode.strip().lower()
+    if normalized not in SUPPORTED_CHECKSUM_MODES:
+        raise ValueError("Unsupported checksum mode")
+    return normalized

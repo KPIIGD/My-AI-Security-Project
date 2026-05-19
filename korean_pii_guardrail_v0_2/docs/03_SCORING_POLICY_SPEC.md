@@ -83,7 +83,9 @@ test@example.com
 |---|---|---:|---|
 | API_KEY_SECRET | prefix + length + entropy 통과 | 0.99 | 보안비밀, block 후보 |
 | RRN | 날짜/성별 digit/길이 + checksum 통과 | 0.98 | P0 recall 우선 |
+| RRN | checksum warn/off pattern-only | 0.70 | 설정 기반 lower-confidence 후보 |
 | FRN | 날짜/성별 digit/길이 + checksum 통과 | 0.98 | P0 recall 우선 |
+| FRN | checksum warn/off pattern-only | 0.70 | 설정 기반 lower-confidence 후보 |
 | CREDIT_CARD | Luhn 통과 | 0.96 | 금융 직접식별 |
 | CREDIT_CARD | Luhn 미통과 but 카드형 패턴 | 0.45 | candidate만 유지 가능 |
 | EMAIL | domain 구조 통과 | 0.92 | suffix trim 필요 |
@@ -100,6 +102,31 @@ test@example.com
 | EMPLOYEE_ID | label + id pattern | 0.72 | label 없으면 낮게 시작 |
 | STUDENT_ID | label + id pattern | 0.72 | label 없으면 낮게 시작 |
 | MEDICAL_RECORD_NO | 의료 label + id pattern | 0.82 | domain high-risk |
+
+### 4.1 Detector and validator configuration
+
+Detector routing is controlled by `configs/detectors.yaml`.
+
+Supported v0.2 settings:
+
+- `regex_detectors.<detector_id>.enabled`: disables an entire regex detector
+  such as `regex.email` or `regex.credit_card`.
+- `entities.<ENTITY>.enabled`: filters candidates for that entity across
+  regex, dictionary, and NER sources.
+- `validators.<ENTITY>.checksum`: controls structured checksum behavior for
+  supported validators.
+
+Checksum modes:
+
+| Mode | Meaning |
+|---|---|
+| `strict` | checksum failure rejects the candidate |
+| `warn` | checksum failure emits a lower-confidence pattern-only candidate |
+| `off` | checksum is skipped and only shape validation is used |
+
+The v0.2 API does not accept request-time regex injection. Custom regex
+definitions need a later design with ReDoS limits, review workflow, and
+no-raw-PII logging guarantees.
 
 ## 5. Dictionary base score
 
