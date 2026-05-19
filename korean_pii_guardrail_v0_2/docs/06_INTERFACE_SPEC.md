@@ -134,9 +134,13 @@ class GuardrailOptions:
     return_spans: bool = True
     include_audit_events: bool = True
     allow_experimental_entities: bool = False
-    fail_on_invalid_offset: bool = True
-    mask_suffix_preserving: bool = True
 ```
+
+`fail_on_invalid_offset` and `mask_suffix_preserving` are not request options
+in v0.2. Invalid raw offsets fail closed, and Korean suffix-preserving masking
+is a fixed safety contract. Detector and validator tunables such as regex
+selection or checksum strictness belong in configuration profiles, not this
+per-request response shaping object.
 
 ### 6.3 GuardrailResponse
 
@@ -174,9 +178,7 @@ class GuardrailResponse:
   "options": {
     "return_spans": true,
     "include_audit_events": true,
-    "allow_experimental_entities": false,
-    "fail_on_invalid_offset": true,
-    "mask_suffix_preserving": true
+    "allow_experimental_entities": false
   }
 }
 ```
