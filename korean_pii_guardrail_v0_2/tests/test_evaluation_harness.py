@@ -18,6 +18,8 @@ from __future__ import annotations
 
 import json
 import logging
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -25,6 +27,7 @@ import pytest
 from pii_guardrail.audit_logger import AuditLogger
 from pii_guardrail.enums import Action, EntityType, OutputTarget, RiskLevel, Source
 from pii_guardrail.evaluation_harness import (
+    AblationRunner,
     CaseResult,
     EntityMetrics,
     EvaluationCase,
@@ -32,14 +35,21 @@ from pii_guardrail.evaluation_harness import (
     EvaluationReport,
     EvaluationRunner,
     SpanMatch,
+    build_release_gate_report,
     load_jsonl_cases,
 )
 from pii_guardrail.pipeline import GuardrailPipeline
-from pii_guardrail.schema import PublicPIISpan
+from pii_guardrail.schema import (
+    AuditEvent,
+    GuardrailResponse,
+    PublicPIISpan,
+    ResponseMetrics,
+)
 
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 HARD_CASES_PATH = (
-    Path(__file__).resolve().parents[1] / "data" / "eval" / "hard_cases_v0.jsonl"
+    PROJECT_ROOT / "data" / "eval" / "hard_cases_v0.jsonl"
 )
 
 
@@ -63,6 +73,7 @@ def _public(
     *,
     action: Action = Action.MASK,
     risk_level: RiskLevel = RiskLevel.P1,
+    raw_value_logged: bool = False,
 ) -> PublicPIISpan:
     return PublicPIISpan(
         start=start,
@@ -75,6 +86,7 @@ def _public(
         action=action,
         reason_codes=("test",),
         detector_ids=("test",),
+        raw_value_logged=raw_value_logged,
     )
 
 
@@ -116,6 +128,32 @@ def test_load_jsonl_cases_preserves_label_metadata(tmp_path: Path) -> None:
     assert case.tags == ("person", "phone")
     assert case.labels[0].entity_type is EntityType.PERSON_NAME
     assert case.labels[0].risk_level is RiskLevel.P1
+
+
+def test_load_jsonl_cases_rejects_invalid_gold_offsets_without_raw_text(tmp_path: Path) -> None:
+    fixture = tmp_path / "bad-offset.jsonl"
+    raw_text = "홍길동"
+    fixture.write_text(
+        json.dumps({
+            "id": "case-bad-offset",
+            "text": raw_text,
+            "expected_masked_text": "[PERSON_1]",
+            "labels": [
+                {"start": 0, "end": 99, "entity_type": "PERSON_NAME", "risk_level": "P1"},
+            ],
+            "tags": [],
+        }) + "\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError) as exc_info:
+        load_jsonl_cases(fixture)
+
+    message = str(exc_info.value)
+    assert "case-bad-offset" in message
+    assert "start=0" in message
+    assert "end=99" in message
+    assert raw_text not in message
 
 
 # ============================================================
@@ -199,7 +237,7 @@ def test_spurious_when_prediction_has_no_gold_overlap() -> None:
     assert ("spurious", EntityType.PHONE_MOBILE) in types
 
 
-def test_type_mismatch_with_overlap_does_not_count_as_match() -> None:
+def test_type_mismatch_with_overlap_counts_miss_and_spurious() -> None:
     case = EvaluationCase(
         id="c1",
         text="홍길동",
@@ -207,18 +245,74 @@ def test_type_mismatch_with_overlap_does_not_count_as_match() -> None:
             EvaluationLabel(start=0, end=3, entity_type=EntityType.PERSON_NAME, risk_level=RiskLevel.P1),
         ),
     )
-    # Same span but wrong entity_type → still a miss for PERSON_NAME, and
-    # the wrong-typed prediction overlaps the gold so it's not spurious.
+    # Same span but wrong entity_type: PERSON_NAME is missed and the
+    # ORGANIZATION prediction must still count as a false positive.
     prediction = _public(0, 3, EntityType.ORGANIZATION)
     runner = EvaluationRunner(GuardrailPipeline())
 
     matches = runner._match_spans(case, (prediction,))
 
-    types = sorted(m.match_type for m in matches)
-    assert "miss" in types
-    # Overlapping wrong-type prediction is NOT counted as spurious
-    # (it overlaps gold, so it's a separate downgraded-type signal).
-    assert "spurious" not in types
+    types = {(m.match_type, m.actual.entity_type if m.actual else None) for m in matches}
+    assert ("miss", None) in types
+    assert ("spurious", EntityType.ORGANIZATION) in types
+
+
+def test_surplus_overlapping_prediction_counts_as_spurious() -> None:
+    case = EvaluationCase(
+        id="c1",
+        text="김민수가 왔습니다",
+        labels=(
+            EvaluationLabel(start=0, end=3, entity_type=EntityType.PERSON_NAME, risk_level=RiskLevel.P1),
+        ),
+    )
+    exact = _public(0, 3, EntityType.PERSON_NAME)
+    duplicate_overlap = _public(0, 4, EntityType.PERSON_NAME)
+    runner = EvaluationRunner(GuardrailPipeline())
+
+    matches = runner._match_spans(case, (exact, duplicate_overlap))
+
+    assert [(m.match_type, m.actual.start if m.actual else None, m.actual.end if m.actual else None) for m in matches] == [
+        ("exact", 0, 3),
+        ("spurious", 0, 4),
+    ]
+
+
+def test_spans_detected_uses_actual_prediction_count_for_surplus_overlap() -> None:
+    case = EvaluationCase(
+        id="c1",
+        text="김민수가 왔습니다",
+        labels=(
+            EvaluationLabel(start=0, end=3, entity_type=EntityType.PERSON_NAME, risk_level=RiskLevel.P1),
+        ),
+    )
+    runner = EvaluationRunner(GuardrailPipeline())
+    matches = runner._match_spans(
+        case,
+        (
+            _public(0, 3, EntityType.PERSON_NAME),
+            _public(0, 4, EntityType.PERSON_NAME),
+        ),
+    )
+    report = runner._aggregate(
+        "synthetic",
+        [case],
+        [
+            CaseResult(
+                case_id="c1",
+                matches=tuple(matches),
+                masked_text="[PERSON_1] 왔습니다",
+                expected_masked_text="[PERSON_1] 왔습니다",
+                blocked=False,
+                audit_event_count=0,
+                prediction_count=2,
+            )
+        ],
+    )
+
+    person = next(row for row in report.per_entity if row.entity_type == "PERSON_NAME")
+    assert report.spans_detected == 2
+    assert person.tp_exact == 1
+    assert person.fp == 1
 
 
 # ============================================================
@@ -300,6 +394,7 @@ def test_residual_risk_report_follows_spec_shape() -> None:
     assert payload["purpose_id"] == "ko_pii_guardrail_v0_2_eval"
     assert payload["policy_profile"] == "strict"
     assert payload["raw_pii_logging_count"] == 0
+    assert payload["masked_text_evaluable_count"] == 0
     assert "residual_risk_notes" in payload
     assert "generated_at" in payload
 
@@ -365,6 +460,195 @@ def test_residual_risk_report_does_not_contain_raw_text(tmp_path: Path) -> None:
     assert case.text not in serialized
 
 
+def test_raw_pii_logging_count_is_aggregated_from_response_flags() -> None:
+    class FakePipeline:
+        def process(self, request):
+            span = _public(0, 3, EntityType.PERSON_NAME, raw_value_logged=True)
+            event = AuditEvent(
+                event_type="pii_action",
+                entity_type=EntityType.PERSON_NAME,
+                score=0.9,
+                risk_level=RiskLevel.P1,
+                action=Action.MASK,
+                raw_value_logged=True,
+            )
+            return GuardrailResponse(
+                request_id=request.effective_request_id,
+                blocked=False,
+                masked_text="[PERSON_1]",
+                spans=(span,),
+                audit_events=(event,),
+                metrics=ResponseMetrics(latency_ms=1.0, detected_span_count=1, masked_span_count=1),
+                policy_profile="strict",
+                output_target=OutputTarget.LLM_INPUT,
+                raw_value_logged=True,
+            )
+
+    runner = EvaluationRunner(FakePipeline())
+    case = EvaluationCase(
+        id="c1",
+        text="홍길동",
+        expected_masked_text="[PERSON_1]",
+        labels=(
+            EvaluationLabel(start=0, end=3, entity_type=EntityType.PERSON_NAME, risk_level=RiskLevel.P1),
+        ),
+    )
+
+    report = runner.evaluate([case], dataset_id="synthetic")
+
+    assert report.raw_pii_logging_count == 3
+    payload = report.to_safe_dict(purpose_id="ko_pii_guardrail_v0_2_eval")
+    assert payload["raw_pii_logging_count"] == 3
+
+
+def test_masked_text_accuracy_ignores_cases_without_expected_masked_text() -> None:
+    runner = EvaluationRunner(GuardrailPipeline())
+    expected_case = EvaluationCase(
+        id="with-expected",
+        text="홍길동",
+        labels=(),
+        expected_masked_text="[PERSON_1]",
+    )
+    missing_expected_case = EvaluationCase(
+        id="without-expected",
+        text="plain text",
+        labels=(),
+        expected_masked_text=None,
+    )
+    report = runner._aggregate(
+        "synthetic",
+        [expected_case, missing_expected_case],
+        [
+            CaseResult(
+                case_id="with-expected",
+                matches=(),
+                masked_text="[PERSON_1]",
+                expected_masked_text="[PERSON_1]",
+                blocked=False,
+                audit_event_count=0,
+            ),
+            CaseResult(
+                case_id="without-expected",
+                matches=(),
+                masked_text="different output",
+                expected_masked_text=None,
+                blocked=False,
+                audit_event_count=0,
+            ),
+        ],
+    )
+
+    assert report.masked_text_evaluable_count == 1
+    assert report.masked_text_exact_match_rate == 1.0
+
+
+# ============================================================
+# M10-3 release gate core
+# ============================================================
+
+
+def _release_gate_report(
+    *,
+    raw_pii_logging_count: int = 0,
+    invalid_offset_count: int = 0,
+    latency_p95: float = 50.0,
+    match_type: str = "exact",
+) -> EvaluationReport:
+    label = EvaluationLabel(
+        start=4,
+        end=17,
+        entity_type=EntityType.PHONE_MOBILE,
+        risk_level=RiskLevel.P1,
+        suffix="로",
+    )
+    actual = _public(4, 17, EntityType.PHONE_MOBILE) if match_type != "miss" else None
+    case_result = CaseResult(
+        case_id="case-release",
+        matches=(
+            SpanMatch(
+                case_id="case-release",
+                expected=label,
+                actual=actual,
+                match_type=match_type,
+            ),
+        ),
+        masked_text="[PHONE_1]로",
+        expected_masked_text="[PHONE_1]로",
+        blocked=False,
+        audit_event_count=0,
+        prediction_count=1 if actual is not None else 0,
+        raw_pii_logging_count=raw_pii_logging_count,
+        latency_ms=latency_p95,
+    )
+    return EvaluationReport(
+        dataset_id="release-synthetic",
+        records_processed=1,
+        blocked_count=0,
+        spans_detected=case_result.prediction_count,
+        spans_masked=0,
+        per_entity=(
+            EntityMetrics(
+                entity_type="PHONE_MOBILE",
+                tp_exact=1 if match_type == "exact" else 0,
+                tp_partial=1 if match_type == "partial" else 0,
+                fp=0,
+                fn=1 if match_type == "miss" else 0,
+            ),
+        ),
+        masked_text_exact_match_rate=1.0,
+        high_risk_recall=0.0,
+        masked_text_evaluable_count=1,
+        raw_pii_logging_count=raw_pii_logging_count,
+        invalid_offset_count=invalid_offset_count,
+        deterministic_latency_ms={"p50": latency_p95, "p95": latency_p95, "p99": latency_p95},
+        case_results=(case_result,),
+    )
+
+
+def test_release_gate_core_pass_and_skipped_real_ner() -> None:
+    payload = build_release_gate_report(_release_gate_report()).to_dict()
+    checks = {check["name"]: check for check in payload["checks"]}
+
+    assert payload["overall_status"] == "pass"
+    assert checks["high_risk_structured_recall"]["status"] == "pass"
+    assert checks["phone_email_recall"]["status"] == "pass"
+    assert checks["josa_boundary_accuracy"]["status"] == "pass"
+    assert checks["deterministic_latency_p95_ms"]["status"] == "pass"
+    assert checks["real_ner_latency_ms"]["status"] == "skipped"
+
+
+def test_release_gate_fails_when_raw_pii_logging_count_is_nonzero() -> None:
+    payload = build_release_gate_report(
+        _release_gate_report(raw_pii_logging_count=1)
+    ).to_dict()
+    checks = {check["name"]: check for check in payload["checks"]}
+
+    assert payload["overall_status"] == "fail"
+    assert checks["raw_pii_logging_count"]["status"] == "fail"
+    assert checks["raw_pii_logging_count"]["actual_value"] == 1
+
+
+def test_release_gate_fails_when_invalid_offset_count_is_nonzero() -> None:
+    payload = build_release_gate_report(
+        _release_gate_report(invalid_offset_count=1)
+    ).to_dict()
+    checks = {check["name"]: check for check in payload["checks"]}
+
+    assert payload["overall_status"] == "fail"
+    assert checks["invalid_offset_count"]["status"] == "fail"
+    assert checks["invalid_offset_count"]["actual_value"] == 1
+
+
+def test_release_gate_fails_when_latency_exceeds_threshold() -> None:
+    payload = build_release_gate_report(
+        _release_gate_report(latency_p95=101.0)
+    ).to_dict()
+    checks = {check["name"]: check for check in payload["checks"]}
+
+    assert payload["overall_status"] == "fail"
+    assert checks["deterministic_latency_p95_ms"]["status"] == "fail"
+
+
 # ============================================================
 # High-risk recall
 # ============================================================
@@ -427,3 +711,146 @@ def test_runner_w6_external_policy_documented_in_docstring() -> None:
     """The runner's docstring must explicitly forbid auto-loading external sets."""
     assert "W6" in EvaluationRunner.__doc__
     assert "external" in EvaluationRunner.__doc__.lower()
+
+
+def test_run_eval_writes_safe_json_report(tmp_path: Path) -> None:
+    raw_phone = "010-1234-5678"
+    raw_text = f"연락처 {raw_phone}"
+    dataset = tmp_path / "tiny_eval.jsonl"
+    dataset.write_text(
+        json.dumps({
+            "id": "case-cli",
+            "text": raw_text,
+            "expected_masked_text": "연락처 [PHONE_1]",
+            "labels": [
+                {"start": 4, "end": 17, "entity_type": "PHONE_MOBILE", "risk_level": "P1"},
+            ],
+            "tags": ["phone"],
+        }) + "\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "reports" / "eval.json"
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts" / "run_eval.py"),
+            "--config-dir",
+            str(PROJECT_ROOT / "configs"),
+            "--dataset",
+            str(dataset),
+            "--output",
+            str(output),
+        ],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert output.exists()
+    serialized = output.read_text(encoding="utf-8")
+    payload = json.loads(serialized)
+    assert payload["dataset_id"] == "tiny_eval"
+    assert payload["records_processed"] == 1
+    assert "per_entity" in payload
+    assert "deterministic_latency_ms" in payload
+    assert "release_gate" in payload
+    assert payload["release_gate"]["report_type"] == "ReleaseGateReport"
+    assert raw_phone not in serialized
+    assert raw_text not in serialized
+    assert raw_phone not in result.stdout
+    assert raw_text not in result.stdout
+
+
+# ============================================================
+# M10-2 cumulative ablation
+# ============================================================
+
+
+def _tiny_ablation_dataset(tmp_path: Path) -> tuple[Path, str, str]:
+    raw_phone = "010-1234-5678"
+    raw_text = f"연락처 {raw_phone}"
+    dataset = tmp_path / "tiny_ablation.jsonl"
+    dataset.write_text(
+        json.dumps({
+            "id": "case-ablation",
+            "text": raw_text,
+            "expected_masked_text": "연락처 [PHONE_1]",
+            "labels": [
+                {"start": 4, "end": 17, "entity_type": "PHONE_MOBILE", "risk_level": "P1"},
+            ],
+            "tags": ["phone"],
+        }) + "\n",
+        encoding="utf-8",
+    )
+    return dataset, raw_text, raw_phone
+
+
+def test_ablation_runner_executes_a_to_f_and_skips_e2(tmp_path: Path) -> None:
+    dataset, _, _ = _tiny_ablation_dataset(tmp_path)
+    cases = load_jsonl_cases(dataset)
+    pipeline = GuardrailPipeline.from_config_dir(PROJECT_ROOT / "configs")
+
+    report = AblationRunner(pipeline).evaluate(cases, dataset_id="tiny_ablation")
+    payload = report.to_safe_dict()
+
+    stage_names = [stage["stage_name"] for stage in payload["stages"]]
+    assert stage_names == ["A", "B", "C", "D", "E1", "E2", "F"]
+    by_name = {stage["stage_name"]: stage for stage in payload["stages"]}
+    for name in ("A", "B", "C", "D", "E1", "F"):
+        assert by_name[name]["status"] == "ok"
+        assert by_name[name]["records_processed"] == 1
+        assert "components" in by_name[name]
+        assert "per_entity" in by_name[name]
+        assert "overall" in by_name[name]
+        assert by_name[name]["raw_pii_logging_count"] == 0
+        assert by_name[name]["invalid_offset_count"] == 0
+
+    assert by_name["E2"]["status"] == "skipped"
+    assert "real NER" in by_name["E2"]["skip_reason"]
+
+
+def test_ablation_report_does_not_contain_raw_text(tmp_path: Path) -> None:
+    dataset, raw_text, raw_phone = _tiny_ablation_dataset(tmp_path)
+    cases = load_jsonl_cases(dataset)
+    pipeline = GuardrailPipeline.from_config_dir(PROJECT_ROOT / "configs")
+
+    report = AblationRunner(pipeline).evaluate(cases, dataset_id="tiny_ablation")
+    serialized = json.dumps(report.to_safe_dict(), ensure_ascii=False)
+
+    assert raw_text not in serialized
+    assert raw_phone not in serialized
+
+
+def test_run_ablation_writes_safe_json_report(tmp_path: Path) -> None:
+    dataset, raw_text, raw_phone = _tiny_ablation_dataset(tmp_path)
+    output = tmp_path / "reports" / "ablation.json"
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(PROJECT_ROOT / "scripts" / "run_ablation.py"),
+            "--config-dir",
+            str(PROJECT_ROOT / "configs"),
+            "--dataset",
+            str(dataset),
+            "--output",
+            str(output),
+        ],
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert output.exists()
+    serialized = output.read_text(encoding="utf-8")
+    payload = json.loads(serialized)
+    assert payload["report_type"] == "AblationEvaluationReport"
+    assert payload["dataset_id"] == "tiny_ablation"
+    assert [stage["stage_name"] for stage in payload["stages"]] == ["A", "B", "C", "D", "E1", "E2", "F"]
+    assert raw_text not in serialized
+    assert raw_phone not in serialized
+    assert raw_text not in result.stdout
+    assert raw_phone not in result.stdout

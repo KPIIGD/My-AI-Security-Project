@@ -27,8 +27,9 @@ Span match rules:
 - ``exact`` — predicted span has identical ``(start, end, entity_type)``.
 - ``partial`` — same ``entity_type`` and overlap ≥ 50% of the longer
   side. Counted as TP for entity recall but not for boundary accuracy.
-- ``miss`` — gold span has no overlapping prediction → FN.
-- predicted span with no gold overlap → FP (per entity type).
+- ``miss`` — gold span has no same-entity prediction → FN.
+- unused predictions, including wrong-type overlaps and surplus overlaps,
+  → FP (per predicted entity type).
 
 high_risk_recall is computed over P0 + P1 gold labels only.
 """
@@ -37,13 +38,23 @@ from __future__ import annotations
 
 import datetime
 import json
+import re
+import time
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from .enums import EntityType, RiskLevel
-from .schema import GuardrailRequest, GuardrailResponse, PublicPIISpan
+from .enums import Action, EntityType, OutputTarget, RiskLevel, Source
+from .preprocess import preprocess_text
+from .schema import (
+    GuardrailRequest,
+    GuardrailResponse,
+    InvalidOffsetError,
+    PIISpan,
+    PublicPIISpan,
+    ResponseMetrics,
+)
 
 
 if TYPE_CHECKING:
@@ -84,31 +95,62 @@ class EvaluationCase:
 def load_jsonl_cases(path: Path) -> list[EvaluationCase]:
     """Load a JSONL gold set conforming to docs/08 §4 schema."""
     cases: list[EvaluationCase] = []
-    for line in path.read_text(encoding="utf-8").splitlines():
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         line = line.strip()
         if not line:
             continue
         raw = json.loads(line)
-        labels = tuple(
-            EvaluationLabel(
-                start=int(label["start"]),
-                end=int(label["end"]),
-                entity_type=EntityType(label["entity_type"]),
-                risk_level=RiskLevel(label["risk_level"]),
-                suffix=label.get("suffix"),
+        case_id = str(raw["id"])
+        text = str(raw["text"])
+        labels: list[EvaluationLabel] = []
+        for label_index, label in enumerate(raw.get("labels", [])):
+            start = int(label["start"])
+            end = int(label["end"])
+            _validate_gold_offset(
+                case_id=case_id,
+                line_number=line_number,
+                label_index=label_index,
+                start=start,
+                end=end,
+                text_length=len(text),
             )
-            for label in raw.get("labels", [])
-        )
+            labels.append(
+                EvaluationLabel(
+                    start=start,
+                    end=end,
+                    entity_type=EntityType(label["entity_type"]),
+                    risk_level=RiskLevel(label["risk_level"]),
+                    suffix=label.get("suffix"),
+                )
+            )
         cases.append(
             EvaluationCase(
-                id=raw["id"],
-                text=raw["text"],
-                labels=labels,
+                id=case_id,
+                text=text,
+                labels=tuple(labels),
                 expected_masked_text=raw.get("expected_masked_text"),
                 tags=tuple(raw.get("tags", [])),
             )
         )
     return cases
+
+
+def _validate_gold_offset(
+    *,
+    case_id: str,
+    line_number: int,
+    label_index: int,
+    start: int,
+    end: int,
+    text_length: int,
+) -> None:
+    """Reject malformed gold labels without echoing source text."""
+    if start < 0 or end > text_length or start >= end:
+        raise ValueError(
+            "Invalid gold label offset "
+            f"case_id={case_id} line={line_number} label_index={label_index} "
+            f"start={start} end={end} text_length={text_length}"
+        )
 
 
 # ============================================================
@@ -136,6 +178,10 @@ class CaseResult:
     expected_masked_text: str | None
     blocked: bool
     audit_event_count: int
+    prediction_count: int = 0
+    raw_pii_logging_count: int = 0
+    latency_ms: float = 0.0
+    tags: tuple[str, ...] = ()
 
     @property
     def masked_text_exact_match(self) -> bool:
@@ -206,7 +252,10 @@ class EvaluationReport:
     per_entity: tuple[EntityMetrics, ...]
     masked_text_exact_match_rate: float
     high_risk_recall: float
-    raw_pii_logging_count: int = 0  # invariant — pipeline forces this to zero
+    masked_text_evaluable_count: int = 0
+    raw_pii_logging_count: int = 0
+    invalid_offset_count: int = 0
+    deterministic_latency_ms: dict[str, float] = field(default_factory=dict)
     generated_at: str = field(
         default_factory=lambda: datetime.datetime.now(datetime.UTC).isoformat()
     )
@@ -270,7 +319,17 @@ class EvaluationReport:
             "overall_recall": round(overall.recall, 4),
             "overall_f1": round(overall.f1, 4),
             "masked_text_exact_match_rate": round(self.masked_text_exact_match_rate, 4),
+            "masked_text_evaluable_count": self.masked_text_evaluable_count,
             "raw_pii_logging_count": self.raw_pii_logging_count,
+            "invalid_offset_count": self.invalid_offset_count,
+            "deterministic_latency_ms": {
+                key: round(value, 4)
+                for key, value in sorted(self.deterministic_latency_ms.items())
+            },
+            "real_ner_latency_ms": {
+                "status": "skipped",
+                "reason_code": "gate.real_ner_latency.unavailable",
+            },
             "residual_risk_notes": [
                 {"entity_type": et, "miss_count": count}
                 for et, count in sorted(miss_summary.items())
@@ -281,6 +340,609 @@ class EvaluationReport:
             ],
             "generated_at": self.generated_at,
         }
+
+    def to_safe_dict(
+        self,
+        *,
+        purpose_id: str,
+        policy_profile: str = "strict",
+        version: str = "v0.2-single-turn",
+    ) -> dict[str, object]:
+        """Render a raw-text-free JSON payload for CLI reports."""
+        payload = self.residual_risk_report(
+            purpose_id=purpose_id,
+            policy_profile=policy_profile,
+            version=version,
+        )
+        payload["per_entity"] = [metrics.to_dict() for metrics in self.per_entity]
+        payload["overall"] = self.overall_metrics.to_dict()
+        payload["release_gate"] = build_release_gate_report(self).to_dict()
+        return payload
+
+
+# ============================================================
+# M10-3 release gate core
+# ============================================================
+
+
+_STRUCTURED_HIGH_RISK_ENTITIES = frozenset(
+    {
+        EntityType.RRN,
+        EntityType.FRN,
+        EntityType.PASSPORT,
+        EntityType.DRIVER_LICENSE,
+        EntityType.PHONE_MOBILE,
+        EntityType.PHONE_LANDLINE,
+        EntityType.EMAIL,
+        EntityType.CREDIT_CARD,
+        EntityType.BANK_ACCOUNT,
+        EntityType.BUSINESS_REG_NO,
+        EntityType.CUSTOMER_ID,
+        EntityType.EMPLOYEE_ID,
+        EntityType.STUDENT_ID,
+        EntityType.MEDICAL_RECORD_NO,
+        EntityType.API_KEY_SECRET,
+    }
+)
+_PHONE_EMAIL_ENTITIES = frozenset(
+    {EntityType.PHONE_MOBILE, EntityType.PHONE_LANDLINE, EntityType.EMAIL}
+)
+_AMBIGUITY_TAGS = frozenset({"hard_negative", "ambiguous_name", "weather_context"})
+
+
+@dataclass(frozen=True)
+class ReleaseGateCheck:
+    """One raw-text-free release gate row."""
+
+    name: str
+    actual_value: float | int | str | None
+    threshold: float | int | str | None
+    status: str
+    reason_code: str
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "name": self.name,
+            "actual_value": self.actual_value,
+            "threshold": self.threshold,
+            "status": self.status,
+            "reason_code": self.reason_code,
+        }
+
+
+@dataclass(frozen=True)
+class ReleaseGateReport:
+    """Minimal M10-3 release gate result."""
+
+    overall_status: str
+    checks: tuple[ReleaseGateCheck, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "report_type": "ReleaseGateReport",
+            "version": "v0.2-single-turn",
+            "scope": "M10-3 core release gate",
+            "overall_status": self.overall_status,
+            "checks": [check.to_dict() for check in self.checks],
+        }
+
+
+def build_release_gate_report(report: EvaluationReport) -> ReleaseGateReport:
+    """Build the currently computable release gate checks.
+
+    The output contains only metrics and reason codes. It never embeds case
+    text, span text, or reversible mappings.
+    """
+    checks = (
+        _threshold_check(
+            "high_risk_structured_recall",
+            _recall_for_expected(
+                report,
+                lambda label: label.risk_level in {RiskLevel.P0, RiskLevel.P1}
+                and label.entity_type in _STRUCTURED_HIGH_RISK_ENTITIES,
+            ),
+            0.99,
+            ">=",
+            "gate.high_risk_structured_recall",
+        ),
+        _threshold_check(
+            "phone_email_recall",
+            _recall_for_expected(
+                report,
+                lambda label: label.entity_type in _PHONE_EMAIL_ENTITIES,
+            ),
+            0.98,
+            ">=",
+            "gate.phone_email_recall",
+        ),
+        _threshold_check(
+            "josa_boundary_accuracy",
+            _josa_boundary_accuracy(report),
+            0.95,
+            ">=",
+            "gate.josa_boundary_accuracy",
+        ),
+        ReleaseGateCheck(
+            name="exact_span_match_rate",
+            actual_value=_exact_span_match_rate(report),
+            threshold="baseline_improvement_required",
+            status="skipped",
+            reason_code="gate.exact_span.baseline_unavailable",
+        ),
+        _threshold_check(
+            "name_ambiguity_fp_rate",
+            _name_ambiguity_fp_rate(report),
+            0.0,
+            "<=",
+            "gate.name_ambiguity_fp_rate",
+        ),
+        _threshold_check(
+            "raw_pii_logging_count",
+            report.raw_pii_logging_count,
+            0,
+            "==",
+            "gate.raw_pii_logging_count",
+        ),
+        _threshold_check(
+            "invalid_offset_count",
+            report.invalid_offset_count,
+            0,
+            "==",
+            "gate.invalid_offset_count",
+        ),
+        _threshold_check(
+            "deterministic_latency_p95_ms",
+            report.deterministic_latency_ms.get("p95"),
+            100.0,
+            "<=",
+            "gate.deterministic_latency_p95_ms",
+        ),
+        ReleaseGateCheck(
+            name="real_ner_latency_ms",
+            actual_value=None,
+            threshold="measured_separately_when_real_ner_available",
+            status="skipped",
+            reason_code="gate.real_ner_latency.unavailable",
+        ),
+    )
+    failing = any(check.status == "fail" for check in checks)
+    overall_status = "fail" if failing else "pass"
+    return ReleaseGateReport(overall_status=overall_status, checks=checks)
+
+
+def _threshold_check(
+    name: str,
+    actual: float | int | None,
+    threshold: float | int,
+    comparator: str,
+    reason_prefix: str,
+) -> ReleaseGateCheck:
+    if actual is None:
+        return ReleaseGateCheck(
+            name=name,
+            actual_value=None,
+            threshold=f"{comparator} {threshold}",
+            status="skipped",
+            reason_code=f"{reason_prefix}.not_evaluable",
+        )
+    if comparator == ">=":
+        passed = actual >= threshold
+    elif comparator == "<=":
+        passed = actual <= threshold
+    elif comparator == "==":
+        passed = actual == threshold
+    else:
+        raise ValueError("Unsupported release gate comparator")
+    return ReleaseGateCheck(
+        name=name,
+        actual_value=round(actual, 4) if isinstance(actual, float) else actual,
+        threshold=f"{comparator} {threshold}",
+        status="pass" if passed else "fail",
+        reason_code=f"{reason_prefix}.{'pass' if passed else 'fail'}",
+    )
+
+
+def _recall_for_expected(
+    report: EvaluationReport,
+    predicate,
+) -> float | None:
+    total = 0
+    matched = 0
+    for result in report.case_results:
+        for match in result.matches:
+            if match.expected is None or not predicate(match.expected):
+                continue
+            total += 1
+            if match.match_type in {"exact", "partial"}:
+                matched += 1
+    if total == 0:
+        return None
+    return matched / total
+
+
+def _josa_boundary_accuracy(report: EvaluationReport) -> float | None:
+    total = 0
+    exact = 0
+    for result in report.case_results:
+        for match in result.matches:
+            if match.expected is None or not match.expected.suffix:
+                continue
+            total += 1
+            if match.match_type == "exact":
+                exact += 1
+    if total == 0:
+        return None
+    return exact / total
+
+
+def _exact_span_match_rate(report: EvaluationReport) -> float | None:
+    total = 0
+    exact = 0
+    for result in report.case_results:
+        for match in result.matches:
+            if match.expected is None:
+                continue
+            total += 1
+            if match.match_type == "exact":
+                exact += 1
+    if total == 0:
+        return None
+    return exact / total
+
+
+def _name_ambiguity_fp_rate(report: EvaluationReport) -> float | None:
+    eligible_cases = [
+        result for result in report.case_results if set(result.tags) & _AMBIGUITY_TAGS
+    ]
+    if not eligible_cases:
+        return None
+    fp_count = 0
+    for result in eligible_cases:
+        for match in result.matches:
+            if (
+                match.match_type == "spurious"
+                and match.actual is not None
+                and match.actual.entity_type is EntityType.PERSON_NAME
+            ):
+                fp_count += 1
+    return fp_count / len(eligible_cases)
+
+
+def _latency_percentiles(values: Iterable[float]) -> dict[str, float]:
+    sorted_values = sorted(value for value in values if value >= 0.0)
+    if not sorted_values:
+        return {"p50": 0.0, "p95": 0.0, "p99": 0.0}
+    return {
+        "p50": _percentile(sorted_values, 0.50),
+        "p95": _percentile(sorted_values, 0.95),
+        "p99": _percentile(sorted_values, 0.99),
+    }
+
+
+def _percentile(sorted_values: list[float], percentile: float) -> float:
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    rank = percentile * (len(sorted_values) - 1)
+    lower = int(rank)
+    upper = min(lower + 1, len(sorted_values) - 1)
+    weight = rank - lower
+    return sorted_values[lower] * (1.0 - weight) + sorted_values[upper] * weight
+
+
+# ============================================================
+# M10-2 cumulative ablation stages
+# ============================================================
+
+
+@dataclass(frozen=True)
+class AblationStageSpec:
+    """One cumulative M10-2 ablation stage."""
+
+    name: str
+    components: tuple[str, ...]
+    include_regex_patterns: bool = False
+    include_validated_regex: bool = False
+    include_dictionary: bool = False
+    include_boundary: bool = False
+    include_mock_ner: bool = False
+    include_context: bool = False
+    status: str = "supported"
+    skip_reason: str | None = None
+
+
+@dataclass(frozen=True)
+class AblationStageResult:
+    """Raw-text-free summary for one ablation stage."""
+
+    stage_name: str
+    components: tuple[str, ...]
+    status: str
+    report: EvaluationReport | None = None
+    invalid_offset_count: int = 0
+    skip_reason: str | None = None
+
+    def to_safe_dict(self) -> dict[str, object]:
+        empty_overall = EntityMetrics(
+            entity_type="__overall__",
+            tp_exact=0,
+            tp_partial=0,
+            fp=0,
+            fn=0,
+        )
+        per_entity = [m.to_dict() for m in self.report.per_entity] if self.report else []
+        overall = self.report.overall_metrics if self.report else empty_overall
+        payload: dict[str, object] = {
+            "stage_name": self.stage_name,
+            "components": list(self.components),
+            "status": self.status,
+            "invalid_offset_count": self.invalid_offset_count,
+            "records_processed": self.report.records_processed if self.report else 0,
+            "spans_detected": self.report.spans_detected if self.report else 0,
+            "raw_pii_logging_count": self.report.raw_pii_logging_count if self.report else 0,
+            "per_entity": per_entity,
+            "overall": overall.to_dict(),
+        }
+        if self.skip_reason is not None:
+            payload["skip_reason"] = self.skip_reason
+        return payload
+
+
+@dataclass(frozen=True)
+class AblationReport:
+    """Raw-text-free report for cumulative M10-2 stages."""
+
+    dataset_id: str
+    stages: tuple[AblationStageResult, ...]
+    generated_at: str = field(
+        default_factory=lambda: datetime.datetime.now(datetime.UTC).isoformat()
+    )
+
+    def to_safe_dict(self) -> dict[str, object]:
+        return {
+            "report_type": "AblationEvaluationReport",
+            "version": "v0.2-single-turn",
+            "scope": "M10-2 cumulative stage evaluation",
+            "dataset_id": self.dataset_id,
+            "generated_at": self.generated_at,
+            "stages": [stage.to_safe_dict() for stage in self.stages],
+        }
+
+
+def m10_2_ablation_stage_specs() -> tuple[AblationStageSpec, ...]:
+    """Return the small M10-2 cumulative stage set.
+
+    E2 is included as a skipped marker only. Real NER activation and latency
+    evaluation remain outside this PR's scope.
+    """
+    return (
+        AblationStageSpec(
+            name="A",
+            components=("regex_patterns",),
+            include_regex_patterns=True,
+        ),
+        AblationStageSpec(
+            name="B",
+            components=("regex_patterns", "validators"),
+            include_validated_regex=True,
+        ),
+        AblationStageSpec(
+            name="C",
+            components=("regex_patterns", "validators", "dictionary"),
+            include_validated_regex=True,
+            include_dictionary=True,
+        ),
+        AblationStageSpec(
+            name="D",
+            components=("regex_patterns", "validators", "dictionary", "korean_boundary"),
+            include_validated_regex=True,
+            include_dictionary=True,
+            include_boundary=True,
+        ),
+        AblationStageSpec(
+            name="E1",
+            components=(
+                "regex_patterns",
+                "validators",
+                "dictionary",
+                "korean_boundary",
+                "mock_ner",
+            ),
+            include_validated_regex=True,
+            include_dictionary=True,
+            include_boundary=True,
+            include_mock_ner=True,
+        ),
+        AblationStageSpec(
+            name="E2",
+            components=(
+                "regex_patterns",
+                "validators",
+                "dictionary",
+                "korean_boundary",
+                "real_v3_ner",
+            ),
+            status="skipped",
+            skip_reason="real NER v3 is not connected in M10-2",
+        ),
+        AblationStageSpec(
+            name="F",
+            components=(
+                "regex_patterns",
+                "validators",
+                "dictionary",
+                "korean_boundary",
+                "mock_ner",
+                "context_scorer",
+            ),
+            include_validated_regex=True,
+            include_dictionary=True,
+            include_boundary=True,
+            include_mock_ner=True,
+            include_context=True,
+        ),
+    )
+
+
+class AblationRunner:
+    """Run cumulative M10-2 stages without invoking full release gates."""
+
+    def __init__(
+        self,
+        pipeline: "GuardrailPipeline",
+        *,
+        partial_overlap_min: float = 0.5,
+    ) -> None:
+        self._pipeline = pipeline
+        self._partial_overlap_min = partial_overlap_min
+
+    def evaluate(
+        self,
+        cases: Iterable[EvaluationCase],
+        *,
+        dataset_id: str = "hard_cases_v0",
+    ) -> AblationReport:
+        case_list = list(cases)
+        results: list[AblationStageResult] = []
+        for spec in m10_2_ablation_stage_specs():
+            if spec.status == "skipped":
+                results.append(
+                    AblationStageResult(
+                        stage_name=spec.name,
+                        components=spec.components,
+                        status="skipped",
+                        skip_reason=spec.skip_reason,
+                    )
+                )
+                continue
+
+            stage_pipeline = _AblationStagePipeline(self._pipeline.components, spec)
+            report = EvaluationRunner(
+                stage_pipeline,
+                partial_overlap_min=self._partial_overlap_min,
+            ).evaluate(case_list, dataset_id=f"{dataset_id}_{spec.name}")
+            results.append(
+                AblationStageResult(
+                    stage_name=spec.name,
+                    components=spec.components,
+                    status="ok",
+                    report=report,
+                    invalid_offset_count=stage_pipeline.invalid_offset_count,
+                )
+            )
+        return AblationReport(dataset_id=dataset_id, stages=tuple(results))
+
+
+@dataclass(frozen=True)
+class _RegexPatternRule:
+    entity_type: EntityType
+    pattern: re.Pattern[str]
+    score_key: str
+    detector_id: str
+
+
+_REGEX_PATTERN_ONLY_RULES = (
+    _RegexPatternRule(EntityType.RRN, re.compile(r"(?<!\d)\d{6}\s*-?\s*\d{7}(?!\d)"), "RRN", "eval.regex_only.rrn"),
+    _RegexPatternRule(EntityType.FRN, re.compile(r"(?<!\d)\d{6}\s*-?\s*\d{7}(?!\d)"), "FRN", "eval.regex_only.frn"),
+    _RegexPatternRule(EntityType.PHONE_MOBILE, re.compile(r"(?<!\d)0\d{1,2}[\s-]?\d{3,4}[\s-]?\d{4}(?!\d)"), "PHONE_MOBILE", "eval.regex_only.phone"),
+    _RegexPatternRule(EntityType.EMAIL, re.compile(r"(?<![A-Za-z0-9._%+-])[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"), "EMAIL", "eval.regex_only.email"),
+    _RegexPatternRule(EntityType.IP_ADDRESS, re.compile(r"(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])"), "IP_ADDRESS_PUBLIC", "eval.regex_only.ipv4"),
+    _RegexPatternRule(EntityType.MAC_ADDRESS, re.compile(r"(?<![0-9A-Fa-f])(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}(?![0-9A-Fa-f])"), "MAC_ADDRESS", "eval.regex_only.mac"),
+    _RegexPatternRule(EntityType.CREDIT_CARD, re.compile(r"(?<!\d)(?:\d[\s-]?){13,19}(?!\d)"), "CREDIT_CARD_PATTERN_ONLY", "eval.regex_only.credit_card"),
+    _RegexPatternRule(EntityType.BUSINESS_REG_NO, re.compile(r"(?<!\d)\d{3}-?\d{2}-?\d{5}(?!\d)"), "BUSINESS_REG_NO_PATTERN_ONLY", "eval.regex_only.business_reg_no"),
+    _RegexPatternRule(EntityType.BANK_ACCOUNT, re.compile(r"(?<!\d)\d{2,6}(?:[- ]\d{2,6}){1,4}(?!\d)"), "BANK_ACCOUNT_PATTERN_ONLY", "eval.regex_only.bank_account"),
+    _RegexPatternRule(EntityType.API_KEY_SECRET, re.compile(r"(?<![A-Za-z0-9_=-])(?:sk-[A-Za-z0-9_=-]{16,}|gh[po]_[A-Za-z0-9]{16,}|xox[bp]-[A-Za-z0-9-]{16,}|AKIA[0-9A-Z]{16})(?![A-Za-z0-9_=-])"), "API_KEY_SECRET", "eval.regex_only.secret"),
+)
+
+
+class _AblationStagePipeline:
+    """Small process-compatible pipeline for one cumulative stage."""
+
+    def __init__(self, components, spec: AblationStageSpec) -> None:
+        self._components = components
+        self._spec = spec
+        first_detector = components.regex_detectors[0]
+        self._scores = getattr(first_detector, "scores", {})
+        self._risk_levels = getattr(first_detector, "risk_levels", {})
+        self.invalid_offset_count = 0
+
+    def process(self, request: GuardrailRequest) -> GuardrailResponse:
+        t0 = time.perf_counter()
+        preprocessed = preprocess_text(request.text)
+        spans: list[PIISpan] = []
+
+        if self._spec.include_regex_patterns:
+            spans.extend(self._detect_regex_patterns(request.text))
+        if self._spec.include_validated_regex:
+            for detector in self._components.regex_detectors:
+                spans.extend(detector.detect(preprocessed, request))
+        if self._spec.include_dictionary:
+            spans.extend(self._components.dictionary_detector.detect(preprocessed, request))
+        if self._spec.include_mock_ner and self._components.ner_detector is not None:
+            spans.extend(
+                self._components.ner_detector.detect(
+                    raw_text=request.text,
+                    preprocessed=preprocessed,
+                    request=request,
+                )
+            )
+        if self._spec.include_boundary:
+            spans = [
+                self._components.boundary_corrector.correct(span, preprocessed)
+                for span in spans
+            ]
+        if self._spec.include_context:
+            spans = self._components.context_scorer.score(spans, preprocessed)
+
+        spans = self._drop_invalid_offsets(spans, request.text)
+        public_spans = tuple(span.to_public() for span in spans)
+        latency_ms = (time.perf_counter() - t0) * 1000.0
+        return GuardrailResponse(
+            request_id=request.effective_request_id,
+            blocked=False,
+            masked_text=None,
+            spans=public_spans,
+            audit_events=(),
+            metrics=ResponseMetrics(
+                latency_ms=latency_ms,
+                detected_span_count=len(public_spans),
+                masked_span_count=0,
+            ),
+            policy_profile=request.policy_profile,
+            output_target=OutputTarget(request.output_target),
+            raw_value_logged=False,
+        )
+
+    def _detect_regex_patterns(self, raw_text: str) -> list[PIISpan]:
+        spans: list[PIISpan] = []
+        for rule in _REGEX_PATTERN_ONLY_RULES:
+            for match in rule.pattern.finditer(raw_text):
+                text = raw_text[match.start() : match.end()]
+                spans.append(
+                    PIISpan(
+                        start=match.start(),
+                        end=match.end(),
+                        text=text,
+                        entity_type=rule.entity_type,
+                        score=float(self._scores.get(rule.score_key, 0.5)),
+                        sources=(Source.REGEX.value,),
+                        risk_level=self._risk_levels.get(rule.entity_type, RiskLevel.P1),
+                        action=Action.CANDIDATE,
+                        reason_codes=("eval.regex_pattern_only",),
+                        detector_ids=(rule.detector_id,),
+                    )
+                )
+        return spans
+
+    def _drop_invalid_offsets(self, spans: list[PIISpan], raw_text: str) -> list[PIISpan]:
+        valid: list[PIISpan] = []
+        for span in spans:
+            try:
+                span.validate_against(raw_text)
+            except InvalidOffsetError:
+                self.invalid_offset_count += 1
+                continue
+            valid.append(span)
+        return valid
 
 
 # ============================================================
@@ -337,6 +999,10 @@ class EvaluationRunner:
             expected_masked_text=case.expected_masked_text,
             blocked=response.blocked,
             audit_event_count=len(response.audit_events),
+            prediction_count=len(response.spans),
+            raw_pii_logging_count=self._raw_pii_logging_count(response),
+            latency_ms=response.metrics.latency_ms,
+            tags=case.tags,
         )
 
     def _match_spans(
@@ -387,17 +1053,14 @@ class EvaluationRunner:
         for idx, prediction in enumerate(predictions):
             if idx in used_predictions:
                 continue
-            # Surplus predictions with no overlapping gold span are FPs.
-            if not self._overlaps_any_expected(prediction, case.labels):
-                matches.append(
-                    SpanMatch(
-                        case_id=case.id,
-                        expected=None,
-                        actual=prediction,
-                        match_type="spurious",
-                    )
+            matches.append(
+                SpanMatch(
+                    case_id=case.id,
+                    expected=None,
+                    actual=prediction,
+                    match_type="spurious",
                 )
-
+            )
         return matches
 
     @staticmethod
@@ -407,15 +1070,6 @@ class EvaluationRunner:
             return 0.0
         longest = max(expected.length, prediction.end - prediction.start)
         return overlap / longest if longest else 0.0
-
-    @staticmethod
-    def _overlaps_any_expected(
-        prediction: PublicPIISpan, labels: tuple[EvaluationLabel, ...]
-    ) -> bool:
-        for label in labels:
-            if not (prediction.end <= label.start or prediction.start >= label.end):
-                return True
-        return False
 
     def _aggregate(
         self,
@@ -473,10 +1127,7 @@ class EvaluationRunner:
             else 0.0
         )
 
-        spans_detected = sum(
-            len([m for m in case.matches if m.actual is not None])
-            for case in case_results
-        )
+        spans_detected = sum(case.prediction_count for case in case_results)
         spans_masked = sum(
             len(
                 [
@@ -488,11 +1139,18 @@ class EvaluationRunner:
             )
             for case in case_results
         )
-        masked_exact = sum(1 for case in case_results if case.masked_text_exact_match)
+        masked_evaluable = [
+            case for case in case_results if case.expected_masked_text is not None
+        ]
+        masked_exact = sum(1 for case in masked_evaluable if case.masked_text_exact_match)
         masked_match_rate = (
-            masked_exact / len(case_results) if case_results else 0.0
+            masked_exact / len(masked_evaluable) if masked_evaluable else 0.0
         )
         blocked = sum(1 for case in case_results if case.blocked)
+        raw_pii_logging_count = sum(case.raw_pii_logging_count for case in case_results)
+        deterministic_latency_ms = _latency_percentiles(
+            case.latency_ms for case in case_results
+        )
 
         return EvaluationReport(
             dataset_id=dataset_id,
@@ -503,11 +1161,27 @@ class EvaluationRunner:
             per_entity=per_entity,
             masked_text_exact_match_rate=masked_match_rate,
             high_risk_recall=high_risk_recall,
+            masked_text_evaluable_count=len(masked_evaluable),
+            raw_pii_logging_count=raw_pii_logging_count,
+            invalid_offset_count=0,
+            deterministic_latency_ms=deterministic_latency_ms,
             case_results=tuple(case_results),
         )
 
+    @staticmethod
+    def _raw_pii_logging_count(response: GuardrailResponse) -> int:
+        """Count raw-value leak flags without reading or serializing raw values."""
+        count = 1 if response.raw_value_logged else 0
+        count += sum(1 for span in response.spans if span.raw_value_logged)
+        count += sum(1 for event in response.audit_events if event.raw_value_logged)
+        return count
+
 
 __all__ = [
+    "AblationReport",
+    "AblationRunner",
+    "AblationStageResult",
+    "AblationStageSpec",
     "CaseResult",
     "EntityMetrics",
     "EvaluationCase",
@@ -516,4 +1190,5 @@ __all__ = [
     "EvaluationRunner",
     "SpanMatch",
     "load_jsonl_cases",
+    "m10_2_ablation_stage_specs",
 ]
