@@ -40,10 +40,10 @@ import datetime
 import json
 import re
 import time
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .enums import Action, EntityType, OutputTarget, RiskLevel, Source
 from .preprocess import preprocess_text
@@ -180,6 +180,9 @@ class CaseResult:
     audit_event_count: int
     prediction_count: int = 0
     raw_pii_logging_count: int = 0
+    response_raw_value_logged_count: int = 0
+    public_span_raw_value_logged_count: int = 0
+    audit_event_raw_value_logged_count: int = 0
     latency_ms: float = 0.0
     tags: tuple[str, ...] = ()
 
@@ -254,6 +257,9 @@ class EvaluationReport:
     high_risk_recall: float
     masked_text_evaluable_count: int = 0
     raw_pii_logging_count: int = 0
+    response_raw_value_logged_count: int = 0
+    public_span_raw_value_logged_count: int = 0
+    audit_event_raw_value_logged_count: int = 0
     invalid_offset_count: int = 0
     deterministic_latency_ms: dict[str, float] = field(default_factory=dict)
     generated_at: str = field(
@@ -321,6 +327,9 @@ class EvaluationReport:
             "masked_text_exact_match_rate": round(self.masked_text_exact_match_rate, 4),
             "masked_text_evaluable_count": self.masked_text_evaluable_count,
             "raw_pii_logging_count": self.raw_pii_logging_count,
+            "response_raw_value_logged_count": self.response_raw_value_logged_count,
+            "public_span_raw_value_logged_count": self.public_span_raw_value_logged_count,
+            "audit_event_raw_value_logged_count": self.audit_event_raw_value_logged_count,
             "invalid_offset_count": self.invalid_offset_count,
             "deterministic_latency_ms": {
                 key: round(value, 4)
@@ -627,6 +636,271 @@ def _percentile(sorted_values: list[float], percentile: float) -> float:
     upper = min(lower + 1, len(sorted_values) - 1)
     weight = rank - lower
     return sorted_values[lower] * (1.0 - weight) + sorted_values[upper] * weight
+
+
+# ============================================================
+# M10-4 failure analysis + audit safety reports
+# ============================================================
+
+
+@dataclass(frozen=True)
+class FailureAnalysisRow:
+    """One raw-text-free failure analysis row."""
+
+    case_id: str
+    error_type: str
+    entity_type: str
+    span_length: int
+    match_type: str
+    suspected_layer: str
+    reason_code: str
+    raw_value_logged: bool = False
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "case_id": self.case_id,
+            "error_type": self.error_type,
+            "entity_type": self.entity_type,
+            "span_length": self.span_length,
+            "match_type": self.match_type,
+            "suspected_layer": self.suspected_layer,
+            "reason_code": self.reason_code,
+            "raw_value_logged": False,
+        }
+
+
+@dataclass(frozen=True)
+class AuditSafetyReport:
+    """Raw-text-free audit safety summary for generated evaluation reports."""
+
+    dataset_id: str
+    raw_pii_logging_count: int
+    response_raw_value_logged_count: int
+    public_span_raw_value_logged_count: int
+    audit_event_raw_value_logged_count: int
+    report_raw_text_leak_count: int
+    safe_report_generated: bool
+    status: str
+    reason_codes: tuple[str, ...]
+    generated_at: str = field(
+        default_factory=lambda: datetime.datetime.now(datetime.UTC).isoformat()
+    )
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "report_type": "AuditSafetyReport",
+            "version": "v0.2-single-turn",
+            "scope": "M10-4 audit safety report",
+            "dataset_id": self.dataset_id,
+            "raw_pii_logging_count": self.raw_pii_logging_count,
+            "response_raw_value_logged_count": self.response_raw_value_logged_count,
+            "public_span_raw_value_logged_count": self.public_span_raw_value_logged_count,
+            "audit_event_raw_value_logged_count": self.audit_event_raw_value_logged_count,
+            "report_raw_text_leak_count": self.report_raw_text_leak_count,
+            "safe_report_generated": self.safe_report_generated,
+            "status": self.status,
+            "reason_codes": list(self.reason_codes),
+            "generated_at": self.generated_at,
+        }
+
+
+def build_failure_analysis_rows(report: EvaluationReport) -> tuple[FailureAnalysisRow, ...]:
+    """Build M10-4 failure rows without text, offsets, hashes, or token maps."""
+    rows: list[FailureAnalysisRow] = []
+    for case in report.case_results:
+        expected_labels = tuple(
+            match.expected for match in case.matches if match.expected is not None
+        )
+        for match in case.matches:
+            if match.match_type == "miss" and match.expected is not None:
+                rows.append(
+                    FailureAnalysisRow(
+                        case_id=match.case_id,
+                        error_type="FN",
+                        entity_type=match.expected.entity_type.value,
+                        span_length=match.expected.length,
+                        match_type=match.match_type,
+                        suspected_layer="detector_or_context",
+                        reason_code="failure.false_negative",
+                    )
+                )
+            elif match.match_type == "spurious" and match.actual is not None:
+                error_type, suspected_layer, reason_code = _classify_spurious_failure(
+                    match.actual,
+                    expected_labels,
+                )
+                rows.append(
+                    FailureAnalysisRow(
+                        case_id=match.case_id,
+                        error_type=error_type,
+                        entity_type=match.actual.entity_type.value,
+                        span_length=match.actual.span_length,
+                        match_type=match.match_type,
+                        suspected_layer=suspected_layer,
+                        reason_code=reason_code,
+                    )
+                )
+    return tuple(rows)
+
+
+def failure_analysis_jsonl(report: EvaluationReport) -> str:
+    """Render failure analysis rows as safe JSONL."""
+    rows = build_failure_analysis_rows(report)
+    if not rows:
+        return ""
+    return "\n".join(
+        json.dumps(row.to_dict(), ensure_ascii=False, sort_keys=True) for row in rows
+    ) + "\n"
+
+
+def build_audit_safety_report(
+    report: EvaluationReport,
+    *,
+    report_raw_text_leak_count: int = 0,
+    safe_report_generated: bool = True,
+) -> AuditSafetyReport:
+    """Build the M10-4 audit safety report from already-safe metrics."""
+    reason_codes: list[str] = []
+    if report.raw_pii_logging_count != 0:
+        reason_codes.append("audit_safety.raw_pii_logging_count.fail")
+    if report.response_raw_value_logged_count != 0:
+        reason_codes.append("audit_safety.response_raw_value_logged.fail")
+    if report.public_span_raw_value_logged_count != 0:
+        reason_codes.append("audit_safety.public_span_raw_value_logged.fail")
+    if report.audit_event_raw_value_logged_count != 0:
+        reason_codes.append("audit_safety.audit_event_raw_value_logged.fail")
+    if report_raw_text_leak_count != 0:
+        reason_codes.append("audit_safety.report_raw_text_leak.fail")
+    if not safe_report_generated:
+        reason_codes.append("audit_safety.safe_report_generated.false")
+    if not reason_codes:
+        reason_codes.append("audit_safety.pass")
+
+    return AuditSafetyReport(
+        dataset_id=report.dataset_id,
+        raw_pii_logging_count=report.raw_pii_logging_count,
+        response_raw_value_logged_count=report.response_raw_value_logged_count,
+        public_span_raw_value_logged_count=report.public_span_raw_value_logged_count,
+        audit_event_raw_value_logged_count=report.audit_event_raw_value_logged_count,
+        report_raw_text_leak_count=report_raw_text_leak_count,
+        safe_report_generated=safe_report_generated,
+        status="fail" if reason_codes != ["audit_safety.pass"] else "pass",
+        reason_codes=tuple(reason_codes),
+    )
+
+
+def count_report_raw_text_leaks(
+    report_payloads: Iterable[object],
+    cases: Iterable[EvaluationCase],
+) -> int:
+    """Count raw source/label literals appearing in generated report strings.
+
+    The function returns only a count. It never exposes the matching literals.
+    """
+    raw_literals = _collect_raw_literals_for_leak_check(cases)
+    if not raw_literals:
+        return 0
+
+    leaked_literal_count = 0
+    report_strings = tuple(
+        report_string for payload in report_payloads for report_string in _iter_report_strings(payload)
+    )
+    for literal in raw_literals:
+        if any(literal in report_string for report_string in report_strings):
+            leaked_literal_count += 1
+    return leaked_literal_count
+
+
+def _classify_spurious_failure(
+    actual: PublicPIISpan,
+    expected_labels: tuple[EvaluationLabel, ...],
+) -> tuple[str, str, str]:
+    overlapping = [
+        expected
+        for expected in expected_labels
+        if _span_overlap_length(expected.start, expected.end, actual.start, actual.end) > 0
+    ]
+    if any(expected.entity_type is not actual.entity_type for expected in overlapping):
+        return (
+            "TYPE_CONFUSION",
+            "entity_classifier_or_resolver",
+            "failure.type_confusion",
+        )
+    if overlapping:
+        return ("OVERDETECTION", "span_resolver", "failure.surplus_overlap")
+    return ("FP", "detector_or_context", "failure.false_positive")
+
+
+def _span_overlap_length(start_a: int, end_a: int, start_b: int, end_b: int) -> int:
+    return max(0, min(end_a, end_b) - max(start_a, start_b))
+
+
+def _collect_raw_literals_for_leak_check(
+    cases: Iterable[EvaluationCase],
+) -> tuple[str, ...]:
+    literals: list[str] = []
+    seen: set[str] = set()
+    for case in cases:
+        _add_raw_literal(literals, seen, case.text, min_length=1)
+        for label in case.labels:
+            _add_raw_literal(
+                literals,
+                seen,
+                case.text[label.start:label.end],
+                min_length=2,
+            )
+    return tuple(literals)
+
+
+def _add_raw_literal(
+    literals: list[str],
+    seen: set[str],
+    value: str,
+    *,
+    min_length: int,
+) -> None:
+    if len(value) < min_length or value in seen:
+        return
+    seen.add(value)
+    literals.append(value)
+
+
+def _iter_report_strings(payload: object) -> Iterable[str]:
+    if isinstance(payload, str):
+        parsed = _parse_report_text(payload)
+        if parsed is None:
+            yield payload
+        else:
+            yield from _iter_report_strings(parsed)
+        return
+    if isinstance(payload, Mapping):
+        for value in payload.values():
+            yield from _iter_report_strings(value)
+        return
+    if isinstance(payload, (list, tuple, set)):
+        for value in payload:
+            yield from _iter_report_strings(value)
+        return
+    if isinstance(payload, str):
+        yield payload
+
+
+def _parse_report_text(report_text: str) -> Any | None:
+    stripped = report_text.strip()
+    if not stripped:
+        return None
+    try:
+        return json.loads(stripped)
+    except json.JSONDecodeError:
+        parsed_lines: list[object] = []
+        for line in stripped.splitlines():
+            if not line.strip():
+                continue
+            try:
+                parsed_lines.append(json.loads(line))
+            except json.JSONDecodeError:
+                return None
+        return parsed_lines or None
 
 
 # ============================================================
@@ -992,6 +1266,11 @@ class EvaluationRunner:
         self, case: EvaluationCase, response: GuardrailResponse
     ) -> CaseResult:
         matches = self._match_spans(case, response.spans)
+        (
+            response_raw_value_logged_count,
+            public_span_raw_value_logged_count,
+            audit_event_raw_value_logged_count,
+        ) = self._raw_pii_logging_counts(response)
         return CaseResult(
             case_id=case.id,
             matches=tuple(matches),
@@ -1000,7 +1279,14 @@ class EvaluationRunner:
             blocked=response.blocked,
             audit_event_count=len(response.audit_events),
             prediction_count=len(response.spans),
-            raw_pii_logging_count=self._raw_pii_logging_count(response),
+            raw_pii_logging_count=(
+                response_raw_value_logged_count
+                + public_span_raw_value_logged_count
+                + audit_event_raw_value_logged_count
+            ),
+            response_raw_value_logged_count=response_raw_value_logged_count,
+            public_span_raw_value_logged_count=public_span_raw_value_logged_count,
+            audit_event_raw_value_logged_count=audit_event_raw_value_logged_count,
             latency_ms=response.metrics.latency_ms,
             tags=case.tags,
         )
@@ -1148,6 +1434,15 @@ class EvaluationRunner:
         )
         blocked = sum(1 for case in case_results if case.blocked)
         raw_pii_logging_count = sum(case.raw_pii_logging_count for case in case_results)
+        response_raw_value_logged_count = sum(
+            case.response_raw_value_logged_count for case in case_results
+        )
+        public_span_raw_value_logged_count = sum(
+            case.public_span_raw_value_logged_count for case in case_results
+        )
+        audit_event_raw_value_logged_count = sum(
+            case.audit_event_raw_value_logged_count for case in case_results
+        )
         deterministic_latency_ms = _latency_percentiles(
             case.latency_ms for case in case_results
         )
@@ -1163,18 +1458,21 @@ class EvaluationRunner:
             high_risk_recall=high_risk_recall,
             masked_text_evaluable_count=len(masked_evaluable),
             raw_pii_logging_count=raw_pii_logging_count,
+            response_raw_value_logged_count=response_raw_value_logged_count,
+            public_span_raw_value_logged_count=public_span_raw_value_logged_count,
+            audit_event_raw_value_logged_count=audit_event_raw_value_logged_count,
             invalid_offset_count=0,
             deterministic_latency_ms=deterministic_latency_ms,
             case_results=tuple(case_results),
         )
 
     @staticmethod
-    def _raw_pii_logging_count(response: GuardrailResponse) -> int:
+    def _raw_pii_logging_counts(response: GuardrailResponse) -> tuple[int, int, int]:
         """Count raw-value leak flags without reading or serializing raw values."""
-        count = 1 if response.raw_value_logged else 0
-        count += sum(1 for span in response.spans if span.raw_value_logged)
-        count += sum(1 for event in response.audit_events if event.raw_value_logged)
-        return count
+        response_count = 1 if response.raw_value_logged else 0
+        public_span_count = sum(1 for span in response.spans if span.raw_value_logged)
+        audit_event_count = sum(1 for event in response.audit_events if event.raw_value_logged)
+        return response_count, public_span_count, audit_event_count
 
 
 __all__ = [
@@ -1182,13 +1480,20 @@ __all__ = [
     "AblationRunner",
     "AblationStageResult",
     "AblationStageSpec",
+    "AuditSafetyReport",
     "CaseResult",
     "EntityMetrics",
     "EvaluationCase",
     "EvaluationLabel",
     "EvaluationReport",
     "EvaluationRunner",
+    "FailureAnalysisRow",
     "SpanMatch",
+    "build_audit_safety_report",
+    "build_failure_analysis_rows",
+    "build_release_gate_report",
+    "count_report_raw_text_leaks",
+    "failure_analysis_jsonl",
     "load_jsonl_cases",
     "m10_2_ablation_stage_specs",
 ]

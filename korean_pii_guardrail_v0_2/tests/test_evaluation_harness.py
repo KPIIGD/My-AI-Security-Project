@@ -35,7 +35,11 @@ from pii_guardrail.evaluation_harness import (
     EvaluationReport,
     EvaluationRunner,
     SpanMatch,
+    build_audit_safety_report,
+    build_failure_analysis_rows,
     build_release_gate_report,
+    count_report_raw_text_leaks,
+    failure_analysis_jsonl,
     load_jsonl_cases,
 )
 from pii_guardrail.pipeline import GuardrailPipeline
@@ -497,8 +501,14 @@ def test_raw_pii_logging_count_is_aggregated_from_response_flags() -> None:
     report = runner.evaluate([case], dataset_id="synthetic")
 
     assert report.raw_pii_logging_count == 3
+    assert report.response_raw_value_logged_count == 1
+    assert report.public_span_raw_value_logged_count == 1
+    assert report.audit_event_raw_value_logged_count == 1
     payload = report.to_safe_dict(purpose_id="ko_pii_guardrail_v0_2_eval")
     assert payload["raw_pii_logging_count"] == 3
+    assert payload["response_raw_value_logged_count"] == 1
+    assert payload["public_span_raw_value_logged_count"] == 1
+    assert payload["audit_event_raw_value_logged_count"] == 1
 
 
 def test_masked_text_accuracy_ignores_cases_without_expected_masked_text() -> None:
@@ -650,6 +660,146 @@ def test_release_gate_fails_when_latency_exceeds_threshold() -> None:
 
 
 # ============================================================
+# M10-4 failure analysis + audit safety reports
+# ============================================================
+
+
+def test_failure_analysis_rows_classify_errors_without_raw_text() -> None:
+    runner = EvaluationRunner(GuardrailPipeline())
+    raw_value = "ABCD1234"
+    raw_text = f"token {raw_value} tail"
+    label = EvaluationLabel(
+        start=6,
+        end=14,
+        entity_type=EntityType.PERSON_NAME,
+        risk_level=RiskLevel.P1,
+    )
+    type_case = EvaluationCase(id="case-type", text=raw_text, labels=(label,))
+    type_matches = runner._match_spans(
+        type_case,
+        (_public(6, 14, EntityType.ORGANIZATION),),
+    )
+    fp_case = EvaluationCase(id="case-fp", text="plain text", labels=())
+    fp_matches = runner._match_spans(
+        fp_case,
+        (_public(0, 5, EntityType.EMAIL),),
+    )
+    duplicate_case = EvaluationCase(id="case-duplicate", text=raw_text, labels=(label,))
+    duplicate_matches = runner._match_spans(
+        duplicate_case,
+        (
+            _public(6, 14, EntityType.PERSON_NAME),
+            _public(6, 15, EntityType.PERSON_NAME),
+        ),
+    )
+    report = EvaluationReport(
+        dataset_id="failure-synthetic",
+        records_processed=3,
+        blocked_count=0,
+        spans_detected=4,
+        spans_masked=0,
+        per_entity=(),
+        masked_text_exact_match_rate=0.0,
+        high_risk_recall=0.0,
+        case_results=(
+            CaseResult(
+                case_id="case-type",
+                matches=tuple(type_matches),
+                masked_text=None,
+                expected_masked_text=None,
+                blocked=False,
+                audit_event_count=0,
+                prediction_count=1,
+            ),
+            CaseResult(
+                case_id="case-fp",
+                matches=tuple(fp_matches),
+                masked_text=None,
+                expected_masked_text=None,
+                blocked=False,
+                audit_event_count=0,
+                prediction_count=1,
+            ),
+            CaseResult(
+                case_id="case-duplicate",
+                matches=tuple(duplicate_matches),
+                masked_text=None,
+                expected_masked_text=None,
+                blocked=False,
+                audit_event_count=0,
+                prediction_count=2,
+            ),
+        ),
+    )
+
+    rows = build_failure_analysis_rows(report)
+    row_keys = {
+        (row.case_id, row.error_type, row.entity_type, row.match_type)
+        for row in rows
+    }
+    assert ("case-type", "FN", "PERSON_NAME", "miss") in row_keys
+    assert ("case-type", "TYPE_CONFUSION", "ORGANIZATION", "spurious") in row_keys
+    assert ("case-fp", "FP", "EMAIL", "spurious") in row_keys
+    assert ("case-duplicate", "OVERDETECTION", "PERSON_NAME", "spurious") in row_keys
+
+    serialized = failure_analysis_jsonl(report)
+    assert raw_value not in serialized
+    assert raw_text not in serialized
+    for line in serialized.splitlines():
+        payload = json.loads(line)
+        assert set(payload) == {
+            "case_id",
+            "error_type",
+            "entity_type",
+            "span_length",
+            "match_type",
+            "suspected_layer",
+            "reason_code",
+            "raw_value_logged",
+        }
+        assert payload["raw_value_logged"] is False
+
+
+def test_audit_safety_report_passes_and_fails_without_raw_values() -> None:
+    pass_payload = build_audit_safety_report(
+        _release_gate_report(),
+        report_raw_text_leak_count=0,
+    ).to_dict()
+    assert pass_payload["status"] == "pass"
+    assert pass_payload["raw_pii_logging_count"] == 0
+    assert pass_payload["public_span_raw_value_logged_count"] == 0
+    assert pass_payload["audit_event_raw_value_logged_count"] == 0
+    assert pass_payload["report_raw_text_leak_count"] == 0
+
+    fail_payload = build_audit_safety_report(
+        _release_gate_report(raw_pii_logging_count=1),
+        report_raw_text_leak_count=0,
+    ).to_dict()
+    assert fail_payload["status"] == "fail"
+    assert fail_payload["raw_pii_logging_count"] == 1
+    assert "audit_safety.raw_pii_logging_count.fail" in fail_payload["reason_codes"]
+
+
+def test_report_raw_text_leak_counter_returns_count_only() -> None:
+    raw_value = "WXYZ9876"
+    case = EvaluationCase(
+        id="case-leak-check",
+        text=f"prefix {raw_value} suffix",
+        labels=(
+            EvaluationLabel(
+                start=7,
+                end=15,
+                entity_type=EntityType.PHONE_MOBILE,
+                risk_level=RiskLevel.P1,
+            ),
+        ),
+    )
+
+    assert count_report_raw_text_leaks([{"note": "safe summary"}], [case]) == 0
+    assert count_report_raw_text_leaks([{"note": f"unsafe {raw_value}"}], [case]) == 1
+
+
+# ============================================================
 # High-risk recall
 # ============================================================
 
@@ -730,6 +880,8 @@ def test_run_eval_writes_safe_json_report(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     output = tmp_path / "reports" / "eval.json"
+    failure_output = tmp_path / "reports" / "failure.jsonl"
+    audit_output = tmp_path / "reports" / "audit_safety.json"
 
     result = subprocess.run(
         [
@@ -741,6 +893,10 @@ def test_run_eval_writes_safe_json_report(tmp_path: Path) -> None:
             str(dataset),
             "--output",
             str(output),
+            "--failure-output",
+            str(failure_output),
+            "--audit-safety-output",
+            str(audit_output),
         ],
         cwd=PROJECT_ROOT,
         capture_output=True,
@@ -749,16 +905,28 @@ def test_run_eval_writes_safe_json_report(tmp_path: Path) -> None:
     )
 
     assert output.exists()
+    assert failure_output.exists()
+    assert audit_output.exists()
     serialized = output.read_text(encoding="utf-8")
+    failure_serialized = failure_output.read_text(encoding="utf-8")
+    audit_serialized = audit_output.read_text(encoding="utf-8")
     payload = json.loads(serialized)
+    audit_payload = json.loads(audit_serialized)
     assert payload["dataset_id"] == "tiny_eval"
     assert payload["records_processed"] == 1
     assert "per_entity" in payload
     assert "deterministic_latency_ms" in payload
     assert "release_gate" in payload
     assert payload["release_gate"]["report_type"] == "ReleaseGateReport"
+    assert audit_payload["report_type"] == "AuditSafetyReport"
+    assert audit_payload["status"] == "pass"
+    assert audit_payload["report_raw_text_leak_count"] == 0
     assert raw_phone not in serialized
     assert raw_text not in serialized
+    assert raw_phone not in failure_serialized
+    assert raw_text not in failure_serialized
+    assert raw_phone not in audit_serialized
+    assert raw_text not in audit_serialized
     assert raw_phone not in result.stdout
     assert raw_text not in result.stdout
 
