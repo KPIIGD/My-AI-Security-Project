@@ -45,9 +45,16 @@ ASSETS = DEMO_DIR / "assets"
 CONFIG_DIR = PROJECT_ROOT / "configs"
 
 # NER 모델: 로컬 학습 산출물이 있으면 그것, 없으면 HuggingFace Hub에서 자동 다운로드.
-# (다른 사람이 clone 후 바로 실행 가능 — vmaca123/korean-pii-ner-v3)
-_LOCAL_NER = Path(r"C:/My-AI-Security-Project/PII/ner/models/pii_ner_v3/final")
-NER_MODEL_PATH = str(_LOCAL_NER) if _LOCAL_NER.is_dir() else "vmaca123/korean-pii-ner-v3"
+# repo 어디에 clone하든 찾도록 repo-relative 후보를 먼저 본 뒤, 레거시 절대경로,
+# 마지막으로 Hub 모델로 fallback. (다른 사람이 clone 후 바로 실행 가능)
+_NER_CANDIDATES = [
+    PROJECT_ROOT.parent / "PII" / "ner" / "models" / "pii_ner_v3" / "final",  # repo-relative
+    Path(r"C:/My-AI-Security-Project/PII/ner/models/pii_ner_v3/final"),       # legacy 절대경로
+]
+NER_MODEL_PATH = next(
+    (str(p) for p in _NER_CANDIDATES if p.is_dir()),
+    "vmaca123/korean-pii-ner-v3",  # HuggingFace Hub
+)
 
 # 대시보드용 측정 데이터/그림은 demo/assets/ 에 동봉 (환경 독립)
 REPORTS = ASSETS
@@ -74,6 +81,10 @@ def build_pipeline():
 
 
 PIPELINE, NER_MODE = build_pipeline()
+
+# --share(공개 링크) 모드에서는 탐지된 원문 PII 값을 public UI에 노출하지 않는다.
+# (로컬 전용일 때만 원문 표시 — 프로젝트의 no-raw-PII 경계 준수)
+SHARE_MODE = False
 
 
 # 엔티티 타입별 색상 (HighlightedText)
@@ -127,10 +138,16 @@ def analyze(text: str):
     elif masked is None:
         masked = text
 
+    def _span_value(span) -> str:
+        # share 모드: 원문값 대신 길이만 (public 노출 방지). 로컬: 원문 표시.
+        if SHARE_MODE:
+            return f"🔒 {span.end - span.start}자 (로컬 전용)"
+        return text[span.start:span.end]
+
     table = [
         [
             span.entity_type.value,
-            text[span.start:span.end],
+            _span_value(span),
             span.risk_level.value,
             span.action.value,
             round(span.score, 2),
@@ -418,6 +435,9 @@ if __name__ == "__main__":
         help="gradio.live 공개 링크 생성 (양유상 등 외부 리뷰용, 72시간 한시적)",
     )
     args = parser.parse_args()
+    if args.share:
+        SHARE_MODE = True
+        print("[demo] SHARE 모드 — 탐지 표의 원문값을 숨깁니다 (public 노출 방지)")
 
     print(f"[demo] NER mode: {NER_MODE}")
     ui = build_ui()
