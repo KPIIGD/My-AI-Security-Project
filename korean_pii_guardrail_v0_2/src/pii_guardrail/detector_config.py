@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import warnings
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -11,6 +12,32 @@ from .enums import EntityType
 
 DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "configs" / "detectors.yaml"
 SUPPORTED_CHECKSUM_MODES = frozenset({"strict", "warn", "off"})
+SUPPORTED_REGEX_DETECTORS = frozenset(
+    {
+        "regex.rrn",
+        "regex.frn",
+        "regex.phone",
+        "regex.email",
+        "regex.network",
+        "regex.credit_card",
+        "regex.business_reg_no",
+        "regex.bank_account",
+        "regex.secret",
+    }
+)
+SUPPORTED_CHECKSUM_VALIDATORS = frozenset({"RRN", "FRN", "CREDIT_CARD", "BUSINESS_REG_NO"})
+HIGH_RISK_DISABLE_ENTITIES = frozenset(
+    {
+        EntityType.API_KEY_SECRET,
+        EntityType.RRN,
+        EntityType.FRN,
+        EntityType.CREDIT_CARD,
+        EntityType.BANK_ACCOUNT,
+        EntityType.PHONE_MOBILE,
+        EntityType.PHONE_LANDLINE,
+        EntityType.EMAIL,
+    }
+)
 DEFAULT_CHECKSUM_MODES = {
     "BUSINESS_REG_NO": "warn",
 }
@@ -42,7 +69,7 @@ class DetectorPolicy:
 
         checksum_modes = dict(DEFAULT_CHECKSUM_MODES)
         for name, mode in self.checksum_modes.items():
-            checksum_modes[str(name)] = _normalize_checksum_mode(mode)
+            checksum_modes[str(name)] = _normalize_checksum_mode(mode, context=str(name))
 
         object.__setattr__(self, "regex_detectors_enabled", regex_detectors)
         object.__setattr__(self, "entities_enabled", entities)
@@ -64,9 +91,18 @@ def load_detector_policy(path: Path | None = None) -> DetectorPolicy:
     if not config_path.is_file():
         return DetectorPolicy()
 
-    regex_detectors = _parse_enabled_mapping(config_path, "regex_detectors")
-    raw_entities = _parse_enabled_mapping(config_path, "entities")
+    regex_detectors = _parse_enabled_mapping(
+        config_path,
+        "regex_detectors",
+        supported_keys=SUPPORTED_REGEX_DETECTORS,
+    )
+    raw_entities = _parse_enabled_mapping(
+        config_path,
+        "entities",
+        supported_keys={entity.value for entity in EntityType},
+    )
     entities = {EntityType(name): enabled for name, enabled in raw_entities.items()}
+    _warn_for_high_risk_entity_disables(config_path, entities)
     checksum_modes = _parse_checksum_modes(config_path)
     return DetectorPolicy(
         regex_detectors_enabled=regex_detectors,
@@ -75,15 +111,24 @@ def load_detector_policy(path: Path | None = None) -> DetectorPolicy:
     )
 
 
-def _parse_enabled_mapping(path: Path, section: str) -> dict[str, bool]:
+def _parse_enabled_mapping(
+    path: Path,
+    section: str,
+    *,
+    supported_keys: frozenset[str] | set[str] | None = None,
+) -> dict[str, bool]:
     values: dict[str, bool] = {}
     current_section: str | None = None
     current_key: str | None = None
 
-    for raw_line in path.read_text(encoding="utf-8").splitlines():
+    for line_number, raw_line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         line = raw_line.split("#", 1)[0].rstrip()
         stripped = line.strip()
         if not stripped:
+            continue
+        if "\t" in line[: len(line) - len(line.lstrip())]:
+            _warn_config(path, line_number, f"Tab indentation is not supported in {section}")
+            current_key = None
             continue
 
         if not line.startswith(" "):
@@ -94,14 +139,28 @@ def _parse_enabled_mapping(path: Path, section: str) -> dict[str, bool]:
         if current_section != section:
             continue
 
-        if line.startswith("  ") and not line.startswith("    ") and stripped.endswith(":"):
-            current_key = stripped[:-1]
+        if line.startswith("  ") and not line.startswith("    "):
+            if not stripped.endswith(":"):
+                _warn_config(path, line_number, f"Malformed entry in {section}: expected '<key>:'")
+                current_key = None
+                continue
+            candidate_key = stripped[:-1]
+            if supported_keys is not None and candidate_key not in supported_keys:
+                _warn_config(path, line_number, f"Unknown {section} key ignored: {candidate_key}")
+                current_key = None
+                continue
+            current_key = candidate_key
             continue
 
         if current_key and line.startswith("    "):
             key, separator, value = stripped.partition(":")
             if separator and key == "enabled":
                 values[current_key] = _parse_bool(value.strip(), path=path, key=current_key)
+                continue
+            _warn_config(path, line_number, f"Unknown setting ignored for {section}.{current_key}: {key or stripped}")
+            continue
+
+        _warn_config(path, line_number, f"Malformed indentation in {section}: {stripped}")
 
     return values
 
@@ -111,10 +170,14 @@ def _parse_checksum_modes(path: Path) -> dict[str, str]:
     current_section: str | None = None
     current_key: str | None = None
 
-    for raw_line in path.read_text(encoding="utf-8").splitlines():
+    for line_number, raw_line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         line = raw_line.split("#", 1)[0].rstrip()
         stripped = line.strip()
         if not stripped:
+            continue
+        if "\t" in line[: len(line) - len(line.lstrip())]:
+            _warn_config(path, line_number, "Tab indentation is not supported in validators")
+            current_key = None
             continue
 
         if not line.startswith(" "):
@@ -125,14 +188,31 @@ def _parse_checksum_modes(path: Path) -> dict[str, str]:
         if current_section != "validators":
             continue
 
-        if line.startswith("  ") and not line.startswith("    ") and stripped.endswith(":"):
-            current_key = stripped[:-1]
+        if line.startswith("  ") and not line.startswith("    "):
+            if not stripped.endswith(":"):
+                _warn_config(path, line_number, "Malformed entry in validators: expected '<ENTITY>:'")
+                current_key = None
+                continue
+            candidate_key = stripped[:-1]
+            if candidate_key not in SUPPORTED_CHECKSUM_VALIDATORS:
+                _warn_config(path, line_number, f"Unknown checksum validator ignored: {candidate_key}")
+                current_key = None
+                continue
+            current_key = candidate_key
             continue
 
         if current_key and line.startswith("    "):
             key, separator, value = stripped.partition(":")
             if separator and key == "checksum":
-                values[current_key] = _normalize_checksum_mode(value.strip())
+                values[current_key] = _normalize_checksum_mode(
+                    value.strip(),
+                    context=f"{current_key}.checksum",
+                )
+                continue
+            _warn_config(path, line_number, f"Unknown setting ignored for validators.{current_key}: {key or stripped}")
+            continue
+
+        _warn_config(path, line_number, f"Malformed indentation in validators: {stripped}")
 
     return values
 
@@ -146,11 +226,28 @@ def _parse_bool(value: str, *, path: Path, key: str) -> bool:
     raise ValueError(f"Invalid enabled value in {path.name} for {key}")
 
 
-def _normalize_checksum_mode(mode: str) -> str:
+def _normalize_checksum_mode(mode: str, *, context: str | None = None) -> str:
     normalized = mode.strip().lower()
     if normalized not in SUPPORTED_CHECKSUM_MODES:
-        raise ValueError("Unsupported checksum mode")
+        scope = f" for {context}" if context else ""
+        supported = ", ".join(sorted(SUPPORTED_CHECKSUM_MODES))
+        raise ValueError(f"Unsupported checksum mode{scope}: {mode!r}. Supported modes: {supported}")
     return normalized
+
+
+def _warn_for_high_risk_entity_disables(path: Path, entities: Mapping[EntityType, bool]) -> None:
+    for entity, enabled in entities.items():
+        if not enabled and entity in HIGH_RISK_DISABLE_ENTITIES:
+            _warn_config(
+                path,
+                None,
+                f"Disabling high-risk entity {entity.value} can violate P0/P1 release gates",
+            )
+
+
+def _warn_config(path: Path, line_number: int | None, message: str) -> None:
+    location = f"{path.name}:{line_number}" if line_number is not None else path.name
+    warnings.warn(f"{location}: {message}", RuntimeWarning, stacklevel=3)
 
 
 __all__ = [

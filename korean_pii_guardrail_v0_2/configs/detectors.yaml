@@ -23,6 +23,9 @@ regex_detectors:
 
 # Entity-level kill switches are applied after candidate generation, so they
 # cover regex, dictionary, and NER candidates consistently.
+# Disabling high-risk entities such as RRN, FRN, CREDIT_CARD, PHONE_*, EMAIL,
+# BANK_ACCOUNT, or API_KEY_SECRET can violate release gates and should require
+# an explicit security review.
 entities:
   API_KEY_SECRET:
     enabled: true

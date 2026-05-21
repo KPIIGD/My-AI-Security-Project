@@ -148,7 +148,7 @@ def is_repeated_or_placeholder_digits(digits: str) -> bool:
 
 
 def validate_rrn(value: str, *, checksum_mode: str = "strict") -> ValidationResult:
-    checksum_mode = _normalize_checksum_mode(checksum_mode)
+    checksum_mode = _normalize_checksum_mode(checksum_mode, context="RRN")
     digits = digits_only(value)
     if len(digits) != 13 or not _valid_birth_date(digits[:6], digits[6], rrn=True):
         return ValidationResult(False, digits, reason_codes=("validator.rrn.invalid",))
@@ -174,7 +174,7 @@ def validate_rrn(value: str, *, checksum_mode: str = "strict") -> ValidationResu
 
 
 def validate_frn(value: str, *, checksum_mode: str = "strict") -> ValidationResult:
-    checksum_mode = _normalize_checksum_mode(checksum_mode)
+    checksum_mode = _normalize_checksum_mode(checksum_mode, context="FRN")
     digits = digits_only(value)
     if len(digits) != 13 or not _valid_birth_date(digits[:6], digits[6], rrn=False):
         return ValidationResult(False, digits, reason_codes=("validator.frn.invalid",))
@@ -278,7 +278,7 @@ def _valid_domain_label(label: str) -> bool:
 
 
 def validate_credit_card(value: str, *, checksum_mode: str = "strict") -> ValidationResult:
-    checksum_mode = _normalize_checksum_mode(checksum_mode)
+    checksum_mode = _normalize_checksum_mode(checksum_mode, context="CREDIT_CARD")
     digits = digits_only(value)
     if len(digits) < 13 or len(digits) > 19 or is_repeated_or_placeholder_digits(digits):
         return ValidationResult(False, digits, "CREDIT_CARD_PATTERN_ONLY", ("validator.credit_card.invalid",))
@@ -319,7 +319,7 @@ def luhn_checksum_valid(digits: str) -> bool:
 
 
 def validate_business_reg_no(value: str, *, checksum_mode: str = "warn") -> ValidationResult:
-    checksum_mode = _normalize_checksum_mode(checksum_mode)
+    checksum_mode = _normalize_checksum_mode(checksum_mode, context="BUSINESS_REG_NO")
     if "-" in value and not re.fullmatch(r"\d{3}-\d{2}-\d{5}", value):
         return ValidationResult(False, digits_only(value), reason_codes=("validator.business_reg_no.invalid_format",))
 
@@ -462,8 +462,10 @@ def shannon_entropy(value: str) -> float:
     return entropy
 
 
-def _normalize_checksum_mode(mode: str) -> str:
+def _normalize_checksum_mode(mode: str, *, context: str | None = None) -> str:
     normalized = mode.strip().lower()
     if normalized not in SUPPORTED_CHECKSUM_MODES:
-        raise ValueError("Unsupported checksum mode")
+        scope = f" for {context}" if context else ""
+        supported = ", ".join(sorted(SUPPORTED_CHECKSUM_MODES))
+        raise ValueError(f"Unsupported checksum mode{scope}: {mode!r}. Supported modes: {supported}")
     return normalized

@@ -116,6 +116,16 @@ Supported v0.2 settings:
 - `validators.<ENTITY>.checksum`: controls structured checksum behavior for
   supported validators.
 
+High-risk entity kill switches (`RRN`, `FRN`, `CREDIT_CARD`, `BANK_ACCOUNT`,
+`PHONE_MOBILE`, `PHONE_LANDLINE`, `EMAIL`, `API_KEY_SECRET`) can violate
+P0/P1 release gates if disabled. `load_detector_policy` emits a runtime warning
+for those disables; production changes should treat them as security-reviewed
+exceptions, not ordinary tuning.
+
+Unknown detector IDs, entity names, checksum validator names, malformed
+indentation, and unknown nested keys are warned and ignored rather than being
+silently accepted.
+
 Checksum modes:
 
 | Mode | Meaning |

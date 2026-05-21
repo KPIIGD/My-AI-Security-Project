@@ -3,6 +3,8 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
+import pytest
+
 from pii_guardrail.detector_config import DetectorPolicy, load_detector_policy
 from pii_guardrail.enums import EntityType
 from pii_guardrail.pipeline import GuardrailPipeline
@@ -46,7 +48,8 @@ validators:
         encoding="utf-8",
     )
 
-    policy = load_detector_policy(path)
+    with pytest.warns(RuntimeWarning, match="high-risk entity EMAIL"):
+        policy = load_detector_policy(path)
 
     assert policy.regex_detector_enabled("regex.email") is False
     assert policy.regex_detector_enabled("regex.phone") is True
@@ -54,6 +57,71 @@ validators:
     assert policy.entity_enabled(EntityType.PHONE_MOBILE) is True
     assert policy.checksum_mode(EntityType.CREDIT_CARD) == "warn"
     assert policy.checksum_mode(EntityType.RRN) == "strict"
+
+
+def test_load_detector_policy_warns_when_high_risk_entity_is_disabled(tmp_path: Path) -> None:
+    path = tmp_path / "detectors.yaml"
+    path.write_text(
+        """
+version: v0.2-single-turn
+entities:
+  RRN:
+    enabled: false
+""".strip(),
+        encoding="utf-8",
+    )
+
+    with pytest.warns(RuntimeWarning, match="high-risk entity RRN"):
+        policy = load_detector_policy(path)
+
+    assert policy.entity_enabled(EntityType.RRN) is False
+
+
+def test_load_detector_policy_warns_for_unknown_or_malformed_config(tmp_path: Path) -> None:
+    path = tmp_path / "detectors.yaml"
+    path.write_text(
+        """
+version: v0.2-single-turn
+regex_detectors:
+  regex.unknown:
+    enabled: false
+  regex.email:
+    enable: false
+entities:
+  NOT_AN_ENTITY:
+    enabled: false
+validators:
+  NOT_A_VALIDATOR:
+    checksum: warn
+""".strip(),
+        encoding="utf-8",
+    )
+
+    with pytest.warns(RuntimeWarning) as warnings:
+        policy = load_detector_policy(path)
+
+    messages = "\n".join(str(warning.message) for warning in warnings)
+    assert "Unknown regex_detectors key ignored: regex.unknown" in messages
+    assert "Unknown setting ignored for regex_detectors.regex.email: enable" in messages
+    assert "Unknown entities key ignored: NOT_AN_ENTITY" in messages
+    assert "Unknown checksum validator ignored: NOT_A_VALIDATOR" in messages
+    assert policy.regex_detector_enabled("regex.email") is True
+
+
+def test_load_detector_policy_checksum_mode_error_includes_context(tmp_path: Path) -> None:
+    path = tmp_path / "detectors.yaml"
+    path.write_text(
+        """
+version: v0.2-single-turn
+validators:
+  CREDIT_CARD:
+    checksum: maybe
+""".strip(),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="CREDIT_CARD\\.checksum.*maybe"):
+        load_detector_policy(path)
 
 
 def test_regex_detector_policy_can_disable_detector_id() -> None:
@@ -103,6 +171,8 @@ def test_validator_checksum_modes_keep_default_behavior_strict() -> None:
     assert validate_credit_card("4111-1111-1111-1112", checksum_mode="warn").is_valid
     assert not validate_business_reg_no("123-45-67892", checksum_mode="strict").is_valid
     assert validate_business_reg_no("123-45-67892", checksum_mode="off").is_valid
+    with pytest.raises(ValueError, match="RRN.*maybe"):
+        validate_rrn("900101-1234567", checksum_mode="maybe")
 
 
 def test_pipeline_from_config_dir_applies_detector_policy(tmp_path: Path) -> None:
