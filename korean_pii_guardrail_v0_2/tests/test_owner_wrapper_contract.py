@@ -45,6 +45,17 @@ def test_entity_risk_level_mapping():
     assert ENTITY_TO_RISK_LEVEL["ORGANIZATION"] == "P2"
 
 
+def test_model_source_preserves_huggingface_repo_id():
+    from pii_guardrail.ner.owner_wrapper import FinetunedKoreanNERDetector
+
+    assert (
+        FinetunedKoreanNERDetector._resolve_model_source(
+            "vmaca123/korean-pii-ner-v3"
+        )
+        == "vmaca123/korean-pii-ner-v3"
+    )
+
+
 def test_sido_prefixes_include_major_metros():
     from pii_guardrail.ner.owner_wrapper import SIDO_PREFIXES
     for sido in ("서울특별시", "부산광역시", "경기도", "제주특별자치도", "서울", "부산"):

@@ -134,6 +134,13 @@ class PolicyRouter:
                 "policy.entity.api_key_secret",
             )
 
+        if self._has_decisive_negative_context(span):
+            return self._pass_decision(
+                profile,
+                output_target,
+                "policy.negative_context.pass",
+            )
+
         if span.risk_level is RiskLevel.P0:
             if self._p0_should_mask(span):
                 return self._decision(
@@ -261,6 +268,38 @@ class PolicyRouter:
             code.startswith(("context.boost.", "context.composite."))
             for code in span.reason_codes
         )
+
+    @staticmethod
+    def _has_decisive_negative_context(span: PIISpan) -> bool:
+        if span.entity_type is not EntityType.PERSON_NAME:
+            return False
+        has_boost = any(
+            code.startswith("context.boost.") for code in span.reason_codes
+        )
+        if (
+            any(
+                code.startswith("context.penalty.example_context")
+                for code in span.reason_codes
+            )
+            and not has_boost
+        ):
+            return True
+        if span.is_composite:
+            return False
+        has_negative = any(
+            code.startswith(
+                (
+                    "context.penalty.weather_context_for_person",
+                    "context.penalty.organization_not_person",
+                    "context.penalty.example_context",
+                    "context.penalty.code_or_log_context",
+                )
+            )
+            for code in span.reason_codes
+        )
+        if not has_negative:
+            return False
+        return not has_boost
 
     @staticmethod
     def _decision(

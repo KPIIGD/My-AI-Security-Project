@@ -3,7 +3,8 @@
 
 This is intentionally narrower than the full M10 ablation/release-gate
 surface. It runs the integrated GuardrailPipeline against one JSONL gold
-set and writes a raw-text-free JSON summary report.
+set and writes a raw-text-free JSON summary report. Real NER v3 is enabled
+by default; use ``--mock-ner`` only for lightweight contract tests.
 """
 
 from __future__ import annotations
@@ -26,7 +27,32 @@ from pii_guardrail.evaluation_harness import (
     failure_analysis_jsonl,
     load_jsonl_cases,
 )
+from pii_guardrail.ner import FinetunedNERDetector, NERDependencyError
 from pii_guardrail.pipeline import GuardrailPipeline
+
+
+DEFAULT_REAL_NER_MODEL_PATH = "vmaca123/korean-pii-ner-v3"
+
+
+def build_pipeline(
+    *,
+    config_dir: str,
+    use_real_ner: bool = True,
+    ner_model_path: str | None = None,
+    ner_calibration_path: str | None = None,
+) -> GuardrailPipeline:
+    """Build the evaluation pipeline with real NER v3 by default."""
+
+    ner_detector = None
+    if use_real_ner:
+        ner_detector = FinetunedNERDetector(
+            model_path=ner_model_path or DEFAULT_REAL_NER_MODEL_PATH,
+            calibration_path=ner_calibration_path,
+        )
+    return GuardrailPipeline.from_config_dir(
+        config_dir,
+        ner_detector=ner_detector,
+    )
 
 
 def main() -> None:
@@ -54,7 +80,26 @@ def main() -> None:
         default="strict",
         help="Policy profile label to include in the report",
     )
+    parser.add_argument(
+        "--mock-ner",
+        action="store_true",
+        help="Use the lightweight MockNERDetector instead of real NER v3.",
+    )
+    parser.add_argument(
+        "--ner-model-path",
+        default=DEFAULT_REAL_NER_MODEL_PATH,
+        help=(
+            "Local model directory or HuggingFace model id for real NER v3. "
+            f"Default: {DEFAULT_REAL_NER_MODEL_PATH}"
+        ),
+    )
+    parser.add_argument(
+        "--ner-calibration-path",
+        help="Optional calibration JSON path for real NER v3 thresholds.",
+    )
     args = parser.parse_args()
+    if args.mock_ner and args.ner_calibration_path:
+        parser.error("--ner-calibration-path cannot be used with --mock-ner")
 
     dataset_path = Path(args.dataset)
     output_path = Path(args.output)
@@ -63,11 +108,19 @@ def main() -> None:
         Path(args.audit_safety_output) if args.audit_safety_output else None
     )
     cases = load_jsonl_cases(dataset_path)
-    pipeline = GuardrailPipeline.from_config_dir(args.config_dir)
-    report = EvaluationRunner(pipeline).evaluate(
-        cases,
-        dataset_id=dataset_path.stem,
+    pipeline = build_pipeline(
+        config_dir=args.config_dir,
+        use_real_ner=not args.mock_ner,
+        ner_model_path=args.ner_model_path,
+        ner_calibration_path=args.ner_calibration_path,
     )
+    try:
+        report = EvaluationRunner(pipeline).evaluate(
+            cases,
+            dataset_id=dataset_path.stem,
+        )
+    except NERDependencyError as exc:
+        raise SystemExit(f"Real NER evaluation failed: {exc}") from exc
     payload = report.to_safe_dict(
         purpose_id=args.purpose_id,
         policy_profile=args.policy_profile,

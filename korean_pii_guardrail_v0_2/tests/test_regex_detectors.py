@@ -5,10 +5,14 @@ from pii_guardrail.preprocess import preprocess_text
 from pii_guardrail.regex_detectors import (
     BankAccountCandidateDetector,
     BusinessRegNoDetector,
+    CorporateRegNoRegexDetector,
     CreditCardRegexDetector,
+    DriverLicenseRegexDetector,
     EmailRegexDetector,
     FRNRegexDetector,
+    LabeledIdentifierRegexDetector,
     NetworkIdentifierDetector,
+    PassportRegexDetector,
     PhoneRegexDetector,
     RRNRegexDetector,
     SecretRegexDetector,
@@ -185,6 +189,15 @@ def test_network_detector_emits_public_private_ip_and_mac() -> None:
         assert "validator" in span.sources
 
 
+def test_network_detector_allows_sentence_period_after_ipv4() -> None:
+    raw = "ip 8.8.9.27."
+    spans = _detect(NetworkIdentifierDetector(), raw)
+
+    assert len(spans) == 1
+    _assert_span_contract(raw, spans[0], EntityType.IP_ADDRESS)
+    assert spans[0].text == "8.8.9.27"
+
+
 def test_network_detector_supports_ipv6_and_rejects_invalid_ip() -> None:
     raw = "dns 2001:4860:4860::8888 bad 999.999.999.999"
     spans = _detect(NetworkIdentifierDetector(), raw)
@@ -209,6 +222,17 @@ def test_credit_card_detector_rejects_repeated_placeholder() -> None:
     assert _detect(CreditCardRegexDetector(), "카드 0000-0000-0000-0000") == []
 
 
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "\uacc4\uc88c 100106-27-101378",
+        "corp 110111-1000217",
+    ],
+)
+def test_credit_card_detector_rejects_non_card_structured_context(raw: str) -> None:
+    assert _detect(CreditCardRegexDetector(), raw) == []
+
+
 def test_business_reg_no_detector_emits_valid_and_pattern_only_candidates() -> None:
     raw = "사업자 123-45-67891, 후보 123-45-67892"
     spans = _detect(BusinessRegNoDetector(), raw)
@@ -222,6 +246,57 @@ def test_business_reg_no_detector_emits_valid_and_pattern_only_candidates() -> N
 
 def test_business_reg_no_detector_rejects_placeholders() -> None:
     assert _detect(BusinessRegNoDetector(), "사업자 000-00-00000") == []
+
+
+@pytest.mark.parametrize(
+    ("detector", "raw", "entity_type", "expected_text"),
+    [
+        (PassportRegexDetector(), "passport M11234567.", EntityType.PASSPORT, "M11234567"),
+        (DriverLicenseRegexDetector(), "driver 12-34-123456-01.", EntityType.DRIVER_LICENSE, "12-34-123456-01"),
+        (CorporateRegNoRegexDetector(), "corp 110111-1234567.", EntityType.CORPORATE_REG_NO, "110111-1234567"),
+    ],
+)
+def test_structured_identifier_detectors_emit_raw_spans(
+    detector: object,
+    raw: str,
+    entity_type: EntityType,
+    expected_text: str,
+) -> None:
+    spans = _detect(detector, raw)
+
+    assert len(spans) == 1
+    _assert_span_contract(raw, spans[0], entity_type)
+    assert spans[0].text == expected_text
+
+
+@pytest.mark.parametrize(
+    ("raw", "entity_type", "expected_text"),
+    [
+        ("\uace0\uac1d\ubc88\ud638 CUST-000123.", EntityType.CUSTOMER_ID, "CUST-000123"),
+        ("\uc0ac\ubc88 EMP-2026-00123.", EntityType.EMPLOYEE_ID, "EMP-2026-00123"),
+        ("\ud559\ubc88 STU-20260001.", EntityType.STUDENT_ID, "STU-20260001"),
+        ("\ud658\uc790\ubc88\ud638 MR-2026-000123.", EntityType.MEDICAL_RECORD_NO, "MR-2026-000123"),
+        ("\uc0dd\ub144\uc6d4\uc77c 1988\ub144 3\uc6d4 9\uc77c.", EntityType.DOB, "1988\ub144 3\uc6d4 9\uc77c"),
+        ("device device-0001-A1B2C3.", EntityType.DEVICE_ID, "device-0001-A1B2C3"),
+        ("vehicle 12\uac001234.", EntityType.VEHICLE_REG_NO, "12\uac001234"),
+    ],
+)
+def test_labeled_identifier_detector_emits_value_only_raw_spans(
+    raw: str,
+    entity_type: EntityType,
+    expected_text: str,
+) -> None:
+    spans = _detect(LabeledIdentifierRegexDetector(), raw)
+
+    assert len(spans) == 1
+    _assert_span_contract(raw, spans[0], entity_type)
+    assert spans[0].text == expected_text
+
+
+def test_labeled_identifier_detector_requires_label() -> None:
+    raw = "CUST-000123 EMP-2026-00123 STU-20260001 MR-2026-000123"
+
+    assert _detect(LabeledIdentifierRegexDetector(), raw) == []
 
 
 def test_bank_account_detector_emits_low_score_pattern_only_candidate() -> None:
@@ -320,6 +395,10 @@ def test_m2_detectors_do_not_classify_restored_korean_keywords_themselves() -> N
         NetworkIdentifierDetector(),
         CreditCardRegexDetector(),
         BusinessRegNoDetector(),
+        PassportRegexDetector(),
+        DriverLicenseRegexDetector(),
+        CorporateRegNoRegexDetector(),
+        LabeledIdentifierRegexDetector(),
         BankAccountCandidateDetector(),
         SecretRegexDetector(),
     )

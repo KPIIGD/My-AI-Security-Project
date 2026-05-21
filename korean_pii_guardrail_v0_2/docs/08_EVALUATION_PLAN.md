@@ -214,8 +214,20 @@ python scripts/run_eval.py \
   --dataset data/eval/hard_cases_v0.jsonl \
   --output reports/eval_v0_2.json
 
+python scripts/run_eval.py \
+  --config-dir configs \
+  --dataset data/eval/hard_cases_v0.jsonl \
+  --output reports/eval_v0_2_mock_ner.json \
+  --mock-ner
+
 python scripts/run_ablation.py \
   --config-dir configs \
   --dataset data/eval/hard_cases_v0.jsonl \
-  --output reports/ablation_v0_2.md
+  --output reports/ablation_v0_2.json
+
+python scripts/run_ablation.py \
+  --config-dir configs \
+  --dataset data/eval/hard_cases_v0.jsonl \
+  --output reports/ablation_v0_2_mock_ner.json \
+  --mock-ner
 ```

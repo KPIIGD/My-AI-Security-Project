@@ -176,7 +176,7 @@ class EmailRegexDetector(BaseRegexDetector):
 
 class NetworkIdentifierDetector(BaseRegexDetector):
     detector_id = "regex.network"
-    _ipv4_pattern = re.compile(r"(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])")
+    _ipv4_pattern = re.compile(r"(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?!\d)(?!\.\d)")
     _ipv6_pattern = re.compile(r"(?<![A-Fa-f0-9:])(?:[A-Fa-f0-9]{0,4}:){2,}[A-Fa-f0-9:]{0,4}(?![A-Fa-f0-9:])")
     _mac_pattern = re.compile(r"(?<![0-9A-Fa-f])(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}(?![0-9A-Fa-f])")
 
@@ -221,6 +221,8 @@ class CreditCardRegexDetector(BaseRegexDetector):
 
     def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
         for match in iter_restored_matches(preprocessed, self._pattern):
+            if _is_non_card_structured_context(preprocessed.raw_text, match.start):
+                continue
             validation = validate_credit_card(match.matched_text)
             if not validation.is_valid or validation.score_key != "CREDIT_CARD_VALID":
                 continue
@@ -257,6 +259,175 @@ class BusinessRegNoDetector(BaseRegexDetector):
                     (Source.REGEX.value, Source.VALIDATOR.value),
                 ),
             )
+
+
+class PassportRegexDetector(BaseRegexDetector):
+    detector_id = "regex.passport"
+    _pattern = re.compile(r"(?<![A-Z0-9])[A-Z]\d{8}(?![A-Z0-9])", re.IGNORECASE)
+
+    def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
+        for match in iter_restored_matches(preprocessed, self._pattern):
+            yield self._make_span(
+                preprocessed.raw_text,
+                match,
+                CandidateSpec(
+                    EntityType.PASSPORT,
+                    "PASSPORT",
+                    ("regex.passport", "regex.passport.pattern"),
+                    self.detector_id,
+                    (Source.REGEX.value,),
+                ),
+            )
+
+
+class DriverLicenseRegexDetector(BaseRegexDetector):
+    detector_id = "regex.driver_license"
+    _pattern = re.compile(r"(?<!\d)\d{2}-\d{2}-\d{6}-\d{2}(?!\d)")
+
+    def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
+        for match in iter_restored_matches(preprocessed, self._pattern):
+            yield self._make_span(
+                preprocessed.raw_text,
+                match,
+                CandidateSpec(
+                    EntityType.DRIVER_LICENSE,
+                    "DRIVER_LICENSE",
+                    ("regex.driver_license", "regex.driver_license.pattern"),
+                    self.detector_id,
+                    (Source.REGEX.value,),
+                ),
+            )
+
+
+class CorporateRegNoRegexDetector(BaseRegexDetector):
+    detector_id = "regex.corporate_reg_no"
+    _pattern = re.compile(r"(?<!\d)(?:110111|110114|110115|110121|134511)-?\d{7}(?!\d)")
+
+    def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
+        for match in iter_restored_matches(preprocessed, self._pattern):
+            yield self._make_span(
+                preprocessed.raw_text,
+                match,
+                CandidateSpec(
+                    EntityType.CORPORATE_REG_NO,
+                    "CORPORATE_REG_NO",
+                    ("regex.corporate_reg_no", "regex.corporate_reg_no.pattern"),
+                    self.detector_id,
+                    (Source.REGEX.value,),
+                ),
+            )
+
+
+_LABEL_SEPARATOR = r"\s*[:#-]?\s*"
+_CUSTOMER_LABELS = (
+    "(?:\uace0\uac1d\ubc88\ud638|\ud68c\uc6d0\ubc88\ud638|"
+    "\uace0\uac1dID|\ud68c\uc6d0ID|customer\\s*(?:id|no|number))"
+)
+_EMPLOYEE_LABELS = "(?:\uc0ac\ubc88|\uc9c1\uc6d0\ubc88\ud638|employee\\s*(?:id|no|number))"
+_STUDENT_LABELS = "(?:\ud559\ubc88|student\\s*(?:id|no|number))"
+_MEDICAL_LABELS = (
+    "(?:\ud658\uc790\ubc88\ud638|\ucc28\ud2b8\ubc88\ud638|"
+    "\uc9c4\ub8cc\uae30\ub85d\ubc88\ud638|\uc758\ubb34\uae30\ub85d\ubc88\ud638|"
+    "medical\\s*(?:record|id|no|number)|MRN)"
+)
+_DOB_LABELS = "(?:\uc0dd\ub144\uc6d4\uc77c|DOB|date\\s*of\\s*birth)"
+_DEVICE_LABELS = "(?:device(?:\\s*(?:id|no|number))?|\uae30\uae30ID|\uc7a5\uce58ID|\ub2e8\ub9d0ID)"
+_VEHICLE_LABELS = (
+    "(?:vehicle(?:\\s*(?:registration|reg|id|no|number))?|"
+    "\ucc28\ub7c9\ubc88\ud638|\ucc28\ub7c9\ub4f1\ub85d\ubc88\ud638)"
+)
+_HANGUL_SYLLABLE_CLASS = f"{chr(0xAC00)}-{chr(0xD7A3)}"
+
+
+class LabeledIdentifierRegexDetector(BaseRegexDetector):
+    detector_id = "regex.labeled_identifier"
+    _rules = (
+        (
+            re.compile(_CUSTOMER_LABELS + _LABEL_SEPARATOR + r"(?P<value>CUST-\d{6})", re.IGNORECASE),
+            CandidateSpec(
+                EntityType.CUSTOMER_ID,
+                "CUSTOMER_ID_WITH_LABEL",
+                ("regex.customer_id", "regex.customer_id.with_label"),
+                "regex.customer_id",
+                (Source.REGEX.value,),
+            ),
+        ),
+        (
+            re.compile(_EMPLOYEE_LABELS + _LABEL_SEPARATOR + r"(?P<value>EMP-\d{4}-\d{5})", re.IGNORECASE),
+            CandidateSpec(
+                EntityType.EMPLOYEE_ID,
+                "EMPLOYEE_ID_WITH_LABEL",
+                ("regex.employee_id", "regex.employee_id.with_label"),
+                "regex.employee_id",
+                (Source.REGEX.value,),
+            ),
+        ),
+        (
+            re.compile(_STUDENT_LABELS + _LABEL_SEPARATOR + r"(?P<value>STU-\d{8})", re.IGNORECASE),
+            CandidateSpec(
+                EntityType.STUDENT_ID,
+                "STUDENT_ID_WITH_LABEL",
+                ("regex.student_id", "regex.student_id.with_label"),
+                "regex.student_id",
+                (Source.REGEX.value,),
+            ),
+        ),
+        (
+            re.compile(_MEDICAL_LABELS + _LABEL_SEPARATOR + r"(?P<value>MR-\d{4}-\d{6})", re.IGNORECASE),
+            CandidateSpec(
+                EntityType.MEDICAL_RECORD_NO,
+                "MEDICAL_RECORD_NO_WITH_LABEL",
+                ("regex.medical_record_no", "regex.medical_record_no.with_label"),
+                "regex.medical_record_no",
+                (Source.REGEX.value,),
+            ),
+        ),
+        (
+            re.compile(
+                _DOB_LABELS
+                + _LABEL_SEPARATOR
+                + r"(?P<value>(?:19|20)\d{2}\s*\uB144\s*\d{1,2}\s*\uC6D4\s*\d{1,2}\s*\uC77C|(?:19|20)\d{2}-\d{2}-\d{2})",
+                re.IGNORECASE,
+            ),
+            CandidateSpec(
+                EntityType.DOB,
+                "DOB_WITH_LABEL",
+                ("regex.dob", "regex.dob.with_label"),
+                "regex.dob",
+                (Source.REGEX.value,),
+            ),
+        ),
+        (
+            re.compile(_DEVICE_LABELS + _LABEL_SEPARATOR + r"(?P<value>device-[A-Za-z0-9-]{8,})", re.IGNORECASE),
+            CandidateSpec(
+                EntityType.DEVICE_ID,
+                "DEVICE_ID_WITH_LABEL",
+                ("regex.device_id", "regex.device_id.with_label"),
+                "regex.device_id",
+                (Source.REGEX.value,),
+            ),
+        ),
+        (
+            re.compile(
+                _VEHICLE_LABELS
+                + _LABEL_SEPARATOR
+                + rf"(?P<value>\d{{2,3}}[{_HANGUL_SYLLABLE_CLASS}]\d{{4}})",
+                re.IGNORECASE,
+            ),
+            CandidateSpec(
+                EntityType.VEHICLE_REG_NO,
+                "VEHICLE_REG_NO_WITH_LABEL",
+                ("regex.vehicle_reg_no", "regex.vehicle_reg_no.with_label"),
+                "regex.vehicle_reg_no",
+                (Source.REGEX.value,),
+            ),
+        ),
+    )
+
+    def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
+        for pattern, spec in self._rules:
+            for match in iter_restored_group_matches(preprocessed, pattern, "value"):
+                yield self._make_span(preprocessed.raw_text, match, spec)
 
 
 class BankAccountCandidateDetector(BaseRegexDetector):
@@ -321,6 +492,32 @@ def iter_restored_matches(preprocessed: PreprocessResult, pattern: re.Pattern[st
             yield RestoredMatch(start, end, raw_text[start:end], variant.name, match.group(0))
 
 
+def iter_restored_group_matches(
+    preprocessed: PreprocessResult,
+    pattern: re.Pattern[str],
+    group: str,
+) -> Iterator[RestoredMatch]:
+    raw_text = preprocessed.raw_text
+    for match in pattern.finditer(raw_text):
+        start, end = match.span(group)
+        if start < 0 or end <= start:
+            continue
+        yield RestoredMatch(start, end, raw_text[start:end], "raw", match.group(group))
+
+    for variant in _scan_variants(preprocessed):
+        for match in pattern.finditer(variant.text):
+            variant_start, variant_end = match.span(group)
+            if variant_start < 0 or variant_end <= variant_start:
+                continue
+            try:
+                start, end = restore_variant_span(variant, variant_start, variant_end)
+            except NormalizationMapError:
+                continue
+            if start < 0 or end > len(raw_text) or start >= end:
+                continue
+            yield RestoredMatch(start, end, raw_text[start:end], variant.name, match.group(group))
+
+
 def _scan_variants(preprocessed: PreprocessResult) -> tuple[TextVariant, ...]:
     variants = list(preprocessed.variants)
     if not any(variant.name == "normalized" for variant in variants):
@@ -346,6 +543,19 @@ _ORDER_ID_CONTEXT_PATTERN = re.compile(
 def _is_order_id_context(raw_text: str, start: int) -> bool:
     prefix = raw_text[max(0, start - 32) : start]
     return bool(_ORDER_ID_CONTEXT_PATTERN.search(prefix))
+
+
+_NON_CARD_STRUCTURED_CONTEXT_PATTERN = re.compile(
+    r"(?:\uacc4\uc88c|account|bank|corp|corporate|"
+    r"\ubc95\uc778\s*(?:\ub4f1\ub85d)?\s*\ubc88\ud638|"
+    r"\uc0ac\uc5c5\uc790\s*(?:\ub4f1\ub85d)?\s*\ubc88\ud638)\s*[:#-]?\s*$",
+    re.IGNORECASE,
+)
+
+
+def _is_non_card_structured_context(raw_text: str, start: int) -> bool:
+    prefix = raw_text[max(0, start - 40) : start]
+    return bool(_NON_CARD_STRUCTURED_CONTEXT_PATTERN.search(prefix))
 
 
 def deduplicate_spans(spans: Iterable[PIISpan]) -> list[PIISpan]:

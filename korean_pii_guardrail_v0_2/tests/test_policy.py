@@ -147,6 +147,67 @@ def test_composite_span_masks_even_when_context_threshold_is_lower() -> None:
     assert decision.method is TransformationMethod.LABEL_MASK
 
 
+def test_person_name_with_decisive_negative_context_passes() -> None:
+    raw = "\uc0c1\ud638 \ud64d\uae38\ub3d9\uce74\ud398 \uc624\ud508."
+    span = _span(
+        raw,
+        "\ud64d\uae38\ub3d9",
+        EntityType.PERSON_NAME,
+        RiskLevel.P1,
+        score=0.84,
+        sources=("ner", "context"),
+        reason_codes=("context.penalty.organization_not_person",),
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.PASS
+    assert decision.method is TransformationMethod.PASS
+
+
+def test_person_name_negative_context_does_not_override_positive_context() -> None:
+    raw = "\uace0\uac1d\uba85 \ud64d\uae38\ub3d9, \uc5f0\ub77d\ucc98 010-1234-5678"
+    span = _span(
+        raw,
+        "\ud64d\uae38\ub3d9",
+        EntityType.PERSON_NAME,
+        RiskLevel.P1,
+        score=0.84,
+        sources=("ner", "context"),
+        reason_codes=(
+            "context.penalty.example_context",
+            "context.boost.field_label_name",
+        ),
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.MASK
+    assert decision.method is TransformationMethod.LABEL_MASK
+
+
+def test_example_context_can_override_composite_name_candidate() -> None:
+    raw = "\uc0d8\ud50c email user@example.com."
+    span = _span(
+        raw,
+        "\uc0d8\ud50c",
+        EntityType.PERSON_NAME,
+        RiskLevel.P1,
+        score=0.84,
+        sources=("ner", "context"),
+        reason_codes=(
+            "context.penalty.example_context",
+            "context.composite.EMAIL",
+        ),
+        is_composite=True,
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.PASS
+    assert decision.method is TransformationMethod.PASS
+
+
 def test_router_applies_action_metadata_without_raw_text() -> None:
     raw = "홍길동이 왔습니다."
     span = _span(raw, "홍길동", EntityType.PERSON_NAME, RiskLevel.P1, score=0.91, sources=("ner",))

@@ -100,6 +100,9 @@ test@example.com
 | EMPLOYEE_ID | label + id pattern | 0.72 | label 없으면 낮게 시작 |
 | STUDENT_ID | label + id pattern | 0.72 | label 없으면 낮게 시작 |
 | MEDICAL_RECORD_NO | 의료 label + id pattern | 0.82 | domain high-risk |
+| DOB | label + date pattern | 0.78 | 단독으로는 P2, composite에서 승격 |
+| DEVICE_ID | device label + id pattern | 0.72 | technical identifier |
+| VEHICLE_REG_NO | vehicle label + plate pattern | 0.78 | label 기반 차량 식별자 |
 
 ## 5. Dictionary base score
 

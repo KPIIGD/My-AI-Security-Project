@@ -31,6 +31,9 @@ regex_base_scores:
   EMPLOYEE_ID_WITH_LABEL: 0.72
   STUDENT_ID_WITH_LABEL: 0.72
   MEDICAL_RECORD_NO_WITH_LABEL: 0.82
+  DOB_WITH_LABEL: 0.78
+  DEVICE_ID_WITH_LABEL: 0.72
+  VEHICLE_REG_NO_WITH_LABEL: 0.78
 dictionary_base_scores:
   surname: 0.25
   given_name_candidate: 0.35

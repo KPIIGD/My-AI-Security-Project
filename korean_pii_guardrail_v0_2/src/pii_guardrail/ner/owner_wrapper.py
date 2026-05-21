@@ -110,7 +110,7 @@ class FinetunedKoreanNERDetector:
         device: str = "auto",
         max_length: int = 256,
     ):
-        self.model_path = Path(model_path)
+        self.model_path = model_path
         self.max_length = max_length
 
         # device 결정
@@ -119,8 +119,9 @@ class FinetunedKoreanNERDetector:
         self.device = device
 
         # 모델/토크나이저 로드
-        self.tokenizer = AutoTokenizer.from_pretrained(str(self.model_path))
-        self.model = AutoModelForTokenClassification.from_pretrained(str(self.model_path))
+        model_source = self._resolve_model_source(model_path)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_source)
+        self.model = AutoModelForTokenClassification.from_pretrained(model_source)
         self.model.to(self.device)
         self.model.eval()
 
@@ -142,6 +143,15 @@ class FinetunedKoreanNERDetector:
             self.per_entity_threshold.update(
                 self.calibration.get("per_entity_threshold", {})
             )
+
+    @staticmethod
+    def _resolve_model_source(model_path: str) -> str:
+        """Preserve HuggingFace repo ids while accepting local paths."""
+
+        local_path = Path(model_path).expanduser()
+        if local_path.exists():
+            return str(local_path)
+        return model_path
 
     # ─────────────────────────────────────────────────────
     # v0.2 BaseNERDetector interface

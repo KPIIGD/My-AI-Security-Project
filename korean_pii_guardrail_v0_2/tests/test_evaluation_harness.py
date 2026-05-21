@@ -563,6 +563,7 @@ def _release_gate_report(
     invalid_offset_count: int = 0,
     latency_p95: float = 50.0,
     match_type: str = "exact",
+    ner_mode: str = "disabled",
 ) -> EvaluationReport:
     label = EvaluationLabel(
         start=4,
@@ -611,6 +612,7 @@ def _release_gate_report(
         raw_pii_logging_count=raw_pii_logging_count,
         invalid_offset_count=invalid_offset_count,
         deterministic_latency_ms={"p50": latency_p95, "p95": latency_p95, "p99": latency_p95},
+        ner_mode=ner_mode,
         case_results=(case_result,),
     )
 
@@ -657,6 +659,76 @@ def test_release_gate_fails_when_latency_exceeds_threshold() -> None:
 
     assert payload["overall_status"] == "fail"
     assert checks["deterministic_latency_p95_ms"]["status"] == "fail"
+
+
+def test_release_gate_skips_deterministic_latency_when_real_ner_path_is_included() -> None:
+    payload = build_release_gate_report(
+        _release_gate_report(latency_p95=250.0, ner_mode="real")
+    ).to_dict()
+    checks = {check["name"]: check for check in payload["checks"]}
+
+    assert payload["overall_status"] == "pass"
+    assert checks["deterministic_latency_p95_ms"]["status"] == "skipped"
+    assert checks["deterministic_latency_p95_ms"]["reason_code"] == (
+        "gate.deterministic_latency.real_ner_path_included"
+    )
+
+
+def test_name_ambiguity_fp_rate_counts_only_actionable_person_predictions() -> None:
+    pass_person = _public(0, 2, EntityType.PERSON_NAME, action=Action.PASS)
+    masked_person = _public(3, 5, EntityType.PERSON_NAME, action=Action.MASK)
+    report = EvaluationReport(
+        dataset_id="hard-negative",
+        records_processed=2,
+        blocked_count=0,
+        spans_detected=2,
+        spans_masked=1,
+        per_entity=(),
+        masked_text_exact_match_rate=0.0,
+        high_risk_recall=0.0,
+        deterministic_latency_ms={"p50": 1.0, "p95": 1.0, "p99": 1.0},
+        case_results=(
+            CaseResult(
+                case_id="hn-pass",
+                matches=(
+                    SpanMatch(
+                        case_id="hn-pass",
+                        expected=None,
+                        actual=pass_person,
+                        match_type="spurious",
+                    ),
+                ),
+                masked_text="safe",
+                expected_masked_text=None,
+                blocked=False,
+                audit_event_count=0,
+                prediction_count=1,
+                tags=("hard_negative",),
+            ),
+            CaseResult(
+                case_id="hn-mask",
+                matches=(
+                    SpanMatch(
+                        case_id="hn-mask",
+                        expected=None,
+                        actual=masked_person,
+                        match_type="spurious",
+                    ),
+                ),
+                masked_text="[PERSON_1]",
+                expected_masked_text=None,
+                blocked=False,
+                audit_event_count=0,
+                prediction_count=1,
+                tags=("hard_negative",),
+            ),
+        ),
+    )
+    payload = build_release_gate_report(report).to_dict()
+    checks = {check["name"]: check for check in payload["checks"]}
+
+    assert checks["name_ambiguity_fp_rate"]["actual_value"] == 0.5
+    assert checks["name_ambiguity_fp_rate"]["status"] == "fail"
 
 
 # ============================================================
@@ -916,6 +988,13 @@ def test_run_eval_writes_safe_json_report(tmp_path: Path) -> None:
     assert payload["records_processed"] == 1
     assert "per_entity" in payload
     assert "deterministic_latency_ms" in payload
+    assert payload["ner_detector"] == {
+        "mode": "real",
+        "detector_id": "ner.finetuned.klue-roberta-large-v3",
+    }
+    assert payload["real_ner_latency_ms"]["reason_code"] == (
+        "gate.real_ner_latency.separate_instrumentation_unavailable"
+    )
     assert "release_gate" in payload
     assert payload["release_gate"]["report_type"] == "ReleaseGateReport"
     assert audit_payload["report_type"] == "AuditSafetyReport"
@@ -1018,6 +1097,10 @@ def test_run_ablation_writes_safe_json_report(tmp_path: Path) -> None:
     assert payload["report_type"] == "AblationEvaluationReport"
     assert payload["dataset_id"] == "tiny_ablation"
     assert [stage["stage_name"] for stage in payload["stages"]] == ["A", "B", "C", "D", "E1", "E2", "F"]
+    by_name = {stage["stage_name"]: stage for stage in payload["stages"]}
+    assert by_name["E2"]["status"] == "ok"
+    assert "real_v3_ner" in by_name["E2"]["components"]
+    assert "real_v3_ner" in by_name["F"]["components"]
     assert raw_text not in serialized
     assert raw_phone not in serialized
     assert raw_text not in result.stdout

@@ -55,10 +55,27 @@ from .schema import (
     PublicPIISpan,
     ResponseMetrics,
 )
+from .ner import MockNERDetector
 
 
 if TYPE_CHECKING:
     from .pipeline import GuardrailPipeline
+
+
+def _ner_detector_id_from_pipeline(pipeline: "GuardrailPipeline") -> str | None:
+    components = getattr(pipeline, "components", None)
+    detector = getattr(components, "ner_detector", None)
+    if detector is None:
+        return None
+    return str(getattr(detector, "detector_id", detector.__class__.__name__))
+
+
+def _ner_mode_from_detector_id(detector_id: str | None) -> str:
+    if detector_id is None:
+        return "disabled"
+    if detector_id.startswith("mock_ner"):
+        return "mock"
+    return "real"
 
 
 # ============================================================
@@ -262,6 +279,8 @@ class EvaluationReport:
     audit_event_raw_value_logged_count: int = 0
     invalid_offset_count: int = 0
     deterministic_latency_ms: dict[str, float] = field(default_factory=dict)
+    ner_detector_id: str | None = None
+    ner_mode: str = "disabled"
     generated_at: str = field(
         default_factory=lambda: datetime.datetime.now(datetime.UTC).isoformat()
     )
@@ -335,10 +354,11 @@ class EvaluationReport:
                 key: round(value, 4)
                 for key, value in sorted(self.deterministic_latency_ms.items())
             },
-            "real_ner_latency_ms": {
-                "status": "skipped",
-                "reason_code": "gate.real_ner_latency.unavailable",
+            "ner_detector": {
+                "mode": self.ner_mode,
+                "detector_id": self.ner_detector_id,
             },
+            "real_ner_latency_ms": self._real_ner_latency_report(),
             "residual_risk_notes": [
                 {"entity_type": et, "miss_count": count}
                 for et, count in sorted(miss_summary.items())
@@ -368,6 +388,18 @@ class EvaluationReport:
         payload["release_gate"] = build_release_gate_report(self).to_dict()
         return payload
 
+    def _real_ner_latency_report(self) -> dict[str, object]:
+        if self.ner_mode == "real":
+            return {
+                "status": "skipped",
+                "reason_code": "gate.real_ner_latency.separate_instrumentation_unavailable",
+                "detector_id": self.ner_detector_id,
+            }
+        return {
+            "status": "skipped",
+            "reason_code": "gate.real_ner_latency.unavailable",
+        }
+
 
 # ============================================================
 # M10-3 release gate core
@@ -386,6 +418,8 @@ _STRUCTURED_HIGH_RISK_ENTITIES = frozenset(
         EntityType.CREDIT_CARD,
         EntityType.BANK_ACCOUNT,
         EntityType.BUSINESS_REG_NO,
+        EntityType.CORPORATE_REG_NO,
+        EntityType.VEHICLE_REG_NO,
         EntityType.CUSTOMER_ID,
         EntityType.EMPLOYEE_ID,
         EntityType.STUDENT_ID,
@@ -499,24 +533,48 @@ def build_release_gate_report(report: EvaluationReport) -> ReleaseGateReport:
             "==",
             "gate.invalid_offset_count",
         ),
-        _threshold_check(
-            "deterministic_latency_p95_ms",
-            report.deterministic_latency_ms.get("p95"),
-            100.0,
-            "<=",
-            "gate.deterministic_latency_p95_ms",
-        ),
-        ReleaseGateCheck(
-            name="real_ner_latency_ms",
-            actual_value=None,
-            threshold="measured_separately_when_real_ner_available",
-            status="skipped",
-            reason_code="gate.real_ner_latency.unavailable",
-        ),
+        _deterministic_latency_gate_check(report),
+        _real_ner_latency_gate_check(report),
     )
     failing = any(check.status == "fail" for check in checks)
     overall_status = "fail" if failing else "pass"
     return ReleaseGateReport(overall_status=overall_status, checks=checks)
+
+
+def _deterministic_latency_gate_check(report: EvaluationReport) -> ReleaseGateCheck:
+    if report.ner_mode == "real":
+        return ReleaseGateCheck(
+            name="deterministic_latency_p95_ms",
+            actual_value=round(report.deterministic_latency_ms.get("p95", 0.0), 4),
+            threshold="<= 100.0 for deterministic-only path",
+            status="skipped",
+            reason_code="gate.deterministic_latency.real_ner_path_included",
+        )
+    return _threshold_check(
+        "deterministic_latency_p95_ms",
+        report.deterministic_latency_ms.get("p95"),
+        100.0,
+        "<=",
+        "gate.deterministic_latency_p95_ms",
+    )
+
+
+def _real_ner_latency_gate_check(report: EvaluationReport) -> ReleaseGateCheck:
+    if report.ner_mode == "real":
+        return ReleaseGateCheck(
+            name="real_ner_latency_ms",
+            actual_value=None,
+            threshold="measured_separately_when_real_ner_available",
+            status="skipped",
+            reason_code="gate.real_ner_latency.separate_instrumentation_unavailable",
+        )
+    return ReleaseGateCheck(
+        name="real_ner_latency_ms",
+        actual_value=None,
+        threshold="measured_separately_when_real_ner_available",
+        status="skipped",
+        reason_code="gate.real_ner_latency.unavailable",
+    )
 
 
 def _threshold_check(
@@ -612,6 +670,7 @@ def _name_ambiguity_fp_rate(report: EvaluationReport) -> float | None:
                 match.match_type == "spurious"
                 and match.actual is not None
                 and match.actual.entity_type is EntityType.PERSON_NAME
+                and match.actual.action in {Action.MASK, Action.HASH, Action.BLOCK}
             ):
                 fp_count += 1
     return fp_count / len(eligible_cases)
@@ -919,6 +978,7 @@ class AblationStageSpec:
     include_dictionary: bool = False
     include_boundary: bool = False
     include_mock_ner: bool = False
+    include_real_ner: bool = False
     include_context: bool = False
     status: str = "supported"
     skip_reason: str | None = None
@@ -982,12 +1042,63 @@ class AblationReport:
         }
 
 
-def m10_2_ablation_stage_specs() -> tuple[AblationStageSpec, ...]:
+def m10_2_ablation_stage_specs(
+    *,
+    real_ner_enabled: bool = False,
+) -> tuple[AblationStageSpec, ...]:
     """Return the small M10-2 cumulative stage set.
 
-    E2 is included as a skipped marker only. Real NER activation and latency
-    evaluation remain outside this PR's scope.
+    E2 is a skipped marker by default. When a real NER detector is injected
+    into the pipeline, E2 runs that detector and F uses real NER + context.
     """
+    e2_spec = (
+        AblationStageSpec(
+            name="E2",
+            components=(
+                "regex_patterns",
+                "validators",
+                "dictionary",
+                "korean_boundary",
+                "real_v3_ner",
+            ),
+            include_validated_regex=True,
+            include_dictionary=True,
+            include_boundary=True,
+            include_real_ner=True,
+        )
+        if real_ner_enabled
+        else AblationStageSpec(
+            name="E2",
+            components=(
+                "regex_patterns",
+                "validators",
+                "dictionary",
+                "korean_boundary",
+                "real_v3_ner",
+            ),
+            status="skipped",
+            skip_reason="real NER v3 is not connected in this run",
+        )
+    )
+    f_components = (
+        (
+            "regex_patterns",
+            "validators",
+            "dictionary",
+            "korean_boundary",
+            "real_v3_ner",
+            "context_scorer",
+        )
+        if real_ner_enabled
+        else (
+            "regex_patterns",
+            "validators",
+            "dictionary",
+            "korean_boundary",
+            "mock_ner",
+            "context_scorer",
+        )
+    )
     return (
         AblationStageSpec(
             name="A",
@@ -1026,32 +1137,15 @@ def m10_2_ablation_stage_specs() -> tuple[AblationStageSpec, ...]:
             include_boundary=True,
             include_mock_ner=True,
         ),
-        AblationStageSpec(
-            name="E2",
-            components=(
-                "regex_patterns",
-                "validators",
-                "dictionary",
-                "korean_boundary",
-                "real_v3_ner",
-            ),
-            status="skipped",
-            skip_reason="real NER v3 is not connected in M10-2",
-        ),
+        e2_spec,
         AblationStageSpec(
             name="F",
-            components=(
-                "regex_patterns",
-                "validators",
-                "dictionary",
-                "korean_boundary",
-                "mock_ner",
-                "context_scorer",
-            ),
+            components=f_components,
             include_validated_regex=True,
             include_dictionary=True,
             include_boundary=True,
-            include_mock_ner=True,
+            include_mock_ner=not real_ner_enabled,
+            include_real_ner=real_ner_enabled,
             include_context=True,
         ),
     )
@@ -1068,6 +1162,10 @@ class AblationRunner:
     ) -> None:
         self._pipeline = pipeline
         self._partial_overlap_min = partial_overlap_min
+        self._real_ner_enabled = (
+            _ner_mode_from_detector_id(_ner_detector_id_from_pipeline(pipeline))
+            == "real"
+        )
 
     def evaluate(
         self,
@@ -1077,7 +1175,9 @@ class AblationRunner:
     ) -> AblationReport:
         case_list = list(cases)
         results: list[AblationStageResult] = []
-        for spec in m10_2_ablation_stage_specs():
+        for spec in m10_2_ablation_stage_specs(
+            real_ner_enabled=self._real_ner_enabled,
+        ):
             if spec.status == "skipped":
                 results.append(
                     AblationStageResult(
@@ -1151,7 +1251,15 @@ class _AblationStagePipeline:
                 spans.extend(detector.detect(preprocessed, request))
         if self._spec.include_dictionary:
             spans.extend(self._components.dictionary_detector.detect(preprocessed, request))
-        if self._spec.include_mock_ner and self._components.ner_detector is not None:
+        if self._spec.include_mock_ner:
+            spans.extend(
+                MockNERDetector().detect(
+                    raw_text=request.text,
+                    preprocessed=preprocessed,
+                    request=request,
+                )
+            )
+        if self._spec.include_real_ner and self._components.ner_detector is not None:
             spans.extend(
                 self._components.ner_detector.detect(
                     raw_text=request.text,
@@ -1245,6 +1353,8 @@ class EvaluationRunner:
             raise ValueError("partial_overlap_min must be in (0, 1]")
         self._pipeline = pipeline
         self._partial_threshold = partial_overlap_min
+        self._ner_detector_id = _ner_detector_id_from_pipeline(pipeline)
+        self._ner_mode = _ner_mode_from_detector_id(self._ner_detector_id)
 
     def evaluate(
         self,
@@ -1463,6 +1573,8 @@ class EvaluationRunner:
             audit_event_raw_value_logged_count=audit_event_raw_value_logged_count,
             invalid_offset_count=0,
             deterministic_latency_ms=deterministic_latency_ms,
+            ner_detector_id=self._ner_detector_id,
+            ner_mode=self._ner_mode,
             case_results=tuple(case_results),
         )
 
