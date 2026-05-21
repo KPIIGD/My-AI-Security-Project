@@ -1,0 +1,10 @@
+# 데모(demo/app.py) 실행에 필요한 의존성
+# 메인 패키지(pii_guardrail)는 src/ 에 있으며 app.py가 sys.path에 자동 추가한다.
+
+gradio>=5.0,<6.0
+matplotlib>=3.5
+
+# real NER 추론용 (없으면 mock NER로 자동 fallback)
+transformers>=4.40
+torch>=2.0
+huggingface_hub>=0.20

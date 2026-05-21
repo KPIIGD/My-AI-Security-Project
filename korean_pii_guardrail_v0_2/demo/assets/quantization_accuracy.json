@@ -1,0 +1,146 @@
+{
+  "n_test_samples": 200,
+  "total_tokens": 5148,
+  "agree_tokens": 5135,
+  "overall_agreement": 0.997475,
+  "per_label": {
+    "B-ADDRESS": {
+      "total": 55,
+      "agree": 54,
+      "rate": 0.9818
+    },
+    "B-NAME": {
+      "total": 129,
+      "agree": 128,
+      "rate": 0.9922
+    },
+    "B-ORG": {
+      "total": 79,
+      "agree": 78,
+      "rate": 0.9873
+    },
+    "I-ADDRESS": {
+      "total": 270,
+      "agree": 268,
+      "rate": 0.9926
+    },
+    "I-NAME": {
+      "total": 134,
+      "agree": 134,
+      "rate": 1.0
+    },
+    "I-ORG": {
+      "total": 93,
+      "agree": 91,
+      "rate": 0.9785
+    },
+    "O": {
+      "total": 4388,
+      "agree": 4382,
+      "rate": 0.9986
+    }
+  },
+  "n_sentences_with_disagreement": 12,
+  "sample_disagreements": [
+    {
+      "idx": 8,
+      "sentence": "법률전문가들은 알왈리드의 소송이 런던 고등법원에서 받아들여지려면 포브스 기사로 인해 잉글랜드와 웨일스 지역에서 자신의 명예가 크게 훼손되고 킹덤...",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 17,
+        "fp32": "I-ORG",
+        "int8": "O"
+      }
+    },
+    {
+      "idx": 44,
+      "sentence": "제주해군기지 무사히 완공되길 기원합니다.",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 4,
+        "fp32": "I-ADDRESS",
+        "int8": "O"
+      }
+    },
+    {
+      "idx": 62,
+      "sentence": "2007년 카카(브라질)가 FIFA 올해의 선수와 발롱도르를 한꺼번에 받은 이후 이 상은 메시와 호날두가 번갈아 수상하고 있다.",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 6,
+        "fp32": "B-ADDRESS",
+        "int8": "I-ADDRESS"
+      }
+    },
+    {
+      "idx": 84,
+      "sentence": "오스트리아 관광청에서 만든 홍보 영상이라고 해도 믿을 거 같다.",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 2,
+        "fp32": "I-ORG",
+        "int8": "O"
+      }
+    },
+    {
+      "idx": 90,
+      "sentence": "프랑스 유머코드가 한국이랑 잘맞는 듯, 자막만드신 분이 맛깔나게 잘 표현한것 같고 내용자체가 유쾌하고 재밌었습니다,",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 5,
+        "fp32": "O",
+        "int8": "B-ADDRESS"
+      }
+    },
+    {
+      "idx": 95,
+      "sentence": "환자 이수빈님 (하나은행 소속)이 진료 받으셨습니다.",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 1,
+        "fp32": "B-NAME",
+        "int8": "O"
+      }
+    },
+    {
+      "idx": 126,
+      "sentence": "미국 항공우주국(NASA·나사)의 무인 화물 로켓이 28일(현지시각) 오후 6시22분쯤 버지니아주 월롭스섬의 기지에서 발사된 지 6초 만에 폭발...",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 46,
+        "fp32": "O",
+        "int8": "B-ORG"
+      }
+    },
+    {
+      "idx": 128,
+      "sentence": "강서준(22세)는 대구광역시 남구 양재대길 882에 거주하며 쿠팡에서 근무합니다.",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 20,
+        "fp32": "O",
+        "int8": "B-ORG"
+      }
+    },
+    {
+      "idx": 145,
+      "sentence": "김성진와 쿠팡 대표가 회의했습니다.",
+      "n_disagree": 1,
+      "first_disagreement": {
+        "token_idx": 4,
+        "fp32": "O",
+        "int8": "B-NAME"
+      }
+    },
+    {
+      "idx": 169,
+      "sentence": "남주혁 잘생겼고 후아유 넘 재밌어요.",
+      "n_disagree": 2,
+      "first_disagreement": {
+        "token_idx": 8,
+        "fp32": "O",
+        "int8": "B-NAME"
+      }
+    }
+  ]
+}
