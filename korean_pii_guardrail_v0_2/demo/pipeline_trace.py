@@ -9,10 +9,11 @@
 달라지므로, `assert_matches_pipeline()` 로 동일성을 검증할 수 있다(drift guard).
 
 raw-PII 경계: 단일 로컬 분석에서는 원문을 보이되(reveal_raw=True), 저장/공개 시에는
-reveal_raw=False 로 길이/해시만 남긴다.
+reveal_raw=False 로 길이/placeholder/요약만 남긴다.
 """
 from __future__ import annotations
 
+import re
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -52,7 +53,7 @@ class PipelineTrace:
     normalized_changed: bool
     variants: list[dict]
     stages: list[StageView]
-    masked_text: str | None          # reveal_raw=False 면 placeholder만 (이미 안전)
+    masked_text: str | None          # reveal_raw=False 면 원문 filler 없이 요약
     blocked: bool
     audit_event_count: int
     total_latency_ms: float
@@ -109,6 +110,24 @@ def _detector_label(detector) -> str:
         or getattr(detector, "source", None)
         or type(detector).__name__
     )
+
+
+_SAFE_PLACEHOLDER_RE = re.compile(r"\[(?:[A-Z][A-Z0-9]*_\d+|REDACTED)\]")
+
+
+def _safe_masked_view(masked_text: str | None, *, reveal_raw: bool) -> str:
+    """Render final output without echoing raw filler in public/share mode."""
+    if masked_text is None:
+        return "🚫 BLOCKED (고위험 다수)"
+    if reveal_raw:
+        return masked_text
+    placeholders = _SAFE_PLACEHOLDER_RE.findall(masked_text)
+    if placeholders:
+        return (
+            f"🔒 출력 {len(masked_text)}자 (원문 숨김) · "
+            f"placeholder: {' '.join(placeholders)}"
+        )
+    return f"🔒 출력 {len(masked_text)}자 (원문 숨김 · 탐지 placeholder 없음)"
 
 
 # ───────────────────────── 핵심: trace ─────────────────────────
@@ -273,7 +292,7 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
     # ── M7 마스킹 (텍스트 재구성) ───────────────────────────────
     masked_text = c.masker.apply(request.text, routed, request)
     blocked = masked_text is None
-    masked_view = "🚫 BLOCKED (고위험 다수)" if blocked else masked_text
+    masked_view = _safe_masked_view(masked_text, reveal_raw=reveal_raw)
     stages.append(StageView(
         module="M7", title="마스킹 (masker)",
         span_count=len(routed),
@@ -282,22 +301,19 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
         detail={"blocked": blocked},
     ))
 
-    # ── M8 감사 로깅 (actionable span만, hash only) ─────────────
-    audit_n = 0
-    if c.audit_logger is not None:
-        for s in routed:
-            if s.action in {Action.MASK, Action.HASH, Action.BLOCK}:
-                audit_n += 1
+    # ── M8 감사 대상 산정 (trace는 파일 쓰기 부작용 없이 대상만 계산) ─────────────
     actionable = sum(1 for s in routed if s.action in {Action.MASK, Action.HASH, Action.BLOCK})
+    audit_n = actionable if c.audit_logger is not None else 0
     stages.append(StageView(
-        module="M8", title="감사 로깅 (audit logger)",
+        module="M8", title="감사 대상 산정 (audit logger)",
         span_count=audit_n,
-        summary=(f"actionable {actionable}건 → 감사 이벤트 (hash only)"
+        summary=(f"actionable {actionable}건 → 감사 이벤트 대상 (hash only)"
                  if c.audit_logger is not None else "감사 로거 비활성 (이벤트 0)"),
-        what_it_did=([f"{actionable}건의 MASK/HASH/BLOCK span을 hash+offset+type만 기록"]
+        what_it_did=([f"{actionable}건의 MASK/HASH/BLOCK span이 감사 이벤트 대상",
+                      "trace 뷰는 관측용이라 실제 audit log 파일 쓰기는 수행하지 않음"]
                      if c.audit_logger is not None
-                     else ["감사 로거가 주입되지 않음 — 이벤트 없음"]),
-        detail={"audit_events": audit_n, "actionable": actionable},
+                      else ["감사 로거가 주입되지 않음 — 이벤트 없음"]),
+        detail={"audit_event_targets": audit_n, "actionable": actionable, "emitted": False},
     ))
 
     total_ms = (time.perf_counter() - t0) * 1000.0
@@ -558,7 +574,8 @@ def assert_matches_pipeline(pipe, request: GuardrailRequest) -> None:
     """
     tr = trace_pipeline(pipe, request, reveal_raw=True)
     resp = pipe.process(request)
-    final_routed = tr.stages[-3].span_count  # M7 정책 라우팅 단계의 span 수
+    policy_stage = next(s for s in tr.stages if s.module == "M7" and "정책" in s.title)
+    final_routed = policy_stage.span_count
     assert tr.blocked == resp.blocked, ("blocked mismatch", tr.blocked, resp.blocked)
     expected_masked = None if resp.blocked else resp.masked_text
     got_masked = None if tr.blocked else tr.masked_text

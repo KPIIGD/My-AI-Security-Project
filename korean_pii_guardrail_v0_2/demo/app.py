@@ -473,6 +473,13 @@ def run_batch(lines_text: str, file_path: str, limit):
     except (TypeError, ValueError):
         limit = None
     if file_path and file_path.strip():
+        if SHARE_MODE:
+            return (
+                "<div style='color:#e64980'>공개 링크(--share)에서는 서버 로컬 파일 경로 입력을 "
+                "허용하지 않습니다. 줄 단위 입력을 사용하세요.</div>",
+                [],
+                [],
+            )
         try:
             texts = load_texts(file_path.strip(), limit=limit)
         except Exception as exc:
@@ -625,13 +632,18 @@ def build_ui():
                 ### 다건 입력(퍼저 · 뉴스 · 문서) 단계별 집계 + 레코드 drill-down
                 여러 건을 흘려보내 **검출기별 기여 · 단계별 span 증감 · entity/조치 분포 · latency**
                 를 집계하고, 표의 **레코드 번호로 개별 1건을 단계별로 해부**할 수 있습니다.
-                10k 규모는 파일 경로로 로드하세요(.json: `[str]` 또는 `[{text:..}]` / .txt: 줄 단위).
+                10k 규모는 로컬 실행에서 파일 경로로 로드하세요(.json: `[str]` 또는 `[{text:..}]` / .txt: 줄 단위).
+                공개 링크(`--share`)에서는 서버 파일 읽기를 막기 위해 파일 경로 입력이 비활성화됩니다.
                 """
             )
             with gr.Row():
                 b_lines = gr.Textbox(label="줄 단위 입력 (1줄 = 1건)", lines=6, value=BATCH_SAMPLE)
                 with gr.Column():
-                    b_file = gr.Textbox(label="또는 파일 경로 (.json / .txt)", placeholder="예: ../PII/evaluation/payloads_10k.json")
+                    b_file = gr.Textbox(
+                        label="또는 파일 경로 (.json / .txt)",
+                        placeholder="예: ../PII/evaluation/payloads_10k.json",
+                        interactive=not SHARE_MODE,
+                    )
                     b_limit = gr.Number(label="최대 건수 (비우면 전체)", value=200, precision=0)
                     b_btn = gr.Button("📊 배치 분석", variant="primary")
             b_agg = gr.HTML()
