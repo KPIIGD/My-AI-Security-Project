@@ -44,7 +44,13 @@ from pii_guardrail.schema import GuardrailRequest
 DEMO_DIR = Path(__file__).resolve().parent
 if str(DEMO_DIR) not in sys.path:
     sys.path.insert(0, str(DEMO_DIR))
-from pipeline_trace import render_trace_html, trace_pipeline  # noqa: E402
+from pipeline_trace import (  # noqa: E402
+    batch_trace,
+    load_texts,
+    render_batch_html,
+    render_trace_html,
+    trace_pipeline,
+)
 
 ASSETS = DEMO_DIR / "assets"
 CONFIG_DIR = PROJECT_ROOT / "configs"
@@ -449,6 +455,63 @@ def trace_view(text: str):
 
 
 # ============================================================
+# Tab ⑤ 배치 분석 (퍼저/뉴스 N건 → 집계 + 레코드 drill-down)
+# ============================================================
+BATCH_SAMPLE = "\n".join([
+    "최영희 연봉 7409만원 010-1234-5678",
+    "김민수 서울시 강남구 테헤란로 123 삼성전자 근무",
+    "내 ㅈㅜㅁㅣㄴ번호는 900101-1234568 이야",
+    "박지성님께 ceo@jisung.co.kr 로 연락주세요",
+    "오늘 날씨가 참 좋네요 점심 뭐 먹지",
+    "환자 이수진 당뇨 진단, 신한은행 110-123-456789",
+])
+
+
+def run_batch(lines_text: str, file_path: str, limit):
+    try:
+        limit = int(limit) if limit else None
+    except (TypeError, ValueError):
+        limit = None
+    if file_path and file_path.strip():
+        try:
+            texts = load_texts(file_path.strip(), limit=limit)
+        except Exception as exc:
+            return f"<div style='color:#e64980'>파일 로드 실패: {_esc_msg(exc)}</div>", [], []
+    else:
+        texts = [ln for ln in (lines_text or "").splitlines() if ln.strip()]
+        if limit:
+            texts = texts[:limit]
+    if not texts:
+        return "<div style='opacity:.6'>입력이 없습니다 (줄 단위 입력 또는 파일 경로).</div>", [], []
+
+    result = batch_trace(PIPELINE, texts, reveal_raw=not SHARE_MODE)
+    rows = [
+        [r["idx"], r["len"], "✨" if r["norm_changed"] else "",
+         r["candidates"], r["final"], "🚫" if r["blocked"] else "",
+         ", ".join(r["types"]) or "—", r["latency_ms"]]
+        for r in result.records
+    ]
+    return render_batch_html(result), rows, texts
+
+
+def drill_record(idx, texts):
+    if not texts:
+        return "<div style='opacity:.6'>먼저 배치 분석을 실행하세요.</div>"
+    try:
+        idx = int(idx)
+    except (TypeError, ValueError):
+        return "<div style='color:#e64980'>레코드 번호가 올바르지 않습니다.</div>"
+    if not (0 <= idx < len(texts)):
+        return f"<div style='color:#e64980'>레코드 #{idx} 없음 (범위 0~{len(texts)-1}).</div>"
+    trace = trace_pipeline(PIPELINE, GuardrailRequest(text=texts[idx]), reveal_raw=not SHARE_MODE)
+    return render_trace_html(trace)
+
+
+def _esc_msg(exc) -> str:
+    return str(exc).replace("<", "&lt;").replace(">", "&gt;")
+
+
+# ============================================================
 # UI
 # ============================================================
 def build_ui():
@@ -555,6 +618,35 @@ def build_ui():
             tr_out = gr.HTML()
             tr_btn.click(trace_view, inputs=tr_inp, outputs=tr_out)
             tr_inp.submit(trace_view, inputs=tr_inp, outputs=tr_out)
+
+        with gr.Tab("⑤ 배치 분석"):
+            gr.Markdown(
+                """
+                ### 다건 입력(퍼저 · 뉴스 · 문서) 단계별 집계 + 레코드 drill-down
+                여러 건을 흘려보내 **검출기별 기여 · 단계별 span 증감 · entity/조치 분포 · latency**
+                를 집계하고, 표의 **레코드 번호로 개별 1건을 단계별로 해부**할 수 있습니다.
+                10k 규모는 파일 경로로 로드하세요(.json: `[str]` 또는 `[{text:..}]` / .txt: 줄 단위).
+                """
+            )
+            with gr.Row():
+                b_lines = gr.Textbox(label="줄 단위 입력 (1줄 = 1건)", lines=6, value=BATCH_SAMPLE)
+                with gr.Column():
+                    b_file = gr.Textbox(label="또는 파일 경로 (.json / .txt)", placeholder="예: ../PII/evaluation/payloads_10k.json")
+                    b_limit = gr.Number(label="최대 건수 (비우면 전체)", value=200, precision=0)
+                    b_btn = gr.Button("📊 배치 분석", variant="primary")
+            b_agg = gr.HTML()
+            b_table = gr.Dataframe(
+                headers=["#", "길이", "변이", "후보(M2)", "최종", "차단", "탐지 entity", "latency(ms)"],
+                label="레코드별 요약 (번호로 drill-down)",
+                wrap=True,
+            )
+            b_state = gr.State([])
+            with gr.Row():
+                b_idx = gr.Number(label="해부할 레코드 #", value=0, precision=0)
+                b_drill = gr.Button("🔬 이 레코드 해부")
+            b_trace = gr.HTML()
+            b_btn.click(run_batch, inputs=[b_lines, b_file, b_limit], outputs=[b_agg, b_table, b_state])
+            b_drill.click(drill_record, inputs=[b_idx, b_state], outputs=b_trace)
 
     return demo
 

@@ -316,6 +316,100 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
     )
 
 
+@dataclass
+class BatchTraceResult:
+    n: int
+    aggregate: dict[str, Any]
+    records: list[dict]      # 레코드별 요약 (drill-down 표용)
+
+
+def _percentile(values: list[float], q: float) -> float:
+    if not values:
+        return 0.0
+    s = sorted(values)
+    idx = min(len(s) - 1, int(round(q * (len(s) - 1))))
+    return s[idx]
+
+
+def batch_trace(pipe, texts: list[str], *, reveal_raw: bool = False) -> BatchTraceResult:
+    """N개 입력을 단계별로 흘려보내며 집계 + 레코드별 요약을 만든다.
+
+    각 레코드 full trace 는 보관하지 않고(메모리 bound), drill-down 시
+    `trace_pipeline(pipe, request)` 로 재계산한다. 따라서 10k 도 처리 가능.
+    """
+    from collections import Counter
+
+    n = len(texts)
+    records: list[dict] = []
+    detector_contrib: Counter = Counter()   # detector_id → 기여 span 수
+    action_dist: Counter = Counter()
+    entity_dist: Counter = Counter()
+    stage_counts: dict[str, list[int]] = {}
+    latencies: list[float] = []
+    n_normalized_changed = 0
+    n_blocked = 0
+    n_zero_detection = 0
+
+    for i, txt in enumerate(texts):
+        txt = (txt or "").strip()
+        if not txt:
+            continue
+        tr = trace_pipeline(pipe, GuardrailRequest(text=txt), reveal_raw=reveal_raw)
+        latencies.append(tr.total_latency_ms)
+        if tr.normalized_changed:
+            n_normalized_changed += 1
+        if tr.blocked:
+            n_blocked += 1
+
+        # 스테이지별 span 수
+        for st in tr.stages:
+            stage_counts.setdefault(st.module, []).append(st.span_count)
+
+        # M2 detector별 기여
+        m2 = next((s for s in tr.stages if s.module == "M2"), None)
+        if m2:
+            for ct in m2.detail.get("contributions", []):
+                detector_contrib[ct["detector"]] += ct["count"]
+
+        # 최종(M7 정책) 기준 action/entity 분포
+        m7 = next((s for s in tr.stages if s.module == "M7" and "정책" in s.title), None)
+        final_spans = m7.spans if m7 else []
+        for sp in final_spans:
+            action_dist[sp["action"]] += 1
+            entity_dist[sp["type"]] += 1
+        if not final_spans:
+            n_zero_detection += 1
+
+        records.append({
+            "idx": i,
+            "len": len(txt),
+            "norm_changed": tr.normalized_changed,
+            "candidates": (m2.span_count if m2 else 0),
+            "final": len(final_spans),
+            "blocked": tr.blocked,
+            "types": sorted({sp["type"] for sp in final_spans}),
+            "latency_ms": round(tr.total_latency_ms, 2),
+        })
+
+    valid = len(records)
+    detected = valid - n_zero_detection
+    aggregate = {
+        "n": valid,
+        "detection_rate": (detected / valid) if valid else 0.0,
+        "zero_detection": n_zero_detection,
+        "block_rate": (n_blocked / valid) if valid else 0.0,
+        "normalized_changed": n_normalized_changed,
+        "detector_contrib": dict(detector_contrib.most_common()),
+        "action_dist": dict(action_dist.most_common()),
+        "entity_dist": dict(entity_dist.most_common()),
+        "stage_avg": {k: (sum(v) / len(v) if v else 0) for k, v in stage_counts.items()},
+        "latency_p50": _percentile(latencies, 0.5),
+        "latency_p95": _percentile(latencies, 0.95),
+        "latency_mean": (sum(latencies) / len(latencies)) if latencies else 0.0,
+    }
+    return BatchTraceResult(n=valid, aggregate=aggregate, records=records)
+
+
 _MODULE_COLOR = {
     "M1": "#4263eb", "M2": "#0ca678", "M3": "#7048e8", "dedup": "#868e96",
     "M4": "#f59f00", "M6": "#e8590c", "M7": "#e64980", "M8": "#1098ad",
@@ -366,6 +460,95 @@ def render_trace_html(trace: PipelineTrace) -> str:
             f'{table}</div>'
         )
     return "<div>" + "".join(blocks) + "</div>"
+
+
+def _bar(label: str, value: float, maxv: float, color: str, suffix: str = "") -> str:
+    pct = (value / maxv * 100) if maxv else 0
+    return (
+        f'<div style="display:flex;align-items:center;gap:8px;margin:3px 0;font-size:12px">'
+        f'<span style="width:160px;text-align:right;opacity:.8">{_esc(label)}</span>'
+        f'<div style="flex:1;background:#8881;border-radius:4px;height:16px">'
+        f'<div style="width:{pct:.0f}%;background:{color};height:16px;border-radius:4px"></div></div>'
+        f'<span style="width:70px">{value:.0f}{suffix}</span></div>'
+    )
+
+
+def render_batch_html(result: BatchTraceResult) -> str:
+    a = result.aggregate
+    n = a["n"]
+    cards = [
+        (f"{n:,}", "분석 건수", "#4263eb"),
+        (f"{a['detection_rate']*100:.1f}%", f"탐지율 (≥1 PII) · 미탐 {a['zero_detection']}", "#37b24d"),
+        (f"{a['block_rate']*100:.1f}%", "차단율 (BLOCK)", "#e64980"),
+        (f"{a['latency_p50']:.1f}ms", f"latency p50 (p95 {a['latency_p95']:.0f})", "#f59f00"),
+    ]
+    card_html = '<div style="display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 16px">'
+    for big, sub, color in cards:
+        card_html += (
+            f'<div style="flex:1;min-width:150px;background:{color}1a;border:1px solid {color}55;'
+            f'border-radius:12px;padding:14px;text-align:center">'
+            f'<div style="font-size:26px;font-weight:800;color:{color}">{big}</div>'
+            f'<div style="font-size:12px;opacity:.75;margin-top:4px">{_esc(sub)}</div></div>'
+        )
+    card_html += "</div>"
+
+    # detector별 기여
+    dc = a["detector_contrib"]
+    maxd = max(dc.values()) if dc else 1
+    det_bars = "".join(_bar(k, v, maxd, "#0ca678", "건") for k, v in dc.items()) \
+        or "<div style='opacity:.6'>기여 검출기 없음</div>"
+
+    # 단계별 평균 span 수 (어디서 늘고 주는지)
+    order = ["M2", "M3", "dedup", "M4", "M6", "M7"]
+    sa = a["stage_avg"]
+    maxs = max((sa.get(k, 0) for k in order), default=1) or 1
+    stage_bars = "".join(_bar(k, sa.get(k, 0), maxs, "#7048e8", "") for k in order if k in sa)
+
+    # entity / action 분포
+    ed = a["entity_dist"]; maxe = max(ed.values()) if ed else 1
+    ent_bars = "".join(_bar(k, v, maxe, "#e8590c", "") for k, v in list(ed.items())[:12]) \
+        or "<div style='opacity:.6'>탐지된 entity 없음</div>"
+    act = a["action_dist"]
+    act_html = " · ".join(f"<b>{_esc(k)}</b> {v}" for k, v in act.items()) or "—"
+
+    def sect(title, body):
+        return (f'<div style="margin:14px 0"><div style="font-weight:700;font-size:14px;'
+                f'margin-bottom:6px">{title}</div>{body}</div>')
+
+    body = (
+        card_html
+        + sect("🔎 검출기별 기여 (M2 후보 수)", det_bars)
+        + sect("📉 단계별 평균 span 수 (어디서 늘고/주는지)", stage_bars)
+        + sect("🏷 최종 entity 분포 (상위 12)", ent_bars)
+        + sect("⚙️ 조치 분포", f'<div style="font-size:13px">{act_html}</div>')
+        + f'<div style="font-size:12px;opacity:.7;margin-top:8px">표기 변이 감지(정규화 변경): '
+          f'{a["normalized_changed"]}건 · 0건 탐지(잠재 미탐): {a["zero_detection"]}건</div>'
+    )
+    return "<div>" + body + "</div>"
+
+
+def load_texts(path: str, limit: int | None = None) -> list[str]:
+    """파일에서 입력 텍스트 로드. .json(list[str] 또는 list[{text:..}]) / .txt(줄 단위)."""
+    import json
+    from pathlib import Path as _P
+
+    p = _P(path).expanduser()
+    raw = p.read_text(encoding="utf-8")
+    texts: list[str] = []
+    if p.suffix.lower() == ".json":
+        data = json.loads(raw)
+        for item in data:
+            if isinstance(item, str):
+                texts.append(item)
+            elif isinstance(item, dict):
+                v = item.get("text") or item.get("payload") or item.get("input")
+                if v:
+                    texts.append(str(v))
+    else:
+        texts = [ln for ln in raw.splitlines() if ln.strip()]
+    if limit:
+        texts = texts[:limit]
+    return texts
 
 
 def assert_matches_pipeline(pipe, request: GuardrailRequest) -> None:
