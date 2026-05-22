@@ -43,11 +43,11 @@
   "boundary_accuracy": 1.0,
   "dataset_id": "stage4_corporate_rrn_expanded",
   "deterministic_latency_ms": {
-    "p50": 2.1796,
-    "p95": 3.6116,
-    "p99": 5.5366
+    "p50": 2.0887,
+    "p95": 3.4278,
+    "p99": 5.1821
   },
-  "generated_at": "2026-05-22T03:35:52.014538+00:00",
+  "generated_at": "2026-05-22T04:35:05.525326+00:00",
   "high_risk_recall": 1.0,
   "invalid_offset_count": 0,
   "masked_text_evaluable_count": 400,
@@ -155,7 +155,7 @@
         "threshold": "== 0"
       },
       {
-        "actual_value": 3.6116,
+        "actual_value": 3.4278,
         "name": "deterministic_latency_p95_ms",
         "reason_code": "gate.deterministic_latency_p95_ms.pass",
         "status": "pass",

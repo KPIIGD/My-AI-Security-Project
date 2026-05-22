@@ -32,11 +32,11 @@
   "boundary_accuracy": 1.0,
   "dataset_id": "stage1_person_name_seed",
   "deterministic_latency_ms": {
-    "p50": 1.1365,
-    "p95": 3.1507,
-    "p99": 3.6616
+    "p50": 1.0189,
+    "p95": 1.4139,
+    "p99": 1.4369
   },
-  "generated_at": "2026-05-22T03:36:36.093752+00:00",
+  "generated_at": "2026-05-22T04:34:57.167148+00:00",
   "high_risk_recall": 1.0,
   "invalid_offset_count": 0,
   "masked_text_evaluable_count": 24,
@@ -133,7 +133,7 @@
         "threshold": "== 0"
       },
       {
-        "actual_value": 3.1507,
+        "actual_value": 1.4139,
         "name": "deterministic_latency_p95_ms",
         "reason_code": "gate.deterministic_latency_p95_ms.pass",
         "status": "pass",

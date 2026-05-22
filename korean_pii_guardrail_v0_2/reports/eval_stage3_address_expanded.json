@@ -43,11 +43,11 @@
   "boundary_accuracy": 1.0,
   "dataset_id": "stage3_address_expanded",
   "deterministic_latency_ms": {
-    "p50": 1.213,
-    "p95": 4.2645,
-    "p99": 9.6027
+    "p50": 0.954,
+    "p95": 1.9819,
+    "p99": 3.0137
   },
-  "generated_at": "2026-05-22T03:36:37.417823+00:00",
+  "generated_at": "2026-05-22T04:35:03.630408+00:00",
   "high_risk_recall": 1.0,
   "invalid_offset_count": 0,
   "masked_text_evaluable_count": 600,
@@ -155,7 +155,7 @@
         "threshold": "== 0"
       },
       {
-        "actual_value": 4.2645,
+        "actual_value": 1.9819,
         "name": "deterministic_latency_p95_ms",
         "reason_code": "gate.deterministic_latency_p95_ms.pass",
         "status": "pass",
