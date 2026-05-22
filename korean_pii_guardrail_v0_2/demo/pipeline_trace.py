@@ -233,8 +233,16 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
         if ner_got:
             contrib.append({"detector": _detector_label(c.ner_detector), "kind": "ner",
                             "count": len(ner_got), "types": sorted({s.entity_type.value for s in ner_got})})
+    raw_candidate_count = len(candidates)
+    candidates = [
+        s for s in candidates
+        if c.detector_policy.entity_enabled(s.entity_type)
+    ]
+    detector_policy_filtered = raw_candidate_count - len(candidates)
     did = [f"검출기 {len(contrib)}종 가동 → " + " · ".join(
         f"{ct['detector'].split('.')[-1]}({ct['kind']}) {ct['count']}" for ct in contrib)] if contrib else []
+    if detector_policy_filtered:
+        did.append(f"   ↳ detector policy: disabled entity 후보 {detector_policy_filtered}건 제외")
     # 후보별 "어느 검출기가 무슨 값을 어떤 신뢰도로 잡았나"
     for s in sorted(candidates, key=lambda x: x.start):
         det = (s.detector_ids[0] if s.detector_ids else (s.sources[0] if s.sources else "?"))
@@ -248,7 +256,9 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
         what_it_did=did,
         spans=[_span_dict(s, reveal_raw) for s in candidates],
         detail={"contributions": contrib, "regex": sum(1 for x in contrib if x['kind']=='regex'),
-                "dict": len(dict_got), "ner": len(ner_got)},
+                "dict": len(dict_got), "ner": len(ner_got),
+                "raw_candidate_count": raw_candidate_count,
+                "detector_policy_filtered": detector_policy_filtered},
     ))
 
     # ── M3 경계 보정 (조사/호칭/어미 분리) ──────────────────────
