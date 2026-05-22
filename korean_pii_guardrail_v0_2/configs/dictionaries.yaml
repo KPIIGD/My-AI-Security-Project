@@ -64,6 +64,7 @@ surnames:
   - 표
   - 명
   - 기
+  - 하
 given_name_candidates:
   - 하늘
   - 가을
@@ -94,6 +95,8 @@ given_name_candidates:
   - 철수
   - 길동
   - 민수
+  - 지성
+  - 수진
   - 지수
   - 지훈
   - 지영
@@ -331,6 +334,7 @@ organization_suffixes:
   - 보험
   - 카드
   - 텔레콤
+  - 테크
   - 모빌리티
   - 엔터테인먼트
 brand_organizations:

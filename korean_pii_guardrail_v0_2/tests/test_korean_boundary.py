@@ -176,6 +176,20 @@ def test_text_entities_trim_internal_ending_suffix(
     assert corrected.reason_codes[-2:] == ("boundary.suffix_trim", "suffix.ending")
 
 
+def test_address_trim_partial_predicate_after_road_number() -> None:
+    raw = "주소는 서울시 강남구 테헤란로 123 거주"
+    body = "서울시 강남구 테헤란로 123"
+    overextended = f"{body} 거"
+    corrected = _correct(raw, _span(raw, overextended, EntityType.ADDRESS_FULL))
+
+    assert corrected.text == body
+    assert corrected.text == raw[corrected.start : corrected.end]
+    assert corrected.suffix is None
+    assert raw[corrected.end :].startswith(" 거주")
+    assert corrected.normalized is None
+    assert corrected.reason_codes[-1] == "boundary.address_partial_word_trim"
+
+
 @pytest.mark.parametrize(
     ("raw", "value", "body", "entity_type", "expected_suffix", "expected_reason_tail"),
     (

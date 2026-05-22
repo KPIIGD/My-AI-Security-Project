@@ -46,6 +46,7 @@ DASH_CHARS = {
 }
 
 DIGIT_SEPARATORS = {"-", ".", "/", "_", " ", "\t", "\n", "\r"}
+HANGUL_SYLLABLE_RANGE = ("가", "힣")
 
 CHOSEONG = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
 JUNGSEONG = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"
@@ -92,6 +93,11 @@ KOREAN_DIGIT_MAP = {
     "팔": "8",
     "구": "9",
 }
+KOREAN_DIGIT_WORD_SUFFIXES = (
+    "입니다",
+    "이에요",
+    "예요",
+)
 
 KOREAN_DIGIT_CONTEXT = (
     "연락처",
@@ -416,12 +422,21 @@ def _korean_digit_restored_variant(base: TextVariant) -> TextVariant:
     index = 0
 
     while index < len(text):
-        if text[index] in KOREAN_DIGIT_MAP and _has_korean_digit_context(text, index):
-            while index < len(text) and (text[index] in KOREAN_DIGIT_MAP or text[index].isspace()):
-                if text[index] in KOREAN_DIGIT_MAP:
+        if (
+            text[index] in KOREAN_DIGIT_MAP
+            and _is_korean_digit_token(text, index)
+            and _has_korean_digit_context(text, index)
+        ):
+            while index < len(text):
+                if text[index] in KOREAN_DIGIT_MAP and _is_korean_digit_token(text, index):
                     output.append(KOREAN_DIGIT_MAP[text[index]])
                     spans.append(base_spans[index])
-                index += 1
+                    index += 1
+                    continue
+                if text[index].isspace() and _next_is_korean_digit_token(text, index):
+                    index += 1
+                    continue
+                break
             continue
 
         output.append(text[index])
@@ -434,6 +449,39 @@ def _korean_digit_restored_variant(base: TextVariant) -> TextVariant:
 def _has_korean_digit_context(text: str, index: int) -> bool:
     window = text[max(0, index - 24) : index]
     return any(keyword in window for keyword in KOREAN_DIGIT_CONTEXT)
+
+
+def _is_korean_digit_token(text: str, index: int) -> bool:
+    start = index
+    while start > 0 and _is_hangul_syllable(text[start - 1]):
+        start -= 1
+    end = index + 1
+    while end < len(text) and _is_hangul_syllable(text[end]):
+        end += 1
+
+    run_start = index
+    while run_start > start and text[run_start - 1] in KOREAN_DIGIT_MAP:
+        run_start -= 1
+    run_end = index + 1
+    while run_end < end and text[run_end] in KOREAN_DIGIT_MAP:
+        run_end += 1
+
+    if run_start != start:
+        return False
+    tail = text[run_end:end]
+    return tail == "" or tail in KOREAN_DIGIT_WORD_SUFFIXES
+
+
+def _next_is_korean_digit_token(text: str, index: int) -> bool:
+    cursor = index + 1
+    while cursor < len(text) and text[cursor].isspace():
+        cursor += 1
+    return cursor < len(text) and text[cursor] in KOREAN_DIGIT_MAP and _is_korean_digit_token(text, cursor)
+
+
+def _is_hangul_syllable(char: str) -> bool:
+    low, high = HANGUL_SYLLABLE_RANGE
+    return low <= char <= high
 
 
 def _variant_spans(variant: TextVariant) -> tuple[tuple[int, int] | None, ...]:

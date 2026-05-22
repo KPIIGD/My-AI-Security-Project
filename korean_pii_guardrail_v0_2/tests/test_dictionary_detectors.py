@@ -49,7 +49,9 @@ def test_dictionary_lists_loads_expected_categories() -> None:
         assert lists[category]
 
     assert "김" in lists["surnames"]
+    assert "하" in lists["surnames"]
     assert "하늘" in lists["given_name_candidates"]
+    assert "지성" in lists["given_name_candidates"]
     assert "신한은행" in lists["bank_names"]
 
 
@@ -72,6 +74,17 @@ def test_person_name_detected_via_full_name_pattern() -> None:
     assert spans[0].text == "김민수"
     assert spans[0].score == 0.55
     assert "dictionary.surname_given.match" in spans[0].reason_codes
+
+
+def test_demo_person_names_detected_via_full_name_pattern() -> None:
+    for raw, expected in (
+        ("하도윤 신한은행 계좌 110-123-456789", "하도윤"),
+        ("박지성님께 연락주세요.", "박지성"),
+        ("환자 이수진 당뇨 진단", "이수진"),
+    ):
+        spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.PERSON_NAME)
+
+        assert any(span.text == expected for span in spans), raw
 
 
 def test_person_name_detected_via_given_name_candidate() -> None:
@@ -138,6 +151,15 @@ def test_organization_brand_match_emits_organization() -> None:
     _assert_dict_span_contract(raw, spans[0], EntityType.ORGANIZATION)
     assert spans[0].text == "삼성전자"
     assert "dictionary.organization.brand" in spans[0].reason_codes
+
+
+def test_organization_tech_suffix_expands_korean_head() -> None:
+    raw = "지성테크 대표에게 연락했습니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ORGANIZATION)
+
+    assert len(spans) == 1
+    _assert_dict_span_contract(raw, spans[0], EntityType.ORGANIZATION)
+    assert spans[0].text == "지성테크"
 
 
 def test_school_suffix_expands_korean_head() -> None:

@@ -40,6 +40,9 @@ from .schema import GuardrailRequest, PIISpan
 
 
 _ADDRESS_TYPES = frozenset({EntityType.ADDRESS_FULL, EntityType.ADDRESS_UNIT})
+_AFFILIATION_TYPES = frozenset(
+    {EntityType.ORGANIZATION, EntityType.SCHOOL, EntityType.HOSPITAL}
+)
 _RISK_ORDER = ("P3", "P2", "P1", "P0")
 
 
@@ -85,6 +88,7 @@ class SpanResolver:
         if not spans:
             return []
         merged = self._merge_duplicates(spans)
+        merged = self._suppress_person_inside_affiliation(merged)
         kept = self._resolve_overlaps(merged)
         kept = self._merge_address_fragments(kept, preprocessed.raw_text)
         kept = self._escalate_composites(kept, preprocessed)
@@ -102,6 +106,28 @@ class SpanResolver:
                 continue
             bucket[key] = self._fold(existing, span)
         return list(bucket.values())
+
+    def _suppress_person_inside_affiliation(self, spans: list[PIISpan]) -> list[PIISpan]:
+        affiliation_spans = [
+            span for span in spans if span.entity_type in _AFFILIATION_TYPES
+        ]
+        if not affiliation_spans:
+            return spans
+
+        result: list[PIISpan] = []
+        for span in spans:
+            if span.entity_type is not EntityType.PERSON_NAME:
+                result.append(span)
+                continue
+            if any(
+                affiliation.start <= span.start
+                and span.end <= affiliation.end
+                and (affiliation.end - affiliation.start) > (span.end - span.start)
+                for affiliation in affiliation_spans
+            ):
+                continue
+            result.append(span)
+        return result
 
     def _resolve_overlaps(self, spans: list[PIISpan]) -> list[PIISpan]:
         if not spans:
