@@ -300,6 +300,84 @@ class EvaluationReport:
             fn=fn,
         )
 
+    @property
+    def actionable_per_entity(self) -> tuple[EntityMetrics, ...]:
+        """Metrics where only MASK/HASH/BLOCK public spans count as predictions."""
+
+        counts: dict[str, dict[str, int]] = {}
+        for case in self.case_results:
+            for match in case.matches:
+                if match.expected is not None:
+                    entity_type = match.expected.entity_type.value
+                    row = counts.setdefault(
+                        entity_type,
+                        {"tp_exact": 0, "tp_partial": 0, "fp": 0, "fn": 0},
+                    )
+                    if _match_has_actionable_prediction(match):
+                        if match.match_type == "exact":
+                            row["tp_exact"] += 1
+                        elif match.match_type == "partial":
+                            row["tp_partial"] += 1
+                        else:
+                            row["fn"] += 1
+                    else:
+                        row["fn"] += 1
+                    continue
+
+                if match.actual is None or match.actual.action not in _ACTIONABLE_ACTIONS:
+                    continue
+                entity_type = match.actual.entity_type.value
+                row = counts.setdefault(
+                    entity_type,
+                    {"tp_exact": 0, "tp_partial": 0, "fp": 0, "fn": 0},
+                )
+                row["fp"] += 1
+
+        return tuple(
+            EntityMetrics(
+                entity_type=et,
+                tp_exact=row["tp_exact"],
+                tp_partial=row["tp_partial"],
+                fp=row["fp"],
+                fn=row["fn"],
+            )
+            for et, row in sorted(counts.items())
+        )
+
+    @property
+    def actionable_overall_metrics(self) -> EntityMetrics:
+        tp_exact = sum(m.tp_exact for m in self.actionable_per_entity)
+        tp_partial = sum(m.tp_partial for m in self.actionable_per_entity)
+        fp = sum(m.fp for m in self.actionable_per_entity)
+        fn = sum(m.fn for m in self.actionable_per_entity)
+        return EntityMetrics(
+            entity_type="__overall__",
+            tp_exact=tp_exact,
+            tp_partial=tp_partial,
+            fp=fp,
+            fn=fn,
+        )
+
+    @property
+    def actionable_high_risk_recall(self) -> float:
+        high_risk_tp = 0
+        high_risk_fn = 0
+        for case in self.case_results:
+            for match in case.matches:
+                if match.expected is None:
+                    continue
+                if match.expected.risk_level not in {RiskLevel.P0, RiskLevel.P1}:
+                    continue
+                if _match_has_actionable_prediction(match):
+                    high_risk_tp += 1
+                else:
+                    high_risk_fn += 1
+        return (
+            high_risk_tp / (high_risk_tp + high_risk_fn)
+            if (high_risk_tp + high_risk_fn)
+            else 0.0
+        )
+
     def residual_risk_report(
         self,
         *,
@@ -315,6 +393,7 @@ class EvaluationReport:
         raw text into the report and violate §5.1.
         """
         overall = self.overall_metrics
+        actionable_overall = self.actionable_overall_metrics
         miss_summary: dict[str, int] = {}
         spurious_summary: dict[str, int] = {}
         for case in self.case_results:
@@ -343,6 +422,10 @@ class EvaluationReport:
             "overall_precision": round(overall.precision, 4),
             "overall_recall": round(overall.recall, 4),
             "overall_f1": round(overall.f1, 4),
+            "actionable_high_risk_recall": round(self.actionable_high_risk_recall, 4),
+            "actionable_overall_precision": round(actionable_overall.precision, 4),
+            "actionable_overall_recall": round(actionable_overall.recall, 4),
+            "actionable_overall_f1": round(actionable_overall.f1, 4),
             "masked_text_exact_match_rate": round(self.masked_text_exact_match_rate, 4),
             "masked_text_evaluable_count": self.masked_text_evaluable_count,
             "raw_pii_logging_count": self.raw_pii_logging_count,
@@ -385,6 +468,10 @@ class EvaluationReport:
         )
         payload["per_entity"] = [metrics.to_dict() for metrics in self.per_entity]
         payload["overall"] = self.overall_metrics.to_dict()
+        payload["actionable_per_entity"] = [
+            metrics.to_dict() for metrics in self.actionable_per_entity
+        ]
+        payload["actionable_overall"] = self.actionable_overall_metrics.to_dict()
         payload["release_gate"] = build_release_gate_report(self).to_dict()
         return payload
 
@@ -431,6 +518,15 @@ _PHONE_EMAIL_ENTITIES = frozenset(
     {EntityType.PHONE_MOBILE, EntityType.PHONE_LANDLINE, EntityType.EMAIL}
 )
 _AMBIGUITY_TAGS = frozenset({"hard_negative", "ambiguous_name", "weather_context"})
+_ACTIONABLE_ACTIONS = frozenset({Action.MASK, Action.HASH, Action.BLOCK})
+
+
+def _match_has_actionable_prediction(match: SpanMatch) -> bool:
+    return (
+        match.match_type in {"exact", "partial"}
+        and match.actual is not None
+        and match.actual.action in _ACTIONABLE_ACTIONS
+    )
 
 
 @dataclass(frozen=True)

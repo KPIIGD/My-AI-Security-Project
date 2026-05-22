@@ -165,6 +165,24 @@ def test_person_name_with_decisive_negative_context_passes() -> None:
     assert decision.method is TransformationMethod.PASS
 
 
+def test_abstract_value_context_does_not_force_high_confidence_person_name_to_pass() -> None:
+    raw = "사랑은 중요한 가치입니다."
+    span = _span(
+        raw,
+        "사랑",
+        EntityType.PERSON_NAME,
+        RiskLevel.P1,
+        score=0.91,
+        sources=("ner", "context"),
+        reason_codes=("context.penalty.abstract_value_context_for_person",),
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.MASK
+    assert decision.method is TransformationMethod.LABEL_MASK
+
+
 def test_person_name_negative_context_does_not_override_positive_context() -> None:
     raw = "\uace0\uac1d\uba85 \ud64d\uae38\ub3d9, \uc5f0\ub77d\ucc98 010-1234-5678"
     span = _span(
@@ -200,6 +218,91 @@ def test_example_context_can_override_composite_name_candidate() -> None:
             "context.composite.EMAIL",
         ),
         is_composite=True,
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.PASS
+    assert decision.method is TransformationMethod.PASS
+
+
+def test_example_keyword_overrides_composite_name_candidate() -> None:
+    raw = "샘플 email user@example.com."
+    span = _span(
+        raw,
+        "샘플",
+        EntityType.PERSON_NAME,
+        RiskLevel.P1,
+        score=0.91,
+        sources=("ner", "context"),
+        reason_codes=(
+            "context.penalty.example_keyword_for_person",
+            "context.composite.EMAIL",
+        ),
+        is_composite=True,
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.PASS
+    assert decision.method is TransformationMethod.PASS
+
+
+def test_example_context_overrides_phone_even_with_field_label() -> None:
+    raw = "예시 전화번호는 010-1234-5678입니다."
+    span = _span(
+        raw,
+        "010-1234-5678",
+        EntityType.PHONE_MOBILE,
+        RiskLevel.P1,
+        score=0.94,
+        sources=("regex", "validator", "context"),
+        reason_codes=(
+            "context.boost.field_label_phone",
+            "context.penalty.example_context",
+        ),
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.PASS
+    assert decision.method is TransformationMethod.PASS
+
+
+def test_example_context_overrides_email_even_with_field_label() -> None:
+    raw = "샘플 이메일 user@example.com을 문서에 넣습니다."
+    span = _span(
+        raw,
+        "user@example.com",
+        EntityType.EMAIL,
+        RiskLevel.P1,
+        score=0.77,
+        sources=("regex", "validator", "context"),
+        reason_codes=(
+            "context.boost.field_label_email",
+            "context.penalty.example_context",
+        ),
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.PASS
+    assert decision.method is TransformationMethod.PASS
+
+
+def test_public_phone_context_overrides_phone_field_label() -> None:
+    raw = "고객센터 전화번호는 02-123-4567입니다."
+    span = _span(
+        raw,
+        "02-123-4567",
+        EntityType.PHONE_LANDLINE,
+        RiskLevel.P1,
+        score=0.75,
+        sources=("regex", "validator", "context"),
+        reason_codes=(
+            "context.boost.field_label_phone",
+            "context.penalty.public_phone_context",
+        ),
     )
 
     decision = PolicyRouter().select(span, _request(raw))

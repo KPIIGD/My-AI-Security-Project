@@ -48,9 +48,11 @@ _BOOST_RULES_BY_ENTITY: dict[EntityType, tuple[str, ...]] = {
 
 _PENALTY_RULES_BY_ENTITY: dict[EntityType, tuple[str, ...]] = {
     EntityType.PERSON_NAME: (
+        "example_keyword_for_person",
         "weather_context_for_person",
         "code_or_log_context",
         "organization_not_person",
+        "abstract_value_context_for_person",
     ),
     EntityType.PHONE_MOBILE: ("public_phone_context",),
     EntityType.PHONE_LANDLINE: ("public_phone_context",),
@@ -72,6 +74,7 @@ _NEGATIVE_GROUP_BY_RULE = {
     "public_phone_context": "public_number_context",
     "code_or_log_context": "code_context",
     "organization_not_person": "business_name_context",
+    "abstract_value_context_for_person": "abstract_value_context",
 }
 
 _EXAMPLE_PENALTY_RULE = "example_context"
@@ -173,9 +176,7 @@ class ContextScorer:
                 delta += self.penalties.get(rule, 0.0)
                 evidence_codes.append(f"context.penalty.{rule}")
 
-        if self._match_term_in_group(
-            sentence_text, self.negative_terms, _EXAMPLE_NEGATIVE_GROUP
-        ) is not None:
+        if self._match_example_context(sentence, span, raw_text) is not None:
             delta += self.penalties.get(_EXAMPLE_PENALTY_RULE, 0.0)
             evidence_codes.append(f"context.penalty.{_EXAMPLE_PENALTY_RULE}")
 
@@ -220,6 +221,10 @@ class ContextScorer:
         peers: list[PIISpan],
         raw_text: str,
     ) -> str | None:
+        if rule == "field_label_name":
+            return self._match_left_field_label(
+                span, raw_text, self.field_label_terms, "name_label"
+            )
         if rule in _FIELD_LABEL_GROUP_BY_RULE:
             return self._match_term_in_group(
                 sentence_text, self.field_label_terms, _FIELD_LABEL_GROUP_BY_RULE[rule]
@@ -254,6 +259,10 @@ class ContextScorer:
         span: PIISpan,
         sentence_text: str,
     ) -> str | None:
+        if rule == "example_keyword_for_person":
+            if span.text in self.negative_terms.get(_EXAMPLE_NEGATIVE_GROUP, ()):
+                return "example_keyword"
+            return None
         if rule in _NEGATIVE_GROUP_BY_RULE:
             return self._match_term_in_group(
                 sentence_text, self.negative_terms, _NEGATIVE_GROUP_BY_RULE[rule]
@@ -279,6 +288,20 @@ class ContextScorer:
                 return term
         return None
 
+    def _match_example_context(
+        self,
+        sentence: SentenceSpan,
+        span: PIISpan,
+        raw_text: str,
+    ) -> str | None:
+        left = raw_text[sentence.start : span.start]
+        right = raw_text[span.end : sentence.end]
+        return self._match_term_in_group(
+            f"{left} {right}",
+            self.negative_terms,
+            _EXAMPLE_NEGATIVE_GROUP,
+        )
+
     def _match_title_after(self, span: PIISpan, raw_text: str) -> str | None:
         window = raw_text[span.end : span.end + 8]
         for suffix in self.honorifics.get("person_suffixes", ()):
@@ -288,6 +311,16 @@ class ContextScorer:
             if title and title in window:
                 return title
         return None
+
+    @staticmethod
+    def _match_left_field_label(
+        span: PIISpan,
+        raw_text: str,
+        groups: Mapping[str, tuple[str, ...]],
+        group_name: str,
+    ) -> str | None:
+        window = raw_text[max(0, span.start - 24) : span.start]
+        return ContextScorer._match_term_in_group(window, groups, group_name)
 
     @staticmethod
     def _append_unique(existing: tuple[str, ...], value: str) -> tuple[str, ...]:

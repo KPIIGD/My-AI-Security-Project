@@ -1,0 +1,167 @@
+{
+  "actionable_high_risk_recall": 1.0,
+  "actionable_overall": {
+    "boundary_accuracy": 1.0,
+    "entity_type": "__overall__",
+    "f1": 1.0,
+    "fn": 0,
+    "fp": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "tp_exact": 12,
+    "tp_partial": 0
+  },
+  "actionable_overall_f1": 1.0,
+  "actionable_overall_precision": 1.0,
+  "actionable_overall_recall": 1.0,
+  "actionable_per_entity": [
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "PERSON_NAME",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 12,
+      "tp_partial": 0
+    }
+  ],
+  "audit_event_raw_value_logged_count": 0,
+  "blocked_count": 0,
+  "boundary_accuracy": 1.0,
+  "dataset_id": "stage1_person_name_seed",
+  "deterministic_latency_ms": {
+    "p50": 1.1365,
+    "p95": 3.1507,
+    "p99": 3.6616
+  },
+  "generated_at": "2026-05-22T03:36:36.093752+00:00",
+  "high_risk_recall": 1.0,
+  "invalid_offset_count": 0,
+  "masked_text_evaluable_count": 24,
+  "masked_text_exact_match_rate": 1.0,
+  "ner_detector": {
+    "detector_id": "mock_ner.v0",
+    "mode": "mock"
+  },
+  "overall": {
+    "boundary_accuracy": 1.0,
+    "entity_type": "__overall__",
+    "f1": 0.7273,
+    "fn": 0,
+    "fp": 9,
+    "precision": 0.5714,
+    "recall": 1.0,
+    "tp_exact": 12,
+    "tp_partial": 0
+  },
+  "overall_f1": 0.7273,
+  "overall_precision": 0.5714,
+  "overall_recall": 1.0,
+  "per_entity": [
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "PERSON_NAME",
+      "f1": 0.7273,
+      "fn": 0,
+      "fp": 9,
+      "precision": 0.5714,
+      "recall": 1.0,
+      "tp_exact": 12,
+      "tp_partial": 0
+    }
+  ],
+  "policy_profile": "strict",
+  "public_span_raw_value_logged_count": 0,
+  "purpose_id": "ko_pii_guardrail_v0_2_eval",
+  "raw_pii_logging_count": 0,
+  "real_ner_latency_ms": {
+    "reason_code": "gate.real_ner_latency.unavailable",
+    "status": "skipped"
+  },
+  "records_processed": 24,
+  "release_gate": {
+    "checks": [
+      {
+        "actual_value": null,
+        "name": "high_risk_structured_recall",
+        "reason_code": "gate.high_risk_structured_recall.not_evaluable",
+        "status": "skipped",
+        "threshold": ">= 0.99"
+      },
+      {
+        "actual_value": null,
+        "name": "phone_email_recall",
+        "reason_code": "gate.phone_email_recall.not_evaluable",
+        "status": "skipped",
+        "threshold": ">= 0.98"
+      },
+      {
+        "actual_value": null,
+        "name": "josa_boundary_accuracy",
+        "reason_code": "gate.josa_boundary_accuracy.not_evaluable",
+        "status": "skipped",
+        "threshold": ">= 0.95"
+      },
+      {
+        "actual_value": 1.0,
+        "name": "exact_span_match_rate",
+        "reason_code": "gate.exact_span.baseline_unavailable",
+        "status": "skipped",
+        "threshold": "baseline_improvement_required"
+      },
+      {
+        "actual_value": 0.0,
+        "name": "name_ambiguity_fp_rate",
+        "reason_code": "gate.name_ambiguity_fp_rate.pass",
+        "status": "pass",
+        "threshold": "<= 0.0"
+      },
+      {
+        "actual_value": 0,
+        "name": "raw_pii_logging_count",
+        "reason_code": "gate.raw_pii_logging_count.pass",
+        "status": "pass",
+        "threshold": "== 0"
+      },
+      {
+        "actual_value": 0,
+        "name": "invalid_offset_count",
+        "reason_code": "gate.invalid_offset_count.pass",
+        "status": "pass",
+        "threshold": "== 0"
+      },
+      {
+        "actual_value": 3.1507,
+        "name": "deterministic_latency_p95_ms",
+        "reason_code": "gate.deterministic_latency_p95_ms.pass",
+        "status": "pass",
+        "threshold": "<= 100.0"
+      },
+      {
+        "actual_value": null,
+        "name": "real_ner_latency_ms",
+        "reason_code": "gate.real_ner_latency.unavailable",
+        "status": "skipped",
+        "threshold": "measured_separately_when_real_ner_available"
+      }
+    ],
+    "overall_status": "pass",
+    "report_type": "ReleaseGateReport",
+    "scope": "M10-3 core release gate",
+    "version": "v0.2-single-turn"
+  },
+  "report_type": "PseudonymizationResultReport",
+  "residual_risk_notes": [],
+  "response_raw_value_logged_count": 0,
+  "spans_detected": 21,
+  "spans_masked": 12,
+  "spurious_detections": [
+    {
+      "entity_type": "PERSON_NAME",
+      "fp_count": 9
+    }
+  ],
+  "version": "v0.2-single-turn"
+}

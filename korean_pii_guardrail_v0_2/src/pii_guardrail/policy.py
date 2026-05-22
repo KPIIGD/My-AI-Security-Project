@@ -19,6 +19,10 @@ from .schema import GuardrailRequest, PIISpan
 DEFAULT_CONFIG_DIR = Path(__file__).resolve().parents[2] / "configs"
 DEFAULT_POLICY_CONFIG_PATH = DEFAULT_CONFIG_DIR / "policy_profiles.yaml"
 DEFAULT_SCORING_CONFIG_PATH = DEFAULT_CONFIG_DIR / "scoring.yaml"
+_CONTACT_ENTITIES = frozenset(
+    {EntityType.PHONE_MOBILE, EntityType.PHONE_LANDLINE, EntityType.EMAIL}
+)
+_PHONE_ENTITIES = frozenset({EntityType.PHONE_MOBILE, EntityType.PHONE_LANDLINE})
 
 
 class PolicyConfigError(ValueError):
@@ -271,18 +275,29 @@ class PolicyRouter:
 
     @staticmethod
     def _has_decisive_negative_context(span: PIISpan) -> bool:
+        has_example_context = any(
+            code.startswith(
+                (
+                    "context.penalty.example_context",
+                    "context.penalty.example_keyword_for_person",
+                )
+            )
+            for code in span.reason_codes
+        )
+        if span.entity_type in _CONTACT_ENTITIES:
+            if has_example_context:
+                return True
+            return span.entity_type in _PHONE_ENTITIES and any(
+                code.startswith("context.penalty.public_phone_context")
+                for code in span.reason_codes
+            )
+
         if span.entity_type is not EntityType.PERSON_NAME:
             return False
         has_boost = any(
             code.startswith("context.boost.") for code in span.reason_codes
         )
-        if (
-            any(
-                code.startswith("context.penalty.example_context")
-                for code in span.reason_codes
-            )
-            and not has_boost
-        ):
+        if has_example_context and not has_boost:
             return True
         if span.is_composite:
             return False
@@ -292,6 +307,7 @@ class PolicyRouter:
                     "context.penalty.weather_context_for_person",
                     "context.penalty.organization_not_person",
                     "context.penalty.example_context",
+                    "context.penalty.example_keyword_for_person",
                     "context.penalty.code_or_log_context",
                 )
             )

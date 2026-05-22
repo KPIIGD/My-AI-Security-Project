@@ -67,10 +67,12 @@ context_boosts:
   medical_label: 0.20
 context_penalties:
   example_context: -0.15
+  example_keyword_for_person: -0.35
   weather_context_for_person: -0.35
   public_phone_context: -0.25
   code_or_log_context: -0.20
   organization_not_person: -0.25
+  abstract_value_context_for_person: -0.20
   private_ip: -0.25
 risk_action_thresholds:
   P0:

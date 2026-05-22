@@ -104,6 +104,14 @@ test@example.com
 | DEVICE_ID | device label + id pattern | 0.72 | technical identifier |
 | VEHICLE_REG_NO | vehicle label + plate pattern | 0.78 | label 기반 차량 식별자 |
 
+### 4.1 구조형 식별자 문맥 우선 보정
+
+`RRNRegexDetector`는 주민등록번호 정규식 탐지기이고, `FRNRegexDetector`는 외국인등록번호 정규식 탐지기다. 두 탐지기는 13자리 숫자가 날짜, 성별 숫자, checksum을 통과하면 P0 후보를 만든다. 이 safety-first 동작은 유지한다.
+
+다만 법인등록번호는 일부 등기소 코드와 뒤 7자리 조합이 주민등록번호/외국인등록번호 checksum 또는 신용카드 Luhn 검증과 우연히 겹칠 수 있다. 그래서 regex 단계에서 값 바로 왼쪽 문맥이 명시적 법인 라벨이면 `RRN`/`FRN`/`CREDIT_CARD` 후보를 만들지 않는다. 반대로 값 바로 왼쪽 문맥이 명시적 개인 등록 라벨이면 주민등록번호 후보를 유지한다. 이 라벨 목록은 `configs/context_rules.yaml`의 `structured_identifier_contexts`가 소유한다.
+
+`priority_order`는 겹치는 span 중 어떤 entity를 최종으로 남길지 정하는 우선순위다. `BUSINESS_REG_NO`와 `CORPORATE_REG_NO`는 business identifier, 즉 사업/법인 식별자이므로 전화번호/이메일 뒤, 주소 앞에 배치한다. 주민등록번호는 여전히 P0이므로 법인등록번호보다 높은 우선순위를 유지하되, 명시적 법인 라벨이 있으면 주민등록번호/외국인등록번호/신용카드 후보를 탐지 단계에서 만들지 않는다.
+
 ## 5. Dictionary base score
 
 Dictionary는 최종 판정자가 아니다. 단독 score는 낮게 시작한다.
@@ -193,10 +201,12 @@ ECE, reliability diagram, temperature scaling 또는 isotonic calibration은 M10
 | Rule | 적용 entity | Delta | 조건 |
 |---|---|---:|---|
 | `example_context` | all | -0.15 | `예시`, `샘플`, `테스트` |
+| `example_keyword_for_person` | PERSON_NAME | -0.35 | 후보 자체가 `예시`, `샘플`, `테스트` 같은 예시 키워드 |
 | `weather_context` | PERSON_NAME | -0.35 | `하늘`, `가을`, `봄` 등이 날씨/계절 문맥 |
 | `public_phone_context` | PHONE | -0.25 | `대표번호`, `고객센터`, `공공기관 안내` |
 | `code_or_log_context` | PERSON_NAME/ADDRESS | -0.20 | 코드, stack trace, placeholder 문맥 |
 | `organization_not_person` | PERSON_NAME | -0.25 | 후보가 상호/조직명 내부에 포함 |
+| `abstract_value_context_for_person` | PERSON_NAME | -0.20 | 중요한 가치, 원칙, 개념 문맥. 최종 action 강제 pass에는 사용하지 않고 점수 감점 근거로만 사용 |
 | `private_ip` | IP_ADDRESS | -0.25 | 사설 IP 또는 localhost |
 
 ## 8. Threshold 및 action mapping

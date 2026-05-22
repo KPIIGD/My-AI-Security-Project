@@ -54,6 +54,7 @@ from .dictionary_loader import (
     load_field_label_terms,
     load_honorific_terms,
     load_negative_context_terms,
+    load_structured_context_terms,
 )
 from .dictionary_detectors import DictionaryDetector
 from .enums import Action, EntityType, RiskLevel
@@ -126,8 +127,13 @@ def _default_regex_detectors(
     *,
     scores: dict[str, float] | None = None,
     risk_levels: dict[EntityType, RiskLevel] | None = None,
+    structured_context_terms: dict[str, tuple[str, ...]] | None = None,
 ) -> tuple[object, ...]:
-    kwargs = {"scores": scores, "risk_levels": risk_levels}
+    kwargs = {
+        "scores": scores,
+        "risk_levels": risk_levels,
+        "structured_context_terms": structured_context_terms,
+    }
     return (
         RRNRegexDetector(**kwargs),
         FRNRegexDetector(**kwargs),
@@ -235,6 +241,7 @@ def default_components(
         regex_detectors = _default_regex_detectors(
             scores=load_regex_base_scores(paths.scoring),
             risk_levels=risk_levels,
+            structured_context_terms=load_structured_context_terms(paths.context_rules),
         )
 
     masker = SuffixPreservingMasker(

@@ -1,0 +1,17 @@
+{
+  "audit_event_raw_value_logged_count": 0,
+  "dataset_id": "stage3_address_expanded",
+  "generated_at": "2026-05-22T03:36:37.548897+00:00",
+  "public_span_raw_value_logged_count": 0,
+  "raw_pii_logging_count": 0,
+  "reason_codes": [
+    "audit_safety.pass"
+  ],
+  "report_raw_text_leak_count": 0,
+  "report_type": "AuditSafetyReport",
+  "response_raw_value_logged_count": 0,
+  "safe_report_generated": true,
+  "scope": "M10-4 audit safety report",
+  "status": "pass",
+  "version": "v0.2-single-turn"
+}

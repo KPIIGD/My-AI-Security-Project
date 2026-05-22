@@ -139,6 +139,55 @@ def test_pipeline_full_redacts_rrn() -> None:
     assert "[REDACTED]" in response.masked_text
 
 
+def test_pipeline_prefers_corporate_reg_no_in_explicit_corporate_context() -> None:
+    raw = "\ubc95\uc778\ub4f1\ub85d\ubc88\ud638 110111-1000002 \ud655\uc778"
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text is not None
+    assert "110111-1000002" not in response.masked_text
+    assert "[CORPORATE_REG_NO_1]" in response.masked_text
+    assert any(
+        span.entity_type is EntityType.CORPORATE_REG_NO and span.action is Action.MASK
+        for span in response.spans
+    )
+    assert not any(span.entity_type is EntityType.RRN for span in response.spans)
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "주문번호 010-1234-5678 처리 완료.",
+        "송장번호 123-45-67891 배송 추적.",
+        "tracking no 110-123-456789 was generated.",
+    ],
+)
+def test_pipeline_passes_order_like_numeric_identifiers(raw: str) -> None:
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == raw
+    assert response.metrics.masked_span_count == 0
+
+
+def test_pipeline_prefers_medical_record_no_over_business_reg_no_subspan() -> None:
+    raw = "\ud658\uc790\ubc88\ud638 MR-2026-000016."
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text is not None
+    assert "MR-2026-000016" not in response.masked_text
+    assert "[MEDICAL_RECORD_NO_1]" in response.masked_text
+    assert any(
+        span.entity_type is EntityType.MEDICAL_RECORD_NO and span.action is Action.MASK
+        for span in response.spans
+    )
+    assert not any(span.entity_type is EntityType.BUSINESS_REG_NO for span in response.spans)
+
+
 def test_pipeline_blocks_api_key_secret() -> None:
     raw = "token sk-AbC123xYz987SecretTokenValue"
     pipeline = GuardrailPipeline()
@@ -198,6 +247,16 @@ def test_pipeline_passes_clean_text_unchanged() -> None:
     response = pipeline.process(_request(raw))
 
     assert response.blocked is False
+    assert response.masked_text == raw
+    assert response.metrics.masked_span_count == 0
+
+
+def test_pipeline_passes_abstract_value_that_looks_like_name() -> None:
+    raw = "사랑은 중요한 가치입니다."
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
     assert response.masked_text == raw
     assert response.metrics.masked_span_count == 0
 

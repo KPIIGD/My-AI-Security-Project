@@ -385,6 +385,114 @@ def test_overall_metrics_sums_across_entity_rows() -> None:
     assert overall.fn == 2
 
 
+def test_actionable_metrics_ignore_pass_predictions() -> None:
+    label = EvaluationLabel(
+        start=0,
+        end=2,
+        entity_type=EntityType.PERSON_NAME,
+        risk_level=RiskLevel.P1,
+    )
+    pass_prediction = _public(0, 2, EntityType.PERSON_NAME, action=Action.PASS)
+    report = EvaluationReport(
+        dataset_id="synthetic",
+        records_processed=1,
+        blocked_count=0,
+        spans_detected=1,
+        spans_masked=0,
+        per_entity=(EntityMetrics("PERSON_NAME", 1, 0, 0, 0),),
+        masked_text_exact_match_rate=0.0,
+        high_risk_recall=1.0,
+        case_results=(
+            CaseResult(
+                case_id="case-pass",
+                matches=(
+                    SpanMatch(
+                        case_id="case-pass",
+                        expected=label,
+                        actual=pass_prediction,
+                        match_type="exact",
+                    ),
+                ),
+                masked_text="하늘",
+                expected_masked_text="[PERSON_1]",
+                blocked=False,
+                audit_event_count=0,
+                prediction_count=1,
+            ),
+        ),
+    )
+
+    actionable = report.actionable_overall_metrics
+
+    assert report.overall_metrics.tp_exact == 1
+    assert actionable.tp_exact == 0
+    assert actionable.fn == 1
+    assert actionable.fp == 0
+    assert report.actionable_high_risk_recall == 0.0
+
+
+def test_actionable_metrics_count_only_actionable_spurious_predictions() -> None:
+    label = EvaluationLabel(
+        start=0,
+        end=2,
+        entity_type=EntityType.PERSON_NAME,
+        risk_level=RiskLevel.P1,
+    )
+    masked_match = _public(0, 2, EntityType.PERSON_NAME, action=Action.MASK)
+    pass_spurious = _public(3, 5, EntityType.PERSON_NAME, action=Action.PASS)
+    masked_spurious = _public(6, 8, EntityType.PERSON_NAME, action=Action.MASK)
+    report = EvaluationReport(
+        dataset_id="synthetic",
+        records_processed=1,
+        blocked_count=0,
+        spans_detected=3,
+        spans_masked=2,
+        per_entity=(EntityMetrics("PERSON_NAME", 1, 0, 2, 0),),
+        masked_text_exact_match_rate=1.0,
+        high_risk_recall=1.0,
+        case_results=(
+            CaseResult(
+                case_id="case-actionable",
+                matches=(
+                    SpanMatch(
+                        case_id="case-actionable",
+                        expected=label,
+                        actual=masked_match,
+                        match_type="exact",
+                    ),
+                    SpanMatch(
+                        case_id="case-actionable",
+                        expected=None,
+                        actual=pass_spurious,
+                        match_type="spurious",
+                    ),
+                    SpanMatch(
+                        case_id="case-actionable",
+                        expected=None,
+                        actual=masked_spurious,
+                        match_type="spurious",
+                    ),
+                ),
+                masked_text="[PERSON_1]",
+                expected_masked_text="[PERSON_1]",
+                blocked=False,
+                audit_event_count=0,
+                prediction_count=3,
+            ),
+        ),
+    )
+
+    actionable = report.actionable_overall_metrics
+    payload = report.to_safe_dict(purpose_id="test")
+
+    assert actionable.tp_exact == 1
+    assert actionable.fp == 1
+    assert actionable.precision == pytest.approx(0.5)
+    assert actionable.recall == pytest.approx(1.0)
+    assert payload["actionable_overall"]["precision"] == 0.5
+    assert payload["actionable_per_entity"][0]["entity_type"] == "PERSON_NAME"
+
+
 def test_residual_risk_report_follows_spec_shape() -> None:
     report = _empty_report()
 

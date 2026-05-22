@@ -1,20 +1,345 @@
 {
   "action_counts": {
     "block": 50,
-    "mask": 5292,
-    "pass": 1250
+    "mask": 5042,
+    "pass": 1500
   },
+  "actionable_high_risk_recall": 0.9539,
+  "actionable_overall": {
+    "boundary_accuracy": 1.0,
+    "entity_type": "__overall__",
+    "f1": 0.8159,
+    "fn": 967,
+    "fp": 917,
+    "precision": 0.8199,
+    "recall": 0.8119,
+    "tp_exact": 4175,
+    "tp_partial": 0
+  },
+  "actionable_overall_f1": 0.8159,
+  "actionable_overall_precision": 0.8199,
+  "actionable_overall_recall": 0.8119,
+  "actionable_per_entity": [
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "ADDRESS_FULL",
+      "f1": 0.6599,
+      "fn": 0,
+      "fp": 405,
+      "precision": 0.4925,
+      "recall": 1.0,
+      "tp_exact": 393,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 0.0,
+      "entity_type": "ADDRESS_UNIT",
+      "f1": 0.0,
+      "fn": 267,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "tp_exact": 0,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "API_KEY_SECRET",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 50,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "BANK_ACCOUNT",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 193,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "BUSINESS_REG_NO",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 50,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "CORPORATE_REG_NO",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 50,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "CREDIT_CARD",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 175,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "CUSTOMER_ID",
+      "f1": 0.8512,
+      "fn": 50,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 0.7409,
+      "tp_exact": 143,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 0.0,
+      "entity_type": "DEVICE_ID",
+      "f1": 0.0,
+      "fn": 50,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "tp_exact": 0,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "DOB",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 142,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "DRIVER_LICENSE",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 50,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "EMAIL",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 193,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 0.0,
+      "entity_type": "EMPLOYEE_ID",
+      "f1": 0.0,
+      "fn": 50,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "tp_exact": 0,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 0.0,
+      "entity_type": "FAMILY_RELATION",
+      "f1": 0.0,
+      "fn": 125,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "tp_exact": 0,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "FRN",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 50,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "HOSPITAL",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 268,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 0.0,
+      "entity_type": "IP_ADDRESS",
+      "f1": 0.0,
+      "fn": 50,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "tp_exact": 0,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 0.0,
+      "entity_type": "MAC_ADDRESS",
+      "f1": 0.0,
+      "fn": 50,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "tp_exact": 0,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "MEDICAL_RECORD_NO",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 193,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 0.0,
+      "entity_type": "ORGANIZATION",
+      "f1": 0.0,
+      "fn": 125,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "tp_exact": 0,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "PASSPORT",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 50,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "PERSON_NAME",
+      "f1": 0.8653,
+      "fn": 25,
+      "fp": 262,
+      "precision": 0.7787,
+      "recall": 0.9736,
+      "tp_exact": 922,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "PHONE_LANDLINE",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 50,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "PHONE_MOBILE",
+      "f1": 0.8699,
+      "fn": 0,
+      "fp": 250,
+      "precision": 0.7698,
+      "recall": 1.0,
+      "tp_exact": 836,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "RRN",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 175,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "SCHOOL",
+      "f1": 0.6944,
+      "fn": 125,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 0.5318,
+      "tp_exact": 142,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 0.0,
+      "entity_type": "STUDENT_ID",
+      "f1": 0.0,
+      "fn": 50,
+      "fp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "tp_exact": 0,
+      "tp_partial": 0
+    },
+    {
+      "boundary_accuracy": 1.0,
+      "entity_type": "VEHICLE_REG_NO",
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp_exact": 50,
+      "tp_partial": 0
+    }
+  ],
   "audit_event_raw_value_logged_count": 0,
   "blocked_count": 50,
   "boundary_accuracy": 1.0,
   "dataset_id": "release_gate_v0_2",
   "deterministic_latency_ms": {
-    "p50": 173.8426,
-    "p95": 323.0001,
-    "p99": 537.9427
+    "p50": 239.9691,
+    "p95": 488.0893,
+    "p99": 754.7082
   },
-  "generated_at": "2026-05-21T03:13:44.877623+00:00",
-  "high_risk_recall": 0.9921,
+  "generated_at": "2026-05-22T04:02:30.812316+00:00",
+  "high_risk_recall": 0.9934,
   "invalid_offset_count": 0,
   "masked_text_evaluable_count": 0,
   "masked_text_exact_match_rate": 0.0,
@@ -25,17 +350,17 @@
   "overall": {
     "boundary_accuracy": 1.0,
     "entity_type": "__overall__",
-    "f1": 0.8258,
-    "fn": 297,
-    "fp": 1747,
-    "precision": 0.735,
-    "recall": 0.9422,
-    "tp_exact": 4845,
+    "f1": 0.8267,
+    "fn": 292,
+    "fp": 1742,
+    "precision": 0.7357,
+    "recall": 0.9432,
+    "tp_exact": 4850,
     "tp_partial": 0
   },
-  "overall_f1": 0.8258,
-  "overall_precision": 0.735,
-  "overall_recall": 0.9422,
+  "overall_f1": 0.8267,
+  "overall_precision": 0.7357,
+  "overall_recall": 0.9432,
   "payload_generation": {
     "bucket_counts": {
       "adversarial_boundary": 1000,
@@ -87,9 +412,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_adversarial_boundary",
       "deterministic_latency_ms": {
-        "p50": 131.5116,
-        "p95": 241.5508,
-        "p99": 355.5111
+        "p50": 197.7525,
+        "p95": 324.4253,
+        "p99": 465.9285
       },
       "high_risk_recall": 0.999,
       "invalid_offset_count": 0,
@@ -231,7 +556,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 241.5508,
+            "actual_value": 324.4253,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -271,16 +596,15 @@
     },
     "hard_negative": {
       "action_counts": {
-        "mask": 250,
-        "pass": 575
+        "pass": 825
       },
       "blocked_count": 0,
       "boundary_accuracy": 0.0,
       "dataset_id": "release_gate_v0_2_hard_negative",
       "deterministic_latency_ms": {
-        "p50": 137.5492,
-        "p95": 268.2977,
-        "p99": 416.5474
+        "p50": 217.314,
+        "p95": 567.8402,
+        "p99": 1254.8136
       },
       "high_risk_recall": 0.0,
       "invalid_offset_count": 0,
@@ -394,7 +718,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 268.2977,
+            "actual_value": 567.8402,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -415,7 +739,7 @@
       },
       "residual_risk_notes": [],
       "spans_detected": 825,
-      "spans_masked": 250,
+      "spans_masked": 0,
       "spurious_detections": [
         {
           "entity_type": "EMAIL",
@@ -440,9 +764,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_name_address_affiliation",
       "deterministic_latency_ms": {
-        "p50": 175.9625,
-        "p95": 241.542,
-        "p99": 354.9917
+        "p50": 233.3168,
+        "p95": 448.1725,
+        "p99": 670.7144
       },
       "high_risk_recall": 1.0,
       "invalid_offset_count": 0,
@@ -619,7 +943,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 241.542,
+            "actual_value": 448.1725,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -669,9 +993,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_single_turn_composite",
       "deterministic_latency_ms": {
-        "p50": 207.1916,
-        "p95": 490.1896,
-        "p99": 760.7069
+        "p50": 281.0969,
+        "p95": 490.4912,
+        "p99": 652.5542
       },
       "high_risk_recall": 0.9847,
       "invalid_offset_count": 0,
@@ -885,7 +1209,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 490.1896,
+            "actual_value": 490.4912,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -937,11 +1261,11 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_structured_pii",
       "deterministic_latency_ms": {
-        "p50": 197.678,
-        "p95": 295.8655,
-        "p99": 418.2647
+        "p50": 268.7528,
+        "p95": 518.2352,
+        "p99": 869.6381
       },
-      "high_risk_recall": 0.9941,
+      "high_risk_recall": 1.0,
       "invalid_offset_count": 0,
       "label_counts": {
         "API_KEY_SECRET": 50,
@@ -972,12 +1296,12 @@
       "overall": {
         "boundary_accuracy": 1.0,
         "entity_type": "__overall__",
-        "f1": 0.995,
-        "fn": 5,
-        "fp": 5,
-        "precision": 0.995,
-        "recall": 0.995,
-        "tp_exact": 995,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "tp_exact": 1000,
         "tp_partial": 0
       },
       "per_entity": [
@@ -1017,12 +1341,12 @@
         {
           "boundary_accuracy": 1.0,
           "entity_type": "CORPORATE_REG_NO",
-          "f1": 0.9474,
-          "fn": 5,
+          "f1": 1.0,
+          "fn": 0,
           "fp": 0,
           "precision": 1.0,
-          "recall": 0.9,
-          "tp_exact": 45,
+          "recall": 1.0,
+          "tp_exact": 50,
           "tp_partial": 0
         },
         {
@@ -1171,10 +1495,10 @@
         {
           "boundary_accuracy": 1.0,
           "entity_type": "RRN",
-          "f1": 0.9524,
+          "f1": 1.0,
           "fn": 0,
-          "fp": 5,
-          "precision": 0.9091,
+          "fp": 0,
+          "precision": 1.0,
           "recall": 1.0,
           "tp_exact": 50,
           "tp_partial": 0
@@ -1212,7 +1536,7 @@
       "release_gate": {
         "checks": [
           {
-            "actual_value": 0.9941,
+            "actual_value": 1.0,
             "name": "high_risk_structured_recall",
             "reason_code": "gate.high_risk_structured_recall.pass",
             "status": "pass",
@@ -1233,7 +1557,7 @@
             "threshold": ">= 0.95"
           },
           {
-            "actual_value": 0.995,
+            "actual_value": 1.0,
             "name": "exact_span_match_rate",
             "reason_code": "gate.exact_span.baseline_unavailable",
             "status": "skipped",
@@ -1261,7 +1585,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 295.8655,
+            "actual_value": 518.2352,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -1280,20 +1604,10 @@
         "scope": "M10-3 core release gate",
         "version": "v0.2-single-turn"
       },
-      "residual_risk_notes": [
-        {
-          "entity_type": "CORPORATE_REG_NO",
-          "miss_count": 5
-        }
-      ],
+      "residual_risk_notes": [],
       "spans_detected": 1000,
       "spans_masked": 700,
-      "spurious_detections": [
-        {
-          "entity_type": "RRN",
-          "fp_count": 5
-        }
-      ]
+      "spurious_detections": []
     }
   },
   "per_entity": [
@@ -1355,12 +1669,12 @@
     {
       "boundary_accuracy": 1.0,
       "entity_type": "CORPORATE_REG_NO",
-      "f1": 0.9474,
-      "fn": 5,
+      "f1": 1.0,
+      "fn": 0,
       "fp": 0,
       "precision": 1.0,
-      "recall": 0.9,
-      "tp_exact": 45,
+      "recall": 1.0,
+      "tp_exact": 50,
       "tp_partial": 0
     },
     {
@@ -1564,10 +1878,10 @@
     {
       "boundary_accuracy": 1.0,
       "entity_type": "RRN",
-      "f1": 0.9859,
+      "f1": 1.0,
       "fn": 0,
-      "fp": 5,
-      "precision": 0.9722,
+      "fp": 0,
+      "precision": 1.0,
       "recall": 1.0,
       "tp_exact": 175,
       "tp_partial": 0
@@ -1619,7 +1933,7 @@
   "release_gate": {
     "checks": [
       {
-        "actual_value": 0.998,
+        "actual_value": 1.0,
         "name": "high_risk_structured_recall",
         "reason_code": "gate.high_risk_structured_recall.pass",
         "status": "pass",
@@ -1640,7 +1954,7 @@
         "threshold": ">= 0.95"
       },
       {
-        "actual_value": 0.9422403733955659,
+        "actual_value": 0.9432127576818359,
         "name": "exact_span_match_rate",
         "reason_code": "gate.exact_span.baseline_unavailable",
         "status": "skipped",
@@ -1668,7 +1982,7 @@
         "threshold": "== 0"
       },
       {
-        "actual_value": 323.0001,
+        "actual_value": 488.0893,
         "name": "deterministic_latency_p95_ms",
         "reason_code": "gate.deterministic_latency.real_ner_path_included",
         "status": "skipped",
@@ -1694,17 +2008,13 @@
       "miss_count": 267
     },
     {
-      "entity_type": "CORPORATE_REG_NO",
-      "miss_count": 5
-    },
-    {
       "entity_type": "PERSON_NAME",
       "miss_count": 25
     }
   ],
   "response_raw_value_logged_count": 0,
   "spans_detected": 6592,
-  "spans_masked": 5342,
+  "spans_masked": 5092,
   "spurious_detections": [
     {
       "entity_type": "ADDRESS_FULL",
@@ -1721,10 +2031,6 @@
     {
       "entity_type": "PHONE_MOBILE",
       "fp_count": 375
-    },
-    {
-      "entity_type": "RRN",
-      "fp_count": 5
     }
   ],
   "version": "v0.2-single-turn"

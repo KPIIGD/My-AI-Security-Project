@@ -60,6 +60,13 @@ def load_honorific_terms(path: Path | None = None) -> dict[str, tuple[str, ...]]
     return _read_flow_list_section(config_path, "honorifics_and_titles")
 
 
+def load_structured_context_terms(
+    path: Path | None = None,
+) -> dict[str, tuple[str, ...]]:
+    config_path = path or DEFAULT_CONFIG_DIR / "context_rules.yaml"
+    return _read_flow_list_section(config_path, "structured_identifier_contexts")
+
+
 def load_entity_priority(path: Path | None = None) -> tuple[str, ...]:
     """Load ``priority_order`` block list from ``configs/entities.yaml``.
 

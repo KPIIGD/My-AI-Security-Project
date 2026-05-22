@@ -69,6 +69,39 @@ def test_trims_honorific_from_person_span() -> None:
     assert corrected.reason_codes[-2:] == ("boundary.suffix_trim", "suffix.honorific")
 
 
+def test_does_not_trim_person_name_to_one_syllable_body() -> None:
+    raw = "고객명 사랑님 확인했습니다."
+    corrected = _correct(raw, _span(raw, "사랑"))
+
+    assert corrected.text == "사랑"
+    assert corrected.suffix == "님"
+    assert corrected.reason_codes[-2:] == ("boundary.suffix_lookahead", "suffix.honorific")
+
+
+def test_address_road_name_final_ro_is_not_trimmed_as_josa() -> None:
+    raw = "주소 일부는 서울시 강남구 테헤란로까지만 입력됐습니다."
+    span = _span(raw, "서울시 강남구 테헤란로", EntityType.ADDRESS_UNIT)
+    span = PIISpan(
+        start=span.start,
+        end=span.end,
+        text=span.text,
+        entity_type=span.entity_type,
+        score=span.score,
+        sources=span.sources,
+        risk_level=RiskLevel.P2,
+        action=span.action,
+        reason_codes=("dictionary.address_unit", "dictionary.address.road_name_without_number"),
+        detector_ids=span.detector_ids,
+    )
+
+    corrected = _correct(raw, span)
+
+    assert corrected.text == "서울시 강남구 테헤란로"
+    assert corrected.suffix == "까지만"
+    assert "boundary.suffix_lookahead" in corrected.reason_codes
+    assert corrected.reason_codes[-1] == "suffix.josa"
+
+
 def test_captures_numeric_pii_lookahead_josa_without_changing_offsets() -> None:
     raw = "연락처 010-1234-5678로 전화하세요."
     span = _span(raw, "010-1234-5678", EntityType.PHONE_MOBILE)
