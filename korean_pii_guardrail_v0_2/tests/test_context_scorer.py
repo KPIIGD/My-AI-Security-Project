@@ -45,6 +45,7 @@ def test_context_scorer_loads_spec_defined_boosts_and_penalties() -> None:
     assert boosts["field_label_name"] == 0.25
     assert boosts["bank_cooccur"] == 0.25
     assert boosts["full_address_detail"] == 0.20
+    assert boosts["organization_affiliation_context"] == 0.25
     assert penalties["weather_context_for_person"] == -0.35
     assert penalties["example_context"] == -0.15
 
@@ -63,6 +64,7 @@ def test_context_scorer_field_label_terms_loaded_from_yaml() -> None:
     assert "placeholder" in negatives["example_context"]
     assert "예제" in negatives["example_context"]
     assert "형식 설명" in negatives["example_context"]
+    assert "대표" in terms["organization_label"]
     assert "맑네요" in negatives["weather_context"]
     assert "변수명" in negatives["code_context"]
     assert "문서" not in negatives["code_context"]
@@ -212,6 +214,19 @@ def test_bank_account_boosted_by_english_account_label() -> None:
         code.startswith("context.boost.field_label_account")
         for code in accounts[0].reason_codes
     )
+
+
+def test_organization_affiliation_context_boosts_organization() -> None:
+    raw = "김민수 삼성전자 근무"
+    spans, preprocessed = _detect_all(raw)
+
+    scored = ContextScorer().score(spans, preprocessed)
+    organizations = _by_entity(scored, EntityType.ORGANIZATION)
+
+    assert len(organizations) == 1
+    organization = organizations[0]
+    assert organization.score >= 0.75
+    assert "context.boost.organization_affiliation_context" in organization.reason_codes
 
 
 def test_example_context_penalises_every_entity_in_sentence() -> None:

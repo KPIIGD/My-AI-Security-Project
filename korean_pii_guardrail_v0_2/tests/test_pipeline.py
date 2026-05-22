@@ -25,7 +25,8 @@ from pii_guardrail.pipeline import (
     PipelineComponents,
     default_components,
 )
-from pii_guardrail.schema import GuardrailOptions, GuardrailRequest
+from pii_guardrail.ner.finetuned_wrapper import FinetunedNERDetector
+from pii_guardrail.schema import GuardrailOptions, GuardrailRequest, PIISpan
 
 
 def _request(
@@ -261,6 +262,129 @@ def test_pipeline_passes_explicit_example_phone() -> None:
         span.entity_type is EntityType.PHONE_MOBILE and span.action is Action.PASS
         for span in response.spans
     )
+
+
+class _OverextendedAddressNER:
+    detector_id = "ner.test.overextended-address"
+
+    def detect(self, raw_text, preprocessed, request):
+        del preprocessed, request
+        text = "서울시 강남구 테헤란로 123 거"
+        start = raw_text.index(text)
+        end = start + len(text)
+        return [
+            PIISpan(
+                start=start,
+                end=end,
+                text=text,
+                entity_type=EntityType.ADDRESS_FULL,
+                score=1.0,
+                sources=("ner",),
+                risk_level=RiskLevel.P1,
+                detector_ids=(self.detector_id,),
+                reason_codes=("ner.test.overextended_address",),
+            )
+        ]
+
+
+class _WhitespacePersonBackend:
+    def detect(self, raw_text):
+        text = "윤 신한"
+        start = raw_text.index(text)
+        return [
+            {
+                "start": start,
+                "end": start + len(text),
+                "text": text,
+                "label": "B-NAME",
+                "score": 0.96,
+            }
+        ]
+
+
+class _PersonPrefixBackend:
+    def detect(self, raw_text):
+        text = "민수"
+        start = raw_text.index(text)
+        return [
+            {
+                "start": start,
+                "end": start + len(text),
+                "text": text,
+                "label": "B-NAME",
+                "score": 0.99,
+            }
+        ]
+
+
+def test_pipeline_trims_ner_address_partial_predicate_before_masking() -> None:
+    raw = "주소는 서울시 강남구 테헤란로 123 거주"
+    pipeline = GuardrailPipeline(default_components(ner_detector=_OverextendedAddressNER()))
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == "주소는 [ADDRESS_1] 거주"
+    address = next(span for span in response.spans if span.entity_type is EntityType.ADDRESS_FULL)
+    assert address.end == raw.index(" 거주")
+    assert "boundary.address_partial_word_trim" in address.reason_codes
+
+
+def test_pipeline_rejects_whitespace_ner_person_and_uses_dictionary_name() -> None:
+    raw = "하도윤 신한은행 계좌 110-123-456789, 카드 4532015112830036"
+    ner = FinetunedNERDetector(backend=_WhitespacePersonBackend())
+    pipeline = GuardrailPipeline(default_components(ner_detector=ner))
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == "[PERSON_1] 신한은행 계좌 [BANK_ACCOUNT_1], 카드 [REDACTED]"
+    persons = [span for span in response.spans if span.entity_type is EntityType.PERSON_NAME]
+    assert len(persons) == 1
+    assert persons[0].start == 0
+    assert persons[0].end == 3
+
+
+def test_pipeline_rejects_ner_person_prefix_inside_compound_word() -> None:
+    raw = "민수전자 제품 문의"
+    ner = FinetunedNERDetector(backend=_PersonPrefixBackend())
+    pipeline = GuardrailPipeline(default_components(ner_detector=ner))
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == raw
+    assert all(span.entity_type is not EntityType.PERSON_NAME for span in response.spans)
+
+
+def test_pipeline_masks_organization_affiliation_without_person_subspan() -> None:
+    raw = "박지성님께 010-9876-5432 로 연락주세요 (지성테크 대표)"
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == "[PERSON_1]님께 [PHONE_1] 로 연락주세요 ([ORGANIZATION_1] 대표)"
+    assert "[PERSON_2]" not in response.masked_text
+    assert any(span.entity_type is EntityType.ORGANIZATION for span in response.spans)
+
+
+def test_pipeline_masks_organization_when_work_context_is_present() -> None:
+    raw = "김민수 서울시 강남구 테헤란로 123 삼성전자 근무"
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert "[ORGANIZATION_1]" in (response.masked_text or "")
+
+
+def test_pipeline_does_not_mask_email_label_syllable() -> None:
+    raw = "최영희 연락처 010-1234-5678, 이메일 choi@example.com"
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text is not None
+    assert "이메일 [EMAIL_1]" in response.masked_text
+    assert "이메[EMAIL_1]" not in response.masked_text
+    email = next(span for span in response.spans if span.entity_type is EntityType.EMAIL)
+    assert raw[email.start : email.end] == "choi@example.com"
 
 
 def test_pipeline_reuses_placeholder_for_repeated_value() -> None:

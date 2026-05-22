@@ -40,6 +40,7 @@ _BOOST_RULES_BY_ENTITY: dict[EntityType, tuple[str, ...]] = {
     EntityType.PHONE_LANDLINE: ("field_label_phone",),
     EntityType.ADDRESS_FULL: ("field_label_address", "full_address_detail"),
     EntityType.ADDRESS_UNIT: ("field_label_address",),
+    EntityType.ORGANIZATION: ("organization_affiliation_context",),
     EntityType.BANK_ACCOUNT: ("field_label_account", "bank_cooccur"),
     EntityType.MEDICAL_RECORD_NO: ("medical_label",),
     EntityType.HOSPITAL: ("medical_label",),
@@ -66,6 +67,7 @@ _FIELD_LABEL_GROUP_BY_RULE = {
     "field_label_phone": "phone_label",
     "field_label_address": "address_label",
     "field_label_account": "account_label",
+    "organization_affiliation_context": "organization_label",
     "medical_label": "medical_label",
 }
 

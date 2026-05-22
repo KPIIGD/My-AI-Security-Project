@@ -214,6 +214,15 @@ def test_email_detector_returns_full_email_only() -> None:
     assert "validator" in spans[0].sources
 
 
+def test_email_detector_does_not_consume_korean_label_syllable() -> None:
+    raw = "최영희 연락처 010-1234-5678, 이메일 choi@example.com"
+    spans = _detect(EmailRegexDetector(), raw)
+
+    assert len(spans) == 1
+    _assert_span_contract(raw, spans[0], EntityType.EMAIL)
+    assert spans[0].text == "choi@example.com"
+
+
 def test_email_detector_rejects_invalid_domains() -> None:
     detector = EmailRegexDetector()
 

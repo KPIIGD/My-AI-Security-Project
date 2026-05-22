@@ -133,6 +133,30 @@ def test_hospital_reclassifies_overlapping_organization_candidate() -> None:
     assert [s.entity_type for s in resolved] == [EntityType.HOSPITAL]
 
 
+def test_person_subspan_inside_affiliation_is_suppressed() -> None:
+    raw = "지성테크 대표에게 연락했습니다."
+    pre = preprocess_text(raw)
+    organization = _make_span(
+        raw,
+        "지성테크",
+        EntityType.ORGANIZATION,
+        score=0.75,
+        risk_level=RiskLevel.P2,
+    )
+    person = _make_span(
+        raw,
+        "지성",
+        EntityType.PERSON_NAME,
+        score=0.95,
+        risk_level=RiskLevel.P1,
+    )
+
+    resolved = SpanResolver().resolve([person, organization], pre, _request(raw))
+
+    assert [s.entity_type for s in resolved] == [EntityType.ORGANIZATION]
+    assert resolved[0].text == "지성테크"
+
+
 def test_same_type_overlap_keeps_longer_span() -> None:
     raw = "서울 강남구 역삼동에서 만났습니다."
     pre = preprocess_text(raw)
