@@ -70,7 +70,8 @@ MVP action은 다음 네 가지로 제한한다.
 | Entity | Risk | MVP 기본 처리 |
 |---|---|---|
 | API_KEY_SECRET | P0 | `block` |
-| RRN, FRN, PASSPORT, DRIVER_LICENSE | P0 | `mask` 또는 `full_redact`; 외부 출력 strict 조건에서는 `block` 가능 |
+| RRN | P0 | strict 기본 `label_mask` (placeholder `[RRN_1]`) — 마스킹된 타입이 보이도록. `full_redact`/외부 출력 `block` 도 설정 가능 |
+| FRN, PASSPORT, DRIVER_LICENSE | P0 | `mask` 또는 `full_redact`; 외부 출력 strict 조건에서는 `block` 가능 |
 | CREDIT_CARD | P0/P1 | `mask` |
 | BANK_ACCOUNT | P1 | context가 있으면 `mask` |
 | PHONE_MOBILE, PHONE_LANDLINE | P1 | 개인 연락처이면 `mask` |
