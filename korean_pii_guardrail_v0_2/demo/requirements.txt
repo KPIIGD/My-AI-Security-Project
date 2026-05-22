@@ -4,7 +4,8 @@
 gradio>=5.0,<6.0
 matplotlib>=3.5
 
-# real NER 추론용 (없으면 mock NER로 자동 fallback)
+# real NER 추론용. 기본 실행은 로드 실패 시 fail-closed이며,
+# mock fallback은 `python demo/app.py --allow-mock` 에서만 명시적으로 허용한다.
 transformers>=4.40
 torch>=2.0
 huggingface_hub>=0.20

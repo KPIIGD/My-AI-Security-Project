@@ -15,7 +15,7 @@ python demo/app.py
 ```
 
 - **첫 실행 시 NER v3 모델 로딩에 ~20초.** 로컬 학습 산출물(`PII/ner/models/pii_ner_v3/final`)이 있으면 그것을, 없으면 **HuggingFace Hub `vmaca123/korean-pii-ner-v3`에서 자동 다운로드**(1.3GB, 최초 1회)한다. 즉 clone 후 바로 실행 가능.
-- real NER 로드 실패 시 자동으로 mock NER fallback (상단 배너에 모드 표시).
+- real NER 로드 실패 시 기본은 **fail-closed**로 즉시 종료된다. mock 으로라도 띄우려면 `python demo/app.py --allow-mock` 을 명시해야 하며, 이때 상단 배너가 mock 상태와 성능 수치 주의사항을 표시한다.
 - 대시보드용 측정 데이터/그림은 `demo/assets/`에 동봉되어 별도 경로 설정 불필요.
 - ⚠️ **발표 5분 전에 미리 실행 + warmup** (예제 한 번 눌러 캐시 워밍업).
 
@@ -27,6 +27,7 @@ python demo/app.py --share
 
 - `https://xxxx.gradio.live` 형태의 **임시 공개 URL**이 콘솔에 출력된다. 이 링크를 전달하면 상대방은 **설치·모델 다운로드 없이 브라우저로 바로** 데모를 본다.
 - 단, **내 PC가 켜져 있고 이 프로세스가 떠 있는 동안만** 작동(터널링)하며, 링크는 **72시간** 후 만료된다. 발표/리뷰 시간대에 맞춰 띄울 것.
+- `--share` 모드에서는 하이라이트/탐지표/공격 탭의 원문 PII 값을 public UI response에 넣지 않고 placeholder 또는 길이 정보만 반환한다.
 
 ---
 
@@ -35,7 +36,7 @@ python demo/app.py --share
 | 탭 | 보여주는 것 | 한 줄 메시지 |
 |----|------------|--------------|
 | ① 라이브 탐지/마스킹 | 텍스트 입력 → 실시간 PII 하이라이트 + 마스킹 결과 + 탐지 상세표 | "진짜 동작한다" |
-| ② 성능 대시보드 | ablation 단계별 기여 그래프 + latency(INT8 4x) + 핵심 지표표 | "성능이 이 정도다" |
+| ② 성능 대시보드 | ablation 단계별 기여 그래프 + latency(ONNX INT8 별도 벤치마크) + 핵심 지표표 | "성능이 이 정도다" |
 | ③ 공격 → 방어 | 자모분해/zero-width 변이를 넣어도 탐지 | "한국어 변이도 막는다" |
 
 ---
@@ -55,7 +56,7 @@ python demo/app.py --share
 > - 처리 시간 ~200ms (탐지 상세표에 위험도 P0/P1, 조치 mask 표시)
 
 ### Act 3 — 성능 + 방어 입증 (②③탭, ~2.5분)
-> **②탭**: "각 단계가 성능에 기여하는 걸 ablation으로 분리 측정했고(그래프), NER를 ONNX INT8로 양자화해 **추론을 4배 빠르게(547ms→135ms)** 만들면서 정확도는 99.7% 유지했습니다."
+> **②탭**: "라이브 데모는 PyTorch NER 경로로 동작하고, 별도 ONNX INT8 벤치마크에서는 **추론을 4배 빠르게(547ms→135ms)** 만들면서 정확도는 99.7% 유지했습니다."
 >
 > **③탭**: "핵심은 변이 방어입니다. `ㅈㅜㅁㅣㄴ번호`(자모분해)나 zero-width가 섞인 주민번호를 넣어도 — " (라디오 선택 → 처리 버튼) " — L0 정규화가 복원해서 그대로 탐지/마스킹합니다."
 
@@ -67,7 +68,7 @@ python demo/app.py --share
 |------|-----|
 | NER v3 macro-F1 | **0.878** (internal test) / **0.766** (KLUE 외부) |
 | NER 학습 | klue-roberta-large, 34k 데이터, $0.92, 30분 |
-| INT8 가속 | **4.04x** (PyTorch 547ms → ONNX INT8 135ms) |
+| INT8 가속 | **4.04x** (별도 벤치마크: PyTorch 547ms → ONNX INT8 135ms, 라이브 경로 아님) |
 | INT8 정확도 | FP32 대비 **99.75%** 일치, 모델 1.3GB → 322MB |
 | release gate | raw PII 로깅 = 0, invalid offset = 0 (docs/08 §8) |
 
@@ -91,13 +92,13 @@ python demo/app.py --share
 - **"외부 평가는 했나요?"**
   → KLUE-NER test에서 macro-F1 0.766. 최종 unseen 평가(KLUE test + KoJailFuzz 6종)는 W6에 1회 수행 예정(test set 오염 방지 정책).
 - **"실서비스 적용 가능한가요?"**
-  → ONNX INT8로 CPU 135ms 확보. LiteLLM Gateway 통합 경로 검증됨(1차 캡스톤). 단일 가드레일이 4-detector를 병렬 통합.
+  → 별도 ONNX INT8 벤치마크에서 CPU 135ms를 확인했습니다. 현재 라이브 데모 경로는 PyTorch NER이며, LiteLLM Gateway 통합 경로는 1차 캡스톤에서 검증했습니다. 단일 가드레일이 4-detector를 병렬 통합합니다.
 - **"왜 직접 fine-tune 했나요?"**
   → 기존 한국어 NER 모델은 라이선스 제약(모두의말뭉치/CC-BY-NC) 또는 라벨 포맷 불일치. klue 기반 fine-tune이 라이선스·성능 모두 우위(v2 실패 경험 포함 6회 실험).
 
 ---
 
-## 6. 트러블슈팅
+## 7. 트러블슈팅
 
 - **한글 깨짐**: `$env:PYTHONUTF8 = "1"` 설정 후 실행.
 - **포트 충돌**: app.py 는 `server_port` 를 지정하지 않아 gradio 가 7860 부터 빈 포트를 자동 탐색합니다. 좀비 프로세스가 점유 중이면 종료하거나, 콘솔에 출력되는 실제 포트로 접속하세요.
