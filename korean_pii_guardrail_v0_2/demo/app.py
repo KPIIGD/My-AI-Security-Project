@@ -42,6 +42,10 @@ from pii_guardrail.pipeline import GuardrailPipeline, default_components
 from pii_guardrail.schema import GuardrailRequest
 
 DEMO_DIR = Path(__file__).resolve().parent
+if str(DEMO_DIR) not in sys.path:
+    sys.path.insert(0, str(DEMO_DIR))
+from pipeline_trace import render_trace_html, trace_pipeline  # noqa: E402
+
 ASSETS = DEMO_DIR / "assets"
 CONFIG_DIR = PROJECT_ROOT / "configs"
 
@@ -425,6 +429,26 @@ def attack_before_after(variant_text: str):
 
 
 # ============================================================
+# Tab ④ 파이프라인 해부 (M1→M8 단계별 trace)
+# ============================================================
+TRACE_EXAMPLES = [
+    "최영희 연봉 7409만원 010-1234-5678 choi@example.com",
+    "김민수 서울시 강남구 테헤란로 123 삼성전자 근무, 당뇨 진단",
+    "내 ㅈㅜㅁㅣㄴ번호는 900101-1234568 이야",
+    "박지성님께 010-9876-5432 로 연락주세요 (지성테크 대표)",
+]
+
+
+def trace_view(text: str):
+    text = (text or "").strip()
+    if not text:
+        return "<div style='opacity:.6'>입력 텍스트가 없습니다.</div>"
+    # share 모드면 원문 숨김(reveal_raw=False) — placeholder/길이만 노출
+    trace = trace_pipeline(PIPELINE, GuardrailRequest(text=text), reveal_raw=not SHARE_MODE)
+    return render_trace_html(trace)
+
+
+# ============================================================
 # UI
 # ============================================================
 def build_ui():
@@ -514,6 +538,23 @@ def build_ui():
                     columns=3,
                     height=320,
                 )
+
+        with gr.Tab("④ 파이프라인 해부"):
+            gr.Markdown(
+                """
+                ### M1 → M8 단계별 해부 (observability)
+                입력 한 건이 **각 모듈(정규화 · 탐지 · 경계보정 · 문맥점수 · 해소 · 정책 · 마스킹 · 감사)**
+                을 거치며 무엇을·어떻게·무슨 결과로 처리되는지 단계별로 보여줍니다.
+                어느 단계에서 PII가 잡히고/놓치는지 눈으로 추적할 수 있습니다.
+                """
+            )
+            tr_inp = gr.Textbox(label="입력 텍스트", lines=2,
+                                placeholder="예: 최영희 연봉 7409만원 010-1234-5678")
+            tr_btn = gr.Button("🔬 단계별 해부", variant="primary")
+            gr.Examples(examples=TRACE_EXAMPLES, inputs=tr_inp)
+            tr_out = gr.HTML()
+            tr_btn.click(trace_view, inputs=tr_inp, outputs=tr_out)
+            tr_inp.submit(trace_view, inputs=tr_inp, outputs=tr_out)
 
     return demo
 
