@@ -233,13 +233,15 @@ ner.heuristic_split_v1   # (v3에서는 거의 트리거 안 됨)
 **입력**: 256 chars → 122 subword tokens (한국어 PII 혼합 adversarial payload)
 **측정 방법**: warmup 30 + measure 100 iterations, single-batch, p50/p95/p99 + mean±std
 
-| Backend | p50 (ms) | p95 (ms) | p99 (ms) | mean±std (ms) | Speedup vs PyTorch | Model size |
+| Backend | p50 (ms) | p95 (ms) | p99 (ms) | mean±std (ms) | Speedup vs PyTorch (이 환경) | Model size |
 |---|---:|---:|---:|---:|---:|---:|
 | PyTorch CPU FP32 | 546.9 | 810.0 | 940.4 | 590.5 ± 113.0 | 1.0x (baseline) | 1.3 GB |
 | ONNX CPU FP32 (opset 18) | 374.8 | 458.6 | 497.2 | 383.4 ± 37.5 | **1.46x** | 1.3 GB |
 | **ONNX CPU INT8 (dynamic)** | **135.5** | **177.2** | **196.8** | **140.4 ± 17.7** | **4.04x** | **322 MB** |
 
-> 노트: PyTorch p50 실측 546.9ms는 본 문서 v2 작성 시점 예상치(150~250ms)보다 약 2.5배 느리다. 측정 CPU(Core Ultra 7 258V)는 노트북용 저전력 칩이라 server-class CPU 대비 일관성 있게 ~2.5배 느린 것으로 추정. **상대 speedup (1.46x / 4.04x) 은 환경 독립적**.
+> **측정 환경 의존성 (해석 주의)**:
+> - 위 **상대 speedup(1.46x / 4.04x)은 환경 독립적이지 않다.** ONNX Runtime 버전, CPU ISA, thread 설정(intra/inter), 메모리 대역폭, PyTorch 버전에 따라 달라질 수 있으므로 **본 측정 환경 내 상대값**으로 읽어야 한다.
+> - **절대 latency 역시 하드웨어/런타임 의존적**이라 벤치마크 setup이 통제되지 않은 다른 환경과 직접 비교하면 안 된다. (측정 CPU: Core Ultra 7 258V, 노트북용 저전력 칩 — server-class 대비 절대값 차이는 통제된 비교가 아니므로 배수로 단정하지 않는다.)
 
 ### INT8 quantization 정확도 — 실측
 
@@ -271,7 +273,7 @@ ONNX `quantize_dynamic` (weights-only INT8, activation FP32 유지). FP32 predic
 - 2건: B-ADDRESS ↔ I-ADDRESS (composite address span 경계)
 - 1건: O ↔ B-NAME (idol name 같은 short-context 케이스)
 
-→ entity-level F1 영향은 ~1~2%p 추정 (FP32 internal test F1 0.878 대비 INT8 F1 0.86~0.87 예상). M10 evaluation_harness 에서 별도 측정 권장.
+→ **entity-level F1 영향은 측정값이 아니라 추정치(estimate)다.** token-level agreement(99.75%)에서 ~1~2%p 정도로 어림한 값(FP32 internal test F1 0.878 → INT8 F1 0.86~0.87 *예상*)으로, **실측 전까지 확정 수치로 인용하지 말 것.** 실제 entity-level F1은 M10 evaluation_harness 통합 후 측정 예정 (TODO, 아래 §TODO 참조).
 
 ### Phase 6 비교 (참고용)
 
@@ -284,7 +286,7 @@ ONNX `quantize_dynamic` (weights-only INT8, activation FP32 유지). FP32 predic
 | **우리 (v3)** | **ONNX CPU FP32** | **374.8** |
 | **우리 (v3)** | **ONNX CPU INT8** | **135.5** |
 
-> 우리 절대값은 측정 CPU 차이로 Phase 6 대비 느림. **INT8로 4x speedup 달성** + 정확도 99.75% 유지 → production trade-off 양호.
+> **비교 주의**: Phase 6 수치는 각 팀의 서로 다른 하드웨어/런타임에서 측정된 값이라 우리 절대값과 **직접 비교 불가**(통제된 동일 setup이 아님). 표는 참고용일 뿐 우열 근거로 쓰지 않는다. 본 PR에서 의미 있는 결론은 **동일 환경 내** "ONNX INT8가 PyTorch FP32 대비 4.04x speedup + 정확도 99.75% 유지" 라는 환경 내부 비교다.
 
 ### 산출물
 
