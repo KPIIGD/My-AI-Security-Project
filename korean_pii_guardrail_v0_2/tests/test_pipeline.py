@@ -25,7 +25,7 @@ from pii_guardrail.pipeline import (
     PipelineComponents,
     default_components,
 )
-from pii_guardrail.schema import GuardrailOptions, GuardrailRequest
+from pii_guardrail.schema import GuardrailOptions, GuardrailRequest, PIISpan
 
 
 def _request(
@@ -173,6 +173,54 @@ def test_pipeline_handles_person_plus_phone_composite() -> None:
         if span.action in {Action.MASK, Action.HASH}
     }
     assert EntityType.PHONE_MOBILE in masked_types
+
+
+class _OverextendedAddressNER:
+    detector_id = "ner.test.overextended-address"
+
+    def detect(self, raw_text, preprocessed, request):
+        del preprocessed, request
+        text = "서울시 강남구 테헤란로 123 거"
+        start = raw_text.index(text)
+        end = start + len(text)
+        return [
+            PIISpan(
+                start=start,
+                end=end,
+                text=text,
+                entity_type=EntityType.ADDRESS_FULL,
+                score=1.0,
+                sources=("ner",),
+                risk_level=RiskLevel.P1,
+                detector_ids=(self.detector_id,),
+                reason_codes=("ner.test.overextended_address",),
+            )
+        ]
+
+
+def test_pipeline_trims_ner_address_partial_predicate_before_masking() -> None:
+    raw = "주소는 서울시 강남구 테헤란로 123 거주"
+    pipeline = GuardrailPipeline(default_components(ner_detector=_OverextendedAddressNER()))
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == "주소는 [ADDRESS_1] 거주"
+    address = next(span for span in response.spans if span.entity_type is EntityType.ADDRESS_FULL)
+    assert address.end == raw.index(" 거주")
+    assert "boundary.address_partial_word_trim" in address.reason_codes
+
+
+def test_pipeline_does_not_mask_email_label_syllable() -> None:
+    raw = "최영희 연락처 010-1234-5678, 이메일 choi@example.com"
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text is not None
+    assert "이메일 [EMAIL_1]" in response.masked_text
+    assert "이메[EMAIL_1]" not in response.masked_text
+    email = next(span for span in response.spans if span.entity_type is EntityType.EMAIL)
+    assert raw[email.start : email.end] == "choi@example.com"
 
 
 def test_pipeline_reuses_placeholder_for_repeated_value() -> None:

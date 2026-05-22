@@ -14,6 +14,22 @@ from .schema import PIISpan
 DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "configs" / "josa_rules.yaml"
 _UNSET = object()
 _SUFFIX_BOUNDARY_CHARS = frozenset(".,!?;:)]}\"'、。，，？！…/\\|")
+_HANGUL_SYLLABLE_RANGE = ("가", "힣")
+_ADDRESS_ENTITY_TYPES = frozenset({EntityType.ADDRESS_FULL, EntityType.ADDRESS_UNIT})
+_ADDRESS_BODY_TERMINALS = (
+    "로",
+    "길",
+    "번지",
+    "동",
+    "호",
+    "읍",
+    "면",
+    "리",
+    "구",
+    "군",
+    "시",
+    "도",
+)
 
 
 @dataclass(frozen=True)
@@ -53,6 +69,10 @@ class KoreanBoundaryCorrector:
         if corrected is not None:
             return corrected
 
+        corrected = self._trim_address_trailing_partial_word(span, raw_text)
+        if corrected is not None:
+            return corrected
+
         corrected = self._capture_lookahead_suffix(span, raw_text, rules)
         if corrected is not None:
             return corrected
@@ -74,6 +94,42 @@ class KoreanBoundaryCorrector:
                 span.reason_codes,
                 "boundary.suffix_trim",
                 *(f"suffix.{group}" for group in match.groups),
+            ),
+        )
+        corrected.validate_against(raw_text)
+        return corrected
+
+    def _trim_address_trailing_partial_word(self, span: PIISpan, raw_text: str) -> PIISpan | None:
+        if span.entity_type not in _ADDRESS_ENTITY_TYPES:
+            return None
+        if span.end >= len(raw_text) or not _is_hangul_syllable(raw_text[span.end]):
+            return None
+
+        split_at = _last_whitespace_index(span.text)
+        if split_at < 0:
+            return None
+
+        trailing_fragment = span.text[split_at + 1 :]
+        address_body = span.text[:split_at].rstrip()
+        if not trailing_fragment or not address_body:
+            return None
+        if not all(_is_hangul_syllable(char) for char in trailing_fragment):
+            return None
+        if not _looks_like_address_body(address_body):
+            return None
+
+        new_end = span.start + len(address_body)
+        if new_end <= span.start or new_end >= span.end:
+            return None
+
+        corrected = _copy_span(
+            span,
+            end=new_end,
+            text=address_body,
+            normalized=None,
+            reason_codes=_append_reason_codes(
+                span.reason_codes,
+                "boundary.address_partial_word_trim",
             ),
         )
         corrected.validate_against(raw_text)
@@ -237,6 +293,27 @@ def _is_suffix_boundary(raw_text: str, position: int) -> bool:
         return True
     char = raw_text[position]
     return char.isspace() or char in _SUFFIX_BOUNDARY_CHARS
+
+
+def _is_hangul_syllable(char: str) -> bool:
+    low, high = _HANGUL_SYLLABLE_RANGE
+    return low <= char <= high
+
+
+def _last_whitespace_index(text: str) -> int:
+    for index in range(len(text) - 1, -1, -1):
+        if text[index].isspace():
+            return index
+    return -1
+
+
+def _looks_like_address_body(text: str) -> bool:
+    stripped = text.rstrip()
+    if not stripped:
+        return False
+    if any(char.isdigit() for char in stripped):
+        return True
+    return stripped.endswith(_ADDRESS_BODY_TERMINALS)
 
 
 def _append_reason_codes(existing: tuple[str, ...], *new_codes: str) -> tuple[str, ...]:

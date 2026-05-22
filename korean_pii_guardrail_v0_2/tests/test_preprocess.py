@@ -222,6 +222,15 @@ def test_korean_digit_variant_requires_context_and_restores_raw_span() -> None:
     assert raw[raw_start:raw_end] == "공일공 일이삼사 오육칠팔"
 
 
+def test_korean_digit_variant_does_not_convert_syllables_inside_words() -> None:
+    raw = "연락처 010-1234-5678, 이메일 choi@example.com"
+    result = preprocess_text(raw)
+    variant = _variant(result, "korean_digit_restored")
+
+    assert "2메1" not in variant.text
+    assert "이메일 choi@example.com" in variant.text
+
+
 def test_korean_digit_variant_does_not_convert_without_context() -> None:
     raw = "오늘은 일이 많습니다."
     result = preprocess_text(raw)
