@@ -16,6 +16,7 @@ import json
 import re
 import sys
 import time
+import uuid
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -466,6 +467,18 @@ BATCH_SAMPLE = "\n".join([
     "환자 이수진 당뇨 진단, 신한은행 110-123-456789",
 ])
 
+_BATCH_CACHE: dict[str, list[str]] = {}
+_BATCH_CACHE_MAX = 16
+
+
+def _store_batch_texts(texts: list[str]) -> str:
+    token = uuid.uuid4().hex
+    _BATCH_CACHE[token] = list(texts)
+    while len(_BATCH_CACHE) > _BATCH_CACHE_MAX:
+        oldest = next(iter(_BATCH_CACHE))
+        _BATCH_CACHE.pop(oldest, None)
+    return token
+
 
 def run_batch(lines_text: str, file_path: str, limit):
     try:
@@ -498,10 +511,11 @@ def run_batch(lines_text: str, file_path: str, limit):
          ", ".join(r["types"]) or "—", r["latency_ms"]]
         for r in result.records
     ]
-    return render_batch_html(result), rows, texts
+    return render_batch_html(result), rows, _store_batch_texts(texts)
 
 
-def drill_record(idx, texts):
+def drill_record(idx, batch_token):
+    texts = _BATCH_CACHE.get(batch_token) if isinstance(batch_token, str) else None
     if not texts:
         return "<div style='opacity:.6'>먼저 배치 분석을 실행하세요.</div>"
     try:
