@@ -1,0 +1,139 @@
+{
+  "overall": {
+    "entity_type": "__overall__",
+    "tp_exact": 16,
+    "tp_partial": 2,
+    "fp": 5,
+    "fn": 2,
+    "precision": 0.7826,
+    "recall": 0.9,
+    "f1": 0.8372,
+    "boundary_accuracy": 0.8889
+  },
+  "per_entity": [
+    {
+      "entity_type": "ADDRESS_FULL",
+      "tp_exact": 2,
+      "tp_partial": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 0.6667
+    },
+    {
+      "entity_type": "API_KEY_SECRET",
+      "tp_exact": 1,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "BANK_ACCOUNT",
+      "tp_exact": 1,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "CUSTOMER_ID",
+      "tp_exact": 0,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "boundary_accuracy": 0.0
+    },
+    {
+      "entity_type": "EMAIL",
+      "tp_exact": 3,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "HOSPITAL",
+      "tp_exact": 1,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "MEDICAL_RECORD_NO",
+      "tp_exact": 0,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "boundary_accuracy": 0.0
+    },
+    {
+      "entity_type": "ORGANIZATION",
+      "tp_exact": 0,
+      "tp_partial": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "boundary_accuracy": 0.0
+    },
+    {
+      "entity_type": "PERSON_NAME",
+      "tp_exact": 3,
+      "tp_partial": 1,
+      "fp": 3,
+      "fn": 0,
+      "precision": 0.5714,
+      "recall": 1.0,
+      "f1": 0.7273,
+      "boundary_accuracy": 0.75
+    },
+    {
+      "entity_type": "PHONE_MOBILE",
+      "tp_exact": 4,
+      "tp_partial": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.8,
+      "recall": 1.0,
+      "f1": 0.8889,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "RRN",
+      "tp_exact": 1,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    }
+  ],
+  "high_risk_recall": 0.8947,
+  "raw_pii_logging_count": 0,
+  "records": 20
+}
