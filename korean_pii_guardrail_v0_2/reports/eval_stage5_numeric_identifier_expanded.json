@@ -65,11 +65,11 @@
   "boundary_accuracy": 1.0,
   "dataset_id": "stage5_numeric_identifier_expanded",
   "deterministic_latency_ms": {
-    "p50": 1.5529,
-    "p95": 2.7912,
-    "p99": 3.3986
+    "p50": 1.7828,
+    "p95": 3.3376,
+    "p99": 4.158
   },
-  "generated_at": "2026-05-22T04:35:07.825269+00:00",
+  "generated_at": "2026-05-22T07:19:19.278938+00:00",
   "high_risk_recall": 1.0,
   "invalid_offset_count": 0,
   "masked_text_evaluable_count": 900,
@@ -210,7 +210,7 @@
         "threshold": "== 0"
       },
       {
-        "actual_value": 2.7912,
+        "actual_value": 3.3376,
         "name": "deterministic_latency_p95_ms",
         "reason_code": "gate.deterministic_latency_p95_ms.pass",
         "status": "pass",

@@ -285,7 +285,8 @@ class PolicyRouter:
             for code in span.reason_codes
         )
         if span.entity_type in _CONTACT_ENTITIES:
-            if has_example_context:
+            has_positive_context = PolicyRouter._has_strong_context(span)
+            if has_example_context and not has_positive_context:
                 return True
             return span.entity_type in _PHONE_ENTITIES and any(
                 code.startswith("context.penalty.public_phone_context")

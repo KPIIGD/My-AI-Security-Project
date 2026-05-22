@@ -248,7 +248,7 @@ def test_example_keyword_overrides_composite_name_candidate() -> None:
     assert decision.method is TransformationMethod.PASS
 
 
-def test_example_context_overrides_phone_even_with_field_label() -> None:
+def test_example_context_does_not_override_phone_with_positive_context() -> None:
     raw = "예시 전화번호는 010-1234-5678입니다."
     span = _span(
         raw,
@@ -265,11 +265,29 @@ def test_example_context_overrides_phone_even_with_field_label() -> None:
 
     decision = PolicyRouter().select(span, _request(raw))
 
+    assert decision.action is Action.MASK
+    assert decision.method is TransformationMethod.LABEL_MASK
+
+
+def test_example_context_overrides_phone_without_positive_context() -> None:
+    raw = "예시 값은 010-1234-5678입니다."
+    span = _span(
+        raw,
+        "010-1234-5678",
+        EntityType.PHONE_MOBILE,
+        RiskLevel.P1,
+        score=0.79,
+        sources=("regex", "validator", "context"),
+        reason_codes=("context.penalty.example_context",),
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
     assert decision.action is Action.PASS
     assert decision.method is TransformationMethod.PASS
 
 
-def test_example_context_overrides_email_even_with_field_label() -> None:
+def test_example_context_does_not_override_email_with_positive_context() -> None:
     raw = "샘플 이메일 user@example.com을 문서에 넣습니다."
     span = _span(
         raw,
@@ -282,6 +300,24 @@ def test_example_context_overrides_email_even_with_field_label() -> None:
             "context.boost.field_label_email",
             "context.penalty.example_context",
         ),
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.MASK
+    assert decision.method is TransformationMethod.LABEL_MASK
+
+
+def test_example_context_overrides_email_without_positive_context() -> None:
+    raw = "샘플 값 user@example.com을 문서에 넣습니다."
+    span = _span(
+        raw,
+        "user@example.com",
+        EntityType.EMAIL,
+        RiskLevel.P1,
+        score=0.77,
+        sources=("regex", "validator", "context"),
+        reason_codes=("context.penalty.example_context",),
     )
 
     decision = PolicyRouter().select(span, _request(raw))

@@ -224,6 +224,45 @@ def test_pipeline_handles_person_plus_phone_composite() -> None:
     assert EntityType.PHONE_MOBILE in masked_types
 
 
+@pytest.mark.parametrize(
+    ("raw", "raw_value", "entity_type"),
+    [
+        ("이 데이터셋 문서 작성자 홍길동", "홍길동", EntityType.PERSON_NAME),
+        ("이 데이터셋 문서 홍길동", "홍길동", EntityType.PERSON_NAME),
+        ("데모 문의는 010-1234-5678 로 주세요", "010-1234-5678", EntityType.PHONE_MOBILE),
+        ("설치 가이드 문서 연락처 010-9876-5432", "010-9876-5432", EntityType.PHONE_MOBILE),
+    ],
+)
+def test_pipeline_masks_real_pii_with_broad_document_words(
+    raw: str,
+    raw_value: str,
+    entity_type: EntityType,
+) -> None:
+    pipeline = GuardrailPipeline.from_config_dir("configs")
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text is not None
+    assert raw_value not in response.masked_text
+    assert any(
+        span.entity_type is entity_type and span.action is Action.MASK
+        for span in response.spans
+    )
+
+
+def test_pipeline_passes_explicit_example_phone() -> None:
+    raw = "예시 전화번호는 010-1234-5678입니다."
+    pipeline = GuardrailPipeline.from_config_dir("configs")
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == raw
+    assert any(
+        span.entity_type is EntityType.PHONE_MOBILE and span.action is Action.PASS
+        for span in response.spans
+    )
+
+
 def test_pipeline_reuses_placeholder_for_repeated_value() -> None:
     raw = "홍길동이 왔고, 다시 홍길동에게 전화했습니다. 연락처 010-1234-5678."
     pipeline = GuardrailPipeline()

@@ -123,7 +123,7 @@ v0.2에서는 RAG와 멀티턴을 제외하므로 context는 **현재 입력 텍
 
 | Label group | Examples | Target entity |
 |---|---|---|
-| name_label | 성명, 이름, 고객명, 신청자, 담당자, 환자명, 수령인, 예약자, 직원명, 보호자, 문의자, 요청자, 상담 기록 | PERSON_NAME |
+| name_label | 성명, 이름, 고객명, 신청자, 담당자, 작성자, 환자명, 수령인, 예약자, 직원명, 보호자, 문의자, 요청자, 상담 기록 | PERSON_NAME |
 | phone_label | 연락처, 전화번호, 휴대폰, 핸드폰 | PHONE_MOBILE/PHONE_LANDLINE |
 | email_label | 이메일, 메일, 전자우편 | EMAIL |
 | address_label | 주소, 배송지, 거주지, 수령지 | ADDRESS_FULL |
@@ -148,14 +148,14 @@ PERSON_NAME의 name_label은 `고객명 하늘`, `신청자 이름은 이서연`
 
 | Feature | Examples | 효과 |
 |---|---|---|
-| example_context | 예시, 샘플, 테스트, 더미, dummy, sample, placeholder, fixture, 목업, 교육 자료, 검증용, 스토리북, seed, synthetic, 데모, 템플릿, 가이드, 샌드박스, 형식, 매뉴얼, 문서용 | penalty |
+| example_context | 예시, 예제, 샘플, 테스트, 더미, dummy, sample, placeholder, fixture, 목업, 교육 자료, 검증용, 스토리북, seed, synthetic, 형식 설명, 마스킹 테스트 | penalty |
 | weather_context | 하늘 맑음, 비, 날씨, 계절 | PERSON penalty |
 | public_number | 대표번호, 고객센터, 안내번호 | PHONE penalty |
-| code_context | stack trace, 변수명, JSON key, 프로젝트, 모델, 컬럼명, 문서, 데이터셋, 파일, 클래스, 브랜치, 라벨, 지표, 시나리오, 화면 | name/address penalty |
+| code_context | stack trace, 변수명, JSON key, 로그, error, debug, 컬럼명, 클래스, 브랜치 | name/address penalty |
 | business_name | 김밥, 식당, 상호, 브랜드, 상품명, 팀 | PERSON penalty |
 | abstract_value | 중요한 가치, 가치입니다, 원칙입니다, 개념입니다 | PERSON penalty |
 
-`example_context`는 후보 점수 감점뿐 아니라 정책 단계에서도 사용한다. `PHONE_MOBILE`, `PHONE_LANDLINE`, `EMAIL` 후보가 예시·샘플·템플릿 문맥에 있으면 정규식 후보는 남기되 최종 action은 `pass`로 둔다. 이는 `test@example.com`, `010-0000-0000` 같은 문서용 값이 실제 개인정보처럼 마스킹되는 오탐을 줄이기 위한 규칙이다.
+`example_context`는 후보 점수 감점뿐 아니라 정책 단계에서도 사용한다. `PHONE_MOBILE`, `PHONE_LANDLINE`, `EMAIL` 후보가 예시·샘플·테스트·placeholder처럼 명시적 예시 문맥에 있으면 정규식 후보는 남기되 최종 action은 `pass`로 둘 수 있다. 다만 `연락처`, `전화번호`, 사람 이름 `작성자`처럼 실제 개인정보를 가리키는 positive label이나 composite 근거가 있으면 example penalty만으로 최종 `pass`를 강제하지 않는다. 이는 `test@example.com`, `010-0000-0000` 같은 문서용 값 오탐을 줄이면서도 `설치 가이드 문서 연락처 010-...` 같은 실제 연락처 recall을 보존하기 위한 규칙이다.
 
 단, example term은 후보 span 바깥의 주변 문맥에서만 본다. 예를 들어 `sample@example.org`의 `sample`처럼 전자우편 주소 내부에 포함된 문자열은 예시 문맥으로 보지 않는다. 반대로 `샘플 이메일 sample@example.org`처럼 후보 앞뒤 설명에 `샘플`이 있으면 example context로 본다.
 

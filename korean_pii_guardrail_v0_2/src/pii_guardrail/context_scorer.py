@@ -221,6 +221,16 @@ class ContextScorer:
         peers: list[PIISpan],
         raw_text: str,
     ) -> str | None:
+        if (
+            rule == "field_label_phone"
+            and self._match_term_in_group(
+                sentence_text,
+                self.negative_terms,
+                _EXAMPLE_NEGATIVE_GROUP,
+            )
+            is not None
+        ):
+            return None
         if rule == "field_label_name":
             return self._match_left_field_label(
                 span, raw_text, self.field_label_terms, "name_label"

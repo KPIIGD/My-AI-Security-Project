@@ -55,15 +55,17 @@ def test_context_scorer_field_label_terms_loaded_from_yaml() -> None:
     honorifics = load_honorific_terms()
 
     assert "고객명" in terms["name_label"]
+    assert "작성자" in terms["name_label"]
     assert "환자명" in terms["name_label"]
     assert "상담 기록" in terms["name_label"]
     assert "계좌" in terms["account_label"]
     assert "account no" in terms["account_label"]
     assert "placeholder" in negatives["example_context"]
-    assert "템플릿" in negatives["example_context"]
-    assert "문서용" in negatives["example_context"]
+    assert "예제" in negatives["example_context"]
+    assert "형식 설명" in negatives["example_context"]
     assert "맑네요" in negatives["weather_context"]
-    assert "프로젝트" in negatives["code_context"]
+    assert "변수명" in negatives["code_context"]
+    assert "문서" not in negatives["code_context"]
     assert "상품명" in negatives["business_name_context"]
     assert "중요한 가치" in negatives["abstract_value_context"]
     assert "님" in honorifics["person_suffixes"]
@@ -163,7 +165,7 @@ def test_field_label_and_phone_cooccurrence_boost_person_name() -> None:
 
 
 def test_name_label_after_candidate_does_not_boost_person_name() -> None:
-    raw = "하늘 모델은 테스트용 분류기 이름입니다."
+    raw = "하늘 변수명은 테스트용 분류기 이름입니다."
     spans, preprocessed = _detect_all(raw)
 
     scored = ContextScorer().score(spans, preprocessed)
@@ -225,6 +227,28 @@ def test_example_context_penalises_every_entity_in_sentence() -> None:
             code.startswith("context.penalty.example_context")
             for code in phones[0].reason_codes
         )
+        assert not any(
+            code.startswith("context.boost.field_label_phone")
+            for code in phones[0].reason_codes
+        )
+
+
+def test_broad_document_words_do_not_penalise_labeled_phone() -> None:
+    raw = "설치 가이드 문서 연락처 010-9876-5432"
+    spans, preprocessed = _detect_all(raw)
+
+    scored = ContextScorer().score(spans, preprocessed)
+    phones = _by_entity(scored, EntityType.PHONE_MOBILE)
+
+    assert len(phones) == 1
+    assert any(
+        code.startswith("context.boost.field_label_phone")
+        for code in phones[0].reason_codes
+    )
+    assert not any(
+        code.startswith("context.penalty.example_context")
+        for code in phones[0].reason_codes
+    )
 
 
 def test_example_context_ignores_keyword_inside_email_address() -> None:

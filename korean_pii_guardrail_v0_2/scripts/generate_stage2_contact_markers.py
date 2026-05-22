@@ -99,11 +99,11 @@ PHONE_NEGATIVE_TEMPLATES = (
     ("storybook_phone", "스토리북 예제 번호는 {value}입니다.", "스토리북 전화번호"),
     ("seed_phone", "seed 데이터에는 {value}가 포함됩니다.", "seed 전화번호"),
     ("synthetic_phone", "synthetic 전화번호 {value}는 평가용입니다.", "synthetic 전화번호"),
-    ("demo_phone", "데모 화면의 번호는 {value}입니다.", "데모 전화번호"),
+    ("demo_phone", "데모 예시 화면의 번호는 {value}입니다.", "데모 예시 전화번호"),
     ("redaction_phone", "마스킹 테스트 번호 {value}를 입력했습니다.", "마스킹 테스트 전화번호"),
-    ("template_phone", "템플릿의 연락처 자리에는 {value}를 넣습니다.", "템플릿 전화번호"),
+    ("template_phone", "템플릿 예시의 연락처 자리에는 {value}를 넣습니다.", "템플릿 예시 전화번호"),
     ("guide_phone", "가이드 문서 예시는 {value}입니다.", "가이드 예시 전화번호"),
-    ("sandbox_phone", "샌드박스 번호 {value}는 외부 발송 금지입니다.", "샌드박스 전화번호"),
+    ("sandbox_phone", "샌드박스 예시 번호 {value}는 외부 발송 금지입니다.", "샌드박스 예시 전화번호"),
 )
 
 PHONE_POSITIVE_TEMPLATES = (

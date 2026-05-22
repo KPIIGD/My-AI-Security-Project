@@ -57,5 +57,5 @@
 ## 문서 기준 버전
 
 - Project version: `v0.2-single-turn`
-- Date: `2026-05-09`
+- Date: `2026-05-22`
 - Scope decision: RAG와 멀티턴은 v0.2 범위에서 제외하고, 단일 턴 텍스트 guardrail을 먼저 완성한다.

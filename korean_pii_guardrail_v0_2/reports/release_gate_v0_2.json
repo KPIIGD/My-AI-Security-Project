@@ -1,23 +1,23 @@
 {
   "action_counts": {
     "block": 50,
-    "mask": 5042,
-    "pass": 1500
+    "mask": 5167,
+    "pass": 1375
   },
   "actionable_high_risk_recall": 0.9539,
   "actionable_overall": {
     "boundary_accuracy": 1.0,
     "entity_type": "__overall__",
-    "f1": 0.8159,
+    "f1": 0.8061,
     "fn": 967,
-    "fp": 917,
-    "precision": 0.8199,
+    "fp": 1042,
+    "precision": 0.8003,
     "recall": 0.8119,
     "tp_exact": 4175,
     "tp_partial": 0
   },
-  "actionable_overall_f1": 0.8159,
-  "actionable_overall_precision": 0.8199,
+  "actionable_overall_f1": 0.8061,
+  "actionable_overall_precision": 0.8003,
   "actionable_overall_recall": 0.8119,
   "actionable_per_entity": [
     {
@@ -144,10 +144,10 @@
     {
       "boundary_accuracy": 1.0,
       "entity_type": "EMAIL",
-      "f1": 1.0,
+      "f1": 0.7554,
       "fn": 0,
-      "fp": 0,
-      "precision": 1.0,
+      "fp": 125,
+      "precision": 0.6069,
       "recall": 1.0,
       "tp_exact": 193,
       "tp_partial": 0
@@ -334,11 +334,11 @@
   "boundary_accuracy": 1.0,
   "dataset_id": "release_gate_v0_2",
   "deterministic_latency_ms": {
-    "p50": 239.9691,
-    "p95": 488.0893,
-    "p99": 754.7082
+    "p50": 196.9704,
+    "p95": 395.2329,
+    "p99": 744.3849
   },
-  "generated_at": "2026-05-22T04:02:30.812316+00:00",
+  "generated_at": "2026-05-22T07:39:11.478277+00:00",
   "high_risk_recall": 0.9934,
   "invalid_offset_count": 0,
   "masked_text_evaluable_count": 0,
@@ -412,9 +412,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_adversarial_boundary",
       "deterministic_latency_ms": {
-        "p50": 197.7525,
-        "p95": 324.4253,
-        "p99": 465.9285
+        "p50": 212.8821,
+        "p95": 468.5969,
+        "p99": 897.9573
       },
       "high_risk_recall": 0.999,
       "invalid_offset_count": 0,
@@ -556,7 +556,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 324.4253,
+            "actual_value": 468.5969,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -596,15 +596,16 @@
     },
     "hard_negative": {
       "action_counts": {
-        "pass": 825
+        "mask": 125,
+        "pass": 700
       },
       "blocked_count": 0,
       "boundary_accuracy": 0.0,
       "dataset_id": "release_gate_v0_2_hard_negative",
       "deterministic_latency_ms": {
-        "p50": 217.314,
-        "p95": 567.8402,
-        "p99": 1254.8136
+        "p50": 168.608,
+        "p95": 364.6077,
+        "p99": 603.7379
       },
       "high_risk_recall": 0.0,
       "invalid_offset_count": 0,
@@ -718,7 +719,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 567.8402,
+            "actual_value": 364.6077,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -739,7 +740,7 @@
       },
       "residual_risk_notes": [],
       "spans_detected": 825,
-      "spans_masked": 0,
+      "spans_masked": 125,
       "spurious_detections": [
         {
           "entity_type": "EMAIL",
@@ -764,9 +765,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_name_address_affiliation",
       "deterministic_latency_ms": {
-        "p50": 233.3168,
-        "p95": 448.1725,
-        "p99": 670.7144
+        "p50": 177.3499,
+        "p95": 324.3107,
+        "p99": 585.9238
       },
       "high_risk_recall": 1.0,
       "invalid_offset_count": 0,
@@ -943,7 +944,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 448.1725,
+            "actual_value": 324.3107,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -993,9 +994,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_single_turn_composite",
       "deterministic_latency_ms": {
-        "p50": 281.0969,
-        "p95": 490.4912,
-        "p99": 652.5542
+        "p50": 231.4891,
+        "p95": 418.8691,
+        "p99": 725.7143
       },
       "high_risk_recall": 0.9847,
       "invalid_offset_count": 0,
@@ -1209,7 +1210,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 490.4912,
+            "actual_value": 418.8691,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -1261,9 +1262,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_structured_pii",
       "deterministic_latency_ms": {
-        "p50": 268.7528,
-        "p95": 518.2352,
-        "p99": 869.6381
+        "p50": 180.942,
+        "p95": 349.8803,
+        "p99": 643.1722
       },
       "high_risk_recall": 1.0,
       "invalid_offset_count": 0,
@@ -1585,7 +1586,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 518.2352,
+            "actual_value": 349.8803,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -1982,7 +1983,7 @@
         "threshold": "== 0"
       },
       {
-        "actual_value": 488.0893,
+        "actual_value": 395.2329,
         "name": "deterministic_latency_p95_ms",
         "reason_code": "gate.deterministic_latency.real_ner_path_included",
         "status": "skipped",
@@ -2014,7 +2015,7 @@
   ],
   "response_raw_value_logged_count": 0,
   "spans_detected": 6592,
-  "spans_masked": 5092,
+  "spans_masked": 5217,
   "spurious_detections": [
     {
       "entity_type": "ADDRESS_FULL",
