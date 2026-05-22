@@ -111,6 +111,7 @@ v0.2에서는 RAG와 멀티턴을 제외하므로 context는 **현재 입력 텍
 | email_label | 이메일, 메일, 전자우편 | EMAIL |
 | address_label | 주소, 배송지, 거주지, 수령지 | ADDRESS_FULL |
 | account_label | 계좌, 입금, 송금, 환불계좌 | BANK_ACCOUNT |
+| organization_label | 소속, 근무, 재직, 대표, 회사 | ORGANIZATION |
 | id_label | 고객번호, 회원ID, 사번, 학번 | CUSTOMER_ID/EMPLOYEE_ID/STUDENT_ID |
 | medical_label | 환자번호, 차트번호, 진료기록 | MEDICAL_RECORD_NO |
 

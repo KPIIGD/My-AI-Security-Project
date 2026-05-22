@@ -220,6 +220,7 @@ ECE, reliability diagram, temperature scaling 또는 isotonic calibration은 M10
 | `phone_cooccur` | PERSON_NAME | +0.20 | 같은 문장에 PHONE 존재 |
 | `address_cooccur` | PERSON_NAME | +0.15 | 같은 문장에 ADDRESS 존재 |
 | `full_address_detail` | ADDRESS_FULL | +0.20 | 도로명/번지/동호수 결합 |
+| `organization_affiliation_context` | ORGANIZATION | +0.25 | 같은 문장에 `소속`, `근무`, `재직`, `대표` 등 소속/직장 문맥 |
 | `medical_label` | MEDICAL_RECORD_NO/HOSPITAL/HEALTH_INFO | +0.20 | `환자`, `진료`, `차트`, `의무기록` |
 
 ### 7.2 Penalty rules

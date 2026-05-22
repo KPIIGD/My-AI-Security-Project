@@ -63,6 +63,7 @@ context_boosts:
   phone_cooccur_for_person: 0.20
   address_cooccur_for_person: 0.15
   full_address_detail: 0.20
+  organization_affiliation_context: 0.25
   medical_label: 0.20
 context_penalties:
   example_context: -0.15

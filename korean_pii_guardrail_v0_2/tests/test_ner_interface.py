@@ -85,6 +85,21 @@ class FakeNERBackend:
         ]
 
 
+class WhitespacePersonBackend:
+    def detect(self, raw_text: str) -> list[dict[str, object]]:
+        text = "윤 신한"
+        start = raw_text.index(text)
+        return [
+            {
+                "start": start,
+                "end": start + len(text),
+                "text": text,
+                "label": "B-NAME",
+                "score": 0.96,
+            }
+        ]
+
+
 def test_finetuned_ner_adapter_converts_only_v3_direct_candidates() -> None:
     raw_text = "홍길동 서울병원"
     detector = FinetunedNERDetector(backend=FakeNERBackend())
@@ -99,6 +114,15 @@ def test_finetuned_ner_adapter_converts_only_v3_direct_candidates() -> None:
     assert spans[0].risk_level is RiskLevel.P1
     assert spans[0].sources == ("ner",)
     assert "ner.threshold_met" in spans[0].reason_codes
+
+
+def test_finetuned_ner_adapter_rejects_whitespace_person_candidates() -> None:
+    raw_text = "하도윤 신한은행"
+    detector = FinetunedNERDetector(backend=WhitespacePersonBackend())
+
+    spans = detector.detect(raw_text, _preprocessed(raw_text), GuardrailRequest(text=raw_text))
+
+    assert spans == []
 
 
 def test_finetuned_ner_adapter_requires_optional_backend_for_real_detection(monkeypatch: pytest.MonkeyPatch) -> None:

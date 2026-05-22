@@ -145,10 +145,15 @@ class FinetunedNERDetector:
         if isinstance(candidate, PIISpan):
             if candidate.entity_type not in set(NER_V3_LABEL_TO_ENTITY_TYPE.values()):
                 return None
+            if candidate.entity_type is EntityType.PERSON_NAME and _contains_whitespace(candidate.text):
+                return None
             return candidate
 
         entity_type = self._candidate_entity_type(candidate)
         if entity_type is None:
+            return None
+        candidate_text = str(candidate["text"])
+        if entity_type is EntityType.PERSON_NAME and _contains_whitespace(candidate_text):
             return None
 
         score = float(candidate["score"])
@@ -161,7 +166,7 @@ class FinetunedNERDetector:
         return PIISpan(
             start=int(candidate["start"]),
             end=int(candidate["end"]),
-            text=str(candidate["text"]),
+            text=candidate_text,
             entity_type=entity_type,
             score=score,
             sources=tuple(candidate.get("sources") or ("ner",)),
@@ -195,3 +200,7 @@ class FinetunedNERDetector:
             except ValueError:
                 pass
         return NER_V3_RISK_LEVELS[entity_type]
+
+
+def _contains_whitespace(value: str) -> bool:
+    return any(ch.isspace() for ch in value)

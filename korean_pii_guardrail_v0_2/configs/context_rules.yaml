@@ -14,6 +14,7 @@ field_labels:
   email_label: [이메일, 메일, 전자우편]
   address_label: [주소, 배송지, 거주지, 수령지, 자택]
   account_label: [계좌, 입금, 송금, 환불계좌, 이체]
+  organization_label: [소속, 근무, 재직, 대표, 회사, 기관, 업체]
   id_label: [고객번호, 회원번호, 회원ID, 사번, 학번, ID]
   medical_label: [환자번호, 차트번호, 진료기록, 의무기록, 병원]
 honorifics_and_titles:
