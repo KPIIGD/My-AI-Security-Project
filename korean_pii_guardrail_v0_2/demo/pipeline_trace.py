@@ -112,6 +112,20 @@ def _detector_label(detector) -> str:
     )
 
 
+# preprocess 가 만드는 변이형(표기 변이 복원형) 한글 설명 — 검출기는 이 변이형들도 함께 스캔한다.
+_VARIANT_GLOSS = {
+    "normalized": "기본 정규화 (NFKC · 대시/전각숫자 통일 · zero-width 제거)",
+    "digit_compact": "숫자 사이 구분자(-, 공백 등) 제거",
+    "digit_space_compact": "숫자 사이 공백 제거",
+    "korean_keyword_spacing_compact": "띄어쓴 한글 키워드 붙이기 (주 민 번 호 → 주민번호)",
+    "jamo_composed": "분해된 자모 결합 (ㅈㅜㅁㅣㄴ → 주민)",
+    "choseong_restored": "초성 축약 복원 (ㅈㅁㅂㅎ → 주민번호)",
+    "yamin_restored": "야민정음 복원 (댸 → 대 등)",
+    "romanized_restored": "로마자 표기 복원 (jumin → 주민)",
+    "korean_digit_restored": "한글 숫자 → 아라비아 숫자 (구공공 → 900)",
+}
+
+
 _SAFE_PLACEHOLDER_RE = re.compile(r"\[(?:[A-Z][A-Z0-9]*_\d+|REDACTED)\]")
 
 
@@ -130,6 +144,17 @@ def _safe_masked_view(masked_text: str | None, *, reveal_raw: bool) -> str:
     return f"🔒 출력 {len(masked_text)}자 (원문 숨김 · 탐지 placeholder 없음)"
 
 
+def _val(span: PIISpan, reveal_raw: bool) -> str:
+    """span 원문값 (share 모드면 길이만)."""
+    return f"「{span.text}」" if reveal_raw else f"「🔒{span.end - span.start}자」"
+
+
+def _reasons(span: PIISpan, prefix: str) -> str:
+    """span.reason_codes 중 특정 prefix 만 사람이 읽게 묶음 (왜 그랬는지)."""
+    rs = [rc for rc in span.reason_codes if rc.startswith(prefix)]
+    return ", ".join(rs)
+
+
 # ───────────────────────── 핵심: trace ─────────────────────────
 def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) -> PipelineTrace:
     """`pipe.components` 를 재생하며 단계별 스냅샷을 만든다.
@@ -143,24 +168,48 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
     # ── M1 정규화 ──────────────────────────────────────────────
     pre = preprocess_text(request.text)
     norm_changed = pre.normalized_text != pre.raw_text
-    active_variants = [
-        {"name": v.name, "changed": v.text != pre.raw_text}
-        for v in pre.variants
-    ]
-    changed_variants = [v["name"] for v in active_variants if v["changed"]]
+    # 변이형은 normalized 위에 추가 변환을 적용한 것. normalized 와 다르면 "뭔가 복원함".
+    changed_vars = [v for v in pre.variants
+                    if v.name != "normalized" and v.text != pre.normalized_text]
+
+    did1: list[str] = []
+    # (1) 기본 정규화 before → after
+    if norm_changed:
+        if reveal_raw:
+            did1.append(f"원문:   「{pre.raw_text}」")
+            did1.append(f"정규화: 「{pre.normalized_text}」  ← NFKC · 대시/전각숫자 통일 · zero-width 제거")
+        else:
+            did1.append(f"기본 정규화로 원문 변경됨 (원문 숨김, {len(pre.normalized_text)}자)")
+    else:
+        did1.append("기본 정규화: 변화 없음 (NFKC · zero-width 등 해당 사항 없음)")
+    # (2) 표기 변이 복원형 — 실제로 무엇을 만들었는지
+    if changed_vars:
+        did1.append(f"표기 변이 복원형 {len(changed_vars)}개 생성 — 검출기가 이 형태들도 함께 스캔:")
+        for v in changed_vars:
+            gloss = _VARIANT_GLOSS.get(v.name, v.name)
+            if reveal_raw:
+                did1.append(f"   ↳ {gloss}  →  「{v.text}」")
+            else:
+                did1.append(f"   ↳ {gloss} (적용됨)")
+    else:
+        did1.append("표기 변이 없음 (자모분해 · 띄어쓰기 · 로마자 · 초성 등 미감지)")
+    # (3) 구조 분해
+    did1.append(f"문장 {len(pre.sentences)}개 · 어절 {len(pre.eojeols)}개로 분해")
+
+    var_summary = (f"변이 복원형 {len(changed_vars)}개" if changed_vars else "변이 없음")
     stages.append(StageView(
         module="M1",
         title="정규화 (preprocess)",
         span_count=0,
-        summary=f"원문 {len(pre.raw_text)}자 → 정규화 {'변경됨' if norm_changed else '변화 없음'}",
-        what_it_did=[
-            "13단계 정규화: 자모 결합 · NFKC · zero-width 제거 · 구분자 정리 등",
-            f"정규화로 원문이 {'바뀜 (변이 복원)' if norm_changed else '그대로'}",
-            (f"활성 변이형: {', '.join(changed_variants)}" if changed_variants
-             else "감지된 표기 변이 없음"),
-            f"문장 {len(pre.sentences)}개 · 어절 {len(pre.eojeols)}개로 분해",
-        ],
-        detail={"normalized_changed": norm_changed, "variants": active_variants},
+        summary=f"원문 {len(pre.raw_text)}자 → 정규화 {'변경됨' if norm_changed else '변화 없음'} · {var_summary}",
+        what_it_did=did1,
+        detail={
+            "normalized_changed": norm_changed,
+            "variants": [
+                {"name": v.name, "changed": v.text != pre.normalized_text}
+                for v in pre.variants if v.name != "normalized"
+            ],
+        },
     ))
 
     # ── M2 탐지 (regex + 사전 + NER) — detector별 기여 분해 ──────
@@ -184,9 +233,14 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
         if ner_got:
             contrib.append({"detector": _detector_label(c.ner_detector), "kind": "ner",
                             "count": len(ner_got), "types": sorted({s.entity_type.value for s in ner_got})})
-    did = [f"{ct['detector']} ({ct['kind']}): {ct['count']}건 {ct['types']}" for ct in contrib]
+    did = [f"검출기 {len(contrib)}종 가동 → " + " · ".join(
+        f"{ct['detector'].split('.')[-1]}({ct['kind']}) {ct['count']}" for ct in contrib)] if contrib else []
+    # 후보별 "어느 검출기가 무슨 값을 어떤 신뢰도로 잡았나"
+    for s in sorted(candidates, key=lambda x: x.start):
+        det = (s.detector_ids[0] if s.detector_ids else (s.sources[0] if s.sources else "?"))
+        did.append(f"   ↳ {det}: {s.entity_type.value} {_val(s, reveal_raw)} (score {s.score:.2f})")
     if not did:
-        did = ["어떤 검출기도 후보를 내지 않음"]
+        did = ["어떤 검출기도 후보를 내지 않음 (탐지 0)"]
     stages.append(StageView(
         module="M2", title="탐지 (정규식 + 사전 + NER)",
         span_count=len(candidates),
@@ -199,29 +253,48 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
 
     # ── M3 경계 보정 (조사/호칭/어미 분리) ──────────────────────
     corrected = [c.boundary_corrector.correct(s, pre) for s in candidates]
-    trimmed = [(s.entity_type.value, s.suffix) for s in corrected if s.suffix]
+    # before(candidates) → after(corrected) 는 index 1:1 대응 (correct 는 per-span)
+    did3 = []
+    for before, after in zip(candidates, corrected):
+        if after.suffix or before.text != after.text:
+            did3.append(
+                f"{after.entity_type.value}: {_val(before, reveal_raw)} → "
+                f"{_val(after, reveal_raw)}  (조사/호칭/어미 '{after.suffix}' 분리)"
+            )
+    trimmed_n = len(did3)
+    if not did3:
+        did3 = ["분리할 조사/호칭/어미 없음 (span 경계 그대로)"]
     stages.append(StageView(
         module="M3", title="경계 보정 (boundary corrector)",
         span_count=len(corrected),
-        summary=f"{len(trimmed)}건에서 조사/호칭/어미 분리",
-        what_it_did=(
-            [f"{t}: '…{suf}' 분리" for t, suf in trimmed] if trimmed
-            else ["분리할 조사/호칭/어미 없음 (span 경계 그대로)"]
-        ),
+        summary=f"{trimmed_n}건에서 조사/호칭/어미 분리",
+        what_it_did=did3,
         spans=[_span_dict(s, reveal_raw) for s in corrected],
-        detail={"trimmed_count": len(trimmed)},
+        detail={"trimmed_count": trimmed_n},
     ))
 
     # ── dedup (동일 start/end/type 중복 제거) ───────────────────
-    before_dedup = len(corrected)
+    pre_dedup = corrected
+    before_dedup = len(pre_dedup)
+    # 중복 그룹: 같은 (start,end,type) 을 낸 검출기들
+    groups: dict[tuple, list[PIISpan]] = {}
+    for s in pre_dedup:
+        groups.setdefault((s.start, s.end, s.entity_type.value), []).append(s)
     corrected = deduplicate_spans(corrected)
     removed = before_dedup - len(corrected)
+    did_d = []
+    for (st, en, typ), grp in groups.items():
+        if len(grp) > 1:
+            dets = " + ".join(sorted({(g.detector_ids[0] if g.detector_ids else
+                              (g.sources[0] if g.sources else "?")) for g in grp}))
+            did_d.append(f"{typ} {_val(grp[0], reveal_raw)}: {dets} → 1개로 통합 ({len(grp)}건 중복)")
+    if not did_d:
+        did_d = ["중복 없음 (검출기 간 동일 span 없음)"]
     stages.append(StageView(
         module="dedup", title="중복 제거 (deduplicate)",
         span_count=len(corrected),
         summary=f"동일 (start,end,type) 중복 {removed}건 제거",
-        what_it_did=([f"{removed}건의 동일 span 중복 제거 (검출기 간 겹침)"] if removed
-                     else ["중복 없음"]),
+        what_it_did=did_d,
         spans=[_span_dict(s, reveal_raw) for s in corrected],
         detail={"removed": removed},
     ))
@@ -229,47 +302,60 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
     # ── M4 문맥 점수 (boost/penalty + composite) ────────────────
     scored = c.context_scorer.score(corrected, pre)
     by_key = {(s.start, s.end, s.entity_type.value): s for s in corrected}
-    deltas = []
+    did4 = []
+    n_delta = 0
     for s in scored:
         prev = by_key.get((s.start, s.end, s.entity_type.value))
         if prev is not None and abs(s.score - prev.score) > 1e-9:
-            deltas.append((s.entity_type.value, prev.score, s.score))
-    composites = [s.entity_type.value for s in scored if s.is_composite]
-    did4 = [f"{t}: 점수 {a:.2f} → {b:.2f} ({'+' if b>=a else ''}{b-a:.2f})" for t, a, b in deltas]
+            n_delta += 1
+            why = _reasons(s, "context.") or "문맥 규칙"
+            arrow = "▲" if s.score >= prev.score else "▼"
+            did4.append(
+                f"{arrow} {s.entity_type.value} {_val(s, reveal_raw)}: "
+                f"{prev.score:.2f} → {s.score:.2f}  (왜: {why})"
+            )
+    composites = [s for s in scored if s.is_composite]
     if composites:
-        did4.append(f"composite 후보 표시: {sorted(set(composites))}")
+        did4.append(f"composite 후보 표시 ({len(composites)}건): "
+                    + ", ".join(sorted({s.entity_type.value for s in composites}))
+                    + " — 함께 등장해 위험도 상향 후보")
     if not did4:
         did4 = ["점수 변화 없음 (문맥 boost/penalty 미적용)"]
     stages.append(StageView(
         module="M4", title="문맥 점수 (context scorer)",
         span_count=len(scored),
-        summary=f"{len(deltas)}건 점수 조정 · composite {len(set(composites))}종",
+        summary=f"{n_delta}건 점수 조정 · composite {len(set(s.entity_type.value for s in composites))}종",
         what_it_did=did4,
         spans=[_span_dict(s, reveal_raw) for s in scored],
-        detail={"score_changes": len(deltas), "composite_types": sorted(set(composites))},
+        detail={"score_changes": n_delta,
+                "composite_types": sorted({s.entity_type.value for s in composites})},
     ))
 
     # ── M6 span 해소 (병합/overlap/주소조각/composite 승급) ──────
     before_resolve = len(scored)
+    risk_before = {(s.start, s.end, s.entity_type.value): s.risk_level.value for s in scored}
     resolved = c.span_resolver.resolve(scored, pre, request)
     delta_n = before_resolve - len(resolved)
-    upgrades = [
-        s.entity_type.value for s in resolved
-        if any("composite" in rc or "upgrade" in rc or "escalat" in rc for rc in s.reason_codes)
-    ]
     did6 = []
     if delta_n > 0:
-        did6.append(f"중복/overlap 정리로 {delta_n}건 감소 (승자 선택·병합)")
+        did6.append(f"중복/overlap 정리로 {delta_n}건 감소 (우선순위 승자 선택·병합)")
     elif delta_n < 0:
         did6.append(f"주소 조각 분할 등으로 {-delta_n}건 증가")
     else:
-        did6.append("span 수 변화 없음")
-    if upgrades:
-        did6.append(f"composite 위험도 승급: {sorted(set(upgrades))}")
+        did6.append("span 수 변화 없음 (병합/분할 없음)")
+    # 위험도 승급 (composite 등) per span
+    upgrades = []
+    for s in resolved:
+        prev_risk = risk_before.get((s.start, s.end, s.entity_type.value))
+        if prev_risk and prev_risk != s.risk_level.value:
+            why = _reasons(s, "resolver.") or _reasons(s, "composite") or "composite 상향"
+            did6.append(f"▲ {s.entity_type.value} {_val(s, reveal_raw)}: "
+                        f"위험도 {prev_risk} → {s.risk_level.value}  (왜: {why})")
+            upgrades.append(s.entity_type.value)
     stages.append(StageView(
         module="M6", title="span 해소 (resolver)",
         span_count=len(resolved),
-        summary=f"{before_resolve}건 → {len(resolved)}건 (병합/overlap/주소/composite)",
+        summary=f"{before_resolve}건 → {len(resolved)}건 · 위험도 승급 {len(upgrades)}건",
         what_it_did=did6,
         spans=[_span_dict(s, reveal_raw) for s in resolved],
         detail={"delta": delta_n, "upgrades": sorted(set(upgrades))},
@@ -279,12 +365,18 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
     routed = c.policy_router.route(resolved, request)
     from collections import Counter
     action_dist = Counter(s.action.value for s in routed)
+    did7 = []
+    for s in routed:
+        why = _reasons(s, "policy.") or "기본 정책"
+        did7.append(f"{s.entity_type.value} {_val(s, reveal_raw)} → "
+                    f"{s.action.value.upper()} ({s.risk_level.value}, 왜: {why})")
+    if not did7:
+        did7 = ["라우팅할 span 없음"]
     stages.append(StageView(
         module="M7", title="정책 라우팅 (policy router)",
         span_count=len(routed),
         summary=f"조치 분포: {dict(action_dist)}",
-        what_it_did=[f"{s.entity_type.value} → {s.action.value}" for s in routed]
-                    or ["라우팅할 span 없음"],
+        what_it_did=did7,
         spans=[_span_dict(s, reveal_raw) for s in routed],
         detail={"action_distribution": dict(action_dist)},
     ))
@@ -302,18 +394,29 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
     ))
 
     # ── M8 감사 대상 산정 (trace는 파일 쓰기 부작용 없이 대상만 계산) ─────────────
-    actionable = sum(1 for s in routed if s.action in {Action.MASK, Action.HASH, Action.BLOCK})
-    audit_n = actionable if c.audit_logger is not None else 0
+    actionable_spans = [s for s in routed if s.action in {Action.MASK, Action.HASH, Action.BLOCK}]
+    audit_n = len(actionable_spans) if c.audit_logger is not None else 0
+    if c.audit_logger is not None:
+        did8 = ["감사 로그에는 원문이 아니라 hash+offset+type 만 기록 (raw-PII 경계):"]
+        for s in actionable_spans:
+            # value_hash 는 원문이 아닌 HMAC — 노출돼도 안전. share/local 무관.
+            try:
+                h = c.audit_logger.digest(s.text)
+            except Exception:
+                h = "hmac-sha256:…"
+            short = h if len(h) <= 40 else h[:40] + "…"
+            did8.append(f"   ↳ {s.entity_type.value} [{s.start}:{s.end}] len{s.end - s.start} "
+                        f"{s.action.value} → {short}")
+        did8.append("trace 뷰는 관측용이라 실제 audit log 파일 쓰기는 하지 않음")
+    else:
+        did8 = ["감사 로거가 주입되지 않음 — 이벤트 없음 (기본 데모는 로거 비활성)"]
     stages.append(StageView(
         module="M8", title="감사 대상 산정 (audit logger)",
         span_count=audit_n,
-        summary=(f"actionable {actionable}건 → 감사 이벤트 대상 (hash only)"
+        summary=(f"actionable {len(actionable_spans)}건 → 감사 이벤트 대상 (hash only)"
                  if c.audit_logger is not None else "감사 로거 비활성 (이벤트 0)"),
-        what_it_did=([f"{actionable}건의 MASK/HASH/BLOCK span이 감사 이벤트 대상",
-                      "trace 뷰는 관측용이라 실제 audit log 파일 쓰기는 수행하지 않음"]
-                     if c.audit_logger is not None
-                      else ["감사 로거가 주입되지 않음 — 이벤트 없음"]),
-        detail={"audit_event_targets": audit_n, "actionable": actionable, "emitted": False},
+        what_it_did=did8,
+        detail={"audit_event_targets": audit_n, "actionable": len(actionable_spans), "emitted": False},
     ))
 
     total_ms = (time.perf_counter() - t0) * 1000.0
@@ -323,7 +426,8 @@ def trace_pipeline(pipe, request: GuardrailRequest, *, reveal_raw: bool = True) 
         raw_len=len(request.text),
         normalized_text=(pre.normalized_text if reveal_raw else None),
         normalized_changed=norm_changed,
-        variants=active_variants,
+        variants=[{"name": v.name, "changed": v.text != pre.normalized_text}
+                  for v in pre.variants if v.name != "normalized"],
         stages=stages,
         masked_text=masked_view,
         blocked=blocked,
