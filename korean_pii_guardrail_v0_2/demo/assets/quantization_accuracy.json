@@ -1,0 +1,44 @@
+{
+  "n_test_samples": 200,
+  "total_tokens": 5148,
+  "agree_tokens": 5135,
+  "overall_agreement": 0.997475,
+  "per_label": {
+    "B-ADDRESS": {
+      "total": 55,
+      "agree": 54,
+      "rate": 0.9818
+    },
+    "B-NAME": {
+      "total": 129,
+      "agree": 128,
+      "rate": 0.9922
+    },
+    "B-ORG": {
+      "total": 79,
+      "agree": 78,
+      "rate": 0.9873
+    },
+    "I-ADDRESS": {
+      "total": 270,
+      "agree": 268,
+      "rate": 0.9926
+    },
+    "I-NAME": {
+      "total": 134,
+      "agree": 134,
+      "rate": 1.0
+    },
+    "I-ORG": {
+      "total": 93,
+      "agree": 91,
+      "rate": 0.9785
+    },
+    "O": {
+      "total": 4388,
+      "agree": 4382,
+      "rate": 0.9986
+    }
+  },
+  "n_sentences_with_disagreement": 12
+}

@@ -110,7 +110,20 @@ class FinetunedKoreanNERDetector:
         device: str = "auto",
         max_length: int = 256,
     ):
-        self.model_path = model_path
+        # model_path 는 로컬 디렉터리 경로일 수도, HuggingFace Hub repo id
+        # ("vmaca123/korean-pii-ner-v3") 일 수도 있다. Hub repo id 를 Path 로
+        # 변환하면 Windows 에서 "/" → "\\" 가 되어 ("vmaca123\\korean-pii-ner-v3")
+        # 유효하지 않은 repo id 가 된다. 따라서 로컬 디렉터리로 실재할 때만 Path 로
+        # 정규화하고, 그 외에는 원본 문자열(슬래시 유지)을 그대로 from_pretrained 에 넘긴다.
+        raw_path = str(model_path)
+        local_dir = Path(raw_path).expanduser()
+        if local_dir.is_dir():
+            self.model_path = local_dir
+            model_ref = str(local_dir)
+        else:
+            # Hub repo id (또는 미존재 경로) — 슬래시 보존
+            self.model_path = raw_path
+            model_ref = raw_path
         self.max_length = max_length
 
         # device 결정
@@ -119,9 +132,8 @@ class FinetunedKoreanNERDetector:
         self.device = device
 
         # 모델/토크나이저 로드
-        model_source = self._resolve_model_source(model_path)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_source)
-        self.model = AutoModelForTokenClassification.from_pretrained(model_source)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_ref)
+        self.model = AutoModelForTokenClassification.from_pretrained(model_ref)
         self.model.to(self.device)
         self.model.eval()
 
@@ -148,10 +160,10 @@ class FinetunedKoreanNERDetector:
     def _resolve_model_source(model_path: str) -> str:
         """Preserve HuggingFace repo ids while accepting local paths."""
 
-        local_path = Path(model_path).expanduser()
-        if local_path.exists():
+        local_path = Path(str(model_path)).expanduser()
+        if local_path.is_dir():
             return str(local_path)
-        return model_path
+        return str(model_path)
 
     # ─────────────────────────────────────────────────────
     # v0.2 BaseNERDetector interface
