@@ -1,4 +1,12 @@
-가드레일 문서 텍스트 변환·마스킹 기능 설계서
+# 가드레일 문서 텍스트 변환·마스킹 기능 설계서
+
+> Review note: this draft was moved from the root-level direct commit `4d9cdc4`
+> into the v0.2 docs tree so review comments can be tracked in PR history.
+> @KeoJung please confirm whether this document-input/OCR preprocessing proposal
+> is intended for the current v0.2 single-turn text-core scope or a later phase.
+> The current v0.2 scope keeps the deterministic text-input core separate from
+> document/RAG-style expansion work.
+
 항목내용문서 제목가드레일 앞단 문서 텍스트 변환 및 마스킹 처리 설계서작성 목적문서 파일 입력을 가드레일 통과 가능한 형태로 전처리하는 기능 설계상태초안 (Draft) — 리뷰 대기관련 작업기존 가드레일 기능 확장
 
 리뷰어 확인 요청 사항
