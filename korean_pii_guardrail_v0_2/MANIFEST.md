@@ -34,7 +34,7 @@
 | 파일 | 목적 |
 |---|---|
 | `schemas/*.schema.json` | API 및 내부 객체 JSON Schema |
-| `configs/*.yaml` | entity, scoring, policy, context, josa 설정 |
+| `configs/*.yaml` | entity, detector routing, scoring, policy, context, josa 설정 |
 | `api/openapi.yaml` | REST API 계약 초안 |
 | `src/pii_guardrail/*.py` | Python 패키지 인터페이스 skeleton |
 | `data/eval/hard_cases_v0.jsonl` | 단일 턴 hard-case 평가 샘플 |

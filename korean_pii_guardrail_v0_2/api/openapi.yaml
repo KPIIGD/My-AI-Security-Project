@@ -137,12 +137,6 @@ components:
         allow_experimental_entities:
           type: boolean
           default: false
-        fail_on_invalid_offset:
-          type: boolean
-          default: true
-        mask_suffix_preserving:
-          type: boolean
-          default: true
     GuardrailRequest:
       type: object
       required: [text]

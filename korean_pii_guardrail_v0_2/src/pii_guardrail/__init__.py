@@ -1,6 +1,7 @@
 """Korean PII Guardrail v0.2 single-turn core skeleton."""
 
 from .enums import Action, EntityType, OutputTarget, RiskLevel, ScanStage
+from .detector_config import DetectorPolicy, load_detector_policy
 from .masker import HmacHashProvider, MaskingError, SuffixPreservingMasker
 from .pipeline import GuardrailPipeline, PipelineComponents, default_components
 from .policy import PolicyConfigError, PolicyDecision, PolicyRouter, TransformationMethod
@@ -16,6 +17,7 @@ from .schema import (
 __all__ = [
     "Action",
     "AuditEvent",
+    "DetectorPolicy",
     "EntityType",
     "GuardrailOptions",
     "GuardrailPipeline",
@@ -35,4 +37,5 @@ __all__ = [
     "SuffixPreservingMasker",
     "TransformationMethod",
     "default_components",
+    "load_detector_policy",
 ]

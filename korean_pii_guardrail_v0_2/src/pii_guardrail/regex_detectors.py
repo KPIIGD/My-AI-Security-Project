@@ -9,6 +9,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from .dictionary_loader import load_structured_context_terms
+from .detector_config import DetectorPolicy
 from .enums import Action, EntityType, RiskLevel, Source
 from .interfaces import PreprocessResult, TextVariant
 from .preprocess import NormalizationMapError, restore_variant_span
@@ -58,6 +59,7 @@ class BaseRegexDetector:
         scores: Mapping[str, float] | None = None,
         risk_levels: Mapping[EntityType, RiskLevel] | None = None,
         structured_context_terms: Mapping[str, tuple[str, ...]] | None = None,
+        detector_policy: DetectorPolicy | None = None,
     ) -> None:
         self.scores = dict(scores) if scores is not None else load_regex_base_scores()
         self.risk_levels = dict(risk_levels) if risk_levels is not None else load_entity_risk_levels()
@@ -66,10 +68,17 @@ class BaseRegexDetector:
             if structured_context_terms is not None
             else load_structured_context_terms()
         )
+        self.detector_policy = detector_policy or DetectorPolicy()
 
     def detect(self, preprocessed: PreprocessResult, request: GuardrailRequest) -> list[PIISpan]:
         del request
-        spans = list(self._detect(preprocessed))
+        if not self.detector_policy.regex_detector_enabled(self.detector_id):
+            return []
+        spans = [
+            span
+            for span in self._detect(preprocessed)
+            if self.detector_policy.entity_enabled(span.entity_type)
+        ]
         return deduplicate_spans(spans)
 
     def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
@@ -92,6 +101,9 @@ class BaseRegexDetector:
         span.validate_against(raw_text)
         return span
 
+    def _checksum_mode(self, entity_type: EntityType | str) -> str:
+        return self.detector_policy.checksum_mode(entity_type)
+
 
 class RRNRegexDetector(BaseRegexDetector):
     detector_id = "regex.rrn"
@@ -111,7 +123,7 @@ class RRNRegexDetector(BaseRegexDetector):
             )
             if is_corporate_context and not is_personal_context:
                 continue
-            validation = validate_rrn(match.matched_text)
+            validation = validate_rrn(match.matched_text, checksum_mode=self._checksum_mode(EntityType.RRN))
             if not validation.is_valid:
                 continue
             yield self._make_span(
@@ -145,7 +157,7 @@ class FRNRegexDetector(BaseRegexDetector):
             )
             if is_corporate_context and not is_personal_context:
                 continue
-            validation = validate_frn(match.matched_text)
+            validation = validate_frn(match.matched_text, checksum_mode=self._checksum_mode(EntityType.FRN))
             if not validation.is_valid:
                 continue
             yield self._make_span(
@@ -265,8 +277,11 @@ class CreditCardRegexDetector(BaseRegexDetector):
                 self.structured_context_terms,
             ):
                 continue
-            validation = validate_credit_card(match.matched_text)
-            if not validation.is_valid or validation.score_key != "CREDIT_CARD_VALID":
+            validation = validate_credit_card(
+                match.matched_text,
+                checksum_mode=self._checksum_mode(EntityType.CREDIT_CARD),
+            )
+            if not validation.is_valid or validation.score_key is None:
                 continue
             yield self._make_span(
                 preprocessed.raw_text,
@@ -311,7 +326,10 @@ class BusinessRegNoDetector(BaseRegexDetector):
                 continue
             if validate_phone(match.matched_text).is_valid:
                 continue
-            validation = validate_business_reg_no(match.matched_text)
+            validation = validate_business_reg_no(
+                match.matched_text,
+                checksum_mode=self._checksum_mode(EntityType.BUSINESS_REG_NO),
+            )
             if not validation.is_valid or validation.score_key is None:
                 continue
             yield self._make_span(

@@ -44,6 +44,7 @@ from pathlib import Path
 
 from .audit_logger import AuditLogger, AuditPayloadLeakError
 from .context_scorer import ContextScorer
+from .detector_config import DetectorPolicy, load_detector_policy
 from .dictionary_loader import (
     load_composite_upgrades,
     load_context_boosts,
@@ -101,6 +102,7 @@ class _ConfigPaths:
     josa_rules: Path
     entities: Path
     context_rules: Path
+    detectors: Path
 
 
 @dataclass(frozen=True)
@@ -121,6 +123,7 @@ class PipelineComponents:
     policy_router: PolicyRouter
     masker: SuffixPreservingMasker
     audit_logger: AuditLogger | None
+    detector_policy: DetectorPolicy
 
 
 def _default_regex_detectors(
@@ -128,11 +131,13 @@ def _default_regex_detectors(
     scores: dict[str, float] | None = None,
     risk_levels: dict[EntityType, RiskLevel] | None = None,
     structured_context_terms: dict[str, tuple[str, ...]] | None = None,
+    detector_policy: DetectorPolicy | None = None,
 ) -> tuple[object, ...]:
     kwargs = {
         "scores": scores,
         "risk_levels": risk_levels,
         "structured_context_terms": structured_context_terms,
+        "detector_policy": detector_policy,
     }
     return (
         RRNRegexDetector(**kwargs),
@@ -168,6 +173,7 @@ def _resolve_config_dir(config_dir: str | Path) -> _ConfigPaths:
         josa_rules=root / "josa_rules.yaml",
         entities=root / "entities.yaml",
         context_rules=root / "context_rules.yaml",
+        detectors=root / "detectors.yaml",
     )
     missing = [
         path.name
@@ -206,9 +212,11 @@ def default_components(
         boundary_corrector = KoreanBoundaryCorrector()
         context_scorer = ContextScorer()
         span_resolver = SpanResolver()
-        regex_detectors = _default_regex_detectors()
+        detector_policy = load_detector_policy()
+        regex_detectors = _default_regex_detectors(detector_policy=detector_policy)
     else:
         paths = _resolve_config_dir(config_dir)
+        detector_policy = load_detector_policy(paths.detectors)
         risk_levels = load_entity_risk_levels(paths.entities)
         dictionaries = load_dictionary_lists(paths.dictionaries)
         composite_upgrades = load_composite_upgrades(paths.scoring)
@@ -242,6 +250,7 @@ def default_components(
             scores=load_regex_base_scores(paths.scoring),
             risk_levels=risk_levels,
             structured_context_terms=load_structured_context_terms(paths.context_rules),
+            detector_policy=detector_policy,
         )
 
     masker = SuffixPreservingMasker(
@@ -258,6 +267,7 @@ def default_components(
         policy_router=policy_router,
         masker=masker,
         audit_logger=audit_logger,
+        detector_policy=detector_policy,
     )
 
 
@@ -324,6 +334,11 @@ class GuardrailPipeline:
                     request=request,
                 )
             )
+        candidates = [
+            span
+            for span in candidates
+            if self._components.detector_policy.entity_enabled(span.entity_type)
+        ]
 
         # --- M3 boundary correction (per-span) ---
         corrected = [

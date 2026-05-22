@@ -93,6 +93,9 @@ def test_m7_gateway_json_schemas_are_mvp_scoped() -> None:
         "audit_log",
     ]
     assert request_schema["properties"]["policy_profile"]["enum"] == ["strict"]
+    option_properties = request_schema["properties"]["options"]["properties"]
+    assert "fail_on_invalid_offset" not in option_properties
+    assert "mask_suffix_preserving" not in option_properties
     assert span_schema["properties"]["action"]["enum"] == [
         "candidate",
         "pass",
@@ -109,6 +112,8 @@ def test_m7_gateway_openapi_and_policy_config_are_mvp_scoped() -> None:
     assert "enum: [llm_input, external_output, audit_log]" in openapi_text
     assert "enum: [candidate, pass, mask, hash, block]" in openapi_text
     assert "enum: [strict]" in openapi_text
+    assert "fail_on_invalid_offset" not in openapi_text
+    assert "mask_suffix_preserving" not in openapi_text
     assert "mvp_scope: llm_gateway" in policy_text
     assert "  strict:" in policy_text
     assert "  audit_log:" in policy_text

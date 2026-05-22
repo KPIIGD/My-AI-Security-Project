@@ -29,9 +29,7 @@
       "properties": {
         "return_spans": { "type": "boolean", "default": true },
         "include_audit_events": { "type": "boolean", "default": true },
-        "allow_experimental_entities": { "type": "boolean", "default": false },
-        "fail_on_invalid_offset": { "type": "boolean", "default": true },
-        "mask_suffix_preserving": { "type": "boolean", "default": true }
+        "allow_experimental_entities": { "type": "boolean", "default": false }
       }
     }
   },

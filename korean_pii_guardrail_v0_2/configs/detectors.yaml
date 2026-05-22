@@ -1,0 +1,65 @@
+version: v0.2-single-turn
+
+# Coarse detector routing. Keep request-time regex injection out of v0.2.
+regex_detectors:
+  regex.rrn:
+    enabled: true
+  regex.frn:
+    enabled: true
+  regex.phone:
+    enabled: true
+  regex.email:
+    enabled: true
+  regex.network:
+    enabled: true
+  regex.credit_card:
+    enabled: true
+  regex.business_reg_no:
+    enabled: true
+  regex.bank_account:
+    enabled: true
+  regex.secret:
+    enabled: true
+
+# Entity-level kill switches are applied after candidate generation, so they
+# cover regex, dictionary, and NER candidates consistently.
+# Disabling high-risk entities such as RRN, FRN, CREDIT_CARD, PHONE_*, EMAIL,
+# BANK_ACCOUNT, or API_KEY_SECRET can violate release gates and should require
+# an explicit security review.
+entities:
+  API_KEY_SECRET:
+    enabled: true
+  RRN:
+    enabled: true
+  FRN:
+    enabled: true
+  CREDIT_CARD:
+    enabled: true
+  BUSINESS_REG_NO:
+    enabled: true
+  BANK_ACCOUNT:
+    enabled: true
+  PHONE_MOBILE:
+    enabled: true
+  PHONE_LANDLINE:
+    enabled: true
+  EMAIL:
+    enabled: true
+  IP_ADDRESS:
+    enabled: true
+  MAC_ADDRESS:
+    enabled: true
+
+# checksum modes:
+# - strict: checksum failure rejects the candidate
+# - warn: checksum failure emits a lower-confidence pattern-only candidate
+# - off: checksum is skipped and only pattern/shape validation is used
+validators:
+  RRN:
+    checksum: strict
+  FRN:
+    checksum: strict
+  CREDIT_CARD:
+    checksum: strict
+  BUSINESS_REG_NO:
+    checksum: warn

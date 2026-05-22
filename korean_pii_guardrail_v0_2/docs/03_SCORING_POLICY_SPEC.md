@@ -83,7 +83,9 @@ test@example.com
 |---|---|---:|---|
 | API_KEY_SECRET | prefix + length + entropy 통과 | 0.99 | 보안비밀, block 후보 |
 | RRN | 날짜/성별 digit/길이 + checksum 통과 | 0.98 | P0 recall 우선 |
+| RRN | checksum warn/off pattern-only | 0.70 | 설정 기반 lower-confidence 후보 |
 | FRN | 날짜/성별 digit/길이 + checksum 통과 | 0.98 | P0 recall 우선 |
+| FRN | checksum warn/off pattern-only | 0.70 | 설정 기반 lower-confidence 후보 |
 | CREDIT_CARD | Luhn 통과 | 0.96 | 금융 직접식별 |
 | CREDIT_CARD | Luhn 미통과 but 카드형 패턴 | 0.45 | candidate만 유지 가능 |
 | EMAIL | domain 구조 통과 | 0.92 | suffix trim 필요 |
@@ -111,6 +113,41 @@ test@example.com
 다만 법인등록번호는 일부 등기소 코드와 뒤 7자리 조합이 주민등록번호/외국인등록번호 checksum 또는 신용카드 Luhn 검증과 우연히 겹칠 수 있다. 그래서 regex 단계에서 값 바로 왼쪽 문맥이 명시적 법인 라벨이면 `RRN`/`FRN`/`CREDIT_CARD` 후보를 만들지 않는다. 반대로 값 바로 왼쪽 문맥이 명시적 개인 등록 라벨이면 주민등록번호 후보를 유지한다. 이 라벨 목록은 `configs/context_rules.yaml`의 `structured_identifier_contexts`가 소유한다.
 
 `priority_order`는 겹치는 span 중 어떤 entity를 최종으로 남길지 정하는 우선순위다. `BUSINESS_REG_NO`와 `CORPORATE_REG_NO`는 business identifier, 즉 사업/법인 식별자이므로 전화번호/이메일 뒤, 주소 앞에 배치한다. 주민등록번호는 여전히 P0이므로 법인등록번호보다 높은 우선순위를 유지하되, 명시적 법인 라벨이 있으면 주민등록번호/외국인등록번호/신용카드 후보를 탐지 단계에서 만들지 않는다.
+
+### 4.1 Detector and validator configuration
+
+Detector routing is controlled by `configs/detectors.yaml`.
+
+Supported v0.2 settings:
+
+- `regex_detectors.<detector_id>.enabled`: disables an entire regex detector
+  such as `regex.email` or `regex.credit_card`.
+- `entities.<ENTITY>.enabled`: filters candidates for that entity across
+  regex, dictionary, and NER sources.
+- `validators.<ENTITY>.checksum`: controls structured checksum behavior for
+  supported validators.
+
+High-risk entity kill switches (`RRN`, `FRN`, `CREDIT_CARD`, `BANK_ACCOUNT`,
+`PHONE_MOBILE`, `PHONE_LANDLINE`, `EMAIL`, `API_KEY_SECRET`) can violate
+P0/P1 release gates if disabled. `load_detector_policy` emits a runtime warning
+for those disables; production changes should treat them as security-reviewed
+exceptions, not ordinary tuning.
+
+Unknown detector IDs, entity names, checksum validator names, malformed
+indentation, and unknown nested keys are warned and ignored rather than being
+silently accepted.
+
+Checksum modes:
+
+| Mode | Meaning |
+|---|---|
+| `strict` | checksum failure rejects the candidate |
+| `warn` | checksum failure emits a lower-confidence pattern-only candidate |
+| `off` | checksum is skipped and only shape validation is used |
+
+The v0.2 API does not accept request-time regex injection. Custom regex
+definitions need a later design with ReDoS limits, review workflow, and
+no-raw-PII logging guarantees.
 
 ## 5. Dictionary base score
 

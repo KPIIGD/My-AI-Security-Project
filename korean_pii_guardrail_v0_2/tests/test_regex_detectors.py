@@ -44,7 +44,9 @@ def test_regex_scores_are_loaded_from_config() -> None:
     scores = load_regex_base_scores()
 
     assert scores["RRN"] == 0.98
+    assert scores["RRN_PATTERN_ONLY"] == 0.70
     assert scores["FRN"] == 0.98
+    assert scores["FRN_PATTERN_ONLY"] == 0.70
     assert scores["BUSINESS_REG_NO_PATTERN_ONLY"] == 0.75
 
 
