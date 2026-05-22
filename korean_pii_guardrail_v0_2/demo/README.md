@@ -100,6 +100,6 @@ python demo/app.py --share
 ## 6. 트러블슈팅
 
 - **한글 깨짐**: `$env:PYTHONUTF8 = "1"` 설정 후 실행.
-- **포트 충돌**: app.py 하단 `server_port=7860` 변경.
-- **real NER 로드 실패**: 상단 배너가 "⚠️ Mock NER"이면 모델 경로(`NER_MODEL_PATH`) 확인. mock이어도 정규식/사전 탐지는 동작.
-- **그래프 빈 화면**: `reports/ablation_demo.json`, `PII/ner/reports/latency_bench.json` 존재 확인.
+- **포트 충돌**: app.py 는 `server_port` 를 지정하지 않아 gradio 가 7860 부터 빈 포트를 자동 탐색합니다. 좀비 프로세스가 점유 중이면 종료하거나, 콘솔에 출력되는 실제 포트로 접속하세요.
+- **real NER 로드 실패**: 기본은 fail-closed 라 즉시 종료됩니다. mock 으로라도 띄우려면 `python demo/app.py --allow-mock` 을 쓰세요. 이 경우 상단 배너가 "⚠️ Mock NER" 가 되고 대시보드 성능 수치는 현재 추론 결과가 아니라는 경고가 표시됩니다.
+- **그래프 빈 화면**: 대시보드 데이터는 모두 `demo/assets/` 에서 읽습니다 (`eval_real_ner.json`, `latency_bench.json`, `quantization_accuracy.json`, `figs/`). 해당 파일 존재를 확인하세요.

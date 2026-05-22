@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 import time
 from pathlib import Path
@@ -63,24 +64,46 @@ FIG_DIR = ASSETS / "figs"
 
 
 # ============================================================
-# Pipeline 초기화 (real NER, 실패 시 mock fallback)
+# Pipeline 초기화 (real NER, 기본 fail-closed)
 # ============================================================
-def build_pipeline():
+# 데모는 "real NER v3 라이브" 라는 메시지를 전제로 한다. real NER 로드에 실패하면
+# 기본적으로 fail-closed (즉시 중단) 한다. mock NER 로의 fallback 은 mock 임을
+# 명시적으로 허용했을 때(--allow-mock)만 가능하며, 이때는 대시보드의 성능 수치를
+# "현재 라이브 측정치"로 오인하지 않도록 mock 경고를 노출한다.
+MOCK_MODE = False
+
+
+class NERLoadError(RuntimeError):
+    """real NER v3 로드 실패 (fail-closed)."""
+
+
+def build_pipeline(allow_mock: bool = False):
+    global MOCK_MODE
     try:
         from pii_guardrail.ner.finetuned_wrapper import FinetunedNERDetector
 
         ner = FinetunedNERDetector(model_path=NER_MODEL_PATH)
         pipe = GuardrailPipeline(default_components(config_dir=CONFIG_DIR, ner_detector=ner))
-        # warmup (모델 lazy-load 강제)
+        # warmup (모델 lazy-load 강제) — 여기서 실패하면 real NER 미작동으로 간주
         pipe.process(GuardrailRequest(text="홍길동 010-1234-5678"))
         return pipe, f"✅ Real NER v3 (klue-roberta-large, {NER_MODEL_PATH})"
-    except Exception as exc:  # pragma: no cover - 데모 환경 fallback
-        print(f"[demo] real NER 로드 실패 → mock NER 사용: {exc}")
+    except Exception as exc:
+        if not allow_mock:
+            raise NERLoadError(
+                f"real NER v3 로드 실패: {exc}\n"
+                "데모는 기본적으로 real NER 를 요구합니다(fail-closed). "
+                "mock NER 로 강제 실행하려면 --allow-mock 옵션을 쓰세요. "
+                "단, 이 경우 대시보드 성능 수치는 현재 추론 결과가 아닙니다."
+            ) from exc
+        print(f"[demo] real NER 로드 실패 → mock NER 사용(--allow-mock): {exc}")
+        MOCK_MODE = True
         pipe = GuardrailPipeline(default_components(config_dir=CONFIG_DIR))
         return pipe, f"⚠️ Mock NER (real NER 로드 실패: {exc})"
 
 
-PIPELINE, NER_MODE = build_pipeline()
+# 파이프라인은 __main__ 에서 옵션(--allow-mock)을 읽은 뒤 빌드한다 (fail-closed 제어).
+PIPELINE = None
+NER_MODE = "(미초기화)"
 
 # --share(공개 링크) 모드에서는 탐지된 원문 PII 값을 public UI에 노출하지 않는다.
 # (로컬 전용일 때만 원문 표시 — 프로젝트의 no-raw-PII 경계 준수)
@@ -104,6 +127,37 @@ ENTITY_COLORS = {
     "IP_ADDRESS": "#74c0fc",
 }
 
+# masked_text 의 placeholder family ([PERSON_1] 등) → HighlightedText 색상 라벨.
+# share 모드에서 원문 대신 placeholder 만 하이라이트할 때 색을 맞추기 위함.
+_MASK_FAMILY_TO_LABEL = {
+    "PERSON": "PERSON_NAME",
+    "PHONE": "PHONE_MOBILE",
+    "ADDRESS": "ADDRESS_FULL",
+    "ID": "RRN",
+    "SECRET": "API_KEY_SECRET",
+}
+_PLACEHOLDER_RE = re.compile(r"\[([A-Z][A-Z0-9]*)_(\d+)\]")
+
+
+def _masked_segments(masked: str) -> list[tuple[str, str | None]]:
+    """share 모드용: masked_text 의 placeholder 토큰만 하이라이트한다.
+
+    masked_text 는 탐지된 PII 가 [FAMILY_N] placeholder 로 치환된, downstream 에
+    전달되는 안전한 출력이다. 따라서 여기엔 원문 PII 값이 들어있지 않으므로
+    public(share) UI 에 노출해도 no-raw-PII 경계를 위반하지 않는다.
+    """
+    segments: list[tuple[str, str | None]] = []
+    cursor = 0
+    for m in _PLACEHOLDER_RE.finditer(masked):
+        if m.start() > cursor:
+            segments.append((masked[cursor:m.start()], None))
+        family = m.group(1)
+        segments.append((m.group(0), _MASK_FAMILY_TO_LABEL.get(family, family)))
+        cursor = m.end()
+    if cursor < len(masked):
+        segments.append((masked[cursor:], None))
+    return segments or [(masked, None)]
+
 
 # ============================================================
 # Tab ① 라이브 탐지/마스킹
@@ -119,24 +173,34 @@ def analyze(text: str):
 
     spans = sorted(response.spans, key=lambda s: s.start)
 
-    # HighlightedText: 원문을 span 경계로 분할
-    segments: list[tuple[str, str | None]] = []
-    cursor = 0
-    for span in spans:
-        if span.start > cursor:
-            segments.append((text[cursor:span.start], None))
-        segments.append((text[span.start:span.end], span.entity_type.value))
-        cursor = span.end
-    if cursor < len(text):
-        segments.append((text[cursor:], None))
-    if not segments:
-        segments = [(text, None)]
-
     masked = response.masked_text
     if response.blocked:
         masked = "🚫 BLOCKED — 고위험 PII 다수 탐지로 요청 차단됨"
     elif masked is None:
         masked = text
+
+    # HighlightedText 분할.
+    #   - 로컬 모드: 원문을 span 경계로 분할해 실제 PII 를 하이라이트 (시연용).
+    #   - share 모드: 원문 대신 masked_text(placeholder)만 하이라이트 → public 에
+    #     raw PII 노출 방지 (no-raw-PII 경계). 원문값/raw offset slice 를 쓰지 않는다.
+    segments: list[tuple[str, str | None]]
+    if SHARE_MODE:
+        if response.blocked:
+            segments = [("🚫 BLOCKED — 고위험 PII 다수 탐지로 요청 차단됨", None)]
+        else:
+            segments = _masked_segments(masked)
+    else:
+        segments = []
+        cursor = 0
+        for span in spans:
+            if span.start > cursor:
+                segments.append((text[cursor:span.start], None))
+            segments.append((text[span.start:span.end], span.entity_type.value))
+            cursor = span.end
+        if cursor < len(text):
+            segments.append((text[cursor:], None))
+        if not segments:
+            segments = [(text, None)]
 
     def _span_value(span) -> str:
         # share 모드: 원문값 대신 길이만 (public 노출 방지). 로컬: 원문 표시.
@@ -213,12 +277,21 @@ def kpi_cards() -> str:
     agree = (qa.get("overall_agreement", 0) * 100) if qa else 99.75
     speedup = (lat.get("speedup_int8_p50") if lat else None) or 4.04
     cards = [
-        ("87.8%", "한국어 NER macro-F1", "klue-roberta-large 직접 fine-tune", "#4263eb"),
+        ("87.8%", "한국어 NER macro-F1", "klue-roberta-large 직접 fine-tune (internal test)", "#4263eb"),
         ("막아냄", "한국어 변이 공격 방어", "자모분해 · zero-width · 띄어쓰기", "#37b24d"),
-        (f"{speedup:.1f}×", "추론 속도 가속", "ONNX INT8 · 135ms · CPU", "#f59f00"),
+        (f"{speedup:.1f}×", "추론 속도 가속 (별도 벤치마크)", "ONNX INT8 · 135ms · CPU — 라이브 경로 아님", "#f59f00"),
         ("0건", "가짜 PII 오탐", "체크섬 검증 · 원문 로깅 0", "#e64980"),
     ]
-    html = '<div style="display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 4px">'
+    html = ""
+    if MOCK_MODE:
+        html += (
+            '<div style="background:#fff3bf;border:1px solid #f59f00;border-radius:10px;'
+            'padding:12px 14px;margin:8px 0;font-weight:700;color:#664d03">'
+            "⚠️ 현재 <b>Mock NER</b> 로 실행 중입니다. 아래 성능 수치는 real NER v3 의 "
+            "별도 측정/벤치마크 결과이며, <b>지금 화면의 탐지 결과와 무관</b>합니다."
+            "</div>"
+        )
+    html += '<div style="display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 4px">'
     for big, title, sub, color in cards:
         html += (
             f'<div style="flex:1;min-width:175px;background:{color}1a;'
@@ -274,7 +347,7 @@ def plot_latency():
     bars = ax.bar(labels, p50s, color=colors)
     for bar, val in zip(bars, p50s):
         ax.text(bar.get_x() + bar.get_width() / 2, val, f"{val:.0f}ms", ha="center", va="bottom", fontsize=10)
-    ax.set_title("NER v3 추론 latency (CPU, 256자) — INT8로 4배 가속")
+    ax.set_title("NER v3 추론 latency (CPU, 256자) — INT8 별도 벤치마크 (라이브 경로 아님)")
     ax.set_ylabel("p50 latency (ms)")
     fig.tight_layout()
     return fig
@@ -339,7 +412,16 @@ def attack_before_after(variant_text: str):
     if response.blocked:
         masked = "🚫 BLOCKED"
     verdict = "✅ 탐지 + 마스킹 성공" if response.spans else "❌ 미탐지"
-    return variant_text, f"{normalized}\n\n[{restored}]", detected, masked, verdict
+
+    # share 모드: ①입력 ②정규화 결과는 원문(변이 전/후 모두 PII 포함)이므로 public 에
+    # 노출하지 않는다. 길이 + 복원 여부만 표시하고, 안전한 detected/masked/verdict 만 공개.
+    if SHARE_MODE:
+        input_view = f"🔒 변이 입력 {len(variant_text)}자 (로컬 전용)"
+        norm_view = f"🔒 정규화 결과 {len(normalized)}자 — [{restored}]"
+    else:
+        input_view = variant_text
+        norm_view = f"{normalized}\n\n[{restored}]"
+    return input_view, norm_view, detected, masked, verdict
 
 
 # ============================================================
@@ -352,6 +434,7 @@ def build_ui():
             # 🛡️ 한국어 PII 가드레일 v0.2 — 라이브 데모
             **단일 통합 가드레일** = L0 정규화 + 정규식 + 사전 + NER(v3) + 문맥 + 정책/마스킹
             현재 NER 모드: **{NER_MODE}**
+            <br><sub>라이브 추론 경로는 PyTorch(klue-roberta-large)입니다. 대시보드의 ONNX INT8·135ms·4.04× 는 별도 최적화 벤치마크 수치입니다.</sub>
             """
         )
 
@@ -412,7 +495,12 @@ def build_ui():
                 inputs=atk,
                 outputs=[atk_input, atk_norm, atk_detected, atk_masked, atk_verdict],
             )
-            gr.Markdown("### 1차 캡스톤 측정 (8,400건 퍼저) — 우회율 / 성능 비교")
+            gr.Markdown(
+                "### 1차 캡스톤 측정 (8,400건 퍼저) — 우회율 / 성능 비교\n"
+                "<sub>⚠️ 이 그래프는 1차 캡스톤(legacy) 결과로, `session`·`gps`·`court`·`crime` 등 "
+                "v0.2 entity taxonomy 범위 밖 항목을 포함합니다. 현재 v0.2 시스템이 해당 범위를 "
+                "지원한다는 의미가 아니며, 참고/비교용입니다.</sub>"
+            )
             fig_files = [
                 FIG_DIR / "fig1_overall_bypass.png",
                 FIG_DIR / "fig5_l0_solo_pii.png",
@@ -420,7 +508,12 @@ def build_ui():
             ]
             existing = [str(f) for f in fig_files if f.exists()]
             if existing:
-                gr.Gallery(value=existing, label="1차 캡스톤 결과 그래프", columns=3, height=320)
+                gr.Gallery(
+                    value=existing,
+                    label="1차 캡스톤(legacy) 결과 그래프 — v0.2 범위 밖 항목 포함",
+                    columns=3,
+                    height=320,
+                )
 
     return demo
 
@@ -434,10 +527,23 @@ if __name__ == "__main__":
         action="store_true",
         help="gradio.live 공개 링크 생성 (양유상 등 외부 리뷰용, 72시간 한시적)",
     )
+    parser.add_argument(
+        "--allow-mock",
+        action="store_true",
+        help="real NER v3 로드 실패 시 mock NER 로 fallback 허용 (기본은 fail-closed). "
+             "이 경우 대시보드에 mock 경고가 표시됩니다.",
+    )
     args = parser.parse_args()
     if args.share:
         SHARE_MODE = True
-        print("[demo] SHARE 모드 — 탐지 표의 원문값을 숨깁니다 (public 노출 방지)")
+        print("[demo] SHARE 모드 — 원문 PII(하이라이트·표·공격 탭)를 숨깁니다 (public 노출 방지)")
+
+    # 옵션 확정 후 파이프라인 빌드 (fail-closed: real NER 실패 시 --allow-mock 없으면 중단)
+    try:
+        PIPELINE, NER_MODE = build_pipeline(allow_mock=args.allow_mock)
+    except NERLoadError as exc:
+        print(f"[demo] {exc}", file=sys.stderr)
+        sys.exit(1)
 
     print(f"[demo] NER mode: {NER_MODE}")
     ui = build_ui()
