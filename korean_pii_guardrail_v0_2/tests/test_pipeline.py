@@ -214,6 +214,21 @@ class _WhitespacePersonBackend:
         ]
 
 
+class _PersonPrefixBackend:
+    def detect(self, raw_text):
+        text = "민수"
+        start = raw_text.index(text)
+        return [
+            {
+                "start": start,
+                "end": start + len(text),
+                "text": text,
+                "label": "B-NAME",
+                "score": 0.99,
+            }
+        ]
+
+
 def test_pipeline_trims_ner_address_partial_predicate_before_masking() -> None:
     raw = "주소는 서울시 강남구 테헤란로 123 거주"
     pipeline = GuardrailPipeline(default_components(ner_detector=_OverextendedAddressNER()))
@@ -238,6 +253,17 @@ def test_pipeline_rejects_whitespace_ner_person_and_uses_dictionary_name() -> No
     assert len(persons) == 1
     assert persons[0].start == 0
     assert persons[0].end == 3
+
+
+def test_pipeline_rejects_ner_person_prefix_inside_compound_word() -> None:
+    raw = "민수전자 제품 문의"
+    ner = FinetunedNERDetector(backend=_PersonPrefixBackend())
+    pipeline = GuardrailPipeline(default_components(ner_detector=ner))
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == raw
+    assert all(span.entity_type is not EntityType.PERSON_NAME for span in response.spans)
 
 
 def test_pipeline_masks_organization_affiliation_without_person_subspan() -> None:

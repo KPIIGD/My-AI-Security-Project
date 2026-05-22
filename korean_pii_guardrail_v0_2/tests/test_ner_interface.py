@@ -100,6 +100,23 @@ class WhitespacePersonBackend:
         ]
 
 
+class PrefixPersonBackend:
+    def __init__(self, text: str) -> None:
+        self.text = text
+
+    def detect(self, raw_text: str) -> list[dict[str, object]]:
+        start = raw_text.index(self.text)
+        return [
+            {
+                "start": start,
+                "end": start + len(self.text),
+                "text": self.text,
+                "label": "B-NAME",
+                "score": 0.96,
+            }
+        ]
+
+
 def test_finetuned_ner_adapter_converts_only_v3_direct_candidates() -> None:
     raw_text = "홍길동 서울병원"
     detector = FinetunedNERDetector(backend=FakeNERBackend())
@@ -123,6 +140,35 @@ def test_finetuned_ner_adapter_rejects_whitespace_person_candidates() -> None:
     spans = detector.detect(raw_text, _preprocessed(raw_text), GuardrailRequest(text=raw_text))
 
     assert spans == []
+
+
+def test_finetuned_ner_adapter_rejects_person_prefix_inside_compound_word() -> None:
+    raw_text = "\ubbfc\uc218\uc804\uc790 \uc81c\ud488 \ubb38\uc758"
+    detector = FinetunedNERDetector(backend=PrefixPersonBackend("\ubbfc\uc218"))
+
+    spans = detector.detect(raw_text, _preprocessed(raw_text), GuardrailRequest(text=raw_text))
+
+    assert spans == []
+
+
+def test_finetuned_ner_adapter_rejects_person_syllable_inside_word() -> None:
+    raw_text = "\uc9c0\uc131\uadf8\ub8f9 \uc2e0\uc785\uc0ac\uc6d0"
+    detector = FinetunedNERDetector(backend=PrefixPersonBackend("\uc6d0"))
+
+    spans = detector.detect(raw_text, _preprocessed(raw_text), GuardrailRequest(text=raw_text))
+
+    assert spans == []
+
+
+def test_finetuned_ner_adapter_keeps_person_before_honorific_josa() -> None:
+    raw_text = "\ubc15\uc9c0\uc131\ub2d8\uaed8 \uc5f0\ub77d\uc8fc\uc138\uc694"
+    detector = FinetunedNERDetector(backend=PrefixPersonBackend("\ubc15\uc9c0\uc131"))
+
+    spans = detector.detect(raw_text, _preprocessed(raw_text), GuardrailRequest(text=raw_text))
+
+    assert len(spans) == 1
+    assert spans[0].text == "\ubc15\uc9c0\uc131"
+    assert spans[0].entity_type is EntityType.PERSON_NAME
 
 
 def test_finetuned_ner_adapter_requires_optional_backend_for_real_detection(monkeypatch: pytest.MonkeyPatch) -> None:
