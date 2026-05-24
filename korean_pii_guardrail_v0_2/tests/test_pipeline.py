@@ -129,7 +129,7 @@ def test_pipeline_masks_email() -> None:
     assert any(span.entity_type is EntityType.EMAIL for span in response.spans)
 
 
-def test_pipeline_full_redacts_rrn() -> None:
+def test_pipeline_label_masks_rrn() -> None:
     raw = "주민번호는 900101-1234568 입니다."
     pipeline = GuardrailPipeline()
 
@@ -137,7 +137,7 @@ def test_pipeline_full_redacts_rrn() -> None:
 
     assert response.masked_text is not None
     assert "900101-1234568" not in response.masked_text
-    assert "[REDACTED]" in response.masked_text
+    assert "[RRN_1]" in response.masked_text
 
 
 def test_pipeline_blocks_api_key_secret() -> None:

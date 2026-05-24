@@ -124,6 +124,14 @@ class PolicyRouter:
                 output_target,
                 "policy.override.full_redact",
             )
+        if override is TransformationMethod.LABEL_MASK:
+            return self._decision(
+                Action.MASK,
+                TransformationMethod.LABEL_MASK,
+                profile,
+                output_target,
+                "policy.override.label_mask",
+            )
 
         if span.entity_type is EntityType.API_KEY_SECRET:
             return self._decision(

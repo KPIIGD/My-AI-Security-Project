@@ -129,12 +129,21 @@ def test_api_key_secret_blocks_response() -> None:
 
 
 def test_p0_full_redact_uses_redacted_token() -> None:
+    raw = "외국인등록번호 900101-1234568"
+    span = _span(raw, "900101-1234568", EntityType.FRN, RiskLevel.P0, score=0.98)
+
+    masked = SuffixPreservingMasker().apply(raw, [span], _request(raw))
+
+    assert masked == "외국인등록번호 [REDACTED]"
+
+
+def test_rrn_uses_label_mask_token() -> None:
     raw = "주민번호 900101-1234568"
     span = _span(raw, "900101-1234568", EntityType.RRN, RiskLevel.P0, score=0.98)
 
     masked = SuffixPreservingMasker().apply(raw, [span], _request(raw))
 
-    assert masked == "주민번호 [REDACTED]"
+    assert masked == "주민번호 [RRN_1]"
 
 
 def test_pass_action_leaves_text_unchanged() -> None:

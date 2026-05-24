@@ -153,7 +153,9 @@ def _entity_family(entity_type: EntityType) -> str:
         return "PHONE"
     if entity_type in {EntityType.ADDRESS_FULL, EntityType.ADDRESS_UNIT}:
         return "ADDRESS"
-    if entity_type in {EntityType.RRN, EntityType.FRN, EntityType.PASSPORT, EntityType.DRIVER_LICENSE}:
+    if entity_type is EntityType.RRN:
+        return "RRN"
+    if entity_type in {EntityType.FRN, EntityType.PASSPORT, EntityType.DRIVER_LICENSE}:
         return "ID"
     if entity_type is EntityType.API_KEY_SECRET:
         return "SECRET"

@@ -54,7 +54,8 @@ def test_policy_config_loads_m7_mvp_scope() -> None:
         OutputTarget.AUDIT_LOG,
     }
     assert config.output_targets[OutputTarget.AUDIT_LOG].default_method is TransformationMethod.HMAC_HASH
-    assert config.entity_overrides[EntityType.RRN]["strict"] is TransformationMethod.FULL_REDACT
+    assert config.entity_overrides[EntityType.RRN]["strict"] is TransformationMethod.LABEL_MASK
+    assert config.entity_overrides[EntityType.FRN]["strict"] is TransformationMethod.FULL_REDACT
     assert thresholds.p1_mask_min_score == 0.75
 
 
@@ -80,13 +81,23 @@ def test_api_key_secret_blocks_external_output() -> None:
 
 
 def test_p0_structured_identifier_uses_full_redact_mask() -> None:
+    raw = "외국인등록번호 900101-1234568"
+    span = _span(raw, "900101-1234568", EntityType.FRN, RiskLevel.P0, score=0.98)
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.MASK
+    assert decision.method is TransformationMethod.FULL_REDACT
+
+
+def test_rrn_uses_label_mask_override() -> None:
     raw = "주민번호 900101-1234568"
     span = _span(raw, "900101-1234568", EntityType.RRN, RiskLevel.P0, score=0.98)
 
     decision = PolicyRouter().select(span, _request(raw))
 
     assert decision.action is Action.MASK
-    assert decision.method is TransformationMethod.FULL_REDACT
+    assert decision.method is TransformationMethod.LABEL_MASK
 
 
 def test_p1_masks_by_threshold_or_context() -> None:
