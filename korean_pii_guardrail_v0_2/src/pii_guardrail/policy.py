@@ -274,6 +274,10 @@ class PolicyRouter:
         )
 
     @staticmethod
+    def _has_context_boost(span: PIISpan) -> bool:
+        return any(code.startswith("context.boost.") for code in span.reason_codes)
+
+    @staticmethod
     def _has_decisive_negative_context(span: PIISpan) -> bool:
         has_example_context = any(
             code.startswith(
@@ -285,8 +289,8 @@ class PolicyRouter:
             for code in span.reason_codes
         )
         if span.entity_type in _CONTACT_ENTITIES:
-            has_positive_context = PolicyRouter._has_strong_context(span)
-            if has_example_context and not has_positive_context:
+            has_direct_boost = PolicyRouter._has_context_boost(span)
+            if has_example_context and not has_direct_boost:
                 return True
             return span.entity_type in _PHONE_ENTITIES and any(
                 code.startswith("context.penalty.public_phone_context")

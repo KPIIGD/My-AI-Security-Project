@@ -342,18 +342,39 @@ def _name_address_case(i: int) -> EvaluationCase:
     if kind == 0:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="", value=name, entity_type=EntityType.PERSON_NAME, risk_level=RiskLevel.P1, suffix="\uc740", tail=f" {K['is']}.", tags=("person_name", "boundary"))
     if kind == 1:
-        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{name}\uc740 ", value=address, entity_type=EntityType.ADDRESS_FULL, risk_level=RiskLevel.P1, suffix="\uc5d0", tail=f" {K['lives']}.", tags=("address_full",))
+        c = CaseComposer()
+        c.span(name, EntityType.PERSON_NAME, RiskLevel.P1, suffix="\uc740")
+        c.text("\uc740 ")
+        c.span(address, EntityType.ADDRESS_FULL, RiskLevel.P1, suffix="\uc5d0")
+        c.text(f"\uc5d0 {K['lives']}.")
+        return _case(f"{bucket}-{i:04d}", bucket, c.build(), "address_full", "person_context")
     if kind == 2:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['address_label']} ", value=ADDRESS_UNITS[i % len(ADDRESS_UNITS)], entity_type=EntityType.ADDRESS_UNIT, risk_level=RiskLevel.P2, tail=".", tags=("address_unit",))
     if kind == 3:
-        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{name}\uc740 ", value=ORGS[i % len(ORGS)], entity_type=EntityType.ORGANIZATION, risk_level=RiskLevel.P2, tail=f" {K['belongs']}.", tags=("organization",))
+        c = CaseComposer()
+        c.span(name, EntityType.PERSON_NAME, RiskLevel.P1, suffix="\uc740")
+        c.text("\uc740 ")
+        c.span(ORGS[i % len(ORGS)], EntityType.ORGANIZATION, RiskLevel.P2)
+        c.text(f" {K['belongs']}.")
+        return _case(f"{bucket}-{i:04d}", bucket, c.build(), "organization", "person_context")
     if kind == 4:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['school']} ", value=SCHOOLS[i % len(SCHOOLS)], entity_type=EntityType.SCHOOL, risk_level=RiskLevel.P2, tail=".", tags=("school",))
     if kind == 5:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['hospital']} ", value=HOSPITALS[i % len(HOSPITALS)], entity_type=EntityType.HOSPITAL, risk_level=RiskLevel.P2, tail=".", tags=("hospital",))
     if kind == 6:
-        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="", value=RELATIONS[i % len(RELATIONS)], entity_type=EntityType.FAMILY_RELATION, risk_level=RiskLevel.P2, tail=f" {K['contact']} {_phone_mobile(i)}.", tags=("family_relation",))
-    return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['name']} ", value=name, entity_type=EntityType.PERSON_NAME, risk_level=RiskLevel.P1, tail=f", {K['address_label']} {address}.", tags=("person_name", "address_context"))
+        c = CaseComposer()
+        c.span(RELATIONS[i % len(RELATIONS)], EntityType.FAMILY_RELATION, RiskLevel.P2)
+        c.text(f" {K['contact']} ")
+        c.span(_phone_mobile(i), EntityType.PHONE_MOBILE, RiskLevel.P1)
+        c.text(".")
+        return _case(f"{bucket}-{i:04d}", bucket, c.build(), "family_relation", "contact")
+    c = CaseComposer()
+    c.text(f"{K['name']} ")
+    c.span(name, EntityType.PERSON_NAME, RiskLevel.P1)
+    c.text(f", {K['address_label']} ")
+    c.span(address, EntityType.ADDRESS_FULL, RiskLevel.P1)
+    c.text(".")
+    return _case(f"{bucket}-{i:04d}", bucket, c.build(), "person_name", "address_context")
 
 
 def _composite_case(i: int) -> EvaluationCase:
@@ -414,7 +435,12 @@ def _adversarial_case(i: int) -> EvaluationCase:
     kind = i % 8
     name = NAMES[i % len(NAMES)]
     if kind == 0:
-        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="", value=name, entity_type=EntityType.PERSON_NAME, risk_level=RiskLevel.P1, suffix="\uc774", tail=f" {K['contact']} {_phone_mobile(i)}.", tags=("josa_boundary",))
+        c = CaseComposer()
+        c.span(name, EntityType.PERSON_NAME, RiskLevel.P1, suffix="\uc774")
+        c.text(f"\uc774 {K['contact']} ")
+        c.span(_phone_mobile(i), EntityType.PHONE_MOBILE, RiskLevel.P1)
+        c.text(".")
+        return _case(f"{bucket}-{i:04d}", bucket, c.build(), "josa_boundary", "contact")
     if kind == 1:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['contact']} ", value=_phone_mobile(i), entity_type=EntityType.PHONE_MOBILE, risk_level=RiskLevel.P1, suffix="\ub85c", tail=".", tags=("suffix_boundary",))
     if kind == 2:
@@ -492,6 +518,17 @@ def write_cases_jsonl(cases: list[EvaluationCase], path: Path) -> None:
         }
         lines.append(json.dumps(payload, ensure_ascii=False, sort_keys=True))
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _prepare_audit_log_output(path: Path) -> Path:
+    if not path.exists():
+        return path
+    try:
+        path.unlink()
+        return path
+    except PermissionError:
+        stamp = dt.datetime.now(dt.UTC).strftime("%Y%m%dT%H%M%SZ")
+        return path.with_name(f"{path.stem}.{stamp}{path.suffix}")
 
 
 def _safe_report_summary(report: EvaluationReport, *, purpose_id: str) -> dict[str, object]:
@@ -653,6 +690,8 @@ def main() -> None:
     cases = generate_release_gate_cases(args.cases_per_bucket)
     write_cases_jsonl(cases, args.dataset_output)
     print(f"Wrote synthetic dataset: {args.dataset_output} ({len(cases)} cases)", flush=True)
+
+    args.audit_log_output = _prepare_audit_log_output(args.audit_log_output)
 
     try:
         pipeline = build_pipeline(

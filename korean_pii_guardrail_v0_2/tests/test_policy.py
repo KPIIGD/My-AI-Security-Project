@@ -326,6 +326,28 @@ def test_example_context_overrides_email_without_positive_context() -> None:
     assert decision.method is TransformationMethod.PASS
 
 
+def test_example_context_overrides_composite_email_without_direct_boost() -> None:
+    raw = "\uc0d8\ud50c email user@example.com."
+    span = _span(
+        raw,
+        "user@example.com",
+        EntityType.EMAIL,
+        RiskLevel.P1,
+        score=0.77,
+        sources=("regex", "validator", "context"),
+        reason_codes=(
+            "context.penalty.example_context",
+            "context.composite.PERSON_NAME",
+        ),
+        is_composite=True,
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.PASS
+    assert decision.method is TransformationMethod.PASS
+
+
 def test_public_phone_context_overrides_phone_field_label() -> None:
     raw = "고객센터 전화번호는 02-123-4567입니다."
     span = _span(
