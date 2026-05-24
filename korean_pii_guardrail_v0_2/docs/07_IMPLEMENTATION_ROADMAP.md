@@ -178,6 +178,8 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 - local model artifact가 없을 때 HuggingFace Hub 또는 별도 산출물 전달이 필요하다는 운영 전제 명시
 - real NER optional dependency와 activation gate 문서화
 
+2026-05-24 상태: real NER v3는 release gate 실행 경로에 연결되어 있다. activation 자체는 완료됐지만, `PERSON_NAME` recall/precision, `ADDRESS` granularity, score calibration, real NER latency 별도 계측은 후속 작업으로 유지한다.
+
 #### Acceptance criteria
 
 - real NER 없이 pipeline end-to-end 실행 가능
@@ -272,7 +274,7 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 
 - preprocess → detector → boundary → context → resolver → policy/mask 순서 구현
 - config loading
-- real NER v3는 feature/config gate 뒤에 연결
+- real NER v3는 feature/config gate 뒤에 연결. 2026-05-24 기준 release gate에서는 real NER mode가 사용된다.
 - local model artifact가 없으면 HF Hub 다운로드 또는 별도 산출물 전달 전까지 mock/disabled NER path 유지
 - request/response generation
 - error handling
@@ -339,7 +341,7 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 
 ## 4. Stop conditions
 
-다음이 완료되기 전에는 real NER v3 activation 또는 v1 기능으로 넘어가지 않는다.
+다음 항목은 real NER v3 activation 전 stop condition으로 정의됐다. 2026-05-24 기준 activation은 release gate 경로에서 완료됐고, 남은 항목은 v1 또는 NER 품질 개선 전 확인 조건으로 유지한다.
 
 - raw offset mapping 안정화
 - L0-derived 변형 variant의 raw span 복원 안정화
