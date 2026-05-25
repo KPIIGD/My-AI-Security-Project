@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import importlib
 import json
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -31,8 +32,28 @@ NER_V3_THRESHOLDS: dict[EntityType, float] = {
 NER_V3_RISK_LEVELS: dict[EntityType, RiskLevel] = {
     EntityType.PERSON_NAME: RiskLevel.P1,
     EntityType.ADDRESS_FULL: RiskLevel.P1,
+    EntityType.ADDRESS_UNIT: RiskLevel.P2,
     EntityType.ORGANIZATION: RiskLevel.P2,
 }
+
+_ADDRESS_UNIT_SUFFIXES = (
+    "\ub3c4",
+    "\uc2dc",
+    "\uad70",
+    "\uad6c",
+    "\uc74d",
+    "\uba74",
+    "\ub3d9",
+)
+_ADDRESS_FULL_DETAIL_MARKERS = (
+    "\ub85c",
+    "\uae38",
+    "\ubc88\uc9c0",
+    "\uc544\ud30c\ud2b8",
+    "\ube4c\ub77c",
+    "\uc624\ud53c\uc2a4\ud154",
+)
+_ADDRESS_UNIT_REASON = "ner.address_unit_granularity"
 
 _PERSON_ALLOWED_TRAILING_SUFFIXES = tuple(
     sorted(
@@ -208,6 +229,13 @@ class FinetunedNERDetector:
                 candidate.text,
             ):
                 return None
+            if candidate.entity_type is EntityType.ADDRESS_FULL and _looks_like_address_unit(candidate.text):
+                return replace(
+                    candidate,
+                    entity_type=EntityType.ADDRESS_UNIT,
+                    risk_level=RiskLevel.P2,
+                    reason_codes=_append_unique(candidate.reason_codes, _ADDRESS_UNIT_REASON),
+                )
             return candidate
 
         entity_type = self._candidate_entity_type(candidate)
@@ -216,6 +244,13 @@ class FinetunedNERDetector:
         start = int(candidate["start"])
         end = int(candidate["end"])
         candidate_text = str(candidate["text"])
+        threshold_entity_type = entity_type
+        address_unit_granularity = (
+            entity_type is EntityType.ADDRESS_FULL
+            and _looks_like_address_unit(candidate_text)
+        )
+        if address_unit_granularity:
+            entity_type = EntityType.ADDRESS_UNIT
         if entity_type is EntityType.PERSON_NAME and not _is_valid_person_candidate(
             raw_text,
             start,
@@ -226,10 +261,17 @@ class FinetunedNERDetector:
 
         score = float(candidate["score"])
         reason_codes = tuple(candidate.get("reason_codes") or ("ner.argmax", "ner.softmax_mean"))
-        threshold = self.thresholds.get(entity_type)
+        if address_unit_granularity:
+            reason_codes = (*reason_codes, _ADDRESS_UNIT_REASON)
+        threshold = self.thresholds.get(threshold_entity_type)
         if threshold is not None:
             threshold_reason = "ner.threshold_met" if score >= threshold else "ner.below_entity_threshold"
             reason_codes = (*reason_codes, threshold_reason)
+        risk_level = (
+            RiskLevel.P2
+            if address_unit_granularity
+            else self._candidate_risk_level(candidate, entity_type)
+        )
 
         return PIISpan(
             start=start,
@@ -238,7 +280,7 @@ class FinetunedNERDetector:
             entity_type=entity_type,
             score=score,
             sources=tuple(candidate.get("sources") or ("ner",)),
-            risk_level=self._candidate_risk_level(candidate, entity_type),
+            risk_level=risk_level,
             detector_ids=tuple(candidate.get("detector_ids") or (self.detector_id,)),
             reason_codes=reason_codes,
         )
@@ -311,3 +353,20 @@ def _is_allowed_person_suffix_chain(value: str) -> bool:
 
 def _is_word_char(value: str) -> bool:
     return value == "_" or value.isalnum()
+
+
+def _looks_like_address_unit(value: str) -> bool:
+    text = value.strip()
+    if not text:
+        return False
+    if any(char.isdigit() for char in text):
+        return False
+    if any(marker in text for marker in _ADDRESS_FULL_DETAIL_MARKERS):
+        return False
+    return any(suffix in text for suffix in _ADDRESS_UNIT_SUFFIXES)
+
+
+def _append_unique(existing: tuple[str, ...], value: str) -> tuple[str, ...]:
+    if value in existing:
+        return existing
+    return (*existing, value)

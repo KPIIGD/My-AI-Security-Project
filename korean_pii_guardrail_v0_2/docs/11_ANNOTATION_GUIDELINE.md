@@ -58,9 +58,9 @@ Date: 2026-05-09
 | SCHOOL | 학교명 |
 | ORGANIZATION | 회사/기관/단체명 |
 | FAMILY_RELATION | 가족관계 표현 |
-| EMPLOYEE_ID | 사번 |
-| STUDENT_ID | 학번 |
-| CUSTOMER_ID | 고객번호/회원번호 |
+| EMPLOYEE_ID | 사번. production 기본 데이터셋에서는 제외하고 custom identifier profile 평가에서만 라벨링 |
+| STUDENT_ID | 학번. production 기본 데이터셋에서는 제외하고 custom identifier profile 평가에서만 라벨링 |
+| CUSTOMER_ID | 고객번호/회원번호. production 기본 데이터셋에서는 제외하고 custom identifier profile 평가에서만 라벨링 |
 
 ### 4.3 Security secrets
 
@@ -152,11 +152,13 @@ TODO: `이라고요`, `이라구요`, `라네요`, `랍니다`, `이라면서요
 | 서울 | ADDRESS_UNIT | P3 |
 | 서울시 강남구 | ADDRESS_UNIT | P2 |
 | 역삼동 | ADDRESS_UNIT | P2 |
+| 서울시 강남구 테헤란로 | ADDRESS_UNIT | P2 |
 | 테헤란로 123 | ADDRESS_FULL | P1 |
 | 101동 1203호 | ADDRESS_FULL/ADDRESS_UNIT | P1 |
 | 서울시 강남구 테헤란로 123 101동 1203호 | ADDRESS_FULL | P1 |
 
 주소 label은 가능한 한 식별 위험이 있는 연속 span으로 잡는다.
+도로명만 있고 건물번호가 없으면 `ADDRESS_UNIT`으로 둔다. 도로명에 포함된 마지막 `로`는 조사 suffix가 아니라 주소 본문이다.
 
 ## 8. Financial numbers
 

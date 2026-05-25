@@ -30,7 +30,8 @@ _APARTMENT_UNIT_PATTERN = re.compile(
     r"(?<!\d)(?:\d{1,3}\s*동\s+)?\d{1,4}\s*호(?!\d)"
 )
 _ROAD_TRAILER_PATTERN = re.compile(
-    r"\s*\d{1,4}(?:\s*-\s*\d{1,4})?(?:\s*번지)?(?:\s+\d{1,3}\s*동)?(?:\s+\d{1,4}\s*호)?"
+    r"\s*\d{1,4}(?:\s*-\s*\d{1,4})?(?:\s*번지)?"
+    r"(?:\s+\d{1,3}\s*동)?(?:\s+\d{1,4}\s*호)?(?:\s+\d{1,3}\s*층)?"
 )
 _BOUNDARY_SUFFIX_RULES = load_suffix_rules()
 _GIVEN_NAME_TRAILING_SUFFIXES = tuple(
@@ -224,6 +225,8 @@ class DictionaryDetector:
                 key = (index, given_end)
                 if key in emitted:
                     continue
+                if len(given) < 2:
+                    continue
                 if any(es <= index and given_end <= ee for (es, ee) in emitted):
                     continue
                 if any(cs <= index and given_end <= ce for (cs, ce) in consumed):
@@ -281,14 +284,15 @@ class DictionaryDetector:
                 cursor += 1
                 continue
             chain_start, chain_end = chain
-            extended_end = self._extend_with_road_and_unit(raw_text, chain_end)
-            if extended_end > chain_end:
+            extension = self._extend_with_road_and_unit(raw_text, chain_end)
+            if extension is not None:
+                entity_type, extended_end, score_key, reason_codes = extension
                 yield _Candidate(
                     start=chain_start,
                     end=extended_end,
-                    entity_type=EntityType.ADDRESS_FULL,
-                    score_key="road_name",
-                    reason_codes=("dictionary.address_full", "dictionary.address.road_name"),
+                    entity_type=entity_type,
+                    score_key=score_key,
+                    reason_codes=reason_codes,
                 )
                 consumed_ranges.append((chain_start, extended_end))
                 cursor = extended_end
@@ -302,6 +306,9 @@ class DictionaryDetector:
                 )
                 consumed_ranges.append((chain_start, chain_end))
                 cursor = chain_end
+
+        for candidate in self._detect_standalone_road_addresses(raw_text, consumed_ranges):
+            yield candidate
 
         for match in _APARTMENT_UNIT_PATTERN.finditer(raw_text):
             if any(cs <= match.start() and match.end() <= ce for (cs, ce) in consumed_ranges):
@@ -320,7 +327,12 @@ class DictionaryDetector:
         self, raw_text: str, start: int
     ) -> tuple[int, int] | None:
         chain_start = self._skip_whitespace(raw_text, start)
-        first = self._match_prefix_token(raw_text, chain_start, self._si_gu_dong)
+        first = self._match_prefix_token(
+            raw_text,
+            chain_start,
+            self._si_gu_dong,
+            require_boundary_after=True,
+        )
         if first is None:
             return None
         cursor = first
@@ -328,22 +340,76 @@ class DictionaryDetector:
             next_pos = self._skip_whitespace(raw_text, cursor)
             if next_pos == cursor or next_pos >= len(raw_text):
                 break
-            extended = self._match_prefix_token(raw_text, next_pos, self._si_gu_dong)
+            extended = self._match_prefix_token(
+                raw_text,
+                next_pos,
+                self._si_gu_dong,
+                require_boundary_after=True,
+            )
             if extended is None:
                 break
             cursor = extended
         return chain_start, cursor
 
-    def _extend_with_road_and_unit(self, raw_text: str, start: int) -> int:
+    def _extend_with_road_and_unit(
+        self, raw_text: str, start: int
+    ) -> tuple[EntityType, int, str, tuple[str, ...]] | None:
         skip = self._skip_whitespace(raw_text, start)
         road_end = self._match_prefix_token(raw_text, skip, self._road_names)
         if road_end is None:
-            return start
-        cursor = road_end
-        trailer = _ROAD_TRAILER_PATTERN.match(raw_text, cursor)
+            return None
+        trailer = _ROAD_TRAILER_PATTERN.match(raw_text, road_end)
         if trailer:
-            cursor = trailer.end()
-        return cursor
+            return (
+                EntityType.ADDRESS_FULL,
+                trailer.end(),
+                "road_name",
+                ("dictionary.address_full", "dictionary.address.road_name"),
+            )
+        return (
+            EntityType.ADDRESS_UNIT,
+            road_end,
+            "address_si_gu_dong",
+            ("dictionary.address_unit", "dictionary.address.road_name_without_number"),
+        )
+
+    def _detect_standalone_road_addresses(
+        self,
+        raw_text: str,
+        consumed_ranges: list[tuple[int, int]],
+    ) -> Iterator[_Candidate]:
+        seen: set[tuple[int, int]] = set()
+        for road in self._road_names:
+            if not road:
+                continue
+            start = 0
+            while True:
+                index = raw_text.find(road, start)
+                if index < 0:
+                    break
+                road_end = index + len(road)
+                start = road_end
+                if not _has_word_boundary_before(raw_text, index):
+                    continue
+                trailer = _ROAD_TRAILER_PATTERN.match(raw_text, road_end)
+                if trailer is None:
+                    continue
+                end = trailer.end()
+                if (index, end) in seen:
+                    continue
+                if any(cs <= index and end <= ce for (cs, ce) in consumed_ranges):
+                    continue
+                seen.add((index, end))
+                yield _Candidate(
+                    start=index,
+                    end=end,
+                    entity_type=EntityType.ADDRESS_FULL,
+                    score_key="road_name",
+                    reason_codes=(
+                        "dictionary.address_full",
+                        "dictionary.address.standalone_road_name",
+                    ),
+                )
 
     # ------------------------------------------------------------------ Affiliation
 
@@ -446,12 +512,21 @@ class DictionaryDetector:
         return cursor
 
     @staticmethod
-    def _match_prefix_token(raw_text: str, start: int, tokens: Iterable[str]) -> int | None:
+    def _match_prefix_token(
+        raw_text: str,
+        start: int,
+        tokens: Iterable[str],
+        *,
+        require_boundary_after: bool = False,
+    ) -> int | None:
         for token in tokens:
             if not token:
                 continue
             if raw_text.startswith(token, start):
-                return start + len(token)
+                end = start + len(token)
+                if require_boundary_after and not _is_address_unit_boundary(raw_text, end):
+                    continue
+                return end
         return None
 
     @staticmethod

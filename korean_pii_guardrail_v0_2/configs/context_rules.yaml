@@ -9,23 +9,32 @@ window:
   use_previous_turns: false
   use_rag_context: false
 field_labels:
-  name_label: [성명, 이름, 고객명, 신청자, 담당자, 수신자]
+  name_label: [성명, 이름, 고객명, 신청자, 담당자, 수신자, 작성자, 환자명, 수령인, 예약자, 직원명, 보호자, 문의자, 요청자, 상담 기록]
   phone_label: [연락처, 전화번호, 휴대폰, 핸드폰, 모바일]
   email_label: [이메일, 메일, 전자우편]
   address_label: [주소, 배송지, 거주지, 수령지, 자택]
-  account_label: [계좌, 입금, 송금, 환불계좌, 이체]
+  account_label: [계좌, 계좌번호, 입금, 송금, 환불계좌, 이체, bank account, account no, account number, deposit account, refund account]
   organization_label: [소속, 근무, 재직, 대표, 회사, 기관, 업체]
-  id_label: [고객번호, 회원번호, 회원ID, 사번, 학번, ID]
   medical_label: [환자번호, 차트번호, 진료기록, 의무기록, 병원]
 honorifics_and_titles:
   person_suffixes: [님, 씨, 군, 양]
   job_titles: [과장, 팀장, 부장, 차장, 대리, 교수, 변호사, 의사, 간호사, 상담사]
 negative_contexts:
-  example_context: [예시, 샘플, 테스트, 더미, dummy, sample]
+  example_context: [예시, 예제, 샘플, 테스트, 더미, dummy, sample, placeholder, fixture, 목업, 교육 자료, 검증용, 스토리북, seed, synthetic, 형식 설명, 마스킹 테스트]
   weather_context: [날씨, 맑네요, 흐림, 비, 눈, 계절]
   public_number_context: [대표번호, 고객센터, 안내번호, 콜센터]
-  code_context: [stack, traceback, json, 변수, 로그, error, debug]
-  business_name_context: [상호, 식당, 김밥, 카페, 브랜드]
+  code_context: [stack, traceback, json, 변수, 변수명, 로그, error, debug, 컬럼명, 클래스, 브랜치]
+  business_name_context: [상호, 식당, 김밥, 카페, 브랜드, 상품명, 팀]
+  abstract_value_context: [중요한 가치, 가치입니다, 원칙입니다, 개념입니다]
+structured_identifier_contexts:
+  order_id_label: [주문번호, 주문ID, 거래번호, 예약번호, 접수번호, 송장번호, 운송장번호, 결제번호, order id, order no, order number, ticket id, ticket no, ticket number, receipt id, receipt no, receipt number, invoice id, invoice no, invoice number, tracking id, tracking no, tracking number, payment id, payment no, payment number]
+  account_label: [계좌, 계좌번호, 입금 계좌, 입금계좌, 송금 계좌, 송금계좌, 환불 계좌, 환불계좌, 정산 계좌, 정산계좌, 이체 계좌, 지급 계좌, 청구서 입금계좌, bank account, account no, account number, deposit account, refund account]
+  business_reg_no_label: [사업자등록번호, 사업자 등록 번호, 사업자번호, 사업자 번호, 공급자 사업자등록번호, 공급자 사업자 등록 번호, 공급자 사업자번호, 가맹점 사업자번호, 공급사 등록번호, business registration no, business registration number, business reg no, business no, BRN, merchant tax id]
+  medical_record_no_label: [환자번호, 환자 번호, 차트번호, 차트 번호, 진료기록번호, 진료 기록 번호, 의무기록번호, 의무 기록 번호, medical record no, medical record number, medical id, medical no, medical number, MRN]
+  corporate_reg_no_label: [법인등록번호, 법인 등록 번호, 법인번호, 법인 번호, 등기번호, 등기 번호, 등기부번호, 등기부 번호, 등기 법인번호, 회사 등록번호, 법인 식별 번호, corporate registration no, corporate registration number, corporate reg no, corporate, corporate no, corporate number, corp, corp no, corp number, company registration no, company registration number]
+  personal_reg_no_label: [주민등록번호, 주민 등록 번호, 주민번호, 주민 번호, 외국인등록번호, 외국인 등록 번호, 외국인번호, 외국인 번호, RRN, FRN, resident registration no, resident registration number, alien registration no, alien registration number]
+  passport_label: [여권번호, 여권 번호, passport, passport no, passport number]
+  driver_license_label: [운전면허번호, 운전 면허 번호, 면허번호, 면허 번호, driver license, driver license no, driver license number, driving license, driving license no, driving license number]
 cooccurrence:
   person_contact:
     entities: [PERSON_NAME, PHONE_MOBILE, PHONE_LANDLINE, EMAIL]

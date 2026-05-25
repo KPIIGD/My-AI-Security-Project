@@ -1,8 +1,8 @@
 # Korean PII Guardrail v0.2 — Single-Turn Core
 
-한국어 개인정보 탐지 및 비식별화 가드레일의 개발 착수용 프로젝트 파일입니다.
+한국어 개인정보 탐지 및 비식별화 가드레일의 v0.2 single-turn core 패키지입니다.
 
-본 버전은 **RAG와 멀티턴 개념을 제외**하고, 단일 입력 텍스트에서 개인정보 후보를 탐지·보정·판정·마스킹하는 deterministic core를 먼저 완성하는 것을 목표로 합니다.
+본 버전은 **RAG와 멀티턴 개념을 제외**하고, 단일 입력 텍스트에서 개인정보 후보를 탐지·보정·판정·마스킹하는 core를 다룹니다. 현재 release gate는 real NER 경로를 포함해 통과했으며, 남은 주요 후속 과제는 `PERSON_NAME` NER 후보 품질, `ADDRESS` granularity, real NER latency 별도 계측입니다.
 
 ## 목표
 
@@ -73,4 +73,24 @@ PIISpan.end    # raw text 기준 exclusive offset
 
 ## 상태
 
-이 패키지는 구현을 시작하기 위한 **명세 및 skeleton**입니다. production-ready 코드는 아닙니다.
+현재 상태: **v0.2 single-turn core 구현 및 5,000건 release gate 통과**.
+
+최신 기준은 2026-05-25에 재생성한 `reports/release_gate_v0_2.json`이다.
+
+| 항목 | 값 |
+|---|---:|
+| records processed | 5,000 |
+| overall precision / recall / F1 | 0.8803 / 0.9729 / 0.9243 |
+| actionable precision / recall / F1 | 0.9975 / 0.8991 / 0.9457 |
+| high-risk structured recall | 1.0000 |
+| actionable high-risk recall | 0.9645 |
+| raw PII logging count | 0 |
+| invalid offset count | 0 |
+| release gate status | pass |
+
+남은 주요 backlog:
+
+- `PERSON_NAME` NER recall/precision 보강
+- hard negative에서 NER candidate noise 감소
+- `ADDRESS_FULL`/`ADDRESS_UNIT` granularity 기준 정리
+- deterministic-only latency와 real NER latency 분리 계측

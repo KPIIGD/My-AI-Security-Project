@@ -83,11 +83,16 @@ class KoreanBoundaryCorrector:
         match = _consume_internal_suffix(span.text, rules)
         if match is None:
             return None
+        body_text = span.text[: -len(match.suffix)]
+        if span.entity_type is EntityType.PERSON_NAME and len(body_text) < 2:
+            return None
+        if _is_address_road_name_suffix(span, match):
+            return None
 
         corrected = _copy_span(
             span,
             end=span.end - len(match.suffix),
-            text=span.text[: -len(match.suffix)],
+            text=body_text,
             suffix=match.suffix,
             normalized=None,
             reason_codes=_append_reason_codes(
@@ -112,6 +117,8 @@ class KoreanBoundaryCorrector:
         trailing_fragment = span.text[split_at + 1 :]
         address_body = span.text[:split_at].rstrip()
         if not trailing_fragment or not address_body:
+            return None
+        if len(trailing_fragment) != 1:
             return None
         if not all(_is_hangul_syllable(char) for char in trailing_fragment):
             return None
@@ -293,6 +300,14 @@ def _is_suffix_boundary(raw_text: str, position: int) -> bool:
         return True
     char = raw_text[position]
     return char.isspace() or char in _SUFFIX_BOUNDARY_CHARS
+
+
+def _is_address_road_name_suffix(span: PIISpan, match: SuffixMatch) -> bool:
+    if span.entity_type not in {EntityType.ADDRESS_FULL, EntityType.ADDRESS_UNIT}:
+        return False
+    if match.suffix != "\ub85c":
+        return False
+    return any("dictionary.address.road_name" in code for code in span.reason_codes)
 
 
 def _is_hangul_syllable(char: str) -> bool:

@@ -51,6 +51,7 @@ def test_dictionary_lists_loads_expected_categories() -> None:
     assert "김" in lists["surnames"]
     assert "하" in lists["surnames"]
     assert "하늘" in lists["given_name_candidates"]
+    assert "은서" in lists["given_name_candidates"]
     assert "지성" in lists["given_name_candidates"]
     assert "신한은행" in lists["bank_names"]
 
@@ -105,6 +106,19 @@ def test_person_name_skipped_when_first_char_not_surname() -> None:
     assert spans == []
 
 
+def test_standalone_one_syllable_given_name_is_skipped_but_full_name_can_match() -> None:
+    detector = DictionaryDetector()
+
+    standalone = _by_entity(
+        _detect(detector, "고객명 하늘, 연락처는 별도 확인 예정입니다."),
+        EntityType.PERSON_NAME,
+    )
+    full_name = _by_entity(_detect(detector, "고객명 김별입니다."), EntityType.PERSON_NAME)
+
+    assert all(span.text != "별" for span in standalone)
+    assert any(span.text == "김별" for span in full_name)
+
+
 def test_family_relation_detected() -> None:
     raw = "어머니께서 보내주셨습니다."
     spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.FAMILY_RELATION)
@@ -134,6 +148,41 @@ def test_address_full_combines_si_gu_dong_road_and_number() -> None:
     assert spans[0].text.startswith("서울시 강남구 테헤란로")
     assert "152" in spans[0].text
     assert spans[0].score == 0.65
+
+
+def test_road_name_without_building_number_stays_address_unit() -> None:
+    raw = "주소 일부는 서울시 강남구 테헤란로까지만 입력됐습니다."
+    spans = _detect(DictionaryDetector(), raw)
+    units = _by_entity(spans, EntityType.ADDRESS_UNIT)
+    full_addresses = _by_entity(spans, EntityType.ADDRESS_FULL)
+
+    assert any(span.text == "서울시 강남구 테헤란로" for span in units)
+    assert full_addresses == []
+
+
+def test_standalone_road_name_with_building_number_emits_address_full() -> None:
+    raw = "방문 주소 테헤란로 123로 와 주세요."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_FULL)
+
+    assert len(spans) == 1
+    _assert_dict_span_contract(raw, spans[0], EntityType.ADDRESS_FULL)
+    assert spans[0].text == "테헤란로 123"
+
+
+def test_road_address_includes_floor_detail() -> None:
+    raw = "주소는 서울시 강남구 테헤란로 123 5층입니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_FULL)
+
+    assert len(spans) == 1
+    assert spans[0].text == "서울시 강남구 테헤란로 123 5층"
+
+
+def test_si_gu_token_inside_road_name_is_not_consumed_as_address_unit() -> None:
+    raw = "주소는 서울 종로구 세종대로 10입니다."
+    spans = _by_entity(_detect(DictionaryDetector(), raw), EntityType.ADDRESS_FULL)
+
+    assert len(spans) == 1
+    assert spans[0].text == "서울 종로구 세종대로 10"
 
 
 def test_apartment_unit_pattern_emits_address_unit() -> None:

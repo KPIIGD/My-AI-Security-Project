@@ -116,7 +116,7 @@ class FinetunedKoreanNERDetector:
         # 유효하지 않은 repo id 가 된다. 따라서 로컬 디렉터리로 실재할 때만 Path 로
         # 정규화하고, 그 외에는 원본 문자열(슬래시 유지)을 그대로 from_pretrained 에 넘긴다.
         raw_path = str(model_path)
-        local_dir = Path(raw_path)
+        local_dir = Path(raw_path).expanduser()
         if local_dir.is_dir():
             self.model_path = local_dir
             model_ref = str(local_dir)
@@ -155,6 +155,15 @@ class FinetunedKoreanNERDetector:
             self.per_entity_threshold.update(
                 self.calibration.get("per_entity_threshold", {})
             )
+
+    @staticmethod
+    def _resolve_model_source(model_path: str) -> str:
+        """Preserve HuggingFace repo ids while accepting local paths."""
+
+        local_path = Path(str(model_path)).expanduser()
+        if local_path.is_dir():
+            return str(local_path)
+        return str(model_path)
 
     # ─────────────────────────────────────────────────────
     # v0.2 BaseNERDetector interface

@@ -7,11 +7,13 @@ from pii_guardrail.dictionary_loader import (
     load_field_label_terms,
     load_honorific_terms,
     load_negative_context_terms,
+    load_structured_context_terms,
 )
-from pii_guardrail.enums import EntityType
+from pii_guardrail.enums import EntityType, RiskLevel
 from pii_guardrail.preprocess import preprocess_text
 from pii_guardrail.regex_detectors import (
     BankAccountCandidateDetector,
+    EmailRegexDetector,
     PhoneRegexDetector,
 )
 from pii_guardrail.schema import GuardrailRequest, PIISpan
@@ -54,10 +56,30 @@ def test_context_scorer_field_label_terms_loaded_from_yaml() -> None:
     honorifics = load_honorific_terms()
 
     assert "고객명" in terms["name_label"]
+    assert "작성자" in terms["name_label"]
+    assert "환자명" in terms["name_label"]
+    assert "상담 기록" in terms["name_label"]
     assert "계좌" in terms["account_label"]
+    assert "account no" in terms["account_label"]
+    assert "placeholder" in negatives["example_context"]
+    assert "예제" in negatives["example_context"]
+    assert "형식 설명" in negatives["example_context"]
     assert "대표" in terms["organization_label"]
     assert "맑네요" in negatives["weather_context"]
+    assert "변수명" in negatives["code_context"]
+    assert "문서" not in negatives["code_context"]
+    assert "상품명" in negatives["business_name_context"]
+    assert "중요한 가치" in negatives["abstract_value_context"]
     assert "님" in honorifics["person_suffixes"]
+
+
+def test_structured_identifier_context_terms_loaded_from_yaml() -> None:
+    terms = load_structured_context_terms()
+
+    assert "order id" in terms["order_id_label"]
+    assert "\uc0ac\uc5c5\uc790\ub4f1\ub85d\ubc88\ud638" in terms["business_reg_no_label"]
+    assert "bank account" in terms["account_label"]
+    assert "MRN" in terms["medical_record_no_label"]
 
 
 def test_composite_upgrades_loaded_from_scoring_yaml() -> None:
@@ -85,6 +107,43 @@ def test_weather_context_suppresses_person_name_candidate() -> None:
     assert "context" in person.sources
 
 
+def test_abstract_value_context_suppresses_person_name_candidate() -> None:
+    raw = "사랑은 중요한 가치입니다."
+    spans, preprocessed = _detect_all(raw)
+
+    scored = ContextScorer().score(spans, preprocessed)
+    persons = _by_entity(scored, EntityType.PERSON_NAME)
+
+    assert persons
+    assert any(
+        code.startswith("context.penalty.abstract_value_context_for_person")
+        for code in persons[0].reason_codes
+    )
+
+
+def test_example_keyword_span_suppresses_person_name_candidate() -> None:
+    raw = "샘플 email user@example.com."
+    span = PIISpan(
+        start=0,
+        end=2,
+        text="샘플",
+        entity_type=EntityType.PERSON_NAME,
+        score=0.91,
+        sources=("ner",),
+        risk_level=RiskLevel.P1,
+        reason_codes=("ner.threshold_met",),
+        detector_ids=("test.ner",),
+    )
+    preprocessed = preprocess_text(raw)
+
+    [scored] = ContextScorer().score([span], preprocessed)
+
+    assert any(
+        code.startswith("context.penalty.example_keyword_for_person")
+        for code in scored.reason_codes
+    )
+
+
 def test_field_label_and_phone_cooccurrence_boost_person_name() -> None:
     raw = "고객명 하늘, 연락처 010-1111-2222."
     spans, preprocessed = _detect_all(raw)
@@ -107,6 +166,24 @@ def test_field_label_and_phone_cooccurrence_boost_person_name() -> None:
     assert any(code.startswith("context.composite.PHONE_MOBILE") for code in person.reason_codes)
 
 
+def test_name_label_after_candidate_does_not_boost_person_name() -> None:
+    raw = "하늘 변수명은 테스트용 분류기 이름입니다."
+    spans, preprocessed = _detect_all(raw)
+
+    scored = ContextScorer().score(spans, preprocessed)
+    persons = _by_entity(scored, EntityType.PERSON_NAME)
+
+    assert persons
+    assert not any(
+        code.startswith("context.boost.field_label_name")
+        for code in persons[0].reason_codes
+    )
+    assert any(
+        code.startswith("context.penalty.code_or_log_context")
+        for code in persons[0].reason_codes
+    )
+
+
 def test_bank_account_boosted_by_field_label_and_bank_cooccurrence() -> None:
     raw = "계좌는 신한은행 110-123-456789입니다."
     spans, preprocessed = _detect_all(raw)
@@ -122,6 +199,21 @@ def test_bank_account_boosted_by_field_label_and_bank_cooccurrence() -> None:
         for code in account.reason_codes
     )
     assert "context.boost.bank_cooccur" in account.reason_codes
+
+
+def test_bank_account_boosted_by_english_account_label() -> None:
+    raw = "account no 1000-1234-5678 was saved."
+    spans, preprocessed = _detect_all(raw)
+
+    scored = ContextScorer().score(spans, preprocessed)
+    accounts = _by_entity(scored, EntityType.BANK_ACCOUNT)
+
+    assert len(accounts) == 1
+    assert accounts[0].score >= 0.55
+    assert any(
+        code.startswith("context.boost.field_label_account")
+        for code in accounts[0].reason_codes
+    )
 
 
 def test_organization_affiliation_context_boosts_organization() -> None:
@@ -150,6 +242,56 @@ def test_example_context_penalises_every_entity_in_sentence() -> None:
             code.startswith("context.penalty.example_context")
             for code in phones[0].reason_codes
         )
+        assert not any(
+            code.startswith("context.boost.field_label_phone")
+            for code in phones[0].reason_codes
+        )
+
+
+def test_broad_document_words_do_not_penalise_labeled_phone() -> None:
+    raw = "설치 가이드 문서 연락처 010-9876-5432"
+    spans, preprocessed = _detect_all(raw)
+
+    scored = ContextScorer().score(spans, preprocessed)
+    phones = _by_entity(scored, EntityType.PHONE_MOBILE)
+
+    assert len(phones) == 1
+    assert any(
+        code.startswith("context.boost.field_label_phone")
+        for code in phones[0].reason_codes
+    )
+    assert not any(
+        code.startswith("context.penalty.example_context")
+        for code in phones[0].reason_codes
+    )
+
+
+def test_example_context_ignores_keyword_inside_email_address() -> None:
+    raw = "이메일 sample@example.org로 회신 주세요."
+    preprocessed = preprocess_text(raw)
+    spans = EmailRegexDetector().detect(preprocessed, _request(raw))
+
+    scored = ContextScorer().score(spans, preprocessed)
+
+    assert len(scored) == 1
+    assert not any(
+        code.startswith("context.penalty.example_context")
+        for code in scored[0].reason_codes
+    )
+
+
+def test_example_context_still_matches_keyword_outside_email_address() -> None:
+    raw = "샘플 이메일 sample@example.org를 사용합니다."
+    preprocessed = preprocess_text(raw)
+    spans = EmailRegexDetector().detect(preprocessed, _request(raw))
+
+    scored = ContextScorer().score(spans, preprocessed)
+
+    assert len(scored) == 1
+    assert any(
+        code.startswith("context.penalty.example_context")
+        for code in scored[0].reason_codes
+    )
 
 
 def test_score_clamped_to_unit_interval() -> None:

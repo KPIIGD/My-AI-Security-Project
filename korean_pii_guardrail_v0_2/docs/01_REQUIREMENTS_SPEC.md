@@ -122,9 +122,9 @@ span.text == raw_text[span.start:span.end]
 | SCHOOL | dictionary + resolver reclassify |
 | HOSPITAL | dictionary + resolver reclassify |
 | FAMILY_RELATION | dictionary + context |
-| CUSTOMER_ID | regex + context |
-| EMPLOYEE_ID | regex + context |
-| STUDENT_ID | regex + context |
+| CUSTOMER_ID | custom identifier profile |
+| EMPLOYEE_ID | custom identifier profile |
+| STUDENT_ID | custom identifier profile |
 | MEDICAL_RECORD_NO | regex + context |
 
 ### FR-006. 한국어 boundary correction
@@ -180,7 +180,7 @@ Context judge는 다음 순서로 판단한다.
 우선순위:
 
 ```text
-API_KEY_SECRET > RRN/FRN/PASSPORT/DRIVER_LICENSE > CREDIT_CARD/BANK_ACCOUNT > PHONE/EMAIL > ADDRESS > CUSTOMER_ID/EMPLOYEE_ID/STUDENT_ID/MEDICAL_RECORD_NO > PERSON_NAME > ORGANIZATION/SCHOOL/HOSPITAL > quasi identifiers
+API_KEY_SECRET > RRN/FRN/PASSPORT/DRIVER_LICENSE > CREDIT_CARD/BANK_ACCOUNT > PHONE/EMAIL > ADDRESS > MEDICAL_RECORD_NO > custom-profile CUSTOMER_ID/EMPLOYEE_ID/STUDENT_ID > PERSON_NAME > ORGANIZATION/SCHOOL/HOSPITAL > quasi identifiers
 ```
 
 요구사항:

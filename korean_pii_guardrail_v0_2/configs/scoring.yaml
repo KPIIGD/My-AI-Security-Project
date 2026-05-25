@@ -29,10 +29,10 @@ regex_base_scores:
   IP_ADDRESS_PUBLIC: 0.72
   IP_ADDRESS_PRIVATE: 0.45
   MAC_ADDRESS: 0.70
-  CUSTOMER_ID_WITH_LABEL: 0.72
-  EMPLOYEE_ID_WITH_LABEL: 0.72
-  STUDENT_ID_WITH_LABEL: 0.72
   MEDICAL_RECORD_NO_WITH_LABEL: 0.82
+  DOB_WITH_LABEL: 0.78
+  DEVICE_ID_WITH_LABEL: 0.72
+  VEHICLE_REG_NO_WITH_LABEL: 0.78
 dictionary_base_scores:
   surname: 0.25
   given_name_candidate: 0.35
@@ -67,10 +67,12 @@ context_boosts:
   medical_label: 0.20
 context_penalties:
   example_context: -0.15
+  example_keyword_for_person: -0.35
   weather_context_for_person: -0.35
   public_phone_context: -0.25
   code_or_log_context: -0.20
   organization_not_person: -0.25
+  abstract_value_context_for_person: -0.20
   private_ip: -0.25
 risk_action_thresholds:
   P0:
@@ -93,6 +95,5 @@ single_turn_composite:
     PERSON_NAME+EMAIL: P1
     PERSON_NAME+ADDRESS_FULL: P1
     PERSON_NAME+BANK_ACCOUNT: P1
-    CUSTOMER_ID+PHONE_MOBILE: P1
     MEDICAL_RECORD_NO+HOSPITAL: P1
     DOB+ADDRESS_UNIT+SCHOOL: P1

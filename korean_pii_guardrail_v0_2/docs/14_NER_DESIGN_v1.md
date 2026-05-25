@@ -3,29 +3,42 @@
 | | |
 |---|---|
 | **NER Owner** | 김민우 |
-| **Document version** | v2 (v3 학습 실측값 반영) |
+| **Document version** | v3 (guardrail release gate feedback 반영) |
 | **Initial date** | 2026-05-09 |
-| **Last updated** | 2026-05-13 |
-| **Status** | ★ **Production-ready** (모델 v3 채택) |
+| **Last updated** | 2026-05-24 |
+| **Status** | ★ **Production candidate** (모델 v3 채택, guardrail 평가 기반 NER backlog 있음) |
 | **Final model** | `models/pii_ner_v3/final/` (klue/roberta-large) |
 | **HuggingFace Hub** | [`vmaca123/korean-pii-ner-v3`](https://huggingface.co/vmaca123/korean-pii-ner-v3) |
 | **대상 통합** | `korean_pii_guardrail_v0_2` (M5/M6/M9/M10) |
 | **참조** | `docs/06_INTERFACE_SPEC.md`, `docs/03_SCORING_POLICY_SPEC.md`, `configs/scoring.yaml`, `configs/josa_rules.yaml`, `data/eval/hard_cases_v0.jsonl` |
 | **결과 보고** | `TRAINING_RESULTS_v1.md`, `TRAINING_RESULTS_v3.md` (로컬 학습 산출물; PR 본문 댓글 참조) |
 
-> **변경 요약 (v1 계획안 → v2 문서)**
-> 초기 v1 설계서(2026-05-09 작성)는 학습 *직전* 계획. 이후 4회 모델 비교 → v3 production 채택. 본 문서는 14개 항목 답변을 v3 실측값으로 업데이트한 최종 spec.
+> **변경 요약 (v1 계획안 → v3 문서)**
+> 초기 v1 설계서(2026-05-09 작성)는 학습 *직전* 계획. 이후 4회 모델 비교 → v3 production candidate 채택. 2026-05-24에는 guardrail release gate 결과를 반영해 `PERSON_NAME` recall/precision, `ADDRESS` granularity, score calibration 후속 과제를 명시했다.
 
 ---
 
-## 0. 현재 진행 상태 — Production 완료
+## 0. 현재 진행 상태 — Production candidate
 
 - ✅ **학습 6회 완료**: bert-base(2/5ep) → roberta-base → roberta-large(v1) → v2(실패) → **v3(production)**
-- ✅ **v3 production 모델**: macro-F1 **0.878 (internal)** / **0.766 (KLUE 외부)**
+- ✅ **v3 production candidate 모델**: macro-F1 **0.878 (internal)** / **0.766 (KLUE 외부)**
 - ✅ **Conjunctive 패턴 모델 자체 처리** (v1 한계 보완 완료)
-- ✅ **Wrapper smoke test 10/10 통과** (hard negative 포함)
+- ✅ **Wrapper smoke test 10/10 통과** (초기 hard negative 포함)
 - ✅ **데이터 quality 보정**: cosmosfarm 행정구역 + Faker conjunctive composite + hard_neg augment
 - ✅ **비용**: Vast.ai $0.92 누계 (6 runs)
+
+### 0.1 Guardrail release gate 피드백
+
+2026-05-25 기준 `reports/release_gate_v0_2.json`에서 release gate는 통과했다. 다만 real NER가 포함된 guardrail 통합 평가에서는 다음 후속 과제가 남았다.
+
+| 항목 | 최신 관찰 | NER 후속 과제 |
+|---|---|---|
+| `PERSON_NAME` | precision 0.6755, recall 0.8697, F1 0.7604 | 소유격/연락처/계좌 composite 문맥의 이름 recall 보강 |
+| hard negative `PERSON_NAME` | candidate FP 500건, 최종 action은 대부분 `pass` | 예시 키워드, 추상명사, 일반명사 hard negative calibration |
+| `ADDRESS` | pipeline 매핑은 `ADDRESS_FULL`, 일부 이름 fixture가 `ADDRESS_FULL`로 오분류 | `ADDRESS` granularity 기준과 `NAME`/`ADDRESS` confidence 분리 |
+| score calibration | temperature 1.0, score 1.000 쏠림 가능성 | entity별 ECE, threshold sweep, calibration set 보강 |
+
+따라서 이 문서의 "production" 표현은 모델 artifact와 wrapper가 통합 가능한 수준이라는 뜻이며, guardrail 전체 품질 관점에서는 `docs/17_NER_BACKLOG_FROM_GUARDRAIL_EVAL.md`의 NER backlog를 후속으로 처리해야 한다.
 
 ---
 
@@ -252,7 +265,7 @@ ner.heuristic_split_v1   # (v3에서는 거의 트리거 안 됨)
 
 ---
 
-## 13. hard negative 처리 — v3 완료
+## 13. hard negative 처리 — v3 초기 완료 및 추가 보강 필요
 
 ### 학습 데이터에 통합 완료 (v3)
 | Hard negative 유형 | 처리 | v3 학습 데이터 |
@@ -335,10 +348,10 @@ class FinetunedKoreanNERAdapter:  # implements BaseNERDetector
 
 ## 결정 / 양유상 답변 받을 사항 (5건)
 
-1. **ADDRESS_UNIT 분기 책임**: NER 은 ADDRESS_FULL 만, dict 가 UNIT 분리 — 이대로 진행 OK?
+1. **ADDRESS_UNIT 분기 책임**: NER은 ADDRESS 라벨만 emit하고 pipeline은 기본적으로 ADDRESS_FULL에 매핑한다. 다만 guardrail 평가 기준에서는 ADDRESS_UNIT granularity 기준과 score hint 제공 가능성을 재검토해야 한다.
 2. **ORG 세분화 책임**: SCHOOL / HOSPITAL 을 dict 후처리로 reclassify — v0.2 architecture 와 어긋나지 않나?
 3. **Phase 6 baseline 통합 평가**: 우리 NER + L0 vs alphagyuu + L0 같은 framework 으로 비교 결과 같이 낼지?
-4. **제출 시점**: v3 production 모델 + wrapper 완성. M5 일정에 맞춰서 wrapper integration PR 별도 올릴 시점만 알려주면 즉시 진행.
+4. **제출 시점**: v3 production candidate 모델 + wrapper는 완성되었고 real NER release gate에 연결됐다. 다음 제출 단위는 NER calibration과 backlog 보강이다.
 5. **M6 NER score resolver 반영 방식** — 현재 가정: regex > validator > NER > dictionary > context 우선순위.
 
 ---
@@ -374,3 +387,4 @@ v1과 v3 사이 시도된 Run 5:
 |---|---|---|---|
 | v1 (계획안) | 2026-05-09 | 김민우 | 학습 직전 14개 항목 답변 |
 | **v2 (실측 반영)** | **2026-05-13** | 김민우 | 학습 6회 완료, v3 production 채택, 모든 항목 실측값 + 검증 결과로 업데이트 |
+| **v3 (guardrail feedback)** | **2026-05-24** | Codex | release gate 통합 평가 기준의 PERSON_NAME, ADDRESS granularity, calibration backlog 반영 |
