@@ -507,9 +507,6 @@ _STRUCTURED_HIGH_RISK_ENTITIES = frozenset(
         EntityType.BUSINESS_REG_NO,
         EntityType.CORPORATE_REG_NO,
         EntityType.VEHICLE_REG_NO,
-        EntityType.CUSTOMER_ID,
-        EntityType.EMPLOYEE_ID,
-        EntityType.STUDENT_ID,
         EntityType.MEDICAL_RECORD_NO,
         EntityType.API_KEY_SECRET,
     }
@@ -716,7 +713,7 @@ def _recall_for_expected(
             if match.expected is None or not predicate(match.expected):
                 continue
             total += 1
-            if match.match_type in {"exact", "partial"}:
+            if _match_has_actionable_prediction(match):
                 matched += 1
     if total == 0:
         return None

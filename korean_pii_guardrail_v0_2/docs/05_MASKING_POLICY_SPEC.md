@@ -61,7 +61,7 @@ MVP action은 다음 네 가지로 제한한다.
 | Risk | Entity 예시 | `llm_input` | `external_output` | `audit_log` |
 |---|---|---|---|---|
 | P0 | RRN, FRN, API key, credential secret | label mask 또는 full redact | API key/secret은 block, 그 외 full redact 가능 | hash only |
-| P1 | PHONE, EMAIL, ADDRESS_FULL, BANK_ACCOUNT | label_mask | label_mask | hash only |
+| P1 | PHONE, EMAIL, ADDRESS_FULL, BANK_ACCOUNT, profile-configured CUSTOMER_ID/EMPLOYEE_ID/STUDENT_ID | score threshold 또는 strong context 기반 label_mask | score threshold 또는 strong context 기반 label_mask | hash only |
 | P2 | SCHOOL, ORG, DOB, ADDRESS_UNIT | context/composite 기반 mask 또는 pass | context/composite 기반 mask 또는 pass | hash only |
 | P3 | AGE, GENDER 단독 | pass unless composite | pass unless composite | hash only |
 
@@ -79,7 +79,8 @@ MVP action은 다음 네 가지로 제한한다.
 | ADDRESS_FULL | P1 | `mask` |
 | ADDRESS_UNIT, ORGANIZATION, SCHOOL, HOSPITAL | P2 | context 또는 composite가 있으면 `mask`, 아니면 `pass` 가능 |
 | DOB, AGE, GENDER, FAMILY_RELATION | P2/P3 | composite가 있으면 `mask`, 단독이면 `pass` 가능 |
-| CUSTOMER_ID, EMPLOYEE_ID, STUDENT_ID, MEDICAL_RECORD_NO | P1/P2 | context가 있으면 `mask` |
+| CUSTOMER_ID, EMPLOYEE_ID, STUDENT_ID | P1/P2 | production 기본 detector는 생성하지 않음. custom identifier profile이 명시한 pattern/validator/checksum으로 생성된 후보만 `mask` |
+| MEDICAL_RECORD_NO | P1/P2 | 명시 라벨 또는 domain context가 있으면 `mask` |
 | HEALTH_INFO | P1/P2 | domain policy가 정해질 때까지 strict에서는 안전 우선 `mask` |
 
 ## 7. Policy selection 의사코드
@@ -100,7 +101,13 @@ def select_policy(span, request_context):
     if span.is_composite:
         return Action.MASK, Method.LABEL_MASK
 
-    if span.risk_level in {"P1"}:
+    if span.risk_level == "P1" and span.score >= thresholds.p1_mask_min_score:
+        return Action.MASK, Method.LABEL_MASK
+
+    if span.risk_level == "P1" and (
+        span.score >= thresholds.p1_context_judge_min_score
+        and has_strong_context(span)
+    ):
         return Action.MASK, Method.LABEL_MASK
 
     if span.risk_level in {"P2", "P3"} and has_strong_context(span):

@@ -67,9 +67,6 @@ K = {
     "deposit": "\uc785\uae08",
     "patient_no": "\ud658\uc790\ubc88\ud638",
     "hospital": "\ubcd1\uc6d0",
-    "student_no": "\ud559\ubc88",
-    "employee_no": "\uc0ac\ubc88",
-    "customer_no": "\uace0\uac1d\ubc88\ud638",
     "dob": "\uc0dd\ub144\uc6d4\uc77c",
     "school": "\ud559\uad50",
     "lives": "\uac70\uc8fc\ud569\ub2c8\ub2e4",
@@ -292,7 +289,7 @@ def _mac(i: int) -> str:
 
 def _structured_case(i: int) -> EvaluationCase:
     bucket = "structured_pii"
-    kind = i % 20
+    kind = i % 17
     if kind == 0:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="RRN ", value=_rrn(i), entity_type=EntityType.RRN, risk_level=RiskLevel.P0, tags=("rrn",))
     if kind == 1:
@@ -318,18 +315,12 @@ def _structured_case(i: int) -> EvaluationCase:
     if kind == 11:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="passport ", value=f"M{i % 10}{(1234567 + i) % 10000000:07d}", entity_type=EntityType.PASSPORT, risk_level=RiskLevel.P0, tags=("passport",))
     if kind == 12:
-        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="driver ", value=f"12-{10 + i % 80:02d}-{100000 + i:06d}-01", entity_type=EntityType.DRIVER_LICENSE, risk_level=RiskLevel.P0, tags=("driver_license",))
+        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="driver license ", value=f"12-{10 + i % 80:02d}-{100000 + i:06d}-01", entity_type=EntityType.DRIVER_LICENSE, risk_level=RiskLevel.P0, tags=("driver_license",))
     if kind == 13:
-        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['customer_no']} ", value=f"CUST-{i:06d}", entity_type=EntityType.CUSTOMER_ID, risk_level=RiskLevel.P1, tags=("customer_id",))
-    if kind == 14:
-        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['employee_no']} ", value=f"EMP-{2026}-{i:05d}", entity_type=EntityType.EMPLOYEE_ID, risk_level=RiskLevel.P1, tags=("employee_id",))
-    if kind == 15:
-        return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['student_no']} ", value=f"STU-{20260000 + i}", entity_type=EntityType.STUDENT_ID, risk_level=RiskLevel.P1, tags=("student_id",))
-    if kind == 16:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix=f"{K['patient_no']} ", value=f"MR-{2026}-{i:06d}", entity_type=EntityType.MEDICAL_RECORD_NO, risk_level=RiskLevel.P1, tags=("medical_record",))
-    if kind == 17:
+    if kind == 14:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="corp ", value=f"110111-{1000000 + i:07d}", entity_type=EntityType.CORPORATE_REG_NO, risk_level=RiskLevel.P1, tags=("corporate_reg_no",))
-    if kind == 18:
+    if kind == 15:
         return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="vehicle ", value=f"{10 + i % 80}\uac00{1000 + i % 9000}", entity_type=EntityType.VEHICLE_REG_NO, risk_level=RiskLevel.P1, tags=("vehicle_reg_no",))
     return _single_span_case(case_id=f"{bucket}-{i:04d}", bucket=bucket, prefix="device ", value=f"device-{i:04d}-A1B2C3", entity_type=EntityType.DEVICE_ID, risk_level=RiskLevel.P2, tags=("device_id",))
 
@@ -400,8 +391,8 @@ def _composite_case(i: int) -> EvaluationCase:
         c.text(f" {K['account']} ")
         c.span(_bank_account(i), EntityType.BANK_ACCOUNT, RiskLevel.P1)
     elif kind == 4:
-        c.text(f"{K['customer_no']} ")
-        c.span(f"CUST-{i:06d}", EntityType.CUSTOMER_ID, RiskLevel.P1)
+        c.text(f"{K['patient_no']} ")
+        c.span(f"MR-{2026}-{i:06d}", EntityType.MEDICAL_RECORD_NO, RiskLevel.P1)
         c.text(f", {K['contact']} ")
         c.span(_phone_mobile(i), EntityType.PHONE_MOBILE, RiskLevel.P1)
     elif kind == 5:

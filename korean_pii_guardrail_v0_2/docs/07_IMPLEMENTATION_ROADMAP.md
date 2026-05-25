@@ -172,7 +172,8 @@ M1은 기존 Layer 0에서 확인된 한국어 변형 공격 대응 전략을 v0
 - Protocol 정의
 - mock output
 - NER v3 label mapping: `NAME -> PERSON_NAME`, `ADDRESS -> ADDRESS_FULL`, `ORG -> ORGANIZATION`
-- `SCHOOL`/`HOSPITAL`/`ADDRESS_UNIT`/`CUSTOMER_ID`/`MEDICAL_RECORD_NO`는 NER 직접 output이 아니라 dictionary, regex, context, resolver 후속 처리 책임으로 문서화
+- `SCHOOL`/`HOSPITAL`/`ADDRESS_UNIT`/`MEDICAL_RECORD_NO`는 NER 직접 output이 아니라 dictionary, regex, context, resolver 후속 처리 책임으로 문서화
+- `CUSTOMER_ID`/`EMPLOYEE_ID`/`STUDENT_ID`는 production 기본 detector가 추정 생성하지 않고 custom identifier profile 후속 기능으로 분리
 - `label_map.json`과 `calibration.json` adapter 요구사항 정리
 - per-entity threshold metadata field
 - local model artifact가 없을 때 HuggingFace Hub 또는 별도 산출물 전달이 필요하다는 운영 전제 명시

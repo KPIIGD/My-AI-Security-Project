@@ -1,24 +1,24 @@
 {
   "action_counts": {
-    "block": 50,
-    "mask": 5024,
-    "pass": 1300
+    "block": 59,
+    "mask": 5139,
+    "pass": 1176
   },
-  "actionable_high_risk_recall": 0.9308,
+  "actionable_high_risk_recall": 0.9645,
   "actionable_overall": {
     "boundary_accuracy": 1.0,
     "entity_type": "__overall__",
-    "f1": 0.9337,
-    "fn": 706,
+    "f1": 0.9457,
+    "fn": 582,
     "fp": 13,
-    "precision": 0.9974,
-    "recall": 0.8776,
-    "tp_exact": 5061,
+    "precision": 0.9975,
+    "recall": 0.8991,
+    "tp_exact": 5185,
     "tp_partial": 0
   },
-  "actionable_overall_f1": 0.9337,
-  "actionable_overall_precision": 0.9974,
-  "actionable_overall_recall": 0.8776,
+  "actionable_overall_f1": 0.9457,
+  "actionable_overall_precision": 0.9975,
+  "actionable_overall_recall": 0.8991,
   "actionable_per_entity": [
     {
       "boundary_accuracy": 1.0,
@@ -50,7 +50,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -61,7 +61,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 193,
+      "tp_exact": 202,
       "tp_partial": 0
     },
     {
@@ -72,7 +72,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -83,7 +83,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 58,
       "tp_partial": 0
     },
     {
@@ -94,25 +94,14 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 175,
-      "tp_partial": 0
-    },
-    {
-      "boundary_accuracy": 1.0,
-      "entity_type": "CUSTOMER_ID",
-      "f1": 0.8512,
-      "fn": 50,
-      "fp": 0,
-      "precision": 1.0,
-      "recall": 0.7409,
-      "tp_exact": 143,
+      "tp_exact": 184,
       "tp_partial": 0
     },
     {
       "boundary_accuracy": 0.0,
       "entity_type": "DEVICE_ID",
       "f1": 0.0,
-      "fn": 50,
+      "fn": 58,
       "fp": 0,
       "precision": 0.0,
       "recall": 0.0,
@@ -138,7 +127,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -149,18 +138,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 193,
-      "tp_partial": 0
-    },
-    {
-      "boundary_accuracy": 0.0,
-      "entity_type": "EMPLOYEE_ID",
-      "f1": 0.0,
-      "fn": 50,
-      "fp": 0,
-      "precision": 0.0,
-      "recall": 0.0,
-      "tp_exact": 0,
+      "tp_exact": 202,
       "tp_partial": 0
     },
     {
@@ -182,7 +160,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -200,7 +178,7 @@
       "boundary_accuracy": 0.0,
       "entity_type": "IP_ADDRESS",
       "f1": 0.0,
-      "fn": 50,
+      "fn": 59,
       "fp": 0,
       "precision": 0.0,
       "recall": 0.0,
@@ -211,7 +189,7 @@
       "boundary_accuracy": 0.0,
       "entity_type": "MAC_ADDRESS",
       "f1": 0.0,
-      "fn": 50,
+      "fn": 59,
       "fp": 0,
       "precision": 0.0,
       "recall": 0.0,
@@ -226,7 +204,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 193,
+      "tp_exact": 345,
       "tp_partial": 0
     },
     {
@@ -248,7 +226,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -270,7 +248,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -281,7 +259,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 1086,
+      "tp_exact": 1095,
       "tp_partial": 0
     },
     {
@@ -292,7 +270,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 175,
+      "tp_exact": 184,
       "tp_partial": 0
     },
     {
@@ -307,17 +285,6 @@
       "tp_partial": 0
     },
     {
-      "boundary_accuracy": 0.0,
-      "entity_type": "STUDENT_ID",
-      "f1": 0.0,
-      "fn": 50,
-      "fp": 0,
-      "precision": 0.0,
-      "recall": 0.0,
-      "tp_exact": 0,
-      "tp_partial": 0
-    },
-    {
       "boundary_accuracy": 1.0,
       "entity_type": "VEHICLE_REG_NO",
       "f1": 1.0,
@@ -325,21 +292,21 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 58,
       "tp_partial": 0
     }
   ],
   "audit_event_raw_value_logged_count": 0,
-  "blocked_count": 50,
+  "blocked_count": 59,
   "boundary_accuracy": 1.0,
   "dataset_id": "release_gate_v0_2",
   "deterministic_latency_ms": {
-    "p50": 146.1511,
-    "p95": 293.9683,
-    "p99": 588.1384
+    "p50": 223.3406,
+    "p95": 368.1189,
+    "p99": 571.6716
   },
-  "generated_at": "2026-05-22T11:56:57.172297+00:00",
-  "high_risk_recall": 0.9647,
+  "generated_at": "2026-05-25T00:36:17.187174+00:00",
+  "high_risk_recall": 0.9645,
   "invalid_offset_count": 0,
   "masked_text_evaluable_count": 0,
   "masked_text_exact_match_rate": 0.0,
@@ -372,32 +339,29 @@
     "label_counts": {
       "ADDRESS_FULL": 518,
       "ADDRESS_UNIT": 267,
-      "API_KEY_SECRET": 50,
-      "BANK_ACCOUNT": 193,
-      "BUSINESS_REG_NO": 50,
-      "CORPORATE_REG_NO": 50,
-      "CREDIT_CARD": 175,
-      "CUSTOMER_ID": 193,
-      "DEVICE_ID": 50,
+      "API_KEY_SECRET": 59,
+      "BANK_ACCOUNT": 202,
+      "BUSINESS_REG_NO": 59,
+      "CORPORATE_REG_NO": 58,
+      "CREDIT_CARD": 184,
+      "DEVICE_ID": 58,
       "DOB": 142,
-      "DRIVER_LICENSE": 50,
-      "EMAIL": 193,
-      "EMPLOYEE_ID": 50,
+      "DRIVER_LICENSE": 59,
+      "EMAIL": 202,
       "FAMILY_RELATION": 125,
-      "FRN": 50,
+      "FRN": 59,
       "HOSPITAL": 268,
-      "IP_ADDRESS": 50,
-      "MAC_ADDRESS": 50,
-      "MEDICAL_RECORD_NO": 193,
+      "IP_ADDRESS": 59,
+      "MAC_ADDRESS": 59,
+      "MEDICAL_RECORD_NO": 345,
       "ORGANIZATION": 125,
-      "PASSPORT": 50,
+      "PASSPORT": 59,
       "PERSON_NAME": 1197,
-      "PHONE_LANDLINE": 50,
-      "PHONE_MOBILE": 1086,
-      "RRN": 175,
+      "PHONE_LANDLINE": 59,
+      "PHONE_MOBILE": 1095,
+      "RRN": 184,
       "SCHOOL": 267,
-      "STUDENT_ID": 50,
-      "VEHICLE_REG_NO": 50
+      "VEHICLE_REG_NO": 58
     },
     "raw_data_policy": "synthetic fixtures only; no production PII",
     "synthetic": true,
@@ -412,9 +376,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_adversarial_boundary",
       "deterministic_latency_ms": {
-        "p50": 160.1506,
-        "p95": 279.374,
-        "p99": 517.9887
+        "p50": 216.5826,
+        "p95": 414.8876,
+        "p99": 977.142
       },
       "high_risk_recall": 0.9991,
       "invalid_offset_count": 0,
@@ -556,7 +520,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 279.374,
+            "actual_value": 414.8876,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -598,9 +562,9 @@
       "boundary_accuracy": 0.0,
       "dataset_id": "release_gate_v0_2_hard_negative",
       "deterministic_latency_ms": {
-        "p50": 123.7424,
-        "p95": 192.4981,
-        "p99": 447.292
+        "p50": 221.8201,
+        "p95": 359.8369,
+        "p99": 465.7669
       },
       "high_risk_recall": 0.0,
       "invalid_offset_count": 0,
@@ -714,7 +678,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 192.4981,
+            "actual_value": 359.8369,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -760,9 +724,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_name_address_affiliation",
       "deterministic_latency_ms": {
-        "p50": 124.0327,
-        "p95": 242.9375,
-        "p99": 526.9998
+        "p50": 190.5695,
+        "p95": 306.7283,
+        "p99": 402.4347
       },
       "high_risk_recall": 1.0,
       "invalid_offset_count": 0,
@@ -940,7 +904,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 242.9375,
+            "actual_value": 306.7283,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -972,9 +936,9 @@
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_single_turn_composite",
       "deterministic_latency_ms": {
-        "p50": 186.7047,
-        "p95": 338.7007,
-        "p99": 674.847
+        "p50": 254.9016,
+        "p95": 373.8429,
+        "p99": 497.3378
       },
       "high_risk_recall": 0.9015,
       "invalid_offset_count": 0,
@@ -982,11 +946,10 @@
         "ADDRESS_FULL": 143,
         "ADDRESS_UNIT": 142,
         "BANK_ACCOUNT": 143,
-        "CUSTOMER_ID": 143,
         "DOB": 142,
         "EMAIL": 143,
         "HOSPITAL": 143,
-        "MEDICAL_RECORD_NO": 143,
+        "MEDICAL_RECORD_NO": 286,
         "PERSON_NAME": 572,
         "PHONE_MOBILE": 286,
         "SCHOOL": 142
@@ -1042,17 +1005,6 @@
         },
         {
           "boundary_accuracy": 1.0,
-          "entity_type": "CUSTOMER_ID",
-          "f1": 1.0,
-          "fn": 0,
-          "fp": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "tp_exact": 143,
-          "tp_partial": 0
-        },
-        {
-          "boundary_accuracy": 1.0,
           "entity_type": "DOB",
           "f1": 1.0,
           "fn": 0,
@@ -1092,7 +1044,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 143,
+          "tp_exact": 286,
           "tp_partial": 0
         },
         {
@@ -1188,7 +1140,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 338.7007,
+            "actual_value": 373.8429,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -1224,41 +1176,38 @@
     },
     "structured_pii": {
       "action_counts": {
-        "block": 50,
-        "mask": 650,
-        "pass": 300
+        "block": 59,
+        "mask": 765,
+        "pass": 176
       },
-      "blocked_count": 50,
+      "blocked_count": 59,
       "boundary_accuracy": 1.0,
       "dataset_id": "release_gate_v0_2_structured_pii",
       "deterministic_latency_ms": {
-        "p50": 151.0288,
-        "p95": 369.2564,
-        "p99": 684.539
+        "p50": 225.6356,
+        "p95": 372.5878,
+        "p99": 614.8454
       },
       "high_risk_recall": 1.0,
       "invalid_offset_count": 0,
       "label_counts": {
-        "API_KEY_SECRET": 50,
-        "BANK_ACCOUNT": 50,
-        "BUSINESS_REG_NO": 50,
-        "CORPORATE_REG_NO": 50,
-        "CREDIT_CARD": 50,
-        "CUSTOMER_ID": 50,
-        "DEVICE_ID": 50,
-        "DRIVER_LICENSE": 50,
-        "EMAIL": 50,
-        "EMPLOYEE_ID": 50,
-        "FRN": 50,
-        "IP_ADDRESS": 50,
-        "MAC_ADDRESS": 50,
-        "MEDICAL_RECORD_NO": 50,
-        "PASSPORT": 50,
-        "PHONE_LANDLINE": 50,
-        "PHONE_MOBILE": 50,
-        "RRN": 50,
-        "STUDENT_ID": 50,
-        "VEHICLE_REG_NO": 50
+        "API_KEY_SECRET": 59,
+        "BANK_ACCOUNT": 59,
+        "BUSINESS_REG_NO": 59,
+        "CORPORATE_REG_NO": 58,
+        "CREDIT_CARD": 59,
+        "DEVICE_ID": 58,
+        "DRIVER_LICENSE": 59,
+        "EMAIL": 59,
+        "FRN": 59,
+        "IP_ADDRESS": 59,
+        "MAC_ADDRESS": 59,
+        "MEDICAL_RECORD_NO": 59,
+        "PASSPORT": 59,
+        "PHONE_LANDLINE": 59,
+        "PHONE_MOBILE": 59,
+        "RRN": 59,
+        "VEHICLE_REG_NO": 58
       },
       "ner_detector": {
         "detector_id": "ner.finetuned.klue-roberta-large-v3",
@@ -1284,7 +1233,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1295,7 +1244,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1306,7 +1255,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1317,7 +1266,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 58,
           "tp_partial": 0
         },
         {
@@ -1328,18 +1277,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
-          "tp_partial": 0
-        },
-        {
-          "boundary_accuracy": 1.0,
-          "entity_type": "CUSTOMER_ID",
-          "f1": 1.0,
-          "fn": 0,
-          "fp": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1350,7 +1288,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 58,
           "tp_partial": 0
         },
         {
@@ -1361,7 +1299,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1372,18 +1310,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
-          "tp_partial": 0
-        },
-        {
-          "boundary_accuracy": 1.0,
-          "entity_type": "EMPLOYEE_ID",
-          "f1": 1.0,
-          "fn": 0,
-          "fp": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1394,7 +1321,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1405,7 +1332,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1416,7 +1343,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1427,7 +1354,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1438,7 +1365,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1449,7 +1376,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1460,7 +1387,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1471,18 +1398,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
-          "tp_partial": 0
-        },
-        {
-          "boundary_accuracy": 1.0,
-          "entity_type": "STUDENT_ID",
-          "f1": 1.0,
-          "fn": 0,
-          "fp": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 59,
           "tp_partial": 0
         },
         {
@@ -1493,7 +1409,7 @@
           "fp": 0,
           "precision": 1.0,
           "recall": 1.0,
-          "tp_exact": 50,
+          "tp_exact": 58,
           "tp_partial": 0
         }
       ],
@@ -1556,7 +1472,7 @@
             "threshold": "== 0"
           },
           {
-            "actual_value": 369.2564,
+            "actual_value": 372.5878,
             "name": "deterministic_latency_p95_ms",
             "reason_code": "gate.deterministic_latency.real_ner_path_included",
             "status": "skipped",
@@ -1577,7 +1493,7 @@
       },
       "residual_risk_notes": [],
       "spans_detected": 1000,
-      "spans_masked": 700,
+      "spans_masked": 824,
       "spurious_detections": []
     }
   },
@@ -1612,7 +1528,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -1623,7 +1539,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 193,
+      "tp_exact": 202,
       "tp_partial": 0
     },
     {
@@ -1634,7 +1550,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -1645,7 +1561,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 58,
       "tp_partial": 0
     },
     {
@@ -1656,18 +1572,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 175,
-      "tp_partial": 0
-    },
-    {
-      "boundary_accuracy": 1.0,
-      "entity_type": "CUSTOMER_ID",
-      "f1": 1.0,
-      "fn": 0,
-      "fp": 0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "tp_exact": 193,
+      "tp_exact": 184,
       "tp_partial": 0
     },
     {
@@ -1678,7 +1583,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 58,
       "tp_partial": 0
     },
     {
@@ -1700,29 +1605,18 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
       "boundary_accuracy": 1.0,
       "entity_type": "EMAIL",
-      "f1": 0.7554,
+      "f1": 0.7637,
       "fn": 0,
       "fp": 125,
-      "precision": 0.6069,
+      "precision": 0.6177,
       "recall": 1.0,
-      "tp_exact": 193,
-      "tp_partial": 0
-    },
-    {
-      "boundary_accuracy": 1.0,
-      "entity_type": "EMPLOYEE_ID",
-      "f1": 1.0,
-      "fn": 0,
-      "fp": 0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 202,
       "tp_partial": 0
     },
     {
@@ -1744,7 +1638,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -1766,7 +1660,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -1777,7 +1671,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -1788,7 +1682,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 193,
+      "tp_exact": 345,
       "tp_partial": 0
     },
     {
@@ -1810,7 +1704,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
@@ -1832,18 +1726,18 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 59,
       "tp_partial": 0
     },
     {
       "boundary_accuracy": 1.0,
       "entity_type": "PHONE_MOBILE",
-      "f1": 0.9456,
+      "f1": 0.946,
       "fn": 0,
       "fp": 125,
-      "precision": 0.8968,
+      "precision": 0.8975,
       "recall": 1.0,
-      "tp_exact": 1086,
+      "tp_exact": 1095,
       "tp_partial": 0
     },
     {
@@ -1854,7 +1748,7 @@
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 175,
+      "tp_exact": 184,
       "tp_partial": 0
     },
     {
@@ -1870,24 +1764,13 @@
     },
     {
       "boundary_accuracy": 1.0,
-      "entity_type": "STUDENT_ID",
-      "f1": 1.0,
-      "fn": 0,
-      "fp": 0,
-      "precision": 1.0,
-      "recall": 1.0,
-      "tp_exact": 50,
-      "tp_partial": 0
-    },
-    {
-      "boundary_accuracy": 1.0,
       "entity_type": "VEHICLE_REG_NO",
       "f1": 1.0,
       "fn": 0,
       "fp": 0,
       "precision": 1.0,
       "recall": 1.0,
-      "tp_exact": 50,
+      "tp_exact": 58,
       "tp_partial": 0
     }
   ],
@@ -1953,7 +1836,7 @@
         "threshold": "== 0"
       },
       {
-        "actual_value": 293.9683,
+        "actual_value": 368.1189,
         "name": "deterministic_latency_p95_ms",
         "reason_code": "gate.deterministic_latency.real_ner_path_included",
         "status": "skipped",
@@ -1981,7 +1864,7 @@
   ],
   "response_raw_value_logged_count": 0,
   "spans_detected": 6374,
-  "spans_masked": 5074,
+  "spans_masked": 5198,
   "spurious_detections": [
     {
       "entity_type": "ADDRESS_FULL",

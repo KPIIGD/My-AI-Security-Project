@@ -98,13 +98,12 @@ test@example.com
 | IP_ADDRESS | valid public IP | 0.72 | policy별 처리 |
 | IP_ADDRESS | private/local IP | 0.45 | 내부 정책에 따라 pass 가능 |
 | MAC_ADDRESS | MAC 형식 | 0.70 | device identifier 후보 |
-| CUSTOMER_ID | label + id pattern | 0.72 | label 없으면 낮게 시작 |
-| EMPLOYEE_ID | label + id pattern | 0.72 | label 없으면 낮게 시작 |
-| STUDENT_ID | label + id pattern | 0.72 | label 없으면 낮게 시작 |
 | MEDICAL_RECORD_NO | 의료 label + id pattern | 0.82 | domain high-risk |
 | DOB | label + date pattern | 0.78 | 단독으로는 P2, composite에서 승격 |
 | DEVICE_ID | device label + id pattern | 0.72 | technical identifier |
 | VEHICLE_REG_NO | vehicle label + plate pattern | 0.78 | label 기반 차량 식별자 |
+
+Production 기본 detector는 `CUSTOMER_ID`, `EMPLOYEE_ID`, `STUDENT_ID`를 내장 regex로 만들지 않는다. `고객번호`, `회원ID`, `사번`, `학번`은 실무에서 개인정보 식별자가 될 수 있지만 값 포맷이 조직마다 다르고 공통 checksum도 없으므로, 기본값에서 `CUST-000123`, `EMP-2026-00123`, `STU-20260001` 같은 synthetic 포맷을 추정 탐지하지 않는다. 실사용 커버리지는 GitHub issue #55의 custom identifier profile에서 label별 pattern, validator, checksum을 명시하는 방식으로 확장해야 한다.
 
 ### 4.1 구조형 식별자 문맥 우선 보정
 
@@ -299,7 +298,6 @@ v0.2의 composite는 같은 입력 텍스트 내부에 한정한다.
 | PERSON + ADDRESS_FULL | 같은 문장 | P1 |
 | PERSON + BANK_ACCOUNT | 같은 문장 | P1 |
 | DOB + ADDRESS_UNIT + SCHOOL | 같은 문장 또는 짧은 field block | P1/P2 |
-| CUSTOMER_ID + PHONE/EMAIL | 같은 문장 | P1 |
 | MEDICAL_RECORD_NO + HOSPITAL | 같은 문장 | P1 |
 
 ### 9.2 Composite 처리 책임

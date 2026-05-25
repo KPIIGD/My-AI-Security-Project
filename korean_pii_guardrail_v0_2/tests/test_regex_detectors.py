@@ -347,7 +347,9 @@ def test_business_reg_no_detector_rejects_account_field_with_intermediate_bank_n
     ("detector", "raw", "entity_type", "expected_text"),
     [
         (PassportRegexDetector(), "passport M11234567.", EntityType.PASSPORT, "M11234567"),
-        (DriverLicenseRegexDetector(), "driver 12-34-123456-01.", EntityType.DRIVER_LICENSE, "12-34-123456-01"),
+        (PassportRegexDetector(), "\uc5ec\uad8c\ubc88\ud638 M11234567.", EntityType.PASSPORT, "M11234567"),
+        (DriverLicenseRegexDetector(), "driver license 12-34-123456-01.", EntityType.DRIVER_LICENSE, "12-34-123456-01"),
+        (DriverLicenseRegexDetector(), "\uc6b4\uc804\uba74\ud5c8\ubc88\ud638 12-34-123456-01.", EntityType.DRIVER_LICENSE, "12-34-123456-01"),
         (CorporateRegNoRegexDetector(), "corp 110111-1234567.", EntityType.CORPORATE_REG_NO, "110111-1234567"),
     ],
 )
@@ -365,11 +367,26 @@ def test_structured_identifier_detectors_emit_raw_spans(
 
 
 @pytest.mark.parametrize(
+    ("detector", "raw"),
+    [
+        (PassportRegexDetector(), "\uc81c\ud488\ucf54\ub4dc A12345678\uc740 \ub2e8\uc885\uc785\ub2c8\ub2e4."),
+        (PassportRegexDetector(), "\ud2f0\ucf13 \ubc88\ud638 B87654321 \ucc98\ub9ac \uc644\ub8cc."),
+        (PassportRegexDetector(), "product code C12345678 is discontinued."),
+        (DriverLicenseRegexDetector(), "\uc8fc\ubb38\ubc88\ud638 12-34-567890-12 \ucc98\ub9ac \uc644\ub8cc."),
+        (DriverLicenseRegexDetector(), "\ucc28\ub7c9 \ubd80\ud488 \ucf54\ub4dc 98-76-543210-98 \uc7ac\uace0 \ud655\uc778."),
+        (DriverLicenseRegexDetector(), "part code 98-76-543210-98 is in stock."),
+    ],
+)
+def test_broad_passport_and_driver_patterns_require_identifier_label(
+    detector: object,
+    raw: str,
+) -> None:
+    assert _detect(detector, raw) == []
+
+
+@pytest.mark.parametrize(
     ("raw", "entity_type", "expected_text"),
     [
-        ("\uace0\uac1d\ubc88\ud638 CUST-000123.", EntityType.CUSTOMER_ID, "CUST-000123"),
-        ("\uc0ac\ubc88 EMP-2026-00123.", EntityType.EMPLOYEE_ID, "EMP-2026-00123"),
-        ("\ud559\ubc88 STU-20260001.", EntityType.STUDENT_ID, "STU-20260001"),
         ("\ud658\uc790\ubc88\ud638 MR-2026-000123.", EntityType.MEDICAL_RECORD_NO, "MR-2026-000123"),
         ("\uc0dd\ub144\uc6d4\uc77c 1988\ub144 3\uc6d4 9\uc77c.", EntityType.DOB, "1988\ub144 3\uc6d4 9\uc77c"),
         ("device device-0001-A1B2C3.", EntityType.DEVICE_ID, "device-0001-A1B2C3"),
@@ -386,6 +403,50 @@ def test_labeled_identifier_detector_emits_value_only_raw_spans(
     assert len(spans) == 1
     _assert_span_contract(raw, spans[0], entity_type)
     assert spans[0].text == expected_text
+
+
+def test_labeled_identifier_detector_does_not_emit_identifier_label_boost() -> None:
+    raw = "\ud658\uc790\ubc88\ud638 MR-2026-000123."
+
+    spans = _detect(LabeledIdentifierRegexDetector(), raw)
+
+    assert len(spans) == 1
+    assert "context.boost.identifier_label" not in spans[0].reason_codes
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "\uace0\uac1d\ubc88\ud638 3\uac1c \ubc1c\uae09\ud588\uc2b5\ub2c8\ub2e4.",
+        "\ud68c\uc6d0\ubc88\ud638 3\uac1c \uc0dd\uc131\ud574\uc8fc\uc138\uc694.",
+        "\ud68c\uc6d0ID 3\uac1c \ub9cc\ub4e4\uc5b4\uc918.",
+        "\uc0ac\ubc88 3\uac1c \ud544\uc694\ud569\ub2c8\ub2e4.",
+        "\uc9c1\uc6d0\ubc88\ud638 3\uac1c \ud544\uc694\ud569\ub2c8\ub2e4.",
+        "\ud559\ubc88 3\uac1c \uc870\ud68c\ud588\uc2b5\ub2c8\ub2e4.",
+        "\ud559\uc0dd\ubc88\ud638 3\uac1c \ub4f1\ub85d\ud588\uc2b5\ub2c8\ub2e4.",
+    ],
+)
+def test_labeled_internal_identifier_detector_ignores_quantity_context(raw: str) -> None:
+    assert _detect(LabeledIdentifierRegexDetector(), raw) == []
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "\uace0\uac1d\ubc88\ud638 CUST-000123.",
+        "\uc0ac\ubc88 EMP-2026-00123.",
+        "\ud559\ubc88 STU-20260001.",
+        "\ud559\uc0dd\ubc88\ud638 STU-20260001.",
+        "\uace0\uac1d\ubc88\ud638 123456.",
+        "\ud68c\uc6d0ID user123.",
+        "\uc9c1\uc6d0\ubc88\ud638 2026-00123.",
+        "\ud559\uc0dd\ubc88\ud638 20260015.",
+    ],
+)
+def test_labeled_internal_identifier_detector_does_not_run_without_profile(
+    raw: str,
+) -> None:
+    assert _detect(LabeledIdentifierRegexDetector(), raw) == []
 
 
 def test_labeled_identifier_detector_requires_label() -> None:

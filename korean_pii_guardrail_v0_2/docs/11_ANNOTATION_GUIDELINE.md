@@ -58,9 +58,9 @@ Date: 2026-05-09
 | SCHOOL | 학교명 |
 | ORGANIZATION | 회사/기관/단체명 |
 | FAMILY_RELATION | 가족관계 표현 |
-| EMPLOYEE_ID | 사번 |
-| STUDENT_ID | 학번 |
-| CUSTOMER_ID | 고객번호/회원번호 |
+| EMPLOYEE_ID | 사번. production 기본 데이터셋에서는 제외하고 custom identifier profile 평가에서만 라벨링 |
+| STUDENT_ID | 학번. production 기본 데이터셋에서는 제외하고 custom identifier profile 평가에서만 라벨링 |
+| CUSTOMER_ID | 고객번호/회원번호. production 기본 데이터셋에서는 제외하고 custom identifier profile 평가에서만 라벨링 |
 
 ### 4.3 Security secrets
 

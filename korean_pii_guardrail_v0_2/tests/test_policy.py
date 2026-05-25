@@ -118,6 +118,26 @@ def test_p1_low_score_without_context_passes() -> None:
     assert decision.method is TransformationMethod.PASS
 
 
+def test_p1_labeled_identifier_context_masks_below_mask_threshold() -> None:
+    raw = "customer number CUST-000123"
+    span = _span(
+        raw,
+        "CUST-000123",
+        EntityType.CUSTOMER_ID,
+        RiskLevel.P1,
+        score=0.72,
+        reason_codes=(
+            "regex.customer_id.with_label",
+            "context.boost.identifier_label",
+        ),
+    )
+
+    decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.MASK
+    assert decision.method is TransformationMethod.LABEL_MASK
+
+
 def test_p2_and_p3_without_context_pass() -> None:
     raw = "OO고 42세"
     school = _span(raw, "OO고", EntityType.SCHOOL, RiskLevel.P2, score=0.88, sources=("dictionary",))

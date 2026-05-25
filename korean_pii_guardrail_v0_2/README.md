@@ -75,14 +75,15 @@ PIISpan.end    # raw text 기준 exclusive offset
 
 현재 상태: **v0.2 single-turn core 구현 및 5,000건 release gate 통과**.
 
-최신 기준은 `reports/release_gate_v0_2.json`이다.
+최신 기준은 2026-05-25에 재생성한 `reports/release_gate_v0_2.json`이다.
 
 | 항목 | 값 |
 |---|---:|
 | records processed | 5,000 |
 | overall precision / recall / F1 | 0.8803 / 0.9729 / 0.9243 |
-| actionable precision / recall / F1 | 0.9974 / 0.8776 / 0.9337 |
-| structured PII bucket F1 | 1.0000 |
+| actionable precision / recall / F1 | 0.9975 / 0.9036 / 0.9482 |
+| high-risk structured recall | 1.0000 |
+| actionable high-risk recall | 0.9647 |
 | raw PII logging count | 0 |
 | invalid offset count | 0 |
 | release gate status | pass |

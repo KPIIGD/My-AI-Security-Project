@@ -162,6 +162,9 @@ def test_pipeline_prefers_corporate_reg_no_in_explicit_corporate_context() -> No
         "주문번호 010-1234-5678 처리 완료.",
         "송장번호 123-45-67891 배송 추적.",
         "tracking no 110-123-456789 was generated.",
+        "\uc81c\ud488\ucf54\ub4dc A12345678\uc740 \ub2e8\uc885\uc785\ub2c8\ub2e4.",
+        "\ud2f0\ucf13 \ubc88\ud638 B87654321 \ucc98\ub9ac \uc644\ub8cc.",
+        "\uc8fc\ubb38\ubc88\ud638 12-34-567890-12 \ucc98\ub9ac \uc644\ub8cc.",
     ],
 )
 def test_pipeline_passes_order_like_numeric_identifiers(raw: str) -> None:
@@ -187,6 +190,54 @@ def test_pipeline_prefers_medical_record_no_over_business_reg_no_subspan() -> No
         for span in response.spans
     )
     assert not any(span.entity_type is EntityType.BUSINESS_REG_NO for span in response.spans)
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "\uace0\uac1d\ubc88\ud638 CUST-000123.",
+        "\uc0ac\ubc88 EMP-2026-00123.",
+        "\ud559\ubc88 STU-20260001.",
+        "\ud559\uc0dd\ubc88\ud638 STU-20260001.",
+        "\uace0\uac1d\ubc88\ud638 123456.",
+        "\ud68c\uc6d0ID user123.",
+        "\uc9c1\uc6d0\ubc88\ud638 2026-00123.",
+        "\ud559\uc0dd\ubc88\ud638 20260015.",
+    ],
+)
+def test_pipeline_passes_internal_identifiers_without_custom_profile(raw: str) -> None:
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text is not None
+    assert response.masked_text == raw
+    assert not any(
+        span.entity_type
+        in {EntityType.CUSTOMER_ID, EntityType.EMPLOYEE_ID, EntityType.STUDENT_ID}
+        for span in response.spans
+    )
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        "\uace0\uac1d\ubc88\ud638 3\uac1c \ubc1c\uae09\ud588\uc2b5\ub2c8\ub2e4.",
+        "\ud68c\uc6d0\ubc88\ud638 3\uac1c \uc0dd\uc131\ud574\uc8fc\uc138\uc694.",
+        "\ud68c\uc6d0ID 3\uac1c \ub9cc\ub4e4\uc5b4\uc918.",
+        "\uc0ac\ubc88 3\uac1c \ud544\uc694\ud569\ub2c8\ub2e4.",
+        "\uc9c1\uc6d0\ubc88\ud638 3\uac1c \ud544\uc694\ud569\ub2c8\ub2e4.",
+        "\ud559\ubc88 3\uac1c \uc870\ud68c\ud588\uc2b5\ub2c8\ub2e4.",
+        "\ud559\uc0dd\ubc88\ud638 3\uac1c \ub4f1\ub85d\ud588\uc2b5\ub2c8\ub2e4.",
+    ],
+)
+def test_pipeline_passes_labeled_internal_identifier_quantity_context(raw: str) -> None:
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw))
+
+    assert response.masked_text == raw
+    assert response.metrics.masked_span_count == 0
 
 
 def test_pipeline_blocks_api_key_secret() -> None:

@@ -15,7 +15,6 @@ field_labels:
   address_label: [주소, 배송지, 거주지, 수령지, 자택]
   account_label: [계좌, 계좌번호, 입금, 송금, 환불계좌, 이체, bank account, account no, account number, deposit account, refund account]
   organization_label: [소속, 근무, 재직, 대표, 회사, 기관, 업체]
-  id_label: [고객번호, 회원번호, 회원ID, 사번, 학번, ID]
   medical_label: [환자번호, 차트번호, 진료기록, 의무기록, 병원]
 honorifics_and_titles:
   person_suffixes: [님, 씨, 군, 양]
@@ -34,6 +33,8 @@ structured_identifier_contexts:
   medical_record_no_label: [환자번호, 환자 번호, 차트번호, 차트 번호, 진료기록번호, 진료 기록 번호, 의무기록번호, 의무 기록 번호, medical record no, medical record number, medical id, medical no, medical number, MRN]
   corporate_reg_no_label: [법인등록번호, 법인 등록 번호, 법인번호, 법인 번호, 등기번호, 등기 번호, 등기부번호, 등기부 번호, 등기 법인번호, 회사 등록번호, 법인 식별 번호, corporate registration no, corporate registration number, corporate reg no, corporate, corporate no, corporate number, corp, corp no, corp number, company registration no, company registration number]
   personal_reg_no_label: [주민등록번호, 주민 등록 번호, 주민번호, 주민 번호, 외국인등록번호, 외국인 등록 번호, 외국인번호, 외국인 번호, RRN, FRN, resident registration no, resident registration number, alien registration no, alien registration number]
+  passport_label: [여권번호, 여권 번호, passport, passport no, passport number]
+  driver_license_label: [운전면허번호, 운전 면허 번호, 면허번호, 면허 번호, driver license, driver license no, driver license number, driving license, driving license no, driving license number]
 cooccurrence:
   person_contact:
     entities: [PERSON_NAME, PHONE_MOBILE, PHONE_LANDLINE, EMAIL]

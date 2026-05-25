@@ -351,13 +351,23 @@ class PassportRegexDetector(BaseRegexDetector):
 
     def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
         for match in iter_restored_matches(preprocessed, self._pattern):
+            if not _is_passport_context(
+                preprocessed.raw_text,
+                match.start,
+                self.structured_context_terms,
+            ):
+                continue
             yield self._make_span(
                 preprocessed.raw_text,
                 match,
                 CandidateSpec(
                     EntityType.PASSPORT,
                     "PASSPORT",
-                    ("regex.passport", "regex.passport.pattern"),
+                    (
+                        "regex.passport",
+                        "regex.passport.pattern",
+                        "regex.passport.label_context",
+                    ),
                     self.detector_id,
                     (Source.REGEX.value,),
                 ),
@@ -370,13 +380,23 @@ class DriverLicenseRegexDetector(BaseRegexDetector):
 
     def _detect(self, preprocessed: PreprocessResult) -> Iterable[PIISpan]:
         for match in iter_restored_matches(preprocessed, self._pattern):
+            if not _is_driver_license_context(
+                preprocessed.raw_text,
+                match.start,
+                self.structured_context_terms,
+            ):
+                continue
             yield self._make_span(
                 preprocessed.raw_text,
                 match,
                 CandidateSpec(
                     EntityType.DRIVER_LICENSE,
                     "DRIVER_LICENSE",
-                    ("regex.driver_license", "regex.driver_license.pattern"),
+                    (
+                        "regex.driver_license",
+                        "regex.driver_license.pattern",
+                        "regex.driver_license.label_context",
+                    ),
                     self.detector_id,
                     (Source.REGEX.value,),
                 ),
@@ -403,12 +423,6 @@ class CorporateRegNoRegexDetector(BaseRegexDetector):
 
 
 _LABEL_SEPARATOR = r"\s*[:#-]?\s*"
-_CUSTOMER_LABELS = (
-    "(?:\uace0\uac1d\ubc88\ud638|\ud68c\uc6d0\ubc88\ud638|"
-    "\uace0\uac1dID|\ud68c\uc6d0ID|customer\\s*(?:id|no|number))"
-)
-_EMPLOYEE_LABELS = "(?:\uc0ac\ubc88|\uc9c1\uc6d0\ubc88\ud638|employee\\s*(?:id|no|number))"
-_STUDENT_LABELS = "(?:\ud559\ubc88|student\\s*(?:id|no|number))"
 _MEDICAL_LABELS = (
     "(?:\ud658\uc790\ubc88\ud638|\ucc28\ud2b8\ubc88\ud638|"
     "\uc9c4\ub8cc\uae30\ub85d\ubc88\ud638|\uc758\ubb34\uae30\ub85d\ubc88\ud638|"
@@ -426,36 +440,6 @@ _HANGUL_SYLLABLE_CLASS = f"{chr(0xAC00)}-{chr(0xD7A3)}"
 class LabeledIdentifierRegexDetector(BaseRegexDetector):
     detector_id = "regex.labeled_identifier"
     _rules = (
-        (
-            re.compile(_CUSTOMER_LABELS + _LABEL_SEPARATOR + r"(?P<value>CUST-\d{6})", re.IGNORECASE),
-            CandidateSpec(
-                EntityType.CUSTOMER_ID,
-                "CUSTOMER_ID_WITH_LABEL",
-                ("regex.customer_id", "regex.customer_id.with_label"),
-                "regex.customer_id",
-                (Source.REGEX.value,),
-            ),
-        ),
-        (
-            re.compile(_EMPLOYEE_LABELS + _LABEL_SEPARATOR + r"(?P<value>EMP-\d{4}-\d{5})", re.IGNORECASE),
-            CandidateSpec(
-                EntityType.EMPLOYEE_ID,
-                "EMPLOYEE_ID_WITH_LABEL",
-                ("regex.employee_id", "regex.employee_id.with_label"),
-                "regex.employee_id",
-                (Source.REGEX.value,),
-            ),
-        ),
-        (
-            re.compile(_STUDENT_LABELS + _LABEL_SEPARATOR + r"(?P<value>STU-\d{8})", re.IGNORECASE),
-            CandidateSpec(
-                EntityType.STUDENT_ID,
-                "STUDENT_ID_WITH_LABEL",
-                ("regex.student_id", "regex.student_id.with_label"),
-                "regex.student_id",
-                (Source.REGEX.value,),
-            ),
-        ),
         (
             re.compile(_MEDICAL_LABELS + _LABEL_SEPARATOR + r"(?P<value>MR-\d{4}-\d{6})", re.IGNORECASE),
             CandidateSpec(
@@ -630,6 +614,8 @@ _BUSINESS_REG_LABEL_GROUP = "business_reg_no_label"
 _MEDICAL_RECORD_LABEL_GROUP = "medical_record_no_label"
 _CORPORATE_REG_LABEL_GROUP = "corporate_reg_no_label"
 _PERSONAL_REG_LABEL_GROUP = "personal_reg_no_label"
+_PASSPORT_LABEL_GROUP = "passport_label"
+_DRIVER_LICENSE_LABEL_GROUP = "driver_license_label"
 _LABEL_TRAILER = r"\s*(?::|#|-|\uc740|\ub294|\uc774|\uac00)?\s*$"
 
 
@@ -724,6 +710,32 @@ def _is_personal_reg_no_context(
         prefix,
         structured_context_terms,
         _PERSONAL_REG_LABEL_GROUP,
+    )
+
+
+def _is_passport_context(
+    raw_text: str,
+    start: int,
+    structured_context_terms: Mapping[str, tuple[str, ...]],
+) -> bool:
+    prefix = raw_text[max(0, start - 64) : start]
+    return _matches_immediate_label_context(
+        prefix,
+        structured_context_terms,
+        _PASSPORT_LABEL_GROUP,
+    )
+
+
+def _is_driver_license_context(
+    raw_text: str,
+    start: int,
+    structured_context_terms: Mapping[str, tuple[str, ...]],
+) -> bool:
+    prefix = raw_text[max(0, start - 64) : start]
+    return _matches_immediate_label_context(
+        prefix,
+        structured_context_terms,
+        _DRIVER_LICENSE_LABEL_GROUP,
     )
 
 

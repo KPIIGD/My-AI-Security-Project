@@ -29,7 +29,7 @@
 
 ### 0.1 Guardrail release gate 피드백
 
-2026-05-24 기준 `reports/release_gate_v0_2.json`에서 release gate는 통과했다. 다만 real NER가 포함된 guardrail 통합 평가에서는 다음 후속 과제가 남았다.
+2026-05-25 기준 `reports/release_gate_v0_2.json`에서 release gate는 통과했다. 다만 real NER가 포함된 guardrail 통합 평가에서는 다음 후속 과제가 남았다.
 
 | 항목 | 최신 관찰 | NER 후속 과제 |
 |---|---|---|

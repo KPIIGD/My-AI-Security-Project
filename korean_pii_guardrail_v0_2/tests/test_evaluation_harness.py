@@ -671,6 +671,7 @@ def _release_gate_report(
     invalid_offset_count: int = 0,
     latency_p95: float = 50.0,
     match_type: str = "exact",
+    actual_action: Action = Action.MASK,
     ner_mode: str = "disabled",
 ) -> EvaluationReport:
     label = EvaluationLabel(
@@ -680,7 +681,11 @@ def _release_gate_report(
         risk_level=RiskLevel.P1,
         suffix="로",
     )
-    actual = _public(4, 17, EntityType.PHONE_MOBILE) if match_type != "miss" else None
+    actual = (
+        _public(4, 17, EntityType.PHONE_MOBILE, action=actual_action)
+        if match_type != "miss"
+        else None
+    )
     case_result = CaseResult(
         case_id="case-release",
         matches=(
@@ -735,6 +740,19 @@ def test_release_gate_core_pass_and_skipped_real_ner() -> None:
     assert checks["josa_boundary_accuracy"]["status"] == "pass"
     assert checks["deterministic_latency_p95_ms"]["status"] == "pass"
     assert checks["real_ner_latency_ms"]["status"] == "skipped"
+
+
+def test_release_gate_recall_requires_actionable_prediction() -> None:
+    payload = build_release_gate_report(
+        _release_gate_report(actual_action=Action.PASS)
+    ).to_dict()
+    checks = {check["name"]: check for check in payload["checks"]}
+
+    assert payload["overall_status"] == "fail"
+    assert checks["high_risk_structured_recall"]["status"] == "fail"
+    assert checks["high_risk_structured_recall"]["actual_value"] == 0.0
+    assert checks["phone_email_recall"]["status"] == "fail"
+    assert checks["phone_email_recall"]["actual_value"] == 0.0
 
 
 def test_release_gate_fails_when_raw_pii_logging_count_is_nonzero() -> None:
