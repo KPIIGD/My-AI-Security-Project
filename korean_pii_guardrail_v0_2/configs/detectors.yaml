@@ -16,6 +16,14 @@ regex_detectors:
     enabled: true
   regex.business_reg_no:
     enabled: true
+  regex.passport:
+    enabled: true
+  regex.driver_license:
+    enabled: true
+  regex.corporate_reg_no:
+    enabled: true
+  regex.labeled_identifier:
+    enabled: true
   regex.bank_account:
     enabled: true
   regex.secret:
@@ -23,9 +31,10 @@ regex_detectors:
 
 # Entity-level kill switches are applied after candidate generation, so they
 # cover regex, dictionary, and NER candidates consistently.
-# Disabling high-risk entities such as RRN, FRN, CREDIT_CARD, PHONE_*, EMAIL,
-# BANK_ACCOUNT, or API_KEY_SECRET can violate release gates and should require
-# an explicit security review.
+# Disabling high-risk entities such as API_KEY_SECRET, RRN, FRN, PASSPORT,
+# DRIVER_LICENSE, CREDIT_CARD, PHONE_*, EMAIL, BANK_ACCOUNT, BUSINESS_REG_NO,
+# CORPORATE_REG_NO, MEDICAL_RECORD_NO, or VEHICLE_REG_NO can violate release
+# gates and should require an explicit security review.
 entities:
   API_KEY_SECRET:
     enabled: true
@@ -33,11 +42,21 @@ entities:
     enabled: true
   FRN:
     enabled: true
+  PASSPORT:
+    enabled: true
+  DRIVER_LICENSE:
+    enabled: true
   CREDIT_CARD:
     enabled: true
   BUSINESS_REG_NO:
     enabled: true
+  CORPORATE_REG_NO:
+    enabled: true
   BANK_ACCOUNT:
+    enabled: true
+  MEDICAL_RECORD_NO:
+    enabled: true
+  VEHICLE_REG_NO:
     enabled: true
   PHONE_MOBILE:
     enabled: true
@@ -45,9 +64,13 @@ entities:
     enabled: true
   EMAIL:
     enabled: true
+  DOB:
+    enabled: true
   IP_ADDRESS:
     enabled: true
   MAC_ADDRESS:
+    enabled: true
+  DEVICE_ID:
     enabled: true
 
 # checksum modes:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import shutil
+import warnings
 from pathlib import Path
 
 import pytest
@@ -10,9 +11,13 @@ from pii_guardrail.enums import EntityType
 from pii_guardrail.pipeline import GuardrailPipeline
 from pii_guardrail.preprocess import preprocess_text
 from pii_guardrail.regex_detectors import (
+    CorporateRegNoRegexDetector,
     CreditCardRegexDetector,
+    DriverLicenseRegexDetector,
     EmailRegexDetector,
+    LabeledIdentifierRegexDetector,
     PhoneRegexDetector,
+    PassportRegexDetector,
     RRNRegexDetector,
 )
 from pii_guardrail.schema import GuardrailRequest
@@ -59,6 +64,46 @@ validators:
     assert policy.checksum_mode(EntityType.RRN) == "strict"
 
 
+def test_load_detector_policy_accepts_all_pipeline_regex_detector_ids(tmp_path: Path) -> None:
+    path = tmp_path / "detectors.yaml"
+    path.write_text(
+        """
+version: v0.2-single-turn
+regex_detectors:
+  regex.passport:
+    enabled: false
+  regex.driver_license:
+    enabled: false
+  regex.corporate_reg_no:
+    enabled: false
+  regex.labeled_identifier:
+    enabled: false
+""".strip(),
+        encoding="utf-8",
+    )
+
+    policy = load_detector_policy(path)
+
+    assert policy.regex_detector_enabled("regex.passport") is False
+    assert policy.regex_detector_enabled("regex.driver_license") is False
+    assert policy.regex_detector_enabled("regex.corporate_reg_no") is False
+    assert policy.regex_detector_enabled("regex.labeled_identifier") is False
+
+
+def test_default_detector_config_loads_without_warnings() -> None:
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        policy = load_detector_policy(PROJECT_ROOT / "configs" / "detectors.yaml")
+
+    assert caught == []
+    assert policy.regex_detector_enabled("regex.passport") is True
+    assert policy.regex_detector_enabled("regex.driver_license") is True
+    assert policy.regex_detector_enabled("regex.corporate_reg_no") is True
+    assert policy.regex_detector_enabled("regex.labeled_identifier") is True
+    assert policy.entity_enabled(EntityType.PASSPORT) is True
+    assert policy.entity_enabled(EntityType.DRIVER_LICENSE) is True
+
+
 def test_load_detector_policy_warns_when_high_risk_entity_is_disabled(tmp_path: Path) -> None:
     path = tmp_path / "detectors.yaml"
     path.write_text(
@@ -75,6 +120,37 @@ entities:
         policy = load_detector_policy(path)
 
     assert policy.entity_enabled(EntityType.RRN) is False
+
+
+@pytest.mark.parametrize(
+    "entity_type",
+    [
+        EntityType.PASSPORT,
+        EntityType.DRIVER_LICENSE,
+        EntityType.CORPORATE_REG_NO,
+        EntityType.MEDICAL_RECORD_NO,
+        EntityType.VEHICLE_REG_NO,
+    ],
+)
+def test_load_detector_policy_warns_when_structured_high_risk_entity_is_disabled(
+    tmp_path: Path,
+    entity_type: EntityType,
+) -> None:
+    path = tmp_path / "detectors.yaml"
+    path.write_text(
+        f"""
+version: v0.2-single-turn
+entities:
+  {entity_type.value}:
+    enabled: false
+""".strip(),
+        encoding="utf-8",
+    )
+
+    with pytest.warns(RuntimeWarning, match=f"high-risk entity {entity_type.value}"):
+        policy = load_detector_policy(path)
+
+    assert policy.entity_enabled(entity_type) is False
 
 
 def test_load_detector_policy_warns_for_unknown_or_malformed_config(tmp_path: Path) -> None:
@@ -129,6 +205,24 @@ def test_regex_detector_policy_can_disable_detector_id() -> None:
     detector = EmailRegexDetector(detector_policy=policy)
 
     assert _detect(detector, "email test@example.com") == []
+
+
+@pytest.mark.parametrize(
+    ("detector", "raw"),
+    [
+        (PassportRegexDetector, "passport M11234567."),
+        (DriverLicenseRegexDetector, "driver license 12-34-123456-01."),
+        (CorporateRegNoRegexDetector, "corp 110111-1234567."),
+        (LabeledIdentifierRegexDetector, "\ud658\uc790\ubc88\ud638 MR-2026-000123."),
+    ],
+)
+def test_regex_detector_policy_can_disable_new_pipeline_detector_ids(
+    detector: type,
+    raw: str,
+) -> None:
+    policy = DetectorPolicy(regex_detectors_enabled={detector.detector_id: False})
+
+    assert _detect(detector(detector_policy=policy), raw) == []
 
 
 def test_entity_policy_filters_detector_output_by_entity_type() -> None:

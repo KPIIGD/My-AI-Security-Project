@@ -81,9 +81,9 @@ PIISpan.end    # raw text 기준 exclusive offset
 |---|---:|
 | records processed | 5,000 |
 | overall precision / recall / F1 | 0.8803 / 0.9729 / 0.9243 |
-| actionable precision / recall / F1 | 0.9975 / 0.9036 / 0.9482 |
+| actionable precision / recall / F1 | 0.9975 / 0.8991 / 0.9457 |
 | high-risk structured recall | 1.0000 |
-| actionable high-risk recall | 0.9647 |
+| actionable high-risk recall | 0.9645 |
 | raw PII logging count | 0 |
 | invalid offset count | 0 |
 | release gate status | pass |
