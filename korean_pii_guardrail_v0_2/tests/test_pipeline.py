@@ -129,11 +129,24 @@ def test_pipeline_masks_email() -> None:
     assert any(span.entity_type is EntityType.EMAIL for span in response.spans)
 
 
-def test_pipeline_label_masks_rrn() -> None:
+def test_pipeline_full_redacts_rrn_under_strict() -> None:
+    """프로덕션 기본 strict profile: RRN 은 [REDACTED] 로 타입 신호까지 제거."""
     raw = "주민번호는 900101-1234568 입니다."
     pipeline = GuardrailPipeline()
 
     response = pipeline.process(_request(raw))
+
+    assert response.masked_text is not None
+    assert "900101-1234568" not in response.masked_text
+    assert "[REDACTED]" in response.masked_text
+
+
+def test_pipeline_label_masks_rrn_under_analysis_profile() -> None:
+    """opt-in analysis profile: RRN 이 [RRN_1] placeholder 로 추적된다."""
+    raw = "주민번호는 900101-1234568 입니다."
+    pipeline = GuardrailPipeline()
+
+    response = pipeline.process(_request(raw, profile="analysis"))
 
     assert response.masked_text is not None
     assert "900101-1234568" not in response.masked_text

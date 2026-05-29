@@ -47,14 +47,16 @@ def test_policy_config_loads_m7_mvp_scope() -> None:
     config = load_policy_config()
     thresholds = load_risk_action_thresholds()
 
-    assert config.profiles == frozenset({"strict"})
+    assert config.profiles == frozenset({"strict", "analysis"})
     assert set(config.output_targets) == {
         OutputTarget.LLM_INPUT,
         OutputTarget.EXTERNAL_OUTPUT,
         OutputTarget.AUDIT_LOG,
     }
     assert config.output_targets[OutputTarget.AUDIT_LOG].default_method is TransformationMethod.HMAC_HASH
-    assert config.entity_overrides[EntityType.RRN]["strict"] is TransformationMethod.LABEL_MASK
+    # RRN: strict(프로덕션 기본)는 가장 보수적인 full_redact, analysis(opt-in)만 label_mask
+    assert config.entity_overrides[EntityType.RRN]["strict"] is TransformationMethod.FULL_REDACT
+    assert config.entity_overrides[EntityType.RRN]["analysis"] is TransformationMethod.LABEL_MASK
     assert config.entity_overrides[EntityType.FRN]["strict"] is TransformationMethod.FULL_REDACT
     assert thresholds.p1_mask_min_score == 0.75
 
@@ -90,11 +92,23 @@ def test_p0_structured_identifier_uses_full_redact_mask() -> None:
     assert decision.method is TransformationMethod.FULL_REDACT
 
 
-def test_rrn_uses_label_mask_override() -> None:
+def test_rrn_strict_profile_uses_full_redact() -> None:
+    """프로덕션 기본 strict: RRN 은 존재 사실까지 숨기도록 full_redact."""
     raw = "주민번호 900101-1234568"
     span = _span(raw, "900101-1234568", EntityType.RRN, RiskLevel.P0, score=0.98)
 
     decision = PolicyRouter().select(span, _request(raw))
+
+    assert decision.action is Action.MASK
+    assert decision.method is TransformationMethod.FULL_REDACT
+
+
+def test_rrn_analysis_profile_uses_label_mask_override() -> None:
+    """opt-in analysis profile 에서만 RRN label_mask([RRN_1]) 추적 허용."""
+    raw = "주민번호 900101-1234568"
+    span = _span(raw, "900101-1234568", EntityType.RRN, RiskLevel.P0, score=0.98)
+
+    decision = PolicyRouter().select(span, _request(raw, profile="analysis"))
 
     assert decision.action is Action.MASK
     assert decision.method is TransformationMethod.LABEL_MASK

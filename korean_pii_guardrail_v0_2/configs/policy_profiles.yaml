@@ -2,8 +2,17 @@ version: v0.2-single-turn
 mvp_scope: llm_gateway
 profiles:
   strict:
-    description: LLM Gateway MVP 안전 우선 정책
+    description: LLM Gateway MVP 안전 우선 정책 (llm_input / external_output 기본값)
     p0_default: block_or_full_redact
+    p1_default: label_mask
+    p2_default: context_judge
+    p3_default: pass_unless_composite
+  analysis:
+    # 내부 평가·디버그·controlled analysis 전용 (opt-in). RRN 등 P0 고유식별자를
+    # label_mask([RRN_1])로 노출해 placeholder 추적/리포트를 가능하게 한다.
+    # 외부 응답(external_output)이나 프로덕션 LLM 입력에는 사용 금지 — strict 를 쓸 것.
+    description: 내부 평가/디버그 controlled-analysis 전용 opt-in 정책
+    p0_default: label_mask_or_full_redact
     p1_default: label_mask
     p2_default: context_judge
     p3_default: pass_unless_composite
@@ -20,7 +29,10 @@ entity_overrides:
     strict: block
     external_output: block
   RRN:
-    strict: label_mask
+    # strict(프로덕션 기본): 가장 보수적인 full_redact([REDACTED]) — RRN 존재 사실까지 비노출.
+    # analysis(opt-in): label_mask([RRN_1]) — 내부 평가/리포트에서 placeholder 추적용.
+    strict: full_redact
+    analysis: label_mask
   FRN:
     strict: full_redact
 placeholder:

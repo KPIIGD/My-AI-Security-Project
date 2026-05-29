@@ -6,8 +6,10 @@ from pii_guardrail.masker import HashProvider, HmacHashProvider, MaskingError, S
 from pii_guardrail.schema import GuardrailRequest, InvalidOffsetError, PIISpan
 
 
-def _request(raw: str, *, target: OutputTarget = OutputTarget.LLM_INPUT) -> GuardrailRequest:
-    return GuardrailRequest(text=raw, output_target=target)
+def _request(
+    raw: str, *, target: OutputTarget = OutputTarget.LLM_INPUT, profile: str = "strict"
+) -> GuardrailRequest:
+    return GuardrailRequest(text=raw, output_target=target, policy_profile=profile)
 
 
 def _span(
@@ -137,11 +139,22 @@ def test_p0_full_redact_uses_redacted_token() -> None:
     assert masked == "외국인등록번호 [REDACTED]"
 
 
-def test_rrn_uses_label_mask_token() -> None:
+def test_rrn_strict_profile_full_redacts() -> None:
+    """프로덕션 기본 strict: RRN 도 [REDACTED] — 타입 신호까지 제거."""
     raw = "주민번호 900101-1234568"
     span = _span(raw, "900101-1234568", EntityType.RRN, RiskLevel.P0, score=0.98)
 
     masked = SuffixPreservingMasker().apply(raw, [span], _request(raw))
+
+    assert masked == "주민번호 [REDACTED]"
+
+
+def test_rrn_analysis_profile_uses_label_mask_token() -> None:
+    """opt-in analysis profile 에서만 RRN 이 [RRN_1] placeholder 로 추적된다."""
+    raw = "주민번호 900101-1234568"
+    span = _span(raw, "900101-1234568", EntityType.RRN, RiskLevel.P0, score=0.98)
+
+    masked = SuffixPreservingMasker().apply(raw, [span], _request(raw, profile="analysis"))
 
     assert masked == "주민번호 [RRN_1]"
 

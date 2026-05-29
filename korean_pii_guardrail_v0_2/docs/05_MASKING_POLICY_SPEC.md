@@ -70,7 +70,7 @@ MVP action은 다음 네 가지로 제한한다.
 | Entity | Risk | MVP 기본 처리 |
 |---|---|---|
 | API_KEY_SECRET | P0 | `block` |
-| RRN | P0 | strict 기본 `label_mask` (placeholder `[RRN_1]`) — 마스킹된 타입이 보이도록. `full_redact`/외부 출력 `block` 도 설정 가능 |
+| RRN | P0 | strict(프로덕션 기본) `full_redact`([REDACTED]) — 가장 보수적. `analysis` opt-in profile에서만 `label_mask`([RRN_1]) (§6-1 참조) |
 | FRN, PASSPORT, DRIVER_LICENSE | P0 | `mask` 또는 `full_redact`; 외부 출력 strict 조건에서는 `block` 가능 |
 | CREDIT_CARD | P0/P1 | `mask` |
 | BANK_ACCOUNT | P1 | context가 있으면 `mask` |
@@ -82,6 +82,15 @@ MVP action은 다음 네 가지로 제한한다.
 | DOB, AGE, GENDER, FAMILY_RELATION | P2/P3 | composite가 있으면 `mask`, 단독이면 `pass` 가능 |
 | CUSTOMER_ID, EMPLOYEE_ID, STUDENT_ID, MEDICAL_RECORD_NO | P1/P2 | context가 있으면 `mask` |
 | HEALTH_INFO | P1/P2 | domain policy가 정해질 때까지 strict에서는 안전 우선 `mask` |
+
+### 6-1. RRN `label_mask` 의 profile 분리 근거 (threat model)
+
+RRN(주민등록번호)은 P0 고유식별자다. placeholder가 `[RRN_1]`이면 원문 복원은 불가능하지만 **"이 텍스트에 주민번호가 있었다"는 사실 + 동일 RRN의 반복 참조 패턴**이라는 잔여 신호가 남는다. 이 잔여 신호는 다음 두 맥락에서 위험도가 다르다.
+
+- **외부 응답(`external_output`) / 프로덕션 LLM 입력(`llm_input`)**: "RRN 존재 사실" 자체가 민감 정보일 수 있고(예: 특정인이 주민번호를 제출했다는 사실), 신뢰 경계를 벗어난다. → strict 기본값을 가장 보수적인 `full_redact`([REDACTED])로 두어 타입 신호까지 제거한다. FRN/PASSPORT/DRIVER_LICENSE 등 다른 P0 고유식별자도 동일하게 `full_redact`를 유지하므로 "어디까지 label token을 열지" 기준이 흐려지지 않는다.
+- **내부 평가·디버그·controlled analysis(`analysis` profile, opt-in)**: 평가 리포트/오류분석에서 어떤 entity가 어디서 잡혔는지 placeholder 단위로 추적해야 한다. 이 경계는 신뢰된 내부 환경이고 raw 값은 여전히 노출되지 않으므로(`[RRN_1]`은 복원 불가), 잔여 타입 신호를 허용 가능한 위험으로 판단한다.
+
+따라서 RRN `label_mask`는 **명시적 opt-in profile에서만** 활성화되며, 프로덕션/외부 경계의 기본값은 `full_redact`다. 새 P0 고유식별자에 label token을 열려면 이 절에 동일한 근거를 명시해야 한다.
 
 ## 7. Policy selection 의사코드
 
