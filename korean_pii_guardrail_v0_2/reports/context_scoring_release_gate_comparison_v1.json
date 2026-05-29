@@ -1,0 +1,126 @@
+{
+  "approved_delta_count": 0,
+  "approved_deltas": [],
+  "checks": [
+    {
+      "after": 0,
+      "before": 0,
+      "delta": 0,
+      "name": "raw_pii_logging_count",
+      "status": "pass"
+    },
+    {
+      "after": 0,
+      "before": 0,
+      "delta": 0,
+      "name": "invalid_offset_count",
+      "status": "pass"
+    },
+    {
+      "after": 0.9645,
+      "before": 0.9645,
+      "delta": 0.0,
+      "name": "high_risk_recall",
+      "status": "pass"
+    },
+    {
+      "after": 0.9645,
+      "before": 0.9645,
+      "delta": 0.0,
+      "name": "actionable_high_risk_recall",
+      "status": "pass"
+    },
+    {
+      "after": 1.0,
+      "before": 1.0,
+      "delta": 0.0,
+      "name": "phone_email_actionable_recall",
+      "status": "pass"
+    },
+    {
+      "after": 1.0,
+      "before": 1.0,
+      "delta": 0.0,
+      "name": "bank_account_actionable_recall",
+      "status": "pass"
+    },
+    {
+      "after": 500,
+      "before": 500,
+      "delta": 0,
+      "name": "person_name_hard_negative_candidate_fp",
+      "status": "pass"
+    },
+    {
+      "after": 0,
+      "before": 0,
+      "delta": 0,
+      "name": "hard_negative_actionable_fp_total",
+      "status": "pass"
+    },
+    {
+      "after": 0.9975,
+      "before": 0.9975,
+      "delta": 0.0,
+      "name": "actionable_overall_precision",
+      "status": "pass"
+    },
+    {
+      "after": 225.5849,
+      "before": 368.1189,
+      "delta": -142.534,
+      "name": "deterministic_latency_p95_ms",
+      "status": "pass"
+    },
+    {
+      "after": 0,
+      "before": 0,
+      "delta": 0,
+      "name": "report_raw_text_leak_count",
+      "status": "pass"
+    },
+    {
+      "after": "pass",
+      "before": "pass",
+      "delta": "n/a",
+      "name": "after_audit_safety_status",
+      "status": "pass"
+    },
+    {
+      "after": "pass",
+      "before": "pass",
+      "delta": "n/a",
+      "name": "release_gate_overall_status",
+      "status": "pass"
+    }
+  ],
+  "config_change_decision": "no_op_no_approved_deltas",
+  "config_snapshot": {
+    "current_sha256": "sha256:f049c1b199fa127b4e03135cf4e70e83d69000dfb2c3a7e2ae998a6bc8f761f0",
+    "path": "configs/scoring.yaml",
+    "previous_sha256": "sha256:f049c1b199fa127b4e03135cf4e70e83d69000dfb2c3a7e2ae998a6bc8f761f0",
+    "previous_snapshot_path": "reports/context_scoring_previous_config_phase5_v1.yaml",
+    "unchanged": true
+  },
+  "config_update_applied": false,
+  "paired_docs_update_reason": "no approved scoring deltas; scoring/context docs remain unchanged",
+  "paired_docs_update_required": false,
+  "phase": "Execution Phase 5. Reviewed Config Change",
+  "public_corpus_used_for_score_tuning": false,
+  "release_gate_inputs": {
+    "after_audit_safety_report": "reports/audit_safety_release_gate_m4_phase5_after_v1.json",
+    "after_report": "reports/release_gate_m4_phase5_after_v1.json",
+    "before_report": "reports/release_gate_v0_2.json"
+  },
+  "release_gate_summary": {
+    "after_status": "pass",
+    "before_status": "pass",
+    "records_processed_after": 5000,
+    "records_processed_before": 5000
+  },
+  "report_type": "ContextReviewedConfigReleaseGateComparison",
+  "runtime_scoring_behavior_changed": false,
+  "score_delta_changed": false,
+  "status": "pass",
+  "version": "v0.2-single-turn"
+}

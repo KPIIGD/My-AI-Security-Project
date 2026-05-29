@@ -1,0 +1,99 @@
+version: v0.2-single-turn
+score_bands:
+  high_confidence: 0.90
+  safety_mask: 0.75
+  context_judge: 0.55
+combination:
+  same_span_strategy: max
+  preserve_sources: true
+  bayesian_enabled: false
+  clamp_min: 0.0
+  clamp_max: 1.0
+regex_base_scores:
+  API_KEY_SECRET: 0.99
+  RRN: 0.98
+  RRN_PATTERN_ONLY: 0.70
+  FRN: 0.98
+  FRN_PATTERN_ONLY: 0.70
+  PASSPORT: 0.95
+  DRIVER_LICENSE: 0.95
+  CREDIT_CARD_VALID: 0.96
+  CREDIT_CARD_PATTERN_ONLY: 0.45
+  EMAIL: 0.92
+  PHONE_MOBILE: 0.94
+  PHONE_LANDLINE: 0.90
+  BUSINESS_REG_NO_VALID: 0.92
+  BUSINESS_REG_NO_PATTERN_ONLY: 0.75
+  CORPORATE_REG_NO: 0.90
+  BANK_ACCOUNT_PATTERN_ONLY: 0.42
+  IP_ADDRESS_PUBLIC: 0.72
+  IP_ADDRESS_PRIVATE: 0.45
+  MAC_ADDRESS: 0.70
+  MEDICAL_RECORD_NO_WITH_LABEL: 0.82
+  DOB_WITH_LABEL: 0.78
+  DEVICE_ID_WITH_LABEL: 0.72
+  VEHICLE_REG_NO_WITH_LABEL: 0.78
+dictionary_base_scores:
+  surname: 0.25
+  given_name_candidate: 0.35
+  full_name_pattern: 0.55
+  relation_term: 0.40
+  address_si_gu_dong: 0.45
+  road_name: 0.65
+  apartment_unit: 0.70
+  organization_suffix: 0.50
+  school_suffix: 0.55
+  hospital_suffix: 0.60
+ner_v3:
+  direct_entities: [PERSON_NAME, ADDRESS_FULL, ORGANIZATION]
+  temperature: 1.0
+  calibration_status: uncalibrated_threshold_only
+  emit_low_confidence_candidates: true
+  per_entity_thresholds:
+    PERSON_NAME: 0.85
+    ADDRESS_FULL: 0.80
+    ORGANIZATION: 0.75
+context_boosts:
+  field_label_name: 0.25
+  field_label_phone: 0.15
+  field_label_address: 0.20
+  field_label_account: 0.30
+  bank_cooccur: 0.25
+  title_after_name: 0.15
+  phone_cooccur_for_person: 0.20
+  address_cooccur_for_person: 0.15
+  full_address_detail: 0.20
+  organization_affiliation_context: 0.25
+  medical_label: 0.20
+context_penalties:
+  example_context: -0.15
+  example_keyword_for_person: -0.35
+  weather_context_for_person: -0.35
+  public_phone_context: -0.25
+  code_or_log_context: -0.20
+  organization_not_person: -0.25
+  abstract_value_context_for_person: -0.20
+  private_ip: -0.25
+risk_action_thresholds:
+  P0:
+    mask_min_score: 0.55
+    structured_like_min_score: 0.55
+  P1:
+    mask_min_score: 0.75
+    context_judge_min_score: 0.55
+  P2:
+    mask_min_score: 0.90
+    context_judge_min_score: 0.75
+  P3:
+    composite_mask_min_score: 0.90
+single_turn_composite:
+  enabled: true
+  same_sentence_only: true
+  upgrades:
+    PERSON_NAME+PHONE_MOBILE: P1
+    PERSON_NAME+PHONE_LANDLINE: P1
+    PERSON_NAME+EMAIL: P1
+    PERSON_NAME+ADDRESS_FULL: P1
+    PERSON_NAME+BANK_ACCOUNT: P1
+    MEDICAL_RECORD_NO+HOSPITAL: P1
+    DOB+ADDRESS_UNIT+SCHOOL: P1
