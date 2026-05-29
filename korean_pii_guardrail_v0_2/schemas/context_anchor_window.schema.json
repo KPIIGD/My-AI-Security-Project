@@ -1,0 +1,262 @@
+{
+  "title": "ContextAnchorWindowV1",
+  "description": "Raw-value-free M4 anchor context window row. Stores anchor shape, source metadata, labels, and surrounding n-grams only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "anchor_entity",
+    "anchor_shape",
+    "anchor_source",
+    "label",
+    "source_domain",
+    "material_class",
+    "distance_bucket",
+    "left_ngrams",
+    "right_ngrams",
+    "contains_raw_pii",
+    "raw_value_logged",
+    "raw_url_logged",
+    "page_body_stored",
+    "candidate_value_stored",
+    "evidence_role"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "context_anchor_windows_v1"
+    },
+    "anchor_entity": {
+      "type": "string",
+      "enum": [
+        "PERSON_NAME",
+        "PHONE_MOBILE",
+        "PHONE_LANDLINE",
+        "EMAIL",
+        "ADDRESS_FULL",
+        "ADDRESS_UNIT",
+        "BANK_ACCOUNT",
+        "RRN",
+        "FRN",
+        "PASSPORT",
+        "DRIVER_LICENSE",
+        "BUSINESS_REG_NO",
+        "CORPORATE_REG_NO"
+      ]
+    },
+    "anchor_shape": {
+      "type": "string",
+      "enum": [
+        "korean_name_2_syllable",
+        "korean_name_3_syllable",
+        "korean_name_4_syllable",
+        "korean_name_like_2_syllable",
+        "korean_name_like_3_syllable",
+        "korean_name_like_4_syllable",
+        "mobile_phone_shape",
+        "landline_phone_shape",
+        "email_shape",
+        "road_address_shape",
+        "lot_address_shape",
+        "address_unit_shape",
+        "bank_account_shape",
+        "rrn_shape",
+        "frn_shape",
+        "passport_shape",
+        "driver_license_shape",
+        "business_registration_shape",
+        "corporate_registration_shape"
+      ]
+    },
+    "anchor_source": {
+      "type": "string",
+      "enum": [
+        "regex",
+        "dictionary",
+        "ner",
+        "dictionary_or_ner",
+        "heuristic_shape",
+        "synthetic_template"
+      ]
+    },
+    "label": {
+      "type": "string",
+      "enum": [
+        "true_pii",
+        "non_pii",
+        "unknown"
+      ]
+    },
+    "source_domain": {
+      "type": "string",
+      "enum": [
+        "customer_support",
+        "ecommerce",
+        "healthcare",
+        "finance",
+        "education",
+        "public_services",
+        "enterprise_internal",
+        "developer_docs",
+        "general_web",
+        "sample_forms"
+      ]
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "customer_support_help",
+        "ecommerce_help",
+        "healthcare_guide",
+        "finance_guide",
+        "education_application",
+        "institution_application",
+        "enterprise_internal",
+        "developer_docs",
+        "privacy_policy",
+        "synthetic_safe_template"
+      ]
+    },
+    "material_class": {
+      "type": "string",
+      "enum": [
+        "realistic_input_like",
+        "general_web_or_explanatory",
+        "example_or_sample"
+      ]
+    },
+    "source_id_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "distance_bucket": {
+      "type": "string",
+      "enum": [
+        "within_1_token",
+        "within_2_tokens",
+        "within_5_tokens"
+      ]
+    },
+    "left_ngrams": {
+      "$ref": "#/$defs/ngram_windows"
+    },
+    "right_ngrams": {
+      "$ref": "#/$defs/ngram_windows"
+    },
+    "contains_raw_pii": {
+      "type": "boolean",
+      "const": false
+    },
+    "raw_value_logged": {
+      "type": "boolean",
+      "const": false
+    },
+    "raw_url_logged": {
+      "type": "boolean",
+      "const": false
+    },
+    "page_body_stored": {
+      "type": "boolean",
+      "const": false
+    },
+    "candidate_value_stored": {
+      "type": "boolean",
+      "const": false
+    },
+    "evidence_role": {
+      "type": "string",
+      "const": "anchor_context_only_not_score_tuning"
+    }
+  },
+  "$defs": {
+    "ngram_windows": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "within_1_token",
+        "within_2_tokens",
+        "within_5_tokens"
+      ],
+      "properties": {
+        "within_1_token": {
+          "$ref": "#/$defs/ngram_bucket"
+        },
+        "within_2_tokens": {
+          "$ref": "#/$defs/ngram_bucket"
+        },
+        "within_5_tokens": {
+          "$ref": "#/$defs/ngram_bucket"
+        }
+      }
+    },
+    "ngram_bucket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unigrams",
+        "bigrams",
+        "trigrams"
+      ],
+      "properties": {
+        "unigrams": {
+          "$ref": "#/$defs/safe_ngram_list"
+        },
+        "bigrams": {
+          "$ref": "#/$defs/safe_ngram_list"
+        },
+        "trigrams": {
+          "$ref": "#/$defs/safe_ngram_list"
+        }
+      }
+    },
+    "safe_ngram_list": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "$ref": "#/$defs/safe_context_ngram"
+      },
+      "uniqueItems": true
+    },
+    "safe_context_ngram": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[^\\r\\n\\t]+$",
+      "not": {
+        "anyOf": [
+          {
+            "pattern": "[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}"
+          },
+          {
+            "pattern": "[0-9]{6}-[0-9]{7}"
+          },
+          {
+            "pattern": "[0-9]{2,6}-[0-9]{2,6}-[0-9]{2,6}"
+          },
+          {
+            "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+          },
+          {
+            "pattern": "https?://"
+          }
+        ]
+      }
+    }
+  },
+  "not": {
+    "anyOf": [
+      { "required": ["anchor_value"] },
+      { "required": ["candidate_value"] },
+      { "required": ["raw_value"] },
+      { "required": ["text"] },
+      { "required": ["raw_text"] },
+      { "required": ["span_text"] },
+      { "required": ["page_body"] },
+      { "required": ["document_text"] },
+      { "required": ["html"] },
+      { "required": ["html_text"] },
+      { "required": ["url"] },
+      { "required": ["raw_url"] }
+    ]
+  }
+}
