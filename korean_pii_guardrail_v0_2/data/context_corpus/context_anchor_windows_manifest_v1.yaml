@@ -1,0 +1,129 @@
+{
+  "anchor_input_exists": false,
+  "anchor_input_path": "data/context_corpus/context_anchor_windows_v1.jsonl",
+  "context_rule_changed": false,
+  "data_quality_gate": {
+    "checks": {
+      "anchor_input_exists": false,
+      "has_anchor_windows": false,
+      "invalid_anchor_row_count_zero": true,
+      "invalid_offset_count_zero": true,
+      "max_duplicate_anchor_window_ratio": true,
+      "max_example_or_sample_document_ratio": true,
+      "max_general_web_or_explanatory_ratio": true,
+      "max_single_domain_ratio_by_core_entity": true,
+      "max_unknown_label_ratio_when_labels_present": true,
+      "min_domain_count_by_core_entity": false,
+      "min_realistic_input_like_ratio": false,
+      "raw_pii_leak_count_zero": true,
+      "raw_url_logged_count_zero": true,
+      "raw_value_logged_count_zero": true
+    },
+    "failure_verdicts": [
+      "needs_anchor_corpus",
+      "needs_more_data",
+      "needs_material_mix"
+    ],
+    "pass_criteria": {
+      "invalid_offset_count": 0,
+      "max_duplicate_anchor_window_ratio": 0.05,
+      "max_example_or_sample_document_ratio": 0.15,
+      "max_general_web_or_explanatory_ratio": 0.3,
+      "max_single_domain_ratio": 0.35,
+      "max_unknown_label_ratio_when_labels_present": 0.15,
+      "min_domain_count_by_core_entity": 5,
+      "min_realistic_input_like_ratio": 0.7,
+      "raw_pii_leak_count": 0
+    },
+    "score_tuning_allowed_by_this_phase": false,
+    "status": "fail"
+  },
+  "generated_at": "2026-05-29T18:49:04.116889+00:00",
+  "manifest_type": "ContextAnchorWindowsManifest",
+  "measurements": {
+    "by_anchor_entity": {},
+    "by_label": {
+      "non_pii": 0,
+      "true_pii": 0,
+      "unknown": 0
+    },
+    "by_material_class": {
+      "example_or_sample": 0,
+      "general_web_or_explanatory": 0,
+      "realistic_input_like": 0
+    },
+    "by_source_domain": {},
+    "domain_count_by_core_entity": {
+      "ADDRESS": 0,
+      "BANK_ACCOUNT": 0,
+      "EMAIL": 0,
+      "PERSON_NAME": 0,
+      "PHONE": 0,
+      "REGISTRATION_IDENTIFIER": 0
+    },
+    "domain_counts_by_core_entity": {
+      "ADDRESS": {},
+      "BANK_ACCOUNT": {},
+      "EMAIL": {},
+      "PERSON_NAME": {},
+      "PHONE": {},
+      "REGISTRATION_IDENTIFIER": {}
+    },
+    "domain_ratio_gate_by_core_entity": {
+      "ADDRESS": false,
+      "BANK_ACCOUNT": false,
+      "EMAIL": false,
+      "PERSON_NAME": false,
+      "PHONE": false,
+      "REGISTRATION_IDENTIFIER": false
+    },
+    "duplicate_anchor_window_count": 0,
+    "duplicate_anchor_window_ratio": 0.0,
+    "invalid_anchor_row_count": 0,
+    "invalid_offset_count": 0,
+    "label_counts_by_core_entity": {
+      "ADDRESS": {},
+      "BANK_ACCOUNT": {},
+      "EMAIL": {},
+      "PERSON_NAME": {},
+      "PHONE": {},
+      "REGISTRATION_IDENTIFIER": {}
+    },
+    "material_ratios": {
+      "example_or_sample": 0.0,
+      "general_web_or_explanatory": 0.0,
+      "realistic_input_like": 0.0
+    },
+    "max_single_domain_ratio_by_core_entity": {
+      "ADDRESS": 0.0,
+      "BANK_ACCOUNT": 0.0,
+      "EMAIL": 0.0,
+      "PERSON_NAME": 0.0,
+      "PHONE": 0.0,
+      "REGISTRATION_IDENTIFIER": 0.0
+    },
+    "offsets_stored": false,
+    "total_anchor_windows": 0,
+    "unknown_label_ratio": 0.0
+  },
+  "public_corpus_used_for_score_tuning": false,
+  "raw_free_scan": {
+    "candidate_value_stored": false,
+    "contains_raw_pii_true_count": 0,
+    "invalid_offset_count": 0,
+    "page_body_stored": false,
+    "raw_pii_leak_count": 0,
+    "raw_url_logged_count": 0,
+    "raw_value_logged_count": 0,
+    "reason_codes": [
+      "context_corpus.safety.pass"
+    ],
+    "status": "pass"
+  },
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "context_anchor_windows_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_manifest": false,
+  "stage": "1.4 diversity manifest",
+  "version": "v0.2-single-turn"
+}
