@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from pii_guardrail.context_phase4 import (
+    _select_conservative_candidate,
     _rewrite_context_delta,
     build_context_delta_sweep_v1,
     build_context_rule_evidence_v1,
@@ -75,6 +76,21 @@ def test_phase4_policy_only_rules_are_not_swept() -> None:
         unchanged["context.boost.bank_cooccur"]
         == "insufficient_support_or_direction_review"
     )
+
+
+def test_phase4_conservative_selector_is_noop_not_optimization() -> None:
+    candidate_rows = [
+        {"candidate_delta": 0.10, "passes_release_constraints": True},
+        {"candidate_delta": 0.25, "passes_release_constraints": True},
+        {"candidate_delta": 0.30, "passes_release_constraints": True},
+    ]
+
+    selected = _select_conservative_candidate(
+        current_delta=0.25,
+        candidate_rows=candidate_rows,
+    )
+
+    assert selected == 0.25
 
 
 def test_phase4_reports_are_raw_text_free() -> None:
