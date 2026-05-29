@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/context_window.schema.json",
+  "title": "ContextWindowEvidence",
+  "description": "Raw-PII-free M4 context coverage evidence row. This schema intentionally has no field for raw text, span text, page body, or raw URL.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_type",
+    "url_hash",
+    "anchor_terms",
+    "entity_hints",
+    "left_token_classes",
+    "right_token_classes",
+    "contains_raw_pii",
+    "raw_value_logged",
+    "evidence_role"
+  ],
+  "properties": {
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "ecommerce_help",
+        "institution_application",
+        "healthcare_guide",
+        "education_application",
+        "enterprise_internal",
+        "privacy_policy",
+        "developer_docs",
+        "synthetic_safe_template"
+      ]
+    },
+    "url_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "anchor_terms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^(field|negative|structured):[a-z0-9_]+$"
+      },
+      "uniqueItems": true
+    },
+    "entity_hints": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z0-9_]+$"
+      },
+      "uniqueItems": true
+    },
+    "left_token_classes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9_]+$"
+      },
+      "uniqueItems": true
+    },
+    "right_token_classes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9_]+$"
+      },
+      "uniqueItems": true
+    },
+    "contains_raw_pii": {
+      "type": "boolean",
+      "const": false
+    },
+    "raw_value_logged": {
+      "type": "boolean",
+      "const": false
+    },
+    "evidence_role": {
+      "type": "string",
+      "const": "coverage_only_not_score_tuning"
+    },
+    "redaction_applied": {
+      "type": "boolean"
+    }
+  },
+  "not": {
+    "anyOf": [
+      { "required": ["text"] },
+      { "required": ["raw_text"] },
+      { "required": ["span_text"] },
+      { "required": ["page_body"] },
+      { "required": ["raw_url"] },
+      { "required": ["url"] },
+      { "required": ["candidate_value"] },
+      { "required": ["raw_value"] }
+    ]
+  }
+}
