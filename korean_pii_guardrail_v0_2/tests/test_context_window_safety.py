@@ -149,3 +149,70 @@ def test_collect_context_windows_cli_writes_safe_artifacts(tmp_path: Path) -> No
     assert safety_payload["raw_url_logged_count"] == 0
     assert source_url not in combined
     assert raw_phone not in combined
+
+
+def test_context_window_safety_ignores_opaque_hash_false_positive() -> None:
+    row = build_context_window_row(
+        source_type="ecommerce_help",
+        url="https://example.test/source",
+        sentence_text="배송지 연락처와 주소를 입력합니다.",
+        project_root=PROJECT_ROOT,
+    )
+    assert row is not None
+    hash_payload = ("010" + "1234" + "5678") * 5 + "010" + "123" + "456"
+    payload = {
+        "url_hash": f"sha256:{hash_payload}",
+        "anchor_terms": ["field:phone_label"],
+    }
+
+    safety = build_context_corpus_safety_report(
+        rows=[row],
+        report_payloads=[payload],
+        source_urls=["https://example.test/source"],
+    )
+
+    assert safety["status"] == "pass"
+    assert safety["raw_pii_leak_count"] == 0
+
+
+def test_context_window_safety_still_flags_raw_url_with_hash_token() -> None:
+    row = build_context_window_row(
+        source_type="ecommerce_help",
+        url="https://example.test/source",
+        sentence_text="배송지 연락처와 주소를 입력합니다.",
+        project_root=PROJECT_ROOT,
+    )
+    assert row is not None
+    hash_payload = ("010" + "1234" + "5678") * 5 + "010" + "123" + "456"
+    source_url = f"https://example.test/path/sha256:{hash_payload}"
+
+    safety = build_context_corpus_safety_report(
+        rows=[row],
+        report_payloads=[{"leaked_url": source_url}],
+        source_urls=[source_url],
+    )
+
+    assert safety["status"] == "fail"
+    assert safety["raw_pii_leak_count"] == 0
+    assert safety["raw_url_logged_count"] == 1
+
+
+def test_context_window_safety_scans_iterator_payload_once() -> None:
+    row = build_context_window_row(
+        source_type="ecommerce_help",
+        url="https://example.test/source",
+        sentence_text="배송지 연락처와 주소를 입력합니다.",
+        project_root=PROJECT_ROOT,
+    )
+    assert row is not None
+    raw_like_value = "010-" + "1234-" + "5678"
+    report_payloads = iter(({"leaked_value": raw_like_value},))
+
+    safety = build_context_corpus_safety_report(
+        rows=[row],
+        report_payloads=report_payloads,
+        source_urls=["https://example.test/source"],
+    )
+
+    assert safety["status"] == "fail"
+    assert safety["raw_pii_leak_count"] >= 1

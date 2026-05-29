@@ -57,6 +57,9 @@ _RAW_PII_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
         re.compile(r"(?<![A-Za-z0-9_=-])(?:sk-[A-Za-z0-9_=-]{16,}|gh[po]_[A-Za-z0-9]{16,}|xox[bp]-[A-Za-z0-9-]{16,}|AKIA[0-9A-Z]{16})(?![A-Za-z0-9_=-])"),
     ),
 )
+_SAFE_OPAQUE_TOKEN_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile(r"sha256:[0-9a-f]{64}"),
+)
 
 _ENTITY_HINTS_BY_ANCHOR = {
     "name_label": ("PERSON_NAME",),
@@ -303,10 +306,13 @@ def scan_context_window_outputs(
 ) -> dict[str, Any]:
     row_list = list(rows)
     report_strings = tuple(_iter_strings(report_payloads))
+    raw_pii_scan_strings = tuple(
+        _strip_safe_opaque_tokens(text) for text in report_strings
+    )
     raw_pii_leak_count = sum(
         1
         for reason, pattern in _RAW_PII_PATTERNS
-        if any(pattern.search(text) for text in report_strings)
+        if any(pattern.search(text) for text in raw_pii_scan_strings)
     )
     raw_url_logged_count = sum(
         1
@@ -336,6 +342,13 @@ def scan_context_window_outputs(
         "reason_codes": reason_codes,
         "status": "pass" if reason_codes == ["context_corpus.safety.pass"] else "fail",
     }
+
+
+def _strip_safe_opaque_tokens(text: str) -> str:
+    stripped = text
+    for pattern in _SAFE_OPAQUE_TOKEN_PATTERNS:
+        stripped = pattern.sub("[SAFE_OPAQUE_TOKEN]", stripped)
+    return stripped
 
 
 def _anchor_classes(sentence_text: str, project_root: Path) -> tuple[str, ...]:

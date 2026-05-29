@@ -1,0 +1,2870 @@
+{
+  "dataset_summaries": [
+    {
+      "context_rule_firing_count": 17,
+      "dataset_id": "hard_cases_v0",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/hard_cases_v0.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 20,
+      "spans_detected": 21,
+      "spans_masked": 17
+    },
+    {
+      "context_rule_firing_count": 825,
+      "dataset_id": "stage1_person_name_expanded",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/stage1_person_name_expanded.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 800,
+      "spans_detected": 752,
+      "spans_masked": 300
+    },
+    {
+      "context_rule_firing_count": 864,
+      "dataset_id": "stage2_contact_expanded",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/stage2_contact_expanded.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 1200,
+      "spans_detected": 1240,
+      "spans_masked": 500
+    },
+    {
+      "context_rule_firing_count": 460,
+      "dataset_id": "stage3_address_expanded",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/stage3_address_expanded.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 600,
+      "spans_detected": 520,
+      "spans_masked": 200
+    },
+    {
+      "context_rule_firing_count": 0,
+      "dataset_id": "stage4_corporate_rrn_expanded",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/stage4_corporate_rrn_expanded.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 400,
+      "spans_detected": 400,
+      "spans_masked": 400
+    },
+    {
+      "context_rule_firing_count": 500,
+      "dataset_id": "stage5_numeric_identifier_expanded",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/stage5_numeric_identifier_expanded.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 900,
+      "spans_detected": 640,
+      "spans_masked": 600
+    },
+    {
+      "context_rule_firing_count": 5873,
+      "dataset_id": "release_gate_v0_2_5000",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/release_gate_v0_2_5000.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 5000,
+      "spans_detected": 5971,
+      "spans_masked": 4459
+    },
+    {
+      "context_rule_firing_count": 15,
+      "dataset_id": "context_calibration_v1_train",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/context_calibration_v1_train.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 15,
+      "spans_detected": 12,
+      "spans_masked": 10
+    },
+    {
+      "context_rule_firing_count": 13,
+      "dataset_id": "context_calibration_v1_dev",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/context_calibration_v1_dev.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 15,
+      "spans_detected": 11,
+      "spans_masked": 10
+    },
+    {
+      "context_rule_firing_count": 11,
+      "dataset_id": "context_calibration_v1_test",
+      "invalid_offset_count": 0,
+      "ner_mode": "mock",
+      "path": "data/eval/generated/context_calibration_v1_test.jsonl",
+      "raw_pii_logging_count": 0,
+      "records_processed": 15,
+      "spans_detected": 9,
+      "spans_masked": 8
+    }
+  ],
+  "evidence_interpretation": {
+    "action_evidence": "action-level precision/recall comparison in delta sweep",
+    "direction_evidence": "candidate TP/FP split, smoothed LR/logLR, and precision_when_fired",
+    "magnitude_evidence": "delta sweep report; proposed runtime changes require later review",
+    "public_corpus_used_for_score_tuning": false
+  },
+  "generated_at": "2026-05-29T09:49:32.882184+00:00",
+  "minimum_support": 50,
+  "missing_datasets": [],
+  "phase": "Execution Phase 4. Rule Metrics and Delta Sweep",
+  "raw_pii_safety": {
+    "audit_event_raw_value_logged_count": 0,
+    "public_span_raw_value_logged_count": 0,
+    "raw_pii_logging_count": 0,
+    "raw_value_logged": false,
+    "report_raw_text_leak_count": 0,
+    "response_raw_value_logged_count": 0,
+    "status": "pass"
+  },
+  "report_type": "ContextRuleEvidence",
+  "rule_count": 30,
+  "rules": [
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 250
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 250
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 284.068915,
+        "log_likelihood_ratio": 5.649217,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.193735,
+        "precision_lift": 1.566563,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 250
+      },
+      "configured_delta": 0.15,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "release_gate_v0_2_5000": 250
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 250
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 250,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 250,
+          "fp_fired": 0,
+          "likelihood_ratio": 284.068915,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.193735,
+          "tp_fired": 250
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 250,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.address_cooccur_for_person",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 181
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 181
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 0,
+        "candidate_tp_total_for_targets": 406,
+        "fp_fired": 0,
+        "likelihood_ratio": null,
+        "log_likelihood_ratio": null,
+        "p_rule_given_fp": null,
+        "p_rule_given_tp": 0.445946,
+        "precision_lift": 1.0,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 1.0,
+        "tp_fired": 181
+      },
+      "configured_delta": 0.25,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "hard_cases_v0": 1,
+        "stage5_numeric_identifier_expanded": 180
+      },
+      "direction_band": "insufficient_support",
+      "domain_breakdown": [],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 181
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 181,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 406,
+          "entity_type": "BANK_ACCOUNT",
+          "fired_count": 181,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.445946,
+          "tp_fired": 181
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "insufficient_support",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 181,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "insufficient_support",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.bank_cooccur",
+      "suggested_delta": null,
+      "target_entities": [
+        "BANK_ACCOUNT"
+      ],
+      "verdict": "insufficient_support"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 406
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 406
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 0,
+        "candidate_tp_total_for_targets": 406,
+        "fp_fired": 0,
+        "likelihood_ratio": null,
+        "log_likelihood_ratio": null,
+        "p_rule_given_fp": null,
+        "p_rule_given_tp": 0.998771,
+        "precision_lift": 1.0,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 1.0,
+        "tp_fired": 406
+      },
+      "configured_delta": 0.3,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 1,
+        "context_calibration_v1_test": 1,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 202,
+        "stage5_numeric_identifier_expanded": 200
+      },
+      "direction_band": "insufficient_support",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_bank_account",
+          "domain": "finance",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 406
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 406,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 406,
+          "entity_type": "BANK_ACCOUNT",
+          "fired_count": 406,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.998771,
+          "tp_fired": 406
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "insufficient_support",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 406,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "insufficient_support",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_account",
+      "suggested_delta": null,
+      "target_entities": [
+        "BANK_ACCOUNT"
+      ],
+      "verdict": "insufficient_support"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 253,
+          "pass": 256
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 1,
+        "actionable_precision_when_fired": 0.996047,
+        "actionable_tp_fired": 252
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 420,
+        "candidate_tp_total_for_targets": 788,
+        "fp_fired": 94,
+        "likelihood_ratio": 2.346084,
+        "log_likelihood_ratio": 0.852748,
+        "p_rule_given_fp": 0.224466,
+        "p_rule_given_tp": 0.526616,
+        "precision_lift": 1.249887,
+        "precision_when_fired": 0.815324,
+        "target_baseline_precision": 0.652318,
+        "tp_fired": 415
+      },
+      "configured_delta": 0.2,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 2,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 225,
+        "stage3_address_expanded": 280
+      },
+      "direction_band": "weak_positive",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_address",
+          "domain": "ecommerce",
+          "fired_count": 3,
+          "fp_fired": 2,
+          "tp_fired": 1
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 252
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 252,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 410,
+          "entity_type": "ADDRESS_FULL",
+          "fired_count": 252,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.614355,
+          "tp_fired": 252
+        },
+        {
+          "action_counts": {
+            "mask": 1,
+            "pass": 256
+          },
+          "actionable_fp_fired": 1,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 420,
+          "candidate_tp_total": 378,
+          "entity_type": "ADDRESS_UNIT",
+          "fired_count": 257,
+          "fp_fired": 94,
+          "likelihood_ratio": 1.921886,
+          "p_rule_given_fp": 0.224466,
+          "p_rule_given_tp": 0.431398,
+          "tp_fired": 163
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 509,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "small_boost",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_address",
+      "suggested_delta": null,
+      "target_entities": [
+        "ADDRESS_FULL",
+        "ADDRESS_UNIT"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 411
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 411
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 466.645161,
+        "log_likelihood_ratio": 6.145569,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.318252,
+        "precision_lift": 1.566563,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 411
+      },
+      "configured_delta": 0.25,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 3,
+        "context_calibration_v1_test": 3,
+        "context_calibration_v1_train": 3,
+        "hard_cases_v0": 2,
+        "release_gate_v0_2_5000": 100,
+        "stage1_person_name_expanded": 300
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_person_phone",
+          "domain": "ecommerce",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        },
+        {
+          "bucket": "positive_organization_affiliation",
+          "domain": "enterprise_internal",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        },
+        {
+          "bucket": "positive_name_suffix",
+          "domain": "generic",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 411
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 411,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 411,
+          "fp_fired": 0,
+          "likelihood_ratio": 466.645161,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.318252,
+          "tp_fired": 411
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 411,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_name",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 1439
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 1439
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 526,
+        "candidate_tp_total_for_targets": 1661,
+        "fp_fired": 0,
+        "likelihood_ratio": 912.671233,
+        "log_likelihood_ratio": 6.816376,
+        "p_rule_given_fp": 0.000949,
+        "p_rule_given_tp": 0.866125,
+        "precision_lift": 1.316676,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.759488,
+        "tp_fired": 1439
+      },
+      "configured_delta": 0.15,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 1,
+        "context_calibration_v1_test": 1,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 2,
+        "release_gate_v0_2_5000": 1154,
+        "stage2_contact_expanded": 160,
+        "stage5_numeric_identifier_expanded": 120
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_person_phone",
+          "domain": "ecommerce",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 167
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 167,
+          "candidate_fp_total": 120,
+          "candidate_tp_total": 249,
+          "entity_type": "PHONE_LANDLINE",
+          "fired_count": 167,
+          "fp_fired": 0,
+          "likelihood_ratio": 162.14908,
+          "p_rule_given_fp": 0.004132,
+          "p_rule_given_tp": 0.67,
+          "tp_fired": 167
+        },
+        {
+          "action_counts": {
+            "mask": 1272
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 1272,
+          "candidate_fp_total": 406,
+          "candidate_tp_total": 1412,
+          "entity_type": "PHONE_MOBILE",
+          "fired_count": 1272,
+          "fp_fired": 0,
+          "likelihood_ratio": 732.763222,
+          "p_rule_given_fp": 0.001229,
+          "p_rule_given_tp": 0.900566,
+          "tp_fired": 1272
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 1439,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_phone",
+      "suggested_delta": null,
+      "target_entities": [
+        "PHONE_LANDLINE",
+        "PHONE_MOBILE"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 389
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 389
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 0,
+        "candidate_tp_total_for_targets": 410,
+        "fp_fired": 0,
+        "likelihood_ratio": null,
+        "log_likelihood_ratio": null,
+        "p_rule_given_fp": null,
+        "p_rule_given_tp": 0.947689,
+        "precision_lift": 1.0,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 1.0,
+        "tp_fired": 389
+      },
+      "configured_delta": 0.2,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 207,
+        "stage3_address_expanded": 180
+      },
+      "direction_band": "insufficient_support",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_address",
+          "domain": "ecommerce",
+          "fired_count": 1,
+          "fp_fired": 0,
+          "tp_fired": 1
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 389
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 389,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 410,
+          "entity_type": "ADDRESS_FULL",
+          "fired_count": 389,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.947689,
+          "tp_fired": 389
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "insufficient_support",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 389,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "insufficient_support",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.full_address_detail",
+      "suggested_delta": null,
+      "target_entities": [
+        "ADDRESS_FULL"
+      ],
+      "verdict": "insufficient_support"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 617
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 617
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 0,
+        "candidate_tp_total_for_targets": 617,
+        "fp_fired": 0,
+        "likelihood_ratio": null,
+        "log_likelihood_ratio": null,
+        "p_rule_given_fp": null,
+        "p_rule_given_tp": 0.999191,
+        "precision_lift": 1.0,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 1.0,
+        "tp_fired": 617
+      },
+      "configured_delta": 0.2,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 1,
+        "context_calibration_v1_test": 1,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 613
+      },
+      "direction_band": "insufficient_support",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_medical",
+          "domain": "healthcare",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 272
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 272,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 272,
+          "entity_type": "HOSPITAL",
+          "fired_count": 272,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.998168,
+          "tp_fired": 272
+        },
+        {
+          "action_counts": {
+            "mask": 345
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 345,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 345,
+          "entity_type": "MEDICAL_RECORD_NO",
+          "fired_count": 345,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.998555,
+          "tp_fired": 345
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "insufficient_support",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 617,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "insufficient_support",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.medical_label",
+      "suggested_delta": null,
+      "target_entities": [
+        "HEALTH_INFO",
+        "HOSPITAL",
+        "MEDICAL_RECORD_NO"
+      ],
+      "verdict": "insufficient_support"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 126
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 126
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 40,
+        "candidate_tp_total_for_targets": 126,
+        "fp_fired": 0,
+        "likelihood_ratio": 81.677983,
+        "log_likelihood_ratio": 4.402784,
+        "p_rule_given_fp": 0.012195,
+        "p_rule_given_tp": 0.996063,
+        "precision_lift": 1.317461,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.759036,
+        "tp_fired": 126
+      },
+      "configured_delta": 0.25,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 1,
+        "release_gate_v0_2_5000": 125
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_organization_affiliation",
+          "domain": "enterprise_internal",
+          "fired_count": 1,
+          "fp_fired": 0,
+          "tp_fired": 1
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 126
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 126,
+          "candidate_fp_total": 40,
+          "candidate_tp_total": 126,
+          "entity_type": "ORGANIZATION",
+          "fired_count": 126,
+          "fp_fired": 0,
+          "likelihood_ratio": 81.677983,
+          "p_rule_given_fp": 0.012195,
+          "p_rule_given_tp": 0.996063,
+          "tp_fired": 126
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 126,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.organization_affiliation_context",
+      "suggested_delta": null,
+      "target_entities": [
+        "ORGANIZATION"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 172
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 172
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 195.617302,
+        "log_likelihood_ratio": 5.27616,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.133411,
+        "precision_lift": 1.566563,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 172
+      },
+      "configured_delta": 0.2,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 1,
+        "context_calibration_v1_test": 1,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 168
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_person_phone",
+          "domain": "ecommerce",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 172
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 172,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 172,
+          "fp_fired": 0,
+          "likelihood_ratio": 195.617302,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.133411,
+          "tp_fired": 172
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 172,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.phone_cooccur_for_person",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 52
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 52
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 59.535191,
+        "log_likelihood_ratio": 4.086568,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.040603,
+        "precision_lift": 1.566563,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 52
+      },
+      "configured_delta": 0.15,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_test": 1,
+        "context_calibration_v1_train": 1,
+        "stage1_person_name_expanded": 50
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_name_suffix",
+          "domain": "generic",
+          "fired_count": 2,
+          "fp_fired": 0,
+          "tp_fired": 2
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 52
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 52,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 52,
+          "fp_fired": 0,
+          "likelihood_ratio": 59.535191,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.040603,
+          "tp_fired": 52
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 52,
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.title_after_name",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 157
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 157
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 178.607038,
+        "log_likelihood_ratio": 5.185188,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.12181,
+        "precision_lift": 1.566563,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 157
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "release_gate_v0_2_5000": 157
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 157
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 157,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 157,
+          "fp_fired": 0,
+          "likelihood_ratio": 178.607038,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.12181,
+          "tp_fired": 157
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 157,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.ADDRESS_FULL",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 284
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 284
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 0,
+        "candidate_tp_total_for_targets": 409,
+        "fp_fired": 0,
+        "likelihood_ratio": null,
+        "log_likelihood_ratio": null,
+        "p_rule_given_fp": null,
+        "p_rule_given_tp": 0.693902,
+        "precision_lift": 1.0,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 1.0,
+        "tp_fired": 284
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "release_gate_v0_2_5000": 284
+      },
+      "direction_band": "insufficient_support",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 142
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 142,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 142,
+          "entity_type": "DOB",
+          "fired_count": 142,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.996503,
+          "tp_fired": 142
+        },
+        {
+          "action_counts": {
+            "mask": 142
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 142,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 267,
+          "entity_type": "SCHOOL",
+          "fired_count": 142,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.531716,
+          "tp_fired": 142
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 284,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "insufficient_support",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.ADDRESS_UNIT",
+      "suggested_delta": null,
+      "target_entities": [
+        "DOB",
+        "SCHOOL"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 129
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 129
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 146.854839,
+        "log_likelihood_ratio": 4.989445,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.100155,
+        "precision_lift": 1.566563,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 129
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "release_gate_v0_2_5000": 129
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 129
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 129,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 129,
+          "fp_fired": 0,
+          "likelihood_ratio": 146.854839,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.100155,
+          "tp_fired": 129
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 129,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.BANK_ACCOUNT",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 284
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 47,
+        "actionable_precision_when_fired": 0.834507,
+        "actionable_tp_fired": 237
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 420,
+        "candidate_tp_total_for_targets": 645,
+        "fp_fired": 47,
+        "likelihood_ratio": 3.258502,
+        "log_likelihood_ratio": 1.181268,
+        "p_rule_given_fp": 0.112827,
+        "p_rule_given_tp": 0.367647,
+        "precision_lift": 1.377906,
+        "precision_when_fired": 0.834507,
+        "target_baseline_precision": 0.605634,
+        "tp_fired": 237
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "release_gate_v0_2_5000": 284
+      },
+      "direction_band": "positive",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 142
+          },
+          "actionable_fp_fired": 47,
+          "actionable_tp_fired": 95,
+          "candidate_fp_total": 420,
+          "candidate_tp_total": 378,
+          "entity_type": "ADDRESS_UNIT",
+          "fired_count": 142,
+          "fp_fired": 47,
+          "likelihood_ratio": 2.233322,
+          "p_rule_given_fp": 0.112827,
+          "p_rule_given_tp": 0.251979,
+          "tp_fired": 95
+        },
+        {
+          "action_counts": {
+            "mask": 142
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 142,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 267,
+          "entity_type": "SCHOOL",
+          "fired_count": 142,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.531716,
+          "tp_fired": 142
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 284,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "normal_boost",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.DOB",
+      "suggested_delta": null,
+      "target_entities": [
+        "ADDRESS_UNIT",
+        "SCHOOL"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 130
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 130
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 147.98827,
+        "log_likelihood_ratio": 4.997133,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.100928,
+        "precision_lift": 1.566563,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 130
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 129
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 130
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 130,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 130,
+          "fp_fired": 0,
+          "likelihood_ratio": 147.98827,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.100928,
+          "tp_fired": 130
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 130,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.EMAIL",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 143
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 143
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 0,
+        "candidate_tp_total_for_targets": 345,
+        "fp_fired": 0,
+        "likelihood_ratio": null,
+        "log_likelihood_ratio": null,
+        "p_rule_given_fp": null,
+        "p_rule_given_tp": 0.41474,
+        "precision_lift": 1.0,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 1.0,
+        "tp_fired": 143
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "release_gate_v0_2_5000": 143
+      },
+      "direction_band": "insufficient_support",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 143
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 143,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 345,
+          "entity_type": "MEDICAL_RECORD_NO",
+          "fired_count": 143,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.41474,
+          "tp_fired": 143
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 143,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "insufficient_support",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.HOSPITAL",
+      "suggested_delta": null,
+      "target_entities": [
+        "MEDICAL_RECORD_NO"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 143
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 143
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 0,
+        "candidate_tp_total_for_targets": 272,
+        "fp_fired": 0,
+        "likelihood_ratio": null,
+        "log_likelihood_ratio": null,
+        "p_rule_given_fp": null,
+        "p_rule_given_tp": 0.525641,
+        "precision_lift": 1.0,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 1.0,
+        "tp_fired": 143
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "release_gate_v0_2_5000": 143
+      },
+      "direction_band": "insufficient_support",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 143
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 143,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 272,
+          "entity_type": "HOSPITAL",
+          "fired_count": 143,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.525641,
+          "tp_fired": 143
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 143,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "insufficient_support",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.MEDICAL_RECORD_NO",
+      "suggested_delta": null,
+      "target_entities": [
+        "HOSPITAL"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 588
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 588
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 951,
+        "candidate_tp_total_for_targets": 2885,
+        "fp_fired": 0,
+        "likelihood_ratio": 388.409524,
+        "log_likelihood_ratio": 5.96206,
+        "p_rule_given_fp": 0.000525,
+        "p_rule_given_tp": 0.203915,
+        "precision_lift": 1.329635,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.752086,
+        "tp_fired": 588
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 1,
+        "context_calibration_v1_test": 1,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 2,
+        "release_gate_v0_2_5000": 583
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_person_phone",
+          "domain": "ecommerce",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        }
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 157
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 157,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 410,
+          "entity_type": "ADDRESS_FULL",
+          "fired_count": 157,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.383212,
+          "tp_fired": 157
+        },
+        {
+          "action_counts": {
+            "mask": 129
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 129,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 406,
+          "entity_type": "BANK_ACCOUNT",
+          "fired_count": 129,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.318182,
+          "tp_fired": 129
+        },
+        {
+          "action_counts": {
+            "mask": 130
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 130,
+          "candidate_fp_total": 425,
+          "candidate_tp_total": 408,
+          "entity_type": "EMAIL",
+          "fired_count": 130,
+          "fp_fired": 0,
+          "likelihood_ratio": 271.78109,
+          "p_rule_given_fp": 0.001174,
+          "p_rule_given_tp": 0.319071,
+          "tp_fired": 130
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 120,
+          "candidate_tp_total": 249,
+          "entity_type": "PHONE_LANDLINE",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": 0.484027,
+          "p_rule_given_fp": 0.004132,
+          "p_rule_given_tp": 0.002,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {
+            "mask": 172
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 172,
+          "candidate_fp_total": 406,
+          "candidate_tp_total": 1412,
+          "entity_type": "PHONE_MOBILE",
+          "fired_count": 172,
+          "fp_fired": 0,
+          "likelihood_ratio": 99.333605,
+          "p_rule_given_fp": 0.001229,
+          "p_rule_given_tp": 0.122081,
+          "tp_fired": 172
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 588,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.PERSON_NAME",
+      "suggested_delta": null,
+      "target_entities": [
+        "ADDRESS_FULL",
+        "BANK_ACCOUNT",
+        "EMAIL",
+        "PHONE_LANDLINE",
+        "PHONE_MOBILE"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {},
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": null,
+        "actionable_tp_fired": 0
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 0.567449,
+        "log_likelihood_ratio": -0.566604,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.000387,
+        "precision_lift": null,
+        "precision_when_fired": null,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 0
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {},
+      "direction_band": "weak_negative",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": 0.567449,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.000387,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 0,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "small_penalty",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.PHONE_LANDLINE",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 172
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 172
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 195.617302,
+        "log_likelihood_ratio": 5.27616,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.133411,
+        "precision_lift": 1.566563,
+        "precision_when_fired": 1.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 172
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 1,
+        "context_calibration_v1_test": 1,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 168
+      },
+      "direction_band": "strong_positive",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_person_phone",
+          "domain": "ecommerce",
+          "fired_count": 3,
+          "fp_fired": 0,
+          "tp_fired": 3
+        }
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 172
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 172,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 172,
+          "fp_fired": 0,
+          "likelihood_ratio": 195.617302,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.133411,
+          "tp_fired": 172
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 172,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "strong_boost",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.PHONE_MOBILE",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 284
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 47,
+        "actionable_precision_when_fired": 0.834507,
+        "actionable_tp_fired": 237
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 420,
+        "candidate_tp_total_for_targets": 520,
+        "fp_fired": 47,
+        "likelihood_ratio": 4.040292,
+        "log_likelihood_ratio": 1.396317,
+        "p_rule_given_fp": 0.112827,
+        "p_rule_given_tp": 0.455854,
+        "precision_lift": 1.508533,
+        "precision_when_fired": 0.834507,
+        "target_baseline_precision": 0.553191,
+        "tp_fired": 237
+      },
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "dataset_firing_counts": {
+        "release_gate_v0_2_5000": 284
+      },
+      "direction_band": "positive",
+      "domain_breakdown": [],
+      "effect_scope": "composite_status_and_policy_action",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "mask": 142
+          },
+          "actionable_fp_fired": 47,
+          "actionable_tp_fired": 95,
+          "candidate_fp_total": 420,
+          "candidate_tp_total": 378,
+          "entity_type": "ADDRESS_UNIT",
+          "fired_count": 142,
+          "fp_fired": 47,
+          "likelihood_ratio": 2.233322,
+          "p_rule_given_fp": 0.112827,
+          "p_rule_given_tp": 0.251979,
+          "tp_fired": 95
+        },
+        {
+          "action_counts": {
+            "mask": 142
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 142,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 142,
+          "entity_type": "DOB",
+          "fired_count": 142,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.996503,
+          "tp_fired": 142
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "policy_interaction_only",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 284,
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "proposed_delta_band": "normal_boost",
+      "raw_value_logged": false,
+      "rule_family": "composite",
+      "rule_id": "context.composite.SCHOOL",
+      "suggested_delta": null,
+      "target_entities": [
+        "ADDRESS_UNIT",
+        "DOB"
+      ],
+      "verdict": "policy_only_rule"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "pass": 153
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": null,
+        "actionable_tp_fired": 0
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 153,
+        "likelihood_ratio": 0.001848,
+        "log_likelihood_ratio": -6.293651,
+        "p_rule_given_fp": 0.209413,
+        "p_rule_given_tp": 0.000387,
+        "precision_lift": 0.0,
+        "precision_when_fired": 0.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 0
+      },
+      "configured_delta": -0.2,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_test": 1,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 125,
+        "stage1_person_name_expanded": 25
+      },
+      "direction_band": "strong_negative",
+      "domain_breakdown": [
+        {
+          "bucket": "hard_negative_abstract_value",
+          "domain": "generic",
+          "fired_count": 2,
+          "fp_fired": 2,
+          "tp_fired": 0
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "pass": 153
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 153,
+          "fp_fired": 153,
+          "likelihood_ratio": 0.001848,
+          "p_rule_given_fp": 0.209413,
+          "p_rule_given_tp": 0.000387,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 153,
+      "policy_interaction": "score_only_before_policy_thresholds",
+      "proposed_delta_band": "strong_penalty",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.abstract_value_context_for_person",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "pass": 100
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": null,
+        "actionable_tp_fired": 0
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 1152,
+        "candidate_tp_total_for_targets": 2080,
+        "fp_fired": 100,
+        "likelihood_ratio": 0.002753,
+        "log_likelihood_ratio": -5.895064,
+        "p_rule_given_fp": 0.087164,
+        "p_rule_given_tp": 0.00024,
+        "precision_lift": 0.0,
+        "precision_when_fired": 0.0,
+        "target_baseline_precision": 0.643564,
+        "tp_fired": 0
+      },
+      "configured_delta": -0.2,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "stage1_person_name_expanded": 100
+      },
+      "direction_band": "strong_negative",
+      "domain_breakdown": [],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 410,
+          "entity_type": "ADDRESS_FULL",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001217,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 420,
+          "candidate_tp_total": 378,
+          "entity_type": "ADDRESS_UNIT",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": 1.110269,
+          "p_rule_given_fp": 0.001188,
+          "p_rule_given_tp": 0.001319,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {
+            "pass": 100
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 100,
+          "fp_fired": 100,
+          "likelihood_ratio": 0.002823,
+          "p_rule_given_fp": 0.137108,
+          "p_rule_given_tp": 0.000387,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 100,
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "proposed_delta_band": "strong_penalty",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.code_or_log_context",
+      "suggested_delta": null,
+      "target_entities": [
+        "ADDRESS_FULL",
+        "ADDRESS_UNIT",
+        "PERSON_NAME"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "mask": 2,
+          "pass": 1230
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": 1.0,
+        "actionable_tp_fired": 2
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 2183,
+        "candidate_tp_total_for_targets": 7393,
+        "fp_fired": 1230,
+        "likelihood_ratio": 0.0006,
+        "log_likelihood_ratio": -7.418581,
+        "p_rule_given_fp": 0.563416,
+        "p_rule_given_tp": 0.000338,
+        "precision_lift": 0.002102,
+        "precision_when_fired": 0.001623,
+        "target_baseline_precision": 0.772034,
+        "tp_fired": 2
+      },
+      "configured_delta": -0.15,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_dev": 1,
+        "context_calibration_v1_train": 1,
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 250,
+        "stage1_person_name_expanded": 275,
+        "stage2_contact_expanded": 704
+      },
+      "direction_band": "strong_negative",
+      "domain_breakdown": [
+        {
+          "bucket": "positive_organization_affiliation",
+          "domain": "enterprise_internal",
+          "fired_count": 2,
+          "fp_fired": 0,
+          "tp_fired": 2
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 410,
+          "entity_type": "ADDRESS_FULL",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001217,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 420,
+          "candidate_tp_total": 378,
+          "entity_type": "ADDRESS_UNIT",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": 1.110269,
+          "p_rule_given_fp": 0.001188,
+          "p_rule_given_tp": 0.001319,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 60,
+          "entity_type": "API_KEY_SECRET",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008197,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 406,
+          "entity_type": "BANK_ACCOUNT",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001229,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 262,
+          "entity_type": "BUSINESS_REG_NO",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001901,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 258,
+          "entity_type": "CORPORATE_REG_NO",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001931,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 184,
+          "entity_type": "CREDIT_CARD",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.002703,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 58,
+          "entity_type": "DEVICE_ID",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008475,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 142,
+          "entity_type": "DOB",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.003497,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 59,
+          "entity_type": "DRIVER_LICENSE",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008333,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {
+            "pass": 425
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 425,
+          "candidate_tp_total": 408,
+          "entity_type": "EMAIL",
+          "fired_count": 425,
+          "fp_fired": 425,
+          "likelihood_ratio": 0.001223,
+          "p_rule_given_fp": 0.998826,
+          "p_rule_given_tp": 0.001222,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {
+            "pass": 4
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 40,
+          "candidate_tp_total": 125,
+          "entity_type": "FAMILY_RELATION",
+          "fired_count": 4,
+          "fp_fired": 4,
+          "likelihood_ratio": 0.036153,
+          "p_rule_given_fp": 0.109756,
+          "p_rule_given_tp": 0.003968,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 59,
+          "entity_type": "FRN",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008333,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 272,
+          "entity_type": "HOSPITAL",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001832,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 59,
+          "entity_type": "IP_ADDRESS",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008333,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 59,
+          "entity_type": "MAC_ADDRESS",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008333,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 345,
+          "entity_type": "MEDICAL_RECORD_NO",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001445,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 40,
+          "candidate_tp_total": 126,
+          "entity_type": "ORGANIZATION",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": 0.322837,
+          "p_rule_given_fp": 0.012195,
+          "p_rule_given_tp": 0.003937,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 59,
+          "entity_type": "PASSPORT",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008333,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {
+            "mask": 2,
+            "pass": 275
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 2,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 277,
+          "fp_fired": 275,
+          "likelihood_ratio": 0.005143,
+          "p_rule_given_fp": 0.375853,
+          "p_rule_given_tp": 0.001933,
+          "tp_fired": 2
+        },
+        {
+          "action_counts": {
+            "pass": 120
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 120,
+          "candidate_tp_total": 249,
+          "entity_type": "PHONE_LANDLINE",
+          "fired_count": 120,
+          "fp_fired": 120,
+          "likelihood_ratio": 0.002008,
+          "p_rule_given_fp": 0.995868,
+          "p_rule_given_tp": 0.002,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {
+            "pass": 406
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 406,
+          "candidate_tp_total": 1412,
+          "entity_type": "PHONE_MOBILE",
+          "fired_count": 406,
+          "fp_fired": 406,
+          "likelihood_ratio": 0.000354,
+          "p_rule_given_fp": 0.998771,
+          "p_rule_given_tp": 0.000354,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 386,
+          "entity_type": "RRN",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001292,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 267,
+          "entity_type": "SCHOOL",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.001866,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 58,
+          "entity_type": "VEHICLE_REG_NO",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008475,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 1232,
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "proposed_delta_band": "strong_penalty",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.example_context",
+      "suggested_delta": null,
+      "target_entities": [
+        "ALL_CANDIDATES"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {},
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": null,
+        "actionable_tp_fired": 0
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 0,
+        "likelihood_ratio": 0.567449,
+        "log_likelihood_ratio": -0.566604,
+        "p_rule_given_fp": 0.000682,
+        "p_rule_given_tp": 0.000387,
+        "precision_lift": null,
+        "precision_when_fired": null,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 0
+      },
+      "configured_delta": -0.35,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {},
+      "direction_band": "weak_negative",
+      "domain_breakdown": [],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": 0.567449,
+          "p_rule_given_fp": 0.000682,
+          "p_rule_given_tp": 0.000387,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "insufficient_support",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 0,
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "proposed_delta_band": "small_penalty",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.example_keyword_for_person",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "insufficient_support"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "pass": 101
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": null,
+        "actionable_tp_fired": 0
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 101,
+        "likelihood_ratio": 0.002795,
+        "log_likelihood_ratio": -5.879923,
+        "p_rule_given_fp": 0.138472,
+        "p_rule_given_tp": 0.000387,
+        "precision_lift": 0.0,
+        "precision_when_fired": 0.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 0
+      },
+      "configured_delta": -0.25,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "context_calibration_v1_train": 1,
+        "release_gate_v0_2_5000": 25,
+        "stage1_person_name_expanded": 75
+      },
+      "direction_band": "strong_negative",
+      "domain_breakdown": [
+        {
+          "bucket": "hard_negative_business_name",
+          "domain": "generic",
+          "fired_count": 1,
+          "fp_fired": 1,
+          "tp_fired": 0
+        }
+      ],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "pass": 101
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 101,
+          "fp_fired": 101,
+          "likelihood_ratio": 0.002795,
+          "p_rule_given_fp": 0.138472,
+          "p_rule_given_tp": 0.000387,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 101,
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "proposed_delta_band": "strong_penalty",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.organization_not_person",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "tune_magnitude"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {},
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": null,
+        "actionable_tp_fired": 0
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 0,
+        "candidate_tp_total_for_targets": 59,
+        "fp_fired": 0,
+        "likelihood_ratio": null,
+        "log_likelihood_ratio": null,
+        "p_rule_given_fp": null,
+        "p_rule_given_tp": 0.008333,
+        "precision_lift": null,
+        "precision_when_fired": null,
+        "target_baseline_precision": 1.0,
+        "tp_fired": 0
+      },
+      "configured_delta": -0.25,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {},
+      "direction_band": "insufficient_support",
+      "domain_breakdown": [],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 0,
+          "candidate_tp_total": 59,
+          "entity_type": "IP_ADDRESS",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": null,
+          "p_rule_given_fp": null,
+          "p_rule_given_tp": 0.008333,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "insufficient_support",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 0,
+      "policy_interaction": "score_only_before_policy_thresholds",
+      "proposed_delta_band": "insufficient_support",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.private_ip",
+      "suggested_delta": null,
+      "target_entities": [
+        "IP_ADDRESS"
+      ],
+      "verdict": "insufficient_support"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {},
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": null,
+        "actionable_tp_fired": 0
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 526,
+        "candidate_tp_total_for_targets": 1661,
+        "fp_fired": 0,
+        "likelihood_ratio": 0.317176,
+        "log_likelihood_ratio": -1.148298,
+        "p_rule_given_fp": 0.000949,
+        "p_rule_given_tp": 0.000301,
+        "precision_lift": null,
+        "precision_when_fired": null,
+        "target_baseline_precision": 0.759488,
+        "tp_fired": 0
+      },
+      "configured_delta": -0.25,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {},
+      "direction_band": "negative",
+      "domain_breakdown": [],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 120,
+          "candidate_tp_total": 249,
+          "entity_type": "PHONE_LANDLINE",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": 0.484027,
+          "p_rule_given_fp": 0.004132,
+          "p_rule_given_tp": 0.002,
+          "tp_fired": 0
+        },
+        {
+          "action_counts": {},
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 406,
+          "candidate_tp_total": 1412,
+          "entity_type": "PHONE_MOBILE",
+          "fired_count": 0,
+          "fp_fired": 0,
+          "likelihood_ratio": 0.288039,
+          "p_rule_given_fp": 0.001229,
+          "p_rule_given_tp": 0.000354,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "insufficient_support",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 0,
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "proposed_delta_band": "normal_penalty",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.public_phone_context",
+      "suggested_delta": null,
+      "target_entities": [
+        "PHONE_LANDLINE",
+        "PHONE_MOBILE"
+      ],
+      "verdict": "insufficient_support"
+    },
+    {
+      "actionable_metrics": {
+        "action_counts": {
+          "pass": 126
+        },
+        "actionable_fp_delta": null,
+        "actionable_fp_fired": 0,
+        "actionable_precision_when_fired": null,
+        "actionable_tp_fired": 0
+      },
+      "candidate_metrics": {
+        "candidate_fp_total_for_targets": 732,
+        "candidate_tp_total_for_targets": 1292,
+        "fp_fired": 126,
+        "likelihood_ratio": 0.002242,
+        "log_likelihood_ratio": -6.100387,
+        "p_rule_given_fp": 0.172578,
+        "p_rule_given_tp": 0.000387,
+        "precision_lift": 0.0,
+        "precision_when_fired": 0.0,
+        "target_baseline_precision": 0.63834,
+        "tp_fired": 0
+      },
+      "configured_delta": -0.35,
+      "configured_risk_upgrade": null,
+      "dataset_firing_counts": {
+        "hard_cases_v0": 1,
+        "release_gate_v0_2_5000": 125
+      },
+      "direction_band": "strong_negative",
+      "domain_breakdown": [],
+      "effect_scope": "candidate_score",
+      "entity_breakdown": [
+        {
+          "action_counts": {
+            "pass": 126
+          },
+          "actionable_fp_fired": 0,
+          "actionable_tp_fired": 0,
+          "candidate_fp_total": 732,
+          "candidate_tp_total": 1292,
+          "entity_type": "PERSON_NAME",
+          "fired_count": 126,
+          "fp_fired": 126,
+          "likelihood_ratio": 0.002242,
+          "p_rule_given_fp": 0.172578,
+          "p_rule_given_tp": 0.000387,
+          "tp_fired": 0
+        }
+      ],
+      "evidence_levels": {
+        "action_evidence": "observed_counts_only_no_delta_sweep",
+        "direction_evidence": "direction_supported",
+        "magnitude_evidence": "not_evaluated_phase_1"
+      },
+      "fired_count": 126,
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "proposed_delta_band": "strong_penalty",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.weather_context_for_person",
+      "suggested_delta": null,
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "verdict": "tune_magnitude"
+    }
+  ],
+  "runtime_scoring_behavior_changed": false,
+  "scope": "M4 deterministic context scorer",
+  "score_delta_changed": false,
+  "smoothing_alpha": 0.5,
+  "unknown_context_reason_codes": [],
+  "verdict_counts": {
+    "insufficient_support": 7,
+    "policy_only_rule": 11,
+    "tune_magnitude": 12
+  },
+  "version": "v0.2-single-turn"
+}
