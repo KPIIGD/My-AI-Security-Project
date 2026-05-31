@@ -1,0 +1,323 @@
+{
+  "title": "ContextTemplateInventoryV1",
+  "description": "Raw-value-free M4 template extraction row for PERSON_NAME and ADDRESS. Stores field labels, controlled template structure, and entity mapping only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "template_id",
+    "template_family",
+    "entity_group",
+    "anchor_entity",
+    "anchor_shape",
+    "source_domain",
+    "material_class",
+    "material_type",
+    "evidence_lane",
+    "label_source",
+    "label_status",
+    "field_label_source",
+    "field_label_terms",
+    "left_context_terms",
+    "right_context_terms",
+    "template_structure",
+    "slot_mappings",
+    "usable_for_synthetic_insertion",
+    "contains_raw_pii",
+    "raw_value_logged",
+    "raw_url_logged",
+    "raw_sentence_logged",
+    "page_body_stored",
+    "candidate_value_stored",
+    "evidence_role"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "context_template_inventory_v1"
+    },
+    "template_id": {
+      "type": "string",
+      "pattern": "^tpl_(person|address)_[a-z_]+_[0-9]{3}$"
+    },
+    "template_family": {
+      "type": "string",
+      "enum": [
+        "field_label_value_context"
+      ]
+    },
+    "entity_group": {
+      "type": "string",
+      "enum": [
+        "PERSON_NAME",
+        "ADDRESS"
+      ]
+    },
+    "anchor_entity": {
+      "type": "string",
+      "enum": [
+        "PERSON_NAME",
+        "ADDRESS_FULL",
+        "ADDRESS_UNIT"
+      ]
+    },
+    "anchor_shape": {
+      "type": "string",
+      "enum": [
+        "korean_name_2_syllable",
+        "korean_name_3_syllable",
+        "korean_name_4_syllable",
+        "road_address_shape",
+        "lot_address_shape",
+        "address_unit_shape"
+      ]
+    },
+    "source_domain": {
+      "type": "string",
+      "enum": [
+        "customer_support",
+        "ecommerce",
+        "healthcare",
+        "finance",
+        "education",
+        "public_services",
+        "enterprise_internal"
+      ]
+    },
+    "material_class": {
+      "type": "string",
+      "const": "realistic_input_like"
+    },
+    "material_type": {
+      "type": "string",
+      "const": "realistic_input_like"
+    },
+    "evidence_lane": {
+      "type": "string",
+      "const": "template_extraction"
+    },
+    "label_source": {
+      "type": "string",
+      "const": "codex_draft"
+    },
+    "label_status": {
+      "type": "string",
+      "const": "review_needed"
+    },
+    "field_label_source": {
+      "type": "string",
+      "const": "raw_free_korean_field_label_template"
+    },
+    "field_label_terms": {
+      "$ref": "#/$defs/safe_term_list"
+    },
+    "left_context_terms": {
+      "$ref": "#/$defs/safe_term_list"
+    },
+    "right_context_terms": {
+      "$ref": "#/$defs/safe_term_list"
+    },
+    "template_structure": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "enum": [
+          "DOMAIN_CONTEXT",
+          "FIELD_LABEL",
+          "PII_SLOT",
+          "ACTION_CONTEXT"
+        ]
+      }
+    },
+    "slot_mappings": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "$ref": "#/$defs/slot_mapping"
+      }
+    },
+    "usable_for_synthetic_insertion": {
+      "type": "boolean",
+      "const": true
+    },
+    "contains_raw_pii": {
+      "type": "boolean",
+      "const": false
+    },
+    "raw_value_logged": {
+      "type": "boolean",
+      "const": false
+    },
+    "raw_url_logged": {
+      "type": "boolean",
+      "const": false
+    },
+    "raw_sentence_logged": {
+      "type": "boolean",
+      "const": false
+    },
+    "page_body_stored": {
+      "type": "boolean",
+      "const": false
+    },
+    "candidate_value_stored": {
+      "type": "boolean",
+      "const": false
+    },
+    "evidence_role": {
+      "type": "string",
+      "const": "template_extraction_only_not_score_tuning"
+    }
+  },
+  "$defs": {
+    "safe_term_list": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "$ref": "#/$defs/safe_term"
+      },
+      "uniqueItems": true
+    },
+    "safe_term": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32,
+      "pattern": "^[^\\r\\n\\t]+$",
+      "not": {
+        "anyOf": [
+          {
+            "pattern": "[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}"
+          },
+          {
+            "pattern": "[0-9]{6}-[0-9]{7}"
+          },
+          {
+            "pattern": "(?<![0-9])(?![0-9]{4}-[0-9]{2}-[0-9]{2})[0-9]{2,6}-[0-9]{2,6}-[0-9]{2,6}(?![0-9])"
+          },
+          {
+            "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+          },
+          {
+            "pattern": "https?://"
+          }
+        ]
+      }
+    },
+    "slot_mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot_id",
+        "anchor_entity",
+        "anchor_shape",
+        "stored_value_policy",
+        "synthetic_insertion_allowed"
+      ],
+      "properties": {
+        "slot_id": {
+          "type": "string",
+          "const": "slot_1"
+        },
+        "anchor_entity": {
+          "type": "string",
+          "enum": [
+            "PERSON_NAME",
+            "ADDRESS_FULL",
+            "ADDRESS_UNIT"
+          ]
+        },
+        "anchor_shape": {
+          "type": "string",
+          "enum": [
+            "korean_name_2_syllable",
+            "korean_name_3_syllable",
+            "korean_name_4_syllable",
+            "road_address_shape",
+            "lot_address_shape",
+            "address_unit_shape"
+          ]
+        },
+        "stored_value_policy": {
+          "type": "string",
+          "const": "shape_only_value_never_persisted"
+        },
+        "synthetic_insertion_allowed": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "entity_group": { "const": "PERSON_NAME" }
+        }
+      },
+      "then": {
+        "properties": {
+          "anchor_entity": { "const": "PERSON_NAME" },
+          "anchor_shape": {
+            "enum": [
+              "korean_name_2_syllable",
+              "korean_name_3_syllable",
+              "korean_name_4_syllable"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "entity_group": { "const": "ADDRESS" }
+        }
+      },
+      "then": {
+        "properties": {
+          "anchor_entity": {
+            "enum": [
+              "ADDRESS_FULL",
+              "ADDRESS_UNIT"
+            ]
+          },
+          "anchor_shape": {
+            "enum": [
+              "road_address_shape",
+              "lot_address_shape",
+              "address_unit_shape"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "not": {
+    "anyOf": [
+      { "required": ["address_value"] },
+      { "required": ["candidate_value"] },
+      { "required": ["document_text"] },
+      { "required": ["html"] },
+      { "required": ["html_text"] },
+      { "required": ["page_body"] },
+      { "required": ["raw_address"] },
+      { "required": ["raw_name"] },
+      { "required": ["raw_sentence"] },
+      { "required": ["raw_text"] },
+      { "required": ["raw_url"] },
+      { "required": ["raw_value"] },
+      { "required": ["sentence"] },
+      { "required": ["span_text"] },
+      { "required": ["template_sentence"] },
+      { "required": ["template_text"] },
+      { "required": ["text"] },
+      { "required": ["url"] },
+      { "required": ["value"] }
+    ]
+  }
+}
