@@ -1,0 +1,123 @@
+{
+  "by_anchor_entity": {
+    "ADDRESS_FULL": 6,
+    "ADDRESS_UNIT": 1,
+    "BANK_ACCOUNT": 99,
+    "EMAIL": 71,
+    "PERSON_NAME": 7
+  },
+  "by_entity_group": {
+    "ADDRESS": 7,
+    "BANK_ACCOUNT": 99,
+    "EMAIL": 71,
+    "PERSON_NAME": 7
+  },
+  "by_source_domain": {
+    "customer_support": 30,
+    "ecommerce": 2,
+    "education": 10,
+    "enterprise_internal": 69,
+    "finance": 51,
+    "healthcare": 12,
+    "public_services": 10
+  },
+  "candidate_value_stored": false,
+  "contains_raw_pii_true_count": 0,
+  "context_rule_changed": false,
+  "evidence_role": "safe_synthetic_insertion_not_score_tuning",
+  "final_anchor_window_count": 1293,
+  "final_by_anchor_entity": {
+    "ADDRESS_FULL": 6,
+    "ADDRESS_UNIT": 1,
+    "BANK_ACCOUNT": 435,
+    "BUSINESS_REG_NO": 74,
+    "EMAIL": 295,
+    "PERSON_NAME": 7,
+    "PHONE_LANDLINE": 461,
+    "PHONE_MOBILE": 14
+  },
+  "final_by_label": {
+    "non_pii": 1109,
+    "true_pii": 184,
+    "unknown": 0
+  },
+  "final_current_counts_by_core_entity": {
+    "ADDRESS": {
+      "non_pii": 0,
+      "true_pii": 7,
+      "unknown": 0
+    },
+    "BANK_ACCOUNT": {
+      "non_pii": 336,
+      "true_pii": 99,
+      "unknown": 0
+    },
+    "EMAIL": {
+      "non_pii": 224,
+      "true_pii": 71,
+      "unknown": 0
+    },
+    "PERSON_NAME": {
+      "non_pii": 0,
+      "true_pii": 7,
+      "unknown": 0
+    },
+    "PHONE": {
+      "non_pii": 475,
+      "true_pii": 0,
+      "unknown": 0
+    },
+    "REGISTRATION_IDENTIFIER": {
+      "non_pii": 74,
+      "true_pii": 0,
+      "unknown": 0
+    }
+  },
+  "final_data_quality_gate_failure_verdicts": [
+    "data_quality_gate_pass"
+  ],
+  "final_data_quality_gate_status": "pass",
+  "generated_at": "2026-05-31T19:49:06.258249+00:00",
+  "page_body_stored": false,
+  "phase": "Phase 4. Safe Synthetic True-PII Insertion",
+  "phase_exit_gate": {
+    "checks": {
+      "address_true_pii_present": true,
+      "all_synthetic_rows_true_pii": true,
+      "context_rule_unchanged": true,
+      "person_name_true_pii_present": true,
+      "raw_pii_safety_pass": true,
+      "review_needed_not_gold_labels": true,
+      "runtime_scoring_behavior_unchanged": true,
+      "safe_synthetic_generator_source_only": true,
+      "safe_synthetic_insertion_lane_only": true,
+      "score_delta_unchanged": true,
+      "synthetic_true_pii_rows_present": true,
+      "synthetic_value_not_materialized": true
+    },
+    "failure_verdicts": [
+      "safe_synthetic_insertion_gate_pass"
+    ],
+    "status": "pass"
+  },
+  "public_corpus_used_for_score_tuning": false,
+  "raw_pii_leak_count": 0,
+  "raw_url_logged_count": 0,
+  "raw_value_logged_count": 0,
+  "reason_codes": [
+    "context_corpus.safety.pass"
+  ],
+  "report_type": "ContextSyntheticInsertionSafetyReport",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "context_synthetic_true_pii_anchor_windows_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "status": "pass",
+  "stored_value_policy": "shape_only_value_never_persisted",
+  "synthetic_anchor_window_count": 184,
+  "synthetic_value_materialized": false,
+  "targeted_true_pii_counts": {
+    "ADDRESS": 7,
+    "PERSON_NAME": 7
+  }
+}

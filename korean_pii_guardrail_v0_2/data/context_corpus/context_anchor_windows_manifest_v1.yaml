@@ -11,9 +11,9 @@
       "max_duplicate_anchor_window_ratio": true,
       "max_example_or_sample_document_ratio": true,
       "max_general_web_or_explanatory_ratio": true,
-      "max_single_domain_ratio_by_core_entity": false,
+      "max_single_domain_ratio_by_core_entity": true,
       "max_unknown_label_ratio_when_labels_present": true,
-      "min_domain_count_by_core_entity": false,
+      "min_domain_count_by_core_entity": true,
       "min_realistic_input_like_ratio": true,
       "practical_metadata_present": true,
       "public_web_only_rows_not_score_evidence": true,
@@ -22,8 +22,7 @@
       "raw_value_logged_count_zero": true
     },
     "failure_verdicts": [
-      "needs_domain_split",
-      "needs_more_data"
+      "data_quality_gate_pass"
     ],
     "pass_criteria": {
       "invalid_offset_count": 0,
@@ -37,72 +36,77 @@
       "raw_pii_leak_count": 0
     },
     "score_tuning_allowed_by_this_phase": false,
-    "status": "fail"
+    "status": "pass"
   },
-  "generated_at": "2026-05-31T18:27:56.258876+00:00",
+  "generated_at": "2026-05-31T19:49:47.149332+00:00",
   "manifest_type": "ContextAnchorWindowsManifest",
   "measurements": {
     "by_anchor_entity": {
-      "BANK_ACCOUNT": 336,
+      "ADDRESS_FULL": 6,
+      "ADDRESS_UNIT": 1,
+      "BANK_ACCOUNT": 435,
       "BUSINESS_REG_NO": 74,
-      "EMAIL": 224,
+      "EMAIL": 295,
+      "PERSON_NAME": 7,
       "PHONE_LANDLINE": 461,
       "PHONE_MOBILE": 14
     },
     "by_evidence_lane": {
-      "public_web_context": 1109
+      "public_web_context": 1109,
+      "safe_synthetic_insertion": 184
     },
     "by_label": {
       "non_pii": 1109,
-      "true_pii": 0,
+      "true_pii": 184,
       "unknown": 0
     },
     "by_label_source": {
-      "codex_draft": 1109
+      "codex_draft": 1109,
+      "safe_synthetic_generator": 184
     },
     "by_label_status": {
-      "review_needed": 1109
+      "review_needed": 1293
     },
     "by_material_class": {
       "example_or_sample": 0,
       "general_web_or_explanatory": 140,
-      "realistic_input_like": 969
+      "realistic_input_like": 1153
     },
     "by_material_type": {
       "example_or_sample": 0,
       "general_web_or_explanatory": 140,
-      "realistic_input_like": 969
+      "realistic_input_like": 1153
     },
     "by_source_domain": {
-      "customer_support": 59,
+      "customer_support": 89,
       "developer_docs": 12,
-      "ecommerce": 289,
-      "education": 180,
-      "enterprise_internal": 8,
-      "finance": 50,
+      "ecommerce": 291,
+      "education": 190,
+      "enterprise_internal": 77,
+      "finance": 101,
       "general_web": 128,
-      "healthcare": 209,
-      "public_services": 174
+      "healthcare": 221,
+      "public_services": 184
     },
     "current_counts_by_core_entity": {
       "ADDRESS": {
         "non_pii": 0,
-        "true_pii": 0,
+        "true_pii": 7,
         "unknown": 0
       },
       "BANK_ACCOUNT": {
         "non_pii": 336,
-        "true_pii": 0,
+        "true_pii": 99,
         "unknown": 0
       },
       "EMAIL": {
         "non_pii": 224,
-        "true_pii": 0,
+        "true_pii": 71,
         "unknown": 0
       },
       "PERSON_NAME": {
         "non_pii": 0,
-        "true_pii": 0,
+        "true_pii": 7,
         "unknown": 0
       },
       "PHONE": {
@@ -117,37 +121,54 @@
       }
     },
     "domain_count_by_core_entity": {
-      "ADDRESS": 0,
+      "ADDRESS": 7,
       "BANK_ACCOUNT": 9,
-      "EMAIL": 8,
-      "PERSON_NAME": 0,
+      "EMAIL": 9,
+      "PERSON_NAME": 7,
       "PHONE": 9,
       "REGISTRATION_IDENTIFIER": 8
     },
     "domain_counts_by_core_entity": {
-      "ADDRESS": {},
+      "ADDRESS": {
+        "customer_support": 1,
+        "ecommerce": 1,
+        "education": 1,
+        "enterprise_internal": 1,
+        "finance": 1,
+        "healthcare": 1,
+        "public_services": 1
+      },
       "BANK_ACCOUNT": {
-        "customer_support": 28,
+        "customer_support": 43,
         "developer_docs": 3,
         "ecommerce": 145,
         "education": 57,
-        "enterprise_internal": 1,
-        "finance": 18,
+        "enterprise_internal": 42,
+        "finance": 43,
         "general_web": 17,
-        "healthcare": 33,
-        "public_services": 34
+        "healthcare": 43,
+        "public_services": 42
       },
       "EMAIL": {
-        "customer_support": 14,
+        "customer_support": 27,
         "developer_docs": 5,
         "ecommerce": 92,
-        "education": 18,
-        "finance": 3,
+        "education": 26,
+        "enterprise_internal": 26,
+        "finance": 27,
         "general_web": 27,
         "healthcare": 35,
         "public_services": 30
       },
-      "PERSON_NAME": {},
+      "PERSON_NAME": {
+        "customer_support": 1,
+        "ecommerce": 1,
+        "education": 1,
+        "enterprise_internal": 1,
+        "finance": 1,
+        "healthcare": 1,
+        "public_services": 1
+      },
       "PHONE": {
         "customer_support": 9,
         "developer_docs": 3,
@@ -171,10 +192,10 @@
       }
     },
     "domain_ratio_gate_by_core_entity": {
-      "ADDRESS": false,
-      "BANK_ACCOUNT": false,
-      "EMAIL": false,
-      "PERSON_NAME": false,
+      "ADDRESS": true,
+      "BANK_ACCOUNT": true,
+      "EMAIL": true,
+      "PERSON_NAME": true,
       "PHONE": true,
       "REGISTRATION_IDENTIFIER": true
     },
@@ -263,14 +284,20 @@
     "invalid_anchor_row_count": 0,
     "invalid_offset_count": 0,
     "label_counts_by_core_entity": {
-      "ADDRESS": {},
+      "ADDRESS": {
+        "true_pii": 7
+      },
       "BANK_ACCOUNT": {
-        "non_pii": 336
+        "non_pii": 336,
+        "true_pii": 99
       },
       "EMAIL": {
-        "non_pii": 224
+        "non_pii": 224,
+        "true_pii": 71
       },
-      "PERSON_NAME": {},
+      "PERSON_NAME": {
+        "true_pii": 7
+      },
       "PHONE": {
         "non_pii": 475
       },
@@ -280,14 +307,14 @@
     },
     "material_ratios": {
       "example_or_sample": 0.0,
-      "general_web_or_explanatory": 0.12624,
-      "realistic_input_like": 0.87376
+      "general_web_or_explanatory": 0.108275,
+      "realistic_input_like": 0.891725
     },
     "max_single_domain_ratio_by_core_entity": {
-      "ADDRESS": 0.0,
-      "BANK_ACCOUNT": 0.431548,
-      "EMAIL": 0.410714,
-      "PERSON_NAME": 0.0,
+      "ADDRESS": 0.142857,
+      "BANK_ACCOUNT": 0.333333,
+      "EMAIL": 0.311864,
+      "PERSON_NAME": 0.142857,
       "PHONE": 0.267368,
       "REGISTRATION_IDENTIFIER": 0.27027
     },
@@ -319,7 +346,7 @@
     },
     "offsets_stored": false,
     "public_web_reviewer_approved_count": 0,
-    "total_anchor_windows": 1109,
+    "total_anchor_windows": 1293,
     "unknown_label_ratio": 0.0
   },
   "public_corpus_used_for_score_tuning": false,
