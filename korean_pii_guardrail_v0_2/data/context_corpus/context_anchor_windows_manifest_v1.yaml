@@ -1,28 +1,29 @@
 {
-  "anchor_input_exists": false,
+  "anchor_input_exists": true,
   "anchor_input_path": "data/context_corpus/context_anchor_windows_v1.jsonl",
   "context_rule_changed": false,
   "data_quality_gate": {
     "checks": {
-      "anchor_input_exists": false,
-      "has_anchor_windows": false,
+      "anchor_input_exists": true,
+      "has_anchor_windows": true,
       "invalid_anchor_row_count_zero": true,
       "invalid_offset_count_zero": true,
       "max_duplicate_anchor_window_ratio": true,
       "max_example_or_sample_document_ratio": true,
       "max_general_web_or_explanatory_ratio": true,
-      "max_single_domain_ratio_by_core_entity": true,
+      "max_single_domain_ratio_by_core_entity": false,
       "max_unknown_label_ratio_when_labels_present": true,
       "min_domain_count_by_core_entity": false,
-      "min_realistic_input_like_ratio": false,
+      "min_realistic_input_like_ratio": true,
+      "practical_metadata_present": true,
+      "public_web_only_rows_not_score_evidence": true,
       "raw_pii_leak_count_zero": true,
       "raw_url_logged_count_zero": true,
       "raw_value_logged_count_zero": true
     },
     "failure_verdicts": [
-      "needs_anchor_corpus",
-      "needs_more_data",
-      "needs_material_mix"
+      "needs_domain_split",
+      "needs_more_data"
     ],
     "pass_criteria": {
       "invalid_offset_count": 0,
@@ -38,72 +39,287 @@
     "score_tuning_allowed_by_this_phase": false,
     "status": "fail"
   },
-  "generated_at": "2026-05-29T18:49:04.116889+00:00",
+  "generated_at": "2026-05-31T18:27:56.258876+00:00",
   "manifest_type": "ContextAnchorWindowsManifest",
   "measurements": {
-    "by_anchor_entity": {},
+    "by_anchor_entity": {
+      "BANK_ACCOUNT": 336,
+      "BUSINESS_REG_NO": 74,
+      "EMAIL": 224,
+      "PHONE_LANDLINE": 461,
+      "PHONE_MOBILE": 14
+    },
+    "by_evidence_lane": {
+      "public_web_context": 1109
+    },
     "by_label": {
-      "non_pii": 0,
+      "non_pii": 1109,
       "true_pii": 0,
       "unknown": 0
     },
+    "by_label_source": {
+      "codex_draft": 1109
+    },
+    "by_label_status": {
+      "review_needed": 1109
+    },
     "by_material_class": {
       "example_or_sample": 0,
-      "general_web_or_explanatory": 0,
-      "realistic_input_like": 0
+      "general_web_or_explanatory": 140,
+      "realistic_input_like": 969
     },
-    "by_source_domain": {},
+    "by_material_type": {
+      "example_or_sample": 0,
+      "general_web_or_explanatory": 140,
+      "realistic_input_like": 969
+    },
+    "by_source_domain": {
+      "customer_support": 59,
+      "developer_docs": 12,
+      "ecommerce": 289,
+      "education": 180,
+      "enterprise_internal": 8,
+      "finance": 50,
+      "general_web": 128,
+      "healthcare": 209,
+      "public_services": 174
+    },
+    "current_counts_by_core_entity": {
+      "ADDRESS": {
+        "non_pii": 0,
+        "true_pii": 0,
+        "unknown": 0
+      },
+      "BANK_ACCOUNT": {
+        "non_pii": 336,
+        "true_pii": 0,
+        "unknown": 0
+      },
+      "EMAIL": {
+        "non_pii": 224,
+        "true_pii": 0,
+        "unknown": 0
+      },
+      "PERSON_NAME": {
+        "non_pii": 0,
+        "true_pii": 0,
+        "unknown": 0
+      },
+      "PHONE": {
+        "non_pii": 475,
+        "true_pii": 0,
+        "unknown": 0
+      },
+      "REGISTRATION_IDENTIFIER": {
+        "non_pii": 74,
+        "true_pii": 0,
+        "unknown": 0
+      }
+    },
     "domain_count_by_core_entity": {
       "ADDRESS": 0,
-      "BANK_ACCOUNT": 0,
-      "EMAIL": 0,
+      "BANK_ACCOUNT": 9,
+      "EMAIL": 8,
       "PERSON_NAME": 0,
-      "PHONE": 0,
-      "REGISTRATION_IDENTIFIER": 0
+      "PHONE": 9,
+      "REGISTRATION_IDENTIFIER": 8
     },
     "domain_counts_by_core_entity": {
       "ADDRESS": {},
-      "BANK_ACCOUNT": {},
-      "EMAIL": {},
+      "BANK_ACCOUNT": {
+        "customer_support": 28,
+        "developer_docs": 3,
+        "ecommerce": 145,
+        "education": 57,
+        "enterprise_internal": 1,
+        "finance": 18,
+        "general_web": 17,
+        "healthcare": 33,
+        "public_services": 34
+      },
+      "EMAIL": {
+        "customer_support": 14,
+        "developer_docs": 5,
+        "ecommerce": 92,
+        "education": 18,
+        "finance": 3,
+        "general_web": 27,
+        "healthcare": 35,
+        "public_services": 30
+      },
       "PERSON_NAME": {},
-      "PHONE": {},
-      "REGISTRATION_IDENTIFIER": {}
+      "PHONE": {
+        "customer_support": 9,
+        "developer_docs": 3,
+        "ecommerce": 32,
+        "education": 94,
+        "enterprise_internal": 1,
+        "finance": 25,
+        "general_web": 74,
+        "healthcare": 127,
+        "public_services": 110
+      },
+      "REGISTRATION_IDENTIFIER": {
+        "customer_support": 8,
+        "developer_docs": 1,
+        "ecommerce": 20,
+        "education": 11,
+        "enterprise_internal": 6,
+        "finance": 4,
+        "general_web": 10,
+        "healthcare": 14
+      }
     },
     "domain_ratio_gate_by_core_entity": {
       "ADDRESS": false,
       "BANK_ACCOUNT": false,
       "EMAIL": false,
       "PERSON_NAME": false,
-      "PHONE": false,
-      "REGISTRATION_IDENTIFIER": false
+      "PHONE": true,
+      "REGISTRATION_IDENTIFIER": true
     },
     "duplicate_anchor_window_count": 0,
     "duplicate_anchor_window_ratio": 0.0,
+    "gap_reasons_by_core_entity": {
+      "ADDRESS": [
+        "true_pii_below_mvp_target",
+        "non_pii_below_mvp_target",
+        "requires_template_extraction_track",
+        "reviewer_approved_labels_absent",
+        "not_final_score_evidence"
+      ],
+      "BANK_ACCOUNT": [
+        "true_pii_below_mvp_target",
+        "non_pii_below_mvp_target",
+        "reviewer_approved_labels_absent",
+        "not_final_score_evidence"
+      ],
+      "EMAIL": [
+        "true_pii_below_mvp_target",
+        "non_pii_below_mvp_target",
+        "reviewer_approved_labels_absent",
+        "not_final_score_evidence"
+      ],
+      "PERSON_NAME": [
+        "true_pii_below_mvp_target",
+        "non_pii_below_mvp_target",
+        "requires_template_extraction_track",
+        "reviewer_approved_labels_absent",
+        "not_final_score_evidence"
+      ],
+      "PHONE": [
+        "true_pii_below_mvp_target",
+        "non_pii_below_mvp_target",
+        "reviewer_approved_labels_absent",
+        "not_final_score_evidence"
+      ],
+      "REGISTRATION_IDENTIFIER": [
+        "true_pii_below_mvp_target",
+        "non_pii_below_mvp_target",
+        "reviewer_approved_labels_absent",
+        "not_final_score_evidence"
+      ]
+    },
+    "gap_verdicts_by_core_entity": {
+      "ADDRESS": [
+        "evidence_backlog",
+        "needs_more_data",
+        "needs_reviewer_labels",
+        "needs_synthetic_true_pii",
+        "needs_template_extraction"
+      ],
+      "BANK_ACCOUNT": [
+        "evidence_backlog",
+        "needs_more_data",
+        "needs_reviewer_labels",
+        "needs_synthetic_true_pii"
+      ],
+      "EMAIL": [
+        "evidence_backlog",
+        "needs_more_data",
+        "needs_reviewer_labels",
+        "needs_synthetic_true_pii"
+      ],
+      "PERSON_NAME": [
+        "evidence_backlog",
+        "needs_more_data",
+        "needs_reviewer_labels",
+        "needs_synthetic_true_pii",
+        "needs_template_extraction"
+      ],
+      "PHONE": [
+        "evidence_backlog",
+        "needs_more_data",
+        "needs_reviewer_labels",
+        "needs_synthetic_true_pii"
+      ],
+      "REGISTRATION_IDENTIFIER": [
+        "evidence_backlog",
+        "needs_more_data",
+        "needs_reviewer_labels",
+        "needs_synthetic_true_pii"
+      ]
+    },
     "invalid_anchor_row_count": 0,
     "invalid_offset_count": 0,
     "label_counts_by_core_entity": {
       "ADDRESS": {},
-      "BANK_ACCOUNT": {},
-      "EMAIL": {},
+      "BANK_ACCOUNT": {
+        "non_pii": 336
+      },
+      "EMAIL": {
+        "non_pii": 224
+      },
       "PERSON_NAME": {},
-      "PHONE": {},
-      "REGISTRATION_IDENTIFIER": {}
+      "PHONE": {
+        "non_pii": 475
+      },
+      "REGISTRATION_IDENTIFIER": {
+        "non_pii": 74
+      }
     },
     "material_ratios": {
       "example_or_sample": 0.0,
-      "general_web_or_explanatory": 0.0,
-      "realistic_input_like": 0.0
+      "general_web_or_explanatory": 0.12624,
+      "realistic_input_like": 0.87376
     },
     "max_single_domain_ratio_by_core_entity": {
       "ADDRESS": 0.0,
-      "BANK_ACCOUNT": 0.0,
-      "EMAIL": 0.0,
+      "BANK_ACCOUNT": 0.431548,
+      "EMAIL": 0.410714,
       "PERSON_NAME": 0.0,
-      "PHONE": 0.0,
-      "REGISTRATION_IDENTIFIER": 0.0
+      "PHONE": 0.267368,
+      "REGISTRATION_IDENTIFIER": 0.27027
+    },
+    "mvp_targets_by_core_entity": {
+      "ADDRESS": {
+        "non_pii": 1500,
+        "true_pii": 1500
+      },
+      "BANK_ACCOUNT": {
+        "non_pii": 1000,
+        "true_pii": 1000
+      },
+      "EMAIL": {
+        "non_pii": 1000,
+        "true_pii": 1000
+      },
+      "PERSON_NAME": {
+        "non_pii": 2000,
+        "true_pii": 2000
+      },
+      "PHONE": {
+        "non_pii": 1500,
+        "true_pii": 1500
+      },
+      "REGISTRATION_IDENTIFIER": {
+        "non_pii": 800,
+        "true_pii": 800
+      }
     },
     "offsets_stored": false,
-    "total_anchor_windows": 0,
+    "public_web_reviewer_approved_count": 0,
+    "total_anchor_windows": 1109,
     "unknown_label_ratio": 0.0
   },
   "public_corpus_used_for_score_tuning": false,

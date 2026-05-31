@@ -10,7 +10,13 @@ from typing import Any, Iterable
 
 from .context_anchor_collector import (
     DOMAIN_TO_MATERIAL,
+    LABEL_COUNT_KEYS,
+    MVP_TARGETS_BY_CORE_ENTITY,
     SCHEMA_VERSION,
+    VALID_EVIDENCE_LANES,
+    VALID_LABEL_SOURCES,
+    VALID_LABEL_STATUSES,
+    annotate_context_anchor_rows,
     build_context_anchor_safety_report,
     context_anchor_windows_jsonl,
     load_context_anchor_windows_jsonl,
@@ -39,8 +45,14 @@ def build_context_anchor_manifest(
     rows: Iterable[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     input_exists = rows is not None or anchor_input_path.exists()
-    row_list = list(rows) if rows is not None else (
-        load_context_anchor_windows_jsonl(anchor_input_path) if input_exists else []
+    row_list = annotate_context_anchor_rows(
+        list(rows)
+        if rows is not None
+        else (
+            load_context_anchor_windows_jsonl(anchor_input_path)
+            if input_exists
+            else []
+        )
     )
     measurements = _build_measurements(row_list)
     safety = build_context_anchor_safety_report(
@@ -110,8 +122,24 @@ def _build_measurements(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
     by_source_domain = Counter(str(row.get("source_domain", "unknown")) for row in rows)
     by_material_class = Counter(str(row.get("material_class", "unknown")) for row in rows)
+    by_material_type = Counter(
+        str(row.get("material_type", row.get("material_class", "unknown")))
+        for row in rows
+    )
     by_label = Counter(str(row.get("label", "unknown")) for row in rows)
     by_entity = Counter(str(row.get("anchor_entity", "unknown")) for row in rows)
+    by_evidence_lane = Counter(str(row.get("evidence_lane", "unknown")) for row in rows)
+    by_label_source = Counter(str(row.get("label_source", "unknown")) for row in rows)
+    by_label_status = Counter(str(row.get("label_status", "unknown")) for row in rows)
+    public_web_reviewer_approved_count = sum(
+        1
+        for row in rows
+        if row.get("evidence_lane") == "public_web_context"
+        and (
+            row.get("label_source") == "reviewer_approved"
+            or row.get("label_status") == "reviewer_approved"
+        )
+    )
     invalid_anchor_row_count = 0
 
     for row in rows:
@@ -119,6 +147,7 @@ def _build_measurements(rows: list[dict[str, Any]]) -> dict[str, Any]:
         entity_group = ENTITY_TO_GROUP.get(entity)
         domain = str(row.get("source_domain", "unknown"))
         material_class = str(row.get("material_class", "unknown"))
+        material_type = str(row.get("material_type", "unknown"))
         label = str(row.get("label", "unknown"))
         if entity_group is None:
             invalid_anchor_row_count += 1
@@ -126,6 +155,14 @@ def _build_measurements(rows: list[dict[str, Any]]) -> dict[str, Any]:
         by_entity_group_domain[entity_group][domain] += 1
         by_entity_group_label[entity_group][label] += 1
         if DOMAIN_TO_MATERIAL.get(domain) != material_class:
+            invalid_anchor_row_count += 1
+        if material_type != material_class:
+            invalid_anchor_row_count += 1
+        if str(row.get("evidence_lane", "")) not in VALID_EVIDENCE_LANES:
+            invalid_anchor_row_count += 1
+        if str(row.get("label_source", "")) not in VALID_LABEL_SOURCES:
+            invalid_anchor_row_count += 1
+        if str(row.get("label_status", "")) not in VALID_LABEL_STATUSES:
             invalid_anchor_row_count += 1
 
     duplicate_count, duplicate_ratio = _duplicate_measurement(rows)
@@ -154,6 +191,14 @@ def _build_measurements(rows: list[dict[str, Any]]) -> dict[str, Any]:
             material_class: by_material_class.get(material_class, 0)
             for material_class in MATERIAL_CLASSES
         },
+        "by_material_type": {
+            material_class: by_material_type.get(material_class, 0)
+            for material_class in MATERIAL_CLASSES
+        },
+        "by_evidence_lane": dict(sorted(by_evidence_lane.items())),
+        "by_label_source": dict(sorted(by_label_source.items())),
+        "by_label_status": dict(sorted(by_label_status.items())),
+        "public_web_reviewer_approved_count": public_web_reviewer_approved_count,
         "by_label": {
             "true_pii": by_label.get("true_pii", 0),
             "non_pii": by_label.get("non_pii", 0),
@@ -170,6 +215,24 @@ def _build_measurements(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "domain_count_by_core_entity": domain_count_by_core_entity,
         "max_single_domain_ratio_by_core_entity": max_single_domain_ratio_by_core_entity,
         "domain_ratio_gate_by_core_entity": domain_ratio_gate_by_core_entity,
+        "mvp_targets_by_core_entity": {
+            entity_group: dict(MVP_TARGETS_BY_CORE_ENTITY[entity_group])
+            for entity_group in CORE_ENTITY_GROUPS
+        },
+        "current_counts_by_core_entity": {
+            entity_group: {
+                label: by_entity_group_label[entity_group].get(label, 0)
+                for label in LABEL_COUNT_KEYS
+            }
+            for entity_group in CORE_ENTITY_GROUPS
+        },
+        "gap_reasons_by_core_entity": _gap_reasons_by_core_entity(
+            by_entity_group_label
+        ),
+        "gap_verdicts_by_core_entity": _gap_verdicts_by_core_entity(
+            by_entity_group_label,
+            by_label_source,
+        ),
         "material_ratios": {
             material_class: _ratio(by_material_class.get(material_class, 0), total)
             for material_class in MATERIAL_CLASSES
@@ -210,6 +273,22 @@ def _data_quality_gate(
         "raw_value_logged_count_zero": safety["raw_value_logged_count"] == 0,
         "invalid_offset_count_zero": measurements["invalid_offset_count"] == 0,
         "invalid_anchor_row_count_zero": measurements["invalid_anchor_row_count"] == 0,
+        "practical_metadata_present": all(
+            field in measurements
+            for field in (
+                "by_evidence_lane",
+                "by_label_source",
+                "by_label_status",
+                "by_material_type",
+                "mvp_targets_by_core_entity",
+                "current_counts_by_core_entity",
+                "gap_reasons_by_core_entity",
+                "gap_verdicts_by_core_entity",
+            )
+        ),
+        "public_web_only_rows_not_score_evidence": (
+            measurements["public_web_reviewer_approved_count"] == 0
+        ),
         "min_domain_count_by_core_entity": all(
             count >= MIN_DOMAIN_COUNT_BY_CORE_ENTITY
             for count in measurements["domain_count_by_core_entity"].values()
@@ -237,7 +316,7 @@ def _data_quality_gate(
             measurements["unknown_label_ratio"] <= MAX_UNKNOWN_LABEL_RATIO
         ),
     }
-    failure_verdicts = _failure_verdicts(checks)
+    failure_verdicts = _failure_verdicts(checks, measurements)
     return {
         "status": "pass" if all(checks.values()) else "fail",
         "checks": checks,
@@ -247,7 +326,58 @@ def _data_quality_gate(
     }
 
 
-def _failure_verdicts(checks: dict[str, bool]) -> list[str]:
+def _gap_reasons_by_core_entity(
+    by_entity_group_label: dict[str, Counter[str]],
+) -> dict[str, list[str]]:
+    reasons: dict[str, list[str]] = {}
+    for entity_group in CORE_ENTITY_GROUPS:
+        target = MVP_TARGETS_BY_CORE_ENTITY[entity_group]
+        counts = by_entity_group_label[entity_group]
+        entity_reasons: list[str] = []
+        if counts.get("true_pii", 0) < target["true_pii"]:
+            entity_reasons.append("true_pii_below_mvp_target")
+        if counts.get("non_pii", 0) < target["non_pii"]:
+            entity_reasons.append("non_pii_below_mvp_target")
+        if entity_group in {"PERSON_NAME", "ADDRESS"}:
+            entity_reasons.append("requires_template_extraction_track")
+        entity_reasons.extend(
+            ["reviewer_approved_labels_absent", "not_final_score_evidence"]
+        )
+        reasons[entity_group] = entity_reasons or ["mvp_target_met"]
+    return reasons
+
+
+def _gap_verdicts_by_core_entity(
+    by_entity_group_label: dict[str, Counter[str]],
+    by_label_source: Counter[str],
+) -> dict[str, list[str]]:
+    verdicts: dict[str, list[str]] = {}
+    reviewer_labels_absent = by_label_source.get("reviewer_approved", 0) == 0
+    for entity_group in CORE_ENTITY_GROUPS:
+        target = MVP_TARGETS_BY_CORE_ENTITY[entity_group]
+        counts = by_entity_group_label[entity_group]
+        entity_verdicts: list[str] = []
+        if counts.get("true_pii", 0) < target["true_pii"]:
+            entity_verdicts.append("needs_synthetic_true_pii")
+        if entity_group in {"PERSON_NAME", "ADDRESS"}:
+            entity_verdicts.append("needs_template_extraction")
+        if reviewer_labels_absent:
+            entity_verdicts.append("needs_reviewer_labels")
+        if (
+            counts.get("true_pii", 0) < target["true_pii"]
+            or counts.get("non_pii", 0) < target["non_pii"]
+        ):
+            entity_verdicts.append("needs_more_data")
+        if entity_verdicts:
+            entity_verdicts.append("evidence_backlog")
+        verdicts[entity_group] = sorted(set(entity_verdicts)) or ["mvp_target_met"]
+    return verdicts
+
+
+def _failure_verdicts(
+    checks: dict[str, bool],
+    measurements: dict[str, Any],
+) -> list[str]:
     verdicts: list[str] = []
     if not checks["anchor_input_exists"] or not checks["has_anchor_windows"]:
         verdicts.append("needs_anchor_corpus")
@@ -266,6 +396,10 @@ def _failure_verdicts(checks: dict[str, bool]) -> list[str]:
         verdicts.append("raw_pii_safety_failure")
     if not checks["invalid_anchor_row_count_zero"]:
         verdicts.append("invalid_anchor_rows")
+    if not checks["practical_metadata_present"]:
+        verdicts.append("missing_practical_metadata")
+    if not checks["public_web_only_rows_not_score_evidence"]:
+        verdicts.append("public_web_score_evidence_blocked")
     if not all(
         checks[key]
         for key in (
@@ -281,7 +415,7 @@ def _failure_verdicts(checks: dict[str, bool]) -> list[str]:
         verdicts.append("needs_labels")
     if not verdicts:
         verdicts.append("data_quality_gate_pass")
-    return verdicts
+    return sorted(set(verdicts))
 
 
 def _duplicate_measurement(rows: list[dict[str, Any]]) -> tuple[int, float]:

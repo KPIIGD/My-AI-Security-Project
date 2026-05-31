@@ -11,6 +11,14 @@
     "label",
     "source_domain",
     "material_class",
+    "material_type",
+    "evidence_lane",
+    "label_source",
+    "label_status",
+    "mvp_target",
+    "current_count",
+    "gap_reason",
+    "gap_verdict",
     "distance_bucket",
     "left_ngrams",
     "right_ngrams",
@@ -125,6 +133,58 @@
         "example_or_sample"
       ]
     },
+    "material_type": {
+      "type": "string",
+      "enum": [
+        "realistic_input_like",
+        "general_web_or_explanatory",
+        "example_or_sample"
+      ]
+    },
+    "evidence_lane": {
+      "type": "string",
+      "enum": [
+        "public_web_context",
+        "template_extraction",
+        "safe_synthetic_insertion",
+        "hard_negative_corpus",
+        "customer_side_raw_free_aggregate",
+        "reviewer_approved_label",
+        "operational_replay_shadow"
+      ]
+    },
+    "label_source": {
+      "type": "string",
+      "enum": [
+        "unlabeled",
+        "codex_draft",
+        "reviewer_approved",
+        "safe_synthetic_generator",
+        "customer_raw_free_aggregate",
+        "operational_shadow"
+      ]
+    },
+    "label_status": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "review_needed",
+        "reviewer_approved",
+        "evidence_backlog"
+      ]
+    },
+    "mvp_target": {
+      "$ref": "#/$defs/mvp_target_count"
+    },
+    "current_count": {
+      "$ref": "#/$defs/current_label_count"
+    },
+    "gap_reason": {
+      "$ref": "#/$defs/gap_reason_list"
+    },
+    "gap_verdict": {
+      "$ref": "#/$defs/gap_verdict_list"
+    },
     "source_id_hash": {
       "type": "string",
       "pattern": "^sha256:[0-9a-f]{64}$"
@@ -189,6 +249,79 @@
         }
       }
     },
+    "mvp_target_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "true_pii",
+        "non_pii"
+      ],
+      "properties": {
+        "true_pii": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "non_pii": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "current_label_count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "true_pii",
+        "non_pii",
+        "unknown"
+      ],
+      "properties": {
+        "true_pii": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "non_pii": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unknown": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "gap_reason_list": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "true_pii_below_mvp_target",
+          "non_pii_below_mvp_target",
+          "requires_template_extraction_track",
+          "reviewer_approved_labels_absent",
+          "not_final_score_evidence",
+          "mvp_target_met"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "gap_verdict_list": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "needs_more_data",
+          "needs_synthetic_true_pii",
+          "needs_template_extraction",
+          "needs_reviewer_labels",
+          "evidence_backlog",
+          "mvp_target_met"
+        ]
+      },
+      "uniqueItems": true
+    },
     "ngram_bucket": {
       "type": "object",
       "additionalProperties": false,
@@ -231,7 +364,7 @@
             "pattern": "[0-9]{6}-[0-9]{7}"
           },
           {
-            "pattern": "[0-9]{2,6}-[0-9]{2,6}-[0-9]{2,6}"
+            "pattern": "(?<![0-9])(?![0-9]{4}-[0-9]{2}-[0-9]{2})[0-9]{2,6}-[0-9]{2,6}-[0-9]{2,6}(?![0-9])"
           },
           {
             "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"

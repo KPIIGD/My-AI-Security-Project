@@ -42,6 +42,13 @@ def test_anchor_collector_extracts_shape_and_context_without_candidate_value() -
     assert payload["anchor_entity"] == "PHONE_MOBILE"
     assert payload["anchor_shape"] == "mobile_phone_shape"
     assert payload["label"] == "unknown"
+    assert payload["evidence_lane"] == "public_web_context"
+    assert payload["label_source"] == "unlabeled"
+    assert payload["label_status"] == "unknown"
+    assert payload["material_type"] == payload["material_class"]
+    assert payload["mvp_target"] == {"true_pii": 1500, "non_pii": 1500}
+    assert payload["current_count"] == {"true_pii": 0, "non_pii": 0, "unknown": 1}
+    assert "needs_reviewer_labels" in payload["gap_verdict"]
     assert payload["left_ngrams"]["within_2_tokens"]["bigrams"] == ["contact phone"]
     assert payload["right_ngrams"]["within_2_tokens"]["bigrams"] == [
         "confirm delivery"
@@ -70,6 +77,8 @@ def test_anchor_collector_supports_raw_free_marker_labels_for_name_like_values()
     assert payload["anchor_shape"] == "korean_name_like_3_syllable"
     assert payload["anchor_source"] == "dictionary_or_ner"
     assert payload["label"] == "non_pii"
+    assert payload["label_source"] == "codex_draft"
+    assert payload["label_status"] == "review_needed"
     assert payload["source_domain"] == "developer_docs"
     assert payload["material_class"] == "general_web_or_explanatory"
 
@@ -107,7 +116,7 @@ def test_anchor_collector_outputs_schema_valid_unique_bounded_ngrams() -> None:
             "[[ANCHOR:PERSON_NAME:korean_name_3_syllable:true_pii:ner]] "
             f"repeat repeat {long_context}"
         ),
-        source_type="customer_support_help",
+        source_type="synthetic_safe_template",
         source_id="fixture://duplicate-context",
     )
 
@@ -220,7 +229,10 @@ def test_context_anchor_cli_writes_anchor_and_term_artifacts(tmp_path: Path) -> 
         "PHONE_MOBILE",
         "PERSON_NAME",
     }
+    assert all("evidence_lane" in row for row in anchor_payloads)
+    assert all(row["label_status"] in {"unknown", "review_needed"} for row in anchor_payloads)
     assert term_payloads
+    assert all("evidence_lane" in row for row in term_payloads)
     assert json.loads(anchor_safety.read_text(encoding="utf-8"))["status"] == "pass"
     assert json.loads(term_safety.read_text(encoding="utf-8"))["status"] == "pass"
     assert raw_phone not in combined

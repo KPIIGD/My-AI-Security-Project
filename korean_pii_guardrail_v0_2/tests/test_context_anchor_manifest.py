@@ -46,6 +46,17 @@ def test_context_anchor_manifest_passes_diverse_raw_free_fixture() -> None:
     assert manifest["raw_free_scan"]["raw_pii_leak_count"] == 0
     assert manifest["measurements"]["duplicate_anchor_window_ratio"] == 0.0
     assert manifest["measurements"]["material_ratios"]["realistic_input_like"] == 1.0
+    assert manifest["measurements"]["by_material_type"]["realistic_input_like"] == len(rows)
+    assert manifest["measurements"]["by_evidence_lane"] == {
+        "public_web_context": len(rows)
+    }
+    assert manifest["measurements"]["by_label_source"] == {"codex_draft": len(rows)}
+    assert all(
+        "needs_reviewer_labels" in verdicts
+        for verdicts in manifest["measurements"][
+            "gap_verdicts_by_core_entity"
+        ].values()
+    )
     assert all(
         count >= 5
         for count in manifest["measurements"][
@@ -191,6 +202,14 @@ def _anchor_row(
         "label": label,
         "source_domain": domain,
         "material_class": "realistic_input_like",
+        "material_type": "realistic_input_like",
+        "evidence_lane": "public_web_context",
+        "label_source": "codex_draft",
+        "label_status": "review_needed",
+        "mvp_target": {"true_pii": 2000, "non_pii": 2000},
+        "current_count": {"true_pii": 0, "non_pii": 0, "unknown": 0},
+        "gap_reason": ["reviewer_approved_labels_absent"],
+        "gap_verdict": ["needs_reviewer_labels"],
         "distance_bucket": "within_2_tokens",
         "left_ngrams": _ngram_windows(f"left-{unique}"),
         "right_ngrams": _ngram_windows(f"right-{unique}"),

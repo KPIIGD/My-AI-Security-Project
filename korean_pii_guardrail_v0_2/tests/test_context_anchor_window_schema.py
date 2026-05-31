@@ -55,6 +55,24 @@ def _valid_row() -> dict:
         "source_domain": "customer_support",
         "source_type": "customer_support_help",
         "material_class": "realistic_input_like",
+        "material_type": "realistic_input_like",
+        "evidence_lane": "safe_synthetic_insertion",
+        "label_source": "safe_synthetic_generator",
+        "label_status": "review_needed",
+        "mvp_target": {"true_pii": 2000, "non_pii": 2000},
+        "current_count": {"true_pii": 1, "non_pii": 0, "unknown": 0},
+        "gap_reason": [
+            "non_pii_below_mvp_target",
+            "requires_template_extraction_track",
+            "reviewer_approved_labels_absent",
+            "not_final_score_evidence",
+        ],
+        "gap_verdict": [
+            "needs_more_data",
+            "needs_template_extraction",
+            "needs_reviewer_labels",
+            "evidence_backlog",
+        ],
         "source_id_hash": "sha256:" + ("a" * 64),
         "distance_bucket": "within_5_tokens",
         "left_ngrams": _ngram_windows(),
@@ -165,3 +183,23 @@ def test_anchor_window_schema_aligns_with_source_inventory_taxonomy() -> None:
         row["source_type"] for row in SOURCE_TYPE_INVENTORY
     }
     assert set(schema["properties"]["material_class"]["enum"]) == set(MATERIAL_CLASSES)
+    assert set(schema["properties"]["material_type"]["enum"]) == set(MATERIAL_CLASSES)
+
+
+def test_anchor_window_schema_requires_practical_evidence_fields() -> None:
+    schema = _schema()
+
+    for field in (
+        "evidence_lane",
+        "label_source",
+        "label_status",
+        "material_type",
+        "mvp_target",
+        "current_count",
+        "gap_reason",
+        "gap_verdict",
+    ):
+        missing = _valid_row()
+        del missing[field]
+        with pytest.raises(jsonschema.ValidationError):
+            jsonschema.validate(missing, schema)
