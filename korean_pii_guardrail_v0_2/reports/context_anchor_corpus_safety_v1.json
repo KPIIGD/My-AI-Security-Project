@@ -1,22 +1,23 @@
 {
-  "anchor_window_count": 1293,
+  "anchor_window_count": 1307,
   "by_evidence_lane": {
+    "hard_negative_corpus": 14,
     "public_web_context": 1109,
     "safe_synthetic_insertion": 184
   },
   "by_label_source": {
-    "codex_draft": 1109,
+    "codex_draft": 1123,
     "safe_synthetic_generator": 184
   },
   "by_label_status": {
-    "review_needed": 1293
+    "review_needed": 1307
   },
   "candidate_value_stored": false,
   "contains_raw_pii_true_count": 0,
   "context_rule_changed": false,
-  "context_term_count": 19947,
+  "context_term_count": 20143,
   "evidence_role": "anchor_context_only_not_score_tuning",
-  "generated_at": "2026-05-31T19:49:02.403723+00:00",
+  "generated_at": "2026-06-01T00:42:48.204563+00:00",
   "page_body_stored": false,
   "public_corpus_used_for_score_tuning": false,
   "public_web_score_tuning_eligible_count": 0,

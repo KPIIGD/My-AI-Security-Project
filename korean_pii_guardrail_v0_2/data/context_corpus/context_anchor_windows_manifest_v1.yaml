@@ -38,59 +38,60 @@
     "score_tuning_allowed_by_this_phase": false,
     "status": "pass"
   },
-  "generated_at": "2026-05-31T19:49:47.149332+00:00",
+  "generated_at": "2026-06-01T00:42:48.790379+00:00",
   "manifest_type": "ContextAnchorWindowsManifest",
   "measurements": {
     "by_anchor_entity": {
-      "ADDRESS_FULL": 6,
-      "ADDRESS_UNIT": 1,
+      "ADDRESS_FULL": 10,
+      "ADDRESS_UNIT": 4,
       "BANK_ACCOUNT": 435,
       "BUSINESS_REG_NO": 74,
       "EMAIL": 295,
-      "PERSON_NAME": 7,
+      "PERSON_NAME": 14,
       "PHONE_LANDLINE": 461,
       "PHONE_MOBILE": 14
     },
     "by_evidence_lane": {
+      "hard_negative_corpus": 14,
       "public_web_context": 1109,
       "safe_synthetic_insertion": 184
     },
     "by_label": {
-      "non_pii": 1109,
+      "non_pii": 1123,
       "true_pii": 184,
       "unknown": 0
     },
     "by_label_source": {
-      "codex_draft": 1109,
+      "codex_draft": 1123,
       "safe_synthetic_generator": 184
     },
     "by_label_status": {
-      "review_needed": 1293
+      "review_needed": 1307
     },
     "by_material_class": {
       "example_or_sample": 0,
       "general_web_or_explanatory": 140,
-      "realistic_input_like": 1153
+      "realistic_input_like": 1167
     },
     "by_material_type": {
       "example_or_sample": 0,
       "general_web_or_explanatory": 140,
-      "realistic_input_like": 1153
+      "realistic_input_like": 1167
     },
     "by_source_domain": {
-      "customer_support": 89,
+      "customer_support": 91,
       "developer_docs": 12,
-      "ecommerce": 291,
-      "education": 190,
-      "enterprise_internal": 77,
-      "finance": 101,
+      "ecommerce": 293,
+      "education": 192,
+      "enterprise_internal": 79,
+      "finance": 103,
       "general_web": 128,
-      "healthcare": 221,
-      "public_services": 184
+      "healthcare": 223,
+      "public_services": 186
     },
     "current_counts_by_core_entity": {
       "ADDRESS": {
-        "non_pii": 0,
+        "non_pii": 7,
         "true_pii": 7,
         "unknown": 0
       },
@@ -105,7 +106,7 @@
         "unknown": 0
       },
       "PERSON_NAME": {
-        "non_pii": 0,
+        "non_pii": 7,
         "true_pii": 7,
         "unknown": 0
       },
@@ -130,13 +131,13 @@
     },
     "domain_counts_by_core_entity": {
       "ADDRESS": {
-        "customer_support": 1,
-        "ecommerce": 1,
-        "education": 1,
-        "enterprise_internal": 1,
-        "finance": 1,
-        "healthcare": 1,
-        "public_services": 1
+        "customer_support": 2,
+        "ecommerce": 2,
+        "education": 2,
+        "enterprise_internal": 2,
+        "finance": 2,
+        "healthcare": 2,
+        "public_services": 2
       },
       "BANK_ACCOUNT": {
         "customer_support": 43,
@@ -161,13 +162,13 @@
         "public_services": 30
       },
       "PERSON_NAME": {
-        "customer_support": 1,
-        "ecommerce": 1,
-        "education": 1,
-        "enterprise_internal": 1,
-        "finance": 1,
-        "healthcare": 1,
-        "public_services": 1
+        "customer_support": 2,
+        "ecommerce": 2,
+        "education": 2,
+        "enterprise_internal": 2,
+        "finance": 2,
+        "healthcare": 2,
+        "public_services": 2
       },
       "PHONE": {
         "customer_support": 9,
@@ -285,6 +286,7 @@
     "invalid_offset_count": 0,
     "label_counts_by_core_entity": {
       "ADDRESS": {
+        "non_pii": 7,
         "true_pii": 7
       },
       "BANK_ACCOUNT": {
@@ -296,6 +298,7 @@
         "true_pii": 71
       },
       "PERSON_NAME": {
+        "non_pii": 7,
         "true_pii": 7
       },
       "PHONE": {
@@ -307,8 +310,8 @@
     },
     "material_ratios": {
       "example_or_sample": 0.0,
-      "general_web_or_explanatory": 0.108275,
-      "realistic_input_like": 0.891725
+      "general_web_or_explanatory": 0.107116,
+      "realistic_input_like": 0.892884
     },
     "max_single_domain_ratio_by_core_entity": {
       "ADDRESS": 0.142857,
@@ -346,7 +349,7 @@
     },
     "offsets_stored": false,
     "public_web_reviewer_approved_count": 0,
-    "total_anchor_windows": 1293,
+    "total_anchor_windows": 1307,
     "unknown_label_ratio": 0.0
   },
   "public_corpus_used_for_score_tuning": false,
