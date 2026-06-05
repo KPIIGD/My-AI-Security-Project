@@ -533,7 +533,7 @@ def inspect_dataset_schema(dataset: DatasetRef) -> dict[str, Any]:
     columns: list[str] = []
     encodings: list[str] = []
     row_count_estimate = 0
-    parser_presets = _suggest_presets(path, file_type)
+    parser_presets = _suggest_presets(dataset, file_type)
     if path.is_dir():
         files = _iter_supported_files(path)
         row_count_estimate = len(files)
@@ -555,7 +555,7 @@ def inspect_dataset_schema(dataset: DatasetRef) -> dict[str, Any]:
         with zipfile.ZipFile(path) as archive:
             names = [info.filename for info in archive.infolist() if not info.is_dir()]
         row_count_estimate = len(names)
-        columns = _zip_candidate_columns(path)
+        columns = _zip_candidate_columns(dataset)
     return {
         "dataset_id": dataset.dataset_id,
         "source_kind": dataset.source_kind,
@@ -819,8 +819,8 @@ def _jsonl_columns(text: str) -> list[str]:
     return []
 
 
-def _zip_candidate_columns(path: Path) -> list[str]:
-    if path.name.lower() in {"ts1.zip", "vs1.zip"}:
+def _zip_candidate_columns(dataset: DatasetRef) -> list[str]:
+    if _looks_like_aihub_624_zip(dataset):
         return ["title", "subtitle", "content"]
     return []
 
@@ -867,8 +867,8 @@ def _file_type(path: Path) -> str:
     return suffix.lstrip(".") or "unknown"
 
 
-def _suggest_presets(path: Path, file_type: str) -> list[str]:
-    if file_type == "zip" and path.name.lower() in {"ts1.zip", "vs1.zip"}:
+def _suggest_presets(dataset: DatasetRef, file_type: str) -> list[str]:
+    if file_type == "zip" and _looks_like_aihub_624_zip(dataset):
         return ["aihub_624_sjml_zip"]
     if file_type == "csv":
         return ["data_go_public_records_csv", "generic_csv"]
@@ -879,6 +879,11 @@ def _suggest_presets(path: Path, file_type: str) -> list[str]:
     if file_type == "directory":
         return list(PARSER_PRESETS)
     return list(PARSER_PRESETS)
+
+
+def _looks_like_aihub_624_zip(dataset: DatasetRef) -> bool:
+    names = {dataset.path.name.lower(), dataset.display_name.lower()}
+    return bool(names & {"ts1.zip", "vs1.zip"})
 
 
 def _count_text_rows(text: str) -> int:

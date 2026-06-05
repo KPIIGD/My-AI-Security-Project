@@ -181,6 +181,9 @@ def test_upload_jsonl_text_and_aihub_zip_runs_without_raw_payloads(tmp_path: Pat
             ),
         )
     zip_id = _upload_file(client, "TS1.zip", zip_buffer.getvalue(), "application/zip")
+    zip_schema = client.get(f"/api/datasets/{zip_id}/schema").json()
+    assert zip_schema["columns"] == ["title", "subtitle", "content"]
+    assert zip_schema["parser_presets"][0] == "aihub_624_sjml_zip"
 
     runs = [
         _create_and_wait(client, jsonl_id, "generic_jsonl", ["memo"]),
