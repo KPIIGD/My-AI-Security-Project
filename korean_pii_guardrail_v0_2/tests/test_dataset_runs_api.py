@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import json
+import hashlib
 import sqlite3
 import time
 import zipfile
@@ -17,7 +18,9 @@ from pii_guardrail.pipeline import GuardrailPipeline, default_components
 
 
 def _mock_client(tmp_path: Path) -> TestClient:
-    return TestClient(create_app(db_path=tmp_path / "audit.sqlite3"))
+    db_path = tmp_path / "audit.sqlite3"
+    manager = DatasetManager(db_path=db_path, upload_dir=tmp_path / "uploads")
+    return TestClient(create_app(db_path=db_path, dataset_manager=manager))
 
 
 def _real_client(tmp_path: Path) -> TestClient:
@@ -70,6 +73,7 @@ def test_dataset_run_requires_real_ner(tmp_path: Path) -> None:
     payload = response.json()
     assert payload["detail"]["code"] == "NER_NOT_READY"
     assert payload["detail"]["raw_value_logged"] is False
+    assert not any((tmp_path / "uploads").iterdir())
 
 
 def test_upload_csv_schema_run_and_records_are_raw_free(tmp_path: Path) -> None:
@@ -111,12 +115,14 @@ def test_upload_csv_schema_run_and_records_are_raw_free(tmp_path: Path) -> None:
     assert "call me" not in serialized
     assert all(row["raw_value_logged"] is False for row in records)
     assert all("row_id_hash" in row and "phone" not in row["row_id_hash"] for row in records)
+    assert records[0]["row_id_hash"] != hashlib.sha256(b"010-1234-5678").hexdigest()[:24]
 
     db_bytes = (tmp_path / "audit.sqlite3").read_bytes()
     assert b"010-1234-5678" not in db_bytes
     assert b"010-9876-5432" not in db_bytes
     assert b"Hong Gil Dong" not in db_bytes
     assert b"call me" not in db_bytes
+    assert not any((tmp_path / "uploads").iterdir())
 
 
 def test_register_local_cp949_csv_under_allowed_root(tmp_path: Path) -> None:
@@ -206,6 +212,7 @@ def test_raw_retention_policy_is_disabled(tmp_path: Path) -> None:
 
     assert response.status_code == 400
     assert response.json()["detail"]["code"] == "DATASET_RUN_ERROR"
+    assert not any((tmp_path / "uploads").iterdir())
 
 
 def _upload_file(client: TestClient, filename: str, data: bytes, content_type: str) -> str:

@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import hmac
 import io
 import json
 import os
+import secrets
 import sqlite3
 import tempfile
 import threading
@@ -42,6 +44,7 @@ CSV_ENCODINGS = ("utf-8-sig", "cp949", "euc-kr")
 MAX_UPLOAD_BYTES = 100 * 1024 * 1024
 DEFAULT_ROW_LIMIT = 1_000
 MAX_ROW_LIMIT = 50_000
+ROW_HASH_KEY = os.getenv("KPG_ROW_HASH_KEY", "").encode("utf-8") or secrets.token_bytes(32)
 
 
 class DatasetError(ValueError):
@@ -406,13 +409,17 @@ class DatasetManager:
         return inspect_dataset_schema(dataset)
 
     def start_run(self, payload: DatasetRunPayload, *, service: Any) -> dict[str, Any]:
-        if not getattr(service, "ner_enabled", False):
-            raise NERNotReadyError("real NER is required for dataset runs")
-        if payload.parser_preset not in PARSER_PRESETS:
-            raise DatasetRunError("unsupported parser preset")
-        if payload.retention_policy != "discard_after_run":
-            raise DatasetRunError("raw retention is disabled without access control")
         dataset = self._get_dataset(payload.dataset_id)
+        try:
+            if not getattr(service, "ner_enabled", False):
+                raise NERNotReadyError("real NER is required for dataset runs")
+            if payload.parser_preset not in PARSER_PRESETS:
+                raise DatasetRunError("unsupported parser preset")
+            if payload.retention_policy != "discard_after_run":
+                raise DatasetRunError("raw retention is disabled without access control")
+        except DatasetError:
+            self._discard_upload(dataset)
+            raise
         run_id = f"run_{uuid4().hex}"
         run = self.store.create_run(
             run_id=run_id,
@@ -510,7 +517,14 @@ class DatasetManager:
             )
         finally:
             if dataset.is_upload:
-                dataset.path.unlink(missing_ok=True)
+                self._discard_upload(dataset)
+
+    def _discard_upload(self, dataset: DatasetRef) -> None:
+        if not dataset.is_upload:
+            return
+        dataset.path.unlink(missing_ok=True)
+        with self._lock:
+            self._datasets.pop(dataset.dataset_id, None)
 
 
 def inspect_dataset_schema(dataset: DatasetRef) -> dict[str, Any]:
@@ -921,7 +935,11 @@ def _safe_size(path: Path) -> int:
 
 def _row_id_hash(parsed: ParsedRecord) -> str:
     source = parsed.row_id_value or f"{parsed.row_index}:{parsed.raw_text}"
-    return hashlib.sha256(source.encode("utf-8", errors="ignore")).hexdigest()[:24]
+    return hmac.new(
+        ROW_HASH_KEY,
+        source.encode("utf-8", errors="ignore"),
+        hashlib.sha256,
+    ).hexdigest()[:24]
 
 
 def _span_overlap(a_start: int, a_end: int, b_start: int, b_end: int) -> bool:
