@@ -18,6 +18,7 @@ __pycache__/
 eval_*.log
 eval_*_test.json
 korean_pii_guardrail_v0_2/data/eval/generated/
+korean_pii_guardrail_v0_2/data/console/
 korean_pii_guardrail_v0_2/reports/audit_release_gate_*.jsonl
 
 # IDE / OS / CLI state
