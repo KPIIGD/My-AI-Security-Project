@@ -18,8 +18,8 @@ export function SpanTable({ spans, compact = false }: SpanTableProps) {
   }
 
   return (
-    <div className="overflow-hidden rounded-md border">
-      <Table>
+    <div className="max-w-full overflow-hidden rounded-md border">
+      <Table className={compact ? "min-w-[420px]" : "min-w-[420px] sm:min-w-[620px]"}>
         <TableHeader>
           <TableRow>
             <TableHead>유형</TableHead>
@@ -27,7 +27,7 @@ export function SpanTable({ spans, compact = false }: SpanTableProps) {
             <TableHead>액션</TableHead>
             <TableHead>오프셋</TableHead>
             <TableHead>점수</TableHead>
-            {!compact && <TableHead>탐지기</TableHead>}
+            {!compact && <TableHead className="hidden sm:table-cell">탐지기</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -52,7 +52,7 @@ export function SpanTable({ spans, compact = false }: SpanTableProps) {
                 </TableCell>
                 <TableCell className="font-mono text-xs">{span.score.toFixed(3)}</TableCell>
                 {!compact && (
-                  <TableCell className="max-w-[260px] truncate font-mono text-xs text-muted-foreground">
+                  <TableCell className="hidden max-w-[260px] truncate font-mono text-xs text-muted-foreground sm:table-cell">
                     {detectorIds.join(", ") || "-"}
                   </TableCell>
                 )}

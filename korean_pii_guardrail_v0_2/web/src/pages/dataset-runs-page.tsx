@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
@@ -421,34 +420,34 @@ export function DatasetRunsPage({ health }: DatasetRunsPageProps) {
       </div>
 
       <Sheet open={selectedRecord !== null} onOpenChange={(open) => !open && setSelectedRecord(null)}>
-        <SheetContent className="w-full overflow-hidden p-0 sm:max-w-3xl">
-          <SheetHeader className="border-b px-5 py-4">
+        <SheetContent className="w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] overflow-hidden p-0 data-[side=right]:w-[calc(100vw-1rem)] sm:w-[760px] sm:max-w-[calc(100vw-2rem)] data-[side=right]:sm:w-[760px] data-[side=right]:sm:max-w-[calc(100vw-2rem)]">
+          <SheetHeader className="min-w-0 border-b px-4 py-4 sm:px-5">
             <SheetTitle className="font-mono text-sm">
               {selectedRecord ? `row ${selectedRecord.row_index}` : "데이터셋 행"}
             </SheetTitle>
             <SheetDescription>원문 없는 데이터셋 레코드 상세입니다.</SheetDescription>
           </SheetHeader>
           {selectedRecord && (
-            <ScrollArea className="h-[calc(100vh-73px)]">
-              <div className="space-y-4 p-5">
-                <div className="grid gap-3 sm:grid-cols-4">
+            <div className="h-[calc(100vh-73px)] overflow-y-auto overflow-x-hidden">
+              <div className="min-w-0 w-full max-w-full space-y-4 overflow-x-hidden p-4 sm:p-5">
+                <div className="grid min-w-0 w-full max-w-full gap-3 sm:grid-cols-4">
                   <InfoBox label="행 해시" value={selectedRecord.row_id_hash} mono />
                   <InfoBox label="Span 수" value={String(selectedRecord.detected_span_count)} />
                   <InfoBox label="지연" value={formatMs(selectedRecord.latency_ms)} />
                   <InfoBox label="원문 로그" value="없음" />
                 </div>
-                <section>
+                <section className="min-w-0 w-full max-w-full overflow-hidden">
                   <h2 className="mb-2 text-sm font-medium">안전 마스킹 요약</h2>
-                  <pre className="min-h-[96px] whitespace-pre-wrap rounded-md border bg-muted/30 p-3 font-mono text-sm">
+                  <pre className="min-h-[96px] max-w-full whitespace-pre-wrap break-words rounded-md border bg-muted/30 p-3 font-mono text-sm">
                     {selectedRecord.masked_text}
                   </pre>
                 </section>
-                <section>
+                <section className="min-w-0 w-full max-w-full overflow-hidden">
                   <h2 className="mb-2 text-sm font-medium">공개 span</h2>
                   <SpanTable spans={selectedRecord.spans} />
                 </section>
               </div>
-            </ScrollArea>
+            </div>
           )}
         </SheetContent>
       </Sheet>

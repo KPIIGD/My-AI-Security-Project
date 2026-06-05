@@ -7,7 +7,6 @@ import { StatusBadge } from "@/components/status-badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { decryptLog, getLogDetail } from "@/lib/api"
@@ -142,15 +141,15 @@ export function LogsPage({ logs }: LogsPageProps) {
       </Card>
 
       <Sheet open={open} onOpenChange={handleSheetOpenChange}>
-        <SheetContent className="w-full overflow-hidden p-0 sm:max-w-3xl">
-          <SheetHeader className="border-b px-5 py-4">
+        <SheetContent className="w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] overflow-hidden p-0 data-[side=right]:w-[calc(100vw-1rem)] sm:w-[760px] sm:max-w-[calc(100vw-2rem)] data-[side=right]:sm:w-[760px] data-[side=right]:sm:max-w-[calc(100vw-2rem)]">
+          <SheetHeader className="min-w-0 border-b px-4 py-4 sm:px-5">
             <SheetTitle className="font-mono text-sm">{detail ? shortId(detail.request_id) : "요청"}</SheetTitle>
-            <SheetDescription>원문 요청 텍스트 없이 저장된 안전 감사 상세입니다.</SheetDescription>
+            <SheetDescription className="pr-8">원문 요청 텍스트 없이 저장된 안전 감사 상세입니다.</SheetDescription>
           </SheetHeader>
           {detail && (
-            <ScrollArea className="h-[calc(100vh-73px)]">
-              <div className="space-y-4 p-5">
-                <div className="grid gap-3 sm:grid-cols-4">
+            <div className="h-[calc(100vh-73px)] overflow-y-auto overflow-x-hidden">
+              <div className="min-w-0 w-full max-w-full space-y-4 overflow-x-hidden p-4 sm:p-5">
+                <div className="grid min-w-0 w-full max-w-full gap-3 sm:grid-cols-4">
                   <div className="rounded-md border p-3">
                     <div className="text-xs text-muted-foreground">액션</div>
                     <div className="mt-2">
@@ -173,7 +172,7 @@ export function LogsPage({ logs }: LogsPageProps) {
                   </div>
                 </div>
                 {detail.encrypted_raw_available && (
-                  <section className="space-y-3 rounded-md border p-3">
+                  <section className="min-w-0 w-full max-w-full space-y-3 overflow-hidden rounded-md border p-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h2 className="flex items-center gap-2 text-sm font-medium">
                         <KeyRound className="h-4 w-4 text-primary" />
@@ -206,24 +205,24 @@ export function LogsPage({ logs }: LogsPageProps) {
                       </Alert>
                     )}
                     {decryptedText && (
-                      <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded-md border bg-muted/30 p-3 font-mono text-sm">
+                      <pre className="max-h-48 max-w-full overflow-auto whitespace-pre-wrap break-words rounded-md border bg-muted/30 p-3 font-mono text-sm">
                         {decryptedText}
                       </pre>
                     )}
                   </section>
                 )}
-                <section>
+                <section className="min-w-0 w-full max-w-full overflow-hidden">
                   <h2 className="mb-2 text-sm font-medium">저장된 출력</h2>
-                  <pre className="min-h-[96px] whitespace-pre-wrap rounded-md border bg-muted/30 p-3 font-mono text-sm">
+                  <pre className="min-h-[96px] max-w-full whitespace-pre-wrap break-words rounded-md border bg-muted/30 p-3 font-mono text-sm">
                     {detail.masked_text ?? "BLOCKED"}
                   </pre>
                 </section>
-                <section>
+                <section className="min-w-0 w-full max-w-full overflow-hidden">
                   <h2 className="mb-2 text-sm font-medium">공개 span</h2>
                   <SpanTable spans={detail.spans} />
                 </section>
               </div>
-            </ScrollArea>
+            </div>
           )}
         </SheetContent>
       </Sheet>
