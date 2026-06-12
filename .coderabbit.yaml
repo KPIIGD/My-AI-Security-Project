@@ -1,0 +1,33 @@
+# CodeRabbit 설정 — My-AI-Security-Project (한국어). litellm_gateway = 한국어 PII 가드레일.
+language: ko-KR
+
+reviews:
+  profile: assertive          # 엄격 (보안/PII 직결)
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: true              # draft PR 도 리뷰
+  path_instructions:
+    - path: "litellm_gateway/**"
+      instructions: |
+        한국어 PII 가드레일(LiteLLM Gateway) — 보안/PII 누출을 최우선으로 점검하라.
+        🔴 보안/시크릿:
+        - API 키 하드코딩 금지. .env/*.pem/*.key 를 코드·로그·URL·외부전송에 노출 금지.
+        - 이 repo 는 PUBLIC. 실제 키·실제 PII·대용량 eval 데이터가 커밋되면 즉시 지적.
+        - config.yaml 의 키는 반드시 os.environ/... 참조여야 함 (인라인 값 금지).
+        🔒 raw-PII boundary:
+        - 원문 PII 가 로그·share 링크·gr.State(client-side)·외부 judge/API·데모 출력에 노출되면 CRITICAL.
+        - 파일경로 사용자 입력 = LFI 위험. 외부 모델 전송 전 PII 마스킹 했는지 점검.
+        🛡 가드레일 무결성:
+        - fail-OPEN 금지: 예외/타임아웃/탐지기 에러 시 PII 가 통과되면 CRITICAL. fail-CLOSED 가 기본.
+        - async 가드레일 시그니처(apply_guardrail/async_pre_call_hook 은 async def), 우회 경로 점검.
+        🟡 정확성:
+        - 한국어 UTF-8/NFKC 정규화, 자모 분리, zwsp, Windows 인코딩(sys.stdout.reconfigure) 점검.
+        - 정규식 엣지케이스, 계층(Presidio/Bedrock/Lakera/Judge) 타임아웃·재시도 누락.
+        📊 측정 무결성:
+        - frozen eval(eval_*.json) provenance, BYPASS 정의 일관성, judge 편향, n 표본, 한국어 편향.
+    - path: "litellm_gateway/eval_harness/**"
+      instructions: "LLM 판정 평가 코드. judge-the-judge 가 raw PII 를 마스킹 후 전송하는지, AI 판정을 진실로 단정하지 않는지 점검."
+    - path: "**/*.py"
+      instructions: "정확성·예외처리·Windows 인코딩·시크릿 노출을 점검하라."

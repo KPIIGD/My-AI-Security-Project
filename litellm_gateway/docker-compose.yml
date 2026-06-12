@@ -1,0 +1,120 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: llmproxy
+      POSTGRES_PASSWORD: dbpass123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d litellm -U llmproxy"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    volumes:
+      - C:\litellm:/app/config
+    environment:
+      # ── DB ──
+      DATABASE_URL: postgresql://llmproxy:dbpass123@db:5432/litellm
+      LITELLM_MASTER_KEY: sk-1234
+      UI_USERNAME: admin
+      UI_PASSWORD: sk-1234
+
+      # ── LLM Provider ──
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
+      # ── Layer 1: Presidio ──
+      PRESIDIO_ANALYZER_API_BASE: "http://presidio-analyzer:3000"
+      PRESIDIO_ANONYMIZER_API_BASE: "http://presidio-anonymizer:3000"
+
+      # ── Layer 2: Bedrock ──
+      # AWS 자격증명은 아래 중 하나를 사용:
+      #   방법 A) AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY
+      #   방법 B) AWS_PROFILE (로컬 credentials 파일 마운트 시)
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      BEDROCK_GUARDRAIL_ID: ${BEDROCK_GUARDRAIL_ID:-lwkm339ab127}
+
+      # ── Layer 3: Lakera ──
+      LAKERA_API_KEY: ${LAKERA_API_KEY}
+
+      # ── Layer 4: GPT-4o Judge ──
+      PII_JUDGE_MODEL: gpt-4o-mini
+      PII_JUDGE_THRESHOLD: "0.7"
+      PII_JUDGE_MAX_TOKENS: "1000"
+
+      # ── custom guardrail 모듈 import 경로 (config 디렉터리 마운트 위치) ──
+      PYTHONPATH: /app/config
+
+      # ── Layer 0: Korean PII sidecar ──
+      PII_SIDECAR_URL: "http://pii-guardrail:8080"
+
+      # ── Langfuse observability ──
+      LANGFUSE_PUBLIC_KEY: pk-lf-capstone-pub-1234567890
+      LANGFUSE_SECRET_KEY: sk-lf-capstone-secret-abcdefghij
+      LANGFUSE_HOST: "http://langfuse:3000"
+
+    command: --config /app/config/config.yaml --detailed_debug
+    networks:
+      - default
+
+  # ── Korean PII Guardrail sidecar (v0.2 + real NER v3) ──
+  # LiteLLM 의 custom guardrail 훅이 http://pii-guardrail:8080 으로 호출.
+  pii-guardrail:
+    build:
+      context: ./pii-sidecar
+    ports:
+      - "8080:8080"   # 호스트에서 직접 테스트용
+    environment:
+      PII_CONFIG_DIR: /pkg/configs
+      NER_MODEL_PATH: /models/ner_v3
+      PII_ALLOW_MOCK: "0"   # fail-closed: real NER 로드 실패 시 기동 중단
+    volumes:
+      - C:/My-AI-Security-Project/korean_pii_guardrail_v0_2/src:/pkg/src:ro
+      - C:/My-AI-Security-Project/korean_pii_guardrail_v0_2/configs:/pkg/configs:ro
+      - C:/My-AI-Security-Project/PII/ner/models/pii_ner_v3/final:/models/ner_v3:ro
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if 'ok' in urllib.request.urlopen('http://localhost:8080/health').read().decode() else 1)\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 90s
+    networks:
+      - default
+
+  # ── Presidio containers (기존 별도 실행 중이면 이 섹션 제거) ──
+  # 현재 별도로 돌고 있으므로 주석 처리.
+  # 필요 시 아래 주석 해제하여 docker-compose로 통합 관리 가능.
+  #
+  # presidio-analyzer:
+  #   image: mcr.microsoft.com/presidio-analyzer:latest
+  #   ports:
+  #     - "5002:3000"
+  #   healthcheck:
+  #     test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/health"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #
+  # presidio-anonymizer:
+  #   image: mcr.microsoft.com/presidio-anonymizer:latest
+  #   ports:
+  #     - "5001:3000"
+  #   healthcheck:
+  #     test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/health"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+volumes:
+  pgdata:

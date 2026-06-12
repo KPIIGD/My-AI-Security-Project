@@ -1,0 +1,53 @@
+# Langfuse v2 — observability layer for LiteLLM
+# 자동으로 org/project/admin user/API 키 생성 (INIT env vars)
+# litellm_default 네트워크에 join → litellm 컨테이너가 hostname=langfuse 로 접근
+
+networks:
+  default:
+    name: litellm_default
+    external: true
+
+volumes:
+  langfuse_pgdata:
+
+services:
+  langfuse-db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: langfuse
+      POSTGRES_PASSWORD: langfusepw
+      POSTGRES_DB: langfuse
+    volumes:
+      - langfuse_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langfuse"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  langfuse:
+    image: langfuse/langfuse:2
+    restart: always
+    depends_on:
+      langfuse-db:
+        condition: service_healthy
+    ports:
+      - "3001:3000"
+    environment:
+      DATABASE_URL: postgresql://langfuse:langfusepw@langfuse-db:5432/langfuse
+      NEXTAUTH_SECRET: capstone-nextauth-secret-change-in-prod
+      SALT: capstone-salt-change-in-prod
+      NEXTAUTH_URL: http://localhost:3001
+      TELEMETRY_ENABLED: "false"
+      LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "true"
+      # Pre-seed: 첫 기동 시 자동 생성됨
+      LANGFUSE_INIT_ORG_ID: capstone-org
+      LANGFUSE_INIT_ORG_NAME: Capstone
+      LANGFUSE_INIT_PROJECT_ID: capstone-pii-project
+      LANGFUSE_INIT_PROJECT_NAME: Korean PII Capstone
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: pk-lf-capstone-pub-1234567890
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: sk-lf-capstone-secret-abcdefghij
+      LANGFUSE_INIT_USER_EMAIL: admin@local.dev
+      LANGFUSE_INIT_USER_NAME: admin
+      LANGFUSE_INIT_USER_PASSWORD: capstone1234

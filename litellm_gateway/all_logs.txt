@@ -1,0 +1,64 @@
+
+   ██╗     ██╗████████╗███████╗██╗     ██╗     ███╗   ███╗
+   ██║     ██║╚══██╔══╝██╔════╝██║     ██║     ████╗ ████║
+   ██║     ██║   ██║   █████╗  ██║     ██║     ██╔████╔██║
+   ██║     ██║   ██║   ██╔══╝  ██║     ██║     ██║╚██╔╝██║
+   ███████╗██║   ██║   ███████╗███████╗███████╗██║ ╚═╝ ██║
+   ╚══════╝╚═╝   ╚═╝   ╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝
+
+
+[1;37m#------------------------------------------------------------#[0m
+[1;37m#                                                            #[0m
+[1;37m#               'A feature I really want is...'               #[0m
+[1;37m#        https://github.com/BerriAI/litellm/issues/new        #[0m
+[1;37m#                                                            #[0m
+[1;37m#------------------------------------------------------------#[0m
+
+ Thank you for using LiteLLM! - Krrish & Ishaan
+
+
+
+[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
+
+
+[32mLiteLLM: Proxy initialized with Config, Set models:[0m
+[32m    gpt-4o[0m
+
+   ██╗     ██╗████████╗███████╗██╗     ██╗     ███╗   ███╗
+   ██║     ██║╚══██╔══╝██╔════╝██║     ██║     ████╗ ████║
+   ██║     ██║   ██║   █████╗  ██║     ██║     ██╔████╔██║
+   ██║     ██║   ██║   ██╔══╝  ██║     ██║     ██║╚██╔╝██║
+   ███████╗██║   ██║   ███████╗███████╗███████╗██║ ╚═╝ ██║
+   ╚══════╝╚═╝   ╚═╝   ╚══════╝╚══════╝╚══════╝╚═╝     ╚═╝
+
+query-engine ac9d7041ed77bcc8a8dbd2ab6616b39013829574
+
+[1;37m#------------------------------------------------------------#[0m
+[1;37m#                                                            #[0m
+[1;37m#              'I don't like how this works...'               #[0m
+[1;37m#        https://github.com/BerriAI/litellm/issues/new        #[0m
+[1;37m#                                                            #[0m
+[1;37m#------------------------------------------------------------#[0m
+
+ Thank you for using LiteLLM! - Krrish & Ishaan
+
+
+
+[1;31mGive Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new[0m
+
+
+[32mLiteLLM: Proxy initialized with Config, Set models:[0m
+[32m    gpt-4o[0m
+INFO:     172.21.0.1:43028 - "GET /health/liveness HTTP/1.1" 200 OK
+INFO:     172.21.0.1:43034 - "GET /health/liveness HTTP/1.1" 200 OK
+INFO:     172.21.0.1:36600 - "POST /v1/chat/completions HTTP/1.1" 400 Bad Request
+INFO:     172.21.0.1:40922 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     172.21.0.1:51750 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     172.21.0.1:59992 - "GET /public/litellm_blog_posts HTTP/1.1" 200 OK
+INFO:     172.21.0.1:59960 - "GET /health/readiness HTTP/1.1" 200 OK
+INFO:     172.21.0.1:59988 - "GET /search_tools/ui/available_providers HTTP/1.1" 200 OK
+INFO:     172.21.0.1:59968 - "GET /organization/list HTTP/1.1" 200 OK
+INFO:     172.21.0.1:59980 - "GET /search_tools/list HTTP/1.1" 200 OK
+INFO:     172.21.0.1:59986 - "GET /team/list HTTP/1.1" 200 OK
+INFO:     172.21.0.1:60744 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     172.21.0.1:53540 - "POST /v1/chat/completions HTTP/1.1" 200 OK

@@ -1,0 +1,60 @@
+name: litellm-gateway CI
+
+on:
+  push:
+    branches: [litellm-gateway, main]
+    paths:
+      - "litellm_gateway/**"
+  pull_request:
+    paths:
+      - "litellm_gateway/**"
+
+jobs:
+  lint-and-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install lint deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+      - name: Ruff lint (litellm_gateway)
+        run: ruff check litellm_gateway/ --select E,F,W,I
+        continue-on-error: true
+      - name: Syntax check all litellm_gateway .py
+        run: |
+          python -c "
+          import ast, sys
+          from pathlib import Path
+          errors = []
+          for p in Path('litellm_gateway').glob('**/*.py'):
+              if '__pycache__' in str(p):
+                  continue
+              try:
+                  ast.parse(open(p, encoding='utf-8').read())
+              except SyntaxError as e:
+                  errors.append(f'{p}: {e}')
+          if errors:
+              for e in errors: print(e)
+              sys.exit(1)
+          print('All litellm_gateway Python files parse OK')
+          "
+      - name: Secret scan (no real keys / PEM in litellm_gateway)
+        run: |
+          python -c "
+          import re, sys
+          from pathlib import Path
+          pat = re.compile(r'sk-ant-[A-Za-z0-9_\-]{20,}|sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_\-]{30,}|gh[pousr]_[A-Za-z0-9]{30,}|-----BEGIN [A-Z ]*PRIVATE KEY-----')
+          bad = []
+          for p in Path('litellm_gateway').glob('**/*'):
+              if p.is_file() and p.suffix in {'.py','.yaml','.yml','.md','.txt','.html','.ini','.cfg','.toml'}:
+                  t = p.read_text(encoding='utf-8', errors='ignore')
+                  m = pat.search(t)
+                  if m: bad.append(f'{p}: {m.group(0)[:12]}...')
+          if bad:
+              print('SECRET DETECTED:'); [print(' ', b) for b in bad]; sys.exit(1)
+          print('No secrets detected in litellm_gateway')
+          "

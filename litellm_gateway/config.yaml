@@ -1,0 +1,125 @@
+model_list:
+  - model_name: gpt-4o
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+
+general_settings:
+  master_key: sk-1234
+  # 마스킹된 프롬프트/응답을 spend log 에 저장 → LiteLLM 내장 UI Logs 탭에서 내용 확인.
+  # (가드레일이 이미 마스킹한 안전한 텍스트만 저장됨 — 원문 PII 아님)
+  store_prompts_in_spend_logs: true
+
+guardrails:
+
+
+  # ═══════════════════════════════════════════════════════
+  # Layer 1: Presidio PII
+  # DB 검증 완료: guardrail=presidio, mode=pre_call
+  # ═══════════════════════════════════════════════════════
+  - guardrail_name: "Presidio PII"
+    litellm_params:
+      guardrail: presidio                                          # DB: "presidio"
+      mode: "pre_call"                                             # DB: "pre_call"
+      default_on: false                                             # DB: true
+      presidio_analyzer_api_base: "http://presidio-analyzer:3000"  # DB: 동일
+      presidio_anonymizer_api_base: "http://presidio-anonymizer:3000"  # DB: 동일
+      presidio_language: "en"                                      # DB: "en"
+      presidio_filter_scope: "both"                                # DB: "both"
+      presidio_run_on: "both"                                      # DB: "both"
+      pii_entities_config:       # DB: 39개 전부 MASK — 아래 목록 DB와 1:1 대조 완료
+        CREDIT_CARD: "MASK"
+        CRYPTO: "MASK"
+        DATE_TIME: "MASK"
+        EMAIL_ADDRESS: "MASK"
+        IBAN_CODE: "MASK"
+        IP_ADDRESS: "MASK"
+        NRP: "MASK"
+        LOCATION: "MASK"
+        PERSON: "MASK"
+        PHONE_NUMBER: "MASK"
+        MEDICAL_LICENSE: "MASK"
+        URL: "MASK"
+        US_BANK_NUMBER: "MASK"
+        US_DRIVER_LICENSE: "MASK"
+        US_ITIN: "MASK"
+        US_PASSPORT: "MASK"
+        US_SSN: "MASK"
+        UK_NHS: "MASK"
+        UK_NINO: "MASK"
+        ES_NIF: "MASK"
+        ES_NIE: "MASK"
+        IT_FISCAL_CODE: "MASK"
+        IT_DRIVER_LICENSE: "MASK"
+        IT_VAT_CODE: "MASK"
+        IT_PASSPORT: "MASK"
+        IT_IDENTITY_CARD: "MASK"
+        PL_PESEL: "MASK"
+        SG_NRIC_FIN: "MASK"
+        SG_UEN: "MASK"
+        AU_ABN: "MASK"
+        AU_ACN: "MASK"
+        AU_TFN: "MASK"
+        AU_MEDICARE: "MASK"
+        IN_PAN: "MASK"
+        IN_AADHAAR: "MASK"
+        IN_VEHICLE_REGISTRATION: "MASK"
+        IN_VOTER: "MASK"
+        IN_PASSPORT: "MASK"
+        FI_PERSONAL_IDENTITY_CODE: "MASK"
+
+  # ═══════════════════════════════════════════════════════
+  # Layer 2: Bedrock Guardrail
+  # DB 검증 완료: guardrail=bedrock, mode=during_call
+  # ═══════════════════════════════════════════════════════
+  - guardrail_name: "Bedrock Guardrail"
+    litellm_params:
+      guardrail: bedrock                              # DB: "bedrock"
+      mode: "during_call"                             # DB: ["during_call"]
+      default_on: false                                # DB: true
+      guardrailIdentifier: "lwkm339ab127"             # DB: "lwkm339ab127"
+      guardrailVersion: "DRAFT"                       # DB: "DRAFT"
+      aws_region_name: "us-east-1"                    # DB: "us-east-1"
+      aws_access_key_id: os.environ/AWS_ACCESS_KEY_ID           # DB: 직접값 → .env로 이동
+      aws_secret_access_key: os.environ/AWS_SECRET_ACCESS_KEY   # DB: 직접값 → .env로 이동
+
+  # ═══════════════════════════════════════════════════════
+  # Layer 3: Lakera
+  # DB 검증 완료: guardrail=lakera_v2, mode=pre_call
+  # ═══════════════════════════════════════════════════════
+  - guardrail_name: "Lakera"
+    litellm_params:
+      guardrail: lakera_v2                            # DB: "lakera_v2"
+      mode: "pre_call"                                # DB: "pre_call"
+      default_on: false                                # DB: true
+      api_key: os.environ/LAKERA_API_KEY              # DB: 직접값 → .env로 이동
+      api_base: "https://api.lakera.ai"               # DB: "https://api.lakera.ai"
+      project_id: "admin"                             # DB: "admin"
+
+  # ═══════════════════════════════════════════════════════
+  # Layer 4: GPT-4o PII Judge (신규)
+  # ═══════════════════════════════════════════════════════
+  - guardrail_name: "gpt4o-pii-judge"
+    litellm_params:
+      guardrail: custom_guardrail.GPT4oPIIJudge
+      mode: "post_call"
+      default_on: false
+
+  # ═══════════════════════════════════════════════════════
+  # Layer 0: Korean PII Guardrail (v0.2 + real NER v3)
+  # 사이드카(http://pii-guardrail:8080) 호출. pre_call 입력 마스킹/차단 +
+  # post_call 출력 마스킹. 탐지 요약은 metadata 로 Langfuse/UI 로그에 남음.
+  # ═══════════════════════════════════════════════════════
+  - guardrail_name: "korean-pii"
+    litellm_params:
+      guardrail: korean_pii_gateway_guardrail.KoreanPIIGuardrail
+      mode: "pre_call"
+      default_on: true
+
+# ── Logging / observability ──
+# 모든 요청을 Langfuse 로 전송(트래픽/지연/마스킹된 메시지/가드레일 metadata).
+# LiteLLM 내장 UI(:4000/ui)도 DB(spend logs)에 동일 트래픽을 기록한다.
+litellm_settings:
+  success_callback: ["langfuse"]
+  failure_callback: ["langfuse"]
+  turn_off_message_logging: false   # 마스킹된 메시지는 로깅 OK (원문 아님)

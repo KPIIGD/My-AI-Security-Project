@@ -1,0 +1,3 @@
+# eval_harness 선택 의존성 — deepeval G-Eval 메트릭용 (없어도 judge_everything.py 핵심기능 동작)
+deepeval>=1.0.0
+# litellm 은 host python 에 이미 설치됨 (multi_ai/ask.py 가 사용)
