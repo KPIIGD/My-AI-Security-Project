@@ -67,7 +67,9 @@ SECRET_CONTENT_RE = re.compile(
 
 
 def git(*args, cwd=WORKTREE):
-    return subprocess.run(["git", "-C", str(cwd), *args], capture_output=True, text=True)
+    # Windows 한글 로케일 cp949 디코드 에러 방지 → utf-8 강제
+    return subprocess.run(["git", "-C", str(cwd), *args], capture_output=True,
+                          text=True, encoding="utf-8", errors="replace")
 
 
 def log(line):
