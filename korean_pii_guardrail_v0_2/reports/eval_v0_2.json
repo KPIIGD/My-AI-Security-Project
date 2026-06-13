@@ -1,0 +1,192 @@
+{
+  "dataset_id": "hard_cases_v0",
+  "records_processed": 20,
+  "blocked_count": 1,
+  "spans_detected": 21,
+  "spans_masked": 18,
+  "high_risk_recall": 0.8421,
+  "masked_text_exact_match_rate": 0.7,
+  "raw_pii_logging_count": 0,
+  "overall": {
+    "entity_type": "__overall__",
+    "tp_exact": 17,
+    "tp_partial": 0,
+    "fp": 4,
+    "fn": 3,
+    "precision": 0.8095,
+    "recall": 0.85,
+    "f1": 0.8293,
+    "boundary_accuracy": 1.0
+  },
+  "per_entity": [
+    {
+      "entity_type": "ADDRESS_FULL",
+      "tp_exact": 2,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.6667,
+      "f1": 0.8,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "ADDRESS_UNIT",
+      "tp_exact": 0,
+      "tp_partial": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "boundary_accuracy": 0.0
+    },
+    {
+      "entity_type": "API_KEY_SECRET",
+      "tp_exact": 1,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "BANK_ACCOUNT",
+      "tp_exact": 1,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "CUSTOMER_ID",
+      "tp_exact": 0,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "boundary_accuracy": 0.0
+    },
+    {
+      "entity_type": "EMAIL",
+      "tp_exact": 3,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "HOSPITAL",
+      "tp_exact": 1,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "MEDICAL_RECORD_NO",
+      "tp_exact": 0,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "boundary_accuracy": 0.0
+    },
+    {
+      "entity_type": "PERSON_NAME",
+      "tp_exact": 4,
+      "tp_partial": 0,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.6667,
+      "recall": 1.0,
+      "f1": 0.8,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "PHONE_MOBILE",
+      "tp_exact": 4,
+      "tp_partial": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.8,
+      "recall": 1.0,
+      "f1": 0.8889,
+      "boundary_accuracy": 1.0
+    },
+    {
+      "entity_type": "RRN",
+      "tp_exact": 1,
+      "tp_partial": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "boundary_accuracy": 1.0
+    }
+  ],
+  "residual_risk_report": {
+    "report_type": "PseudonymizationResultReport",
+    "version": "v0.2-single-turn",
+    "purpose_id": "ko_pii_guardrail_v0_2_eval",
+    "policy_profile": "strict",
+    "dataset_id": "hard_cases_v0",
+    "records_processed": 20,
+    "blocked_count": 1,
+    "spans_detected": 21,
+    "spans_masked": 18,
+    "high_risk_recall": 0.8421,
+    "boundary_accuracy": 1.0,
+    "overall_precision": 0.8095,
+    "overall_recall": 0.85,
+    "overall_f1": 0.8293,
+    "masked_text_exact_match_rate": 0.7,
+    "raw_pii_logging_count": 0,
+    "residual_risk_notes": [
+      {
+        "entity_type": "ADDRESS_FULL",
+        "miss_count": 1
+      },
+      {
+        "entity_type": "CUSTOMER_ID",
+        "miss_count": 1
+      },
+      {
+        "entity_type": "MEDICAL_RECORD_NO",
+        "miss_count": 1
+      }
+    ],
+    "spurious_detections": [
+      {
+        "entity_type": "ADDRESS_UNIT",
+        "fp_count": 1
+      },
+      {
+        "entity_type": "PERSON_NAME",
+        "fp_count": 2
+      },
+      {
+        "entity_type": "PHONE_MOBILE",
+        "fp_count": 1
+      }
+    ],
+    "generated_at": "2026-05-20T10:51:54.994222+00:00"
+  },
+  "generated_at": "2026-05-20T10:51:54.994222+00:00"
+}

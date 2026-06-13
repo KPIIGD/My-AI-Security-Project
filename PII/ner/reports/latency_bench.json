@@ -1,0 +1,40 @@
+{
+  "sample_text_length": 256,
+  "warmup_iters": 30,
+  "measure_iters": 100,
+  "pytorch": {
+    "backend": "PyTorch CPU FP32",
+    "n": 100,
+    "mean_ms": 590.49,
+    "std_ms": 113.01,
+    "p50_ms": 546.9,
+    "p95_ms": 809.98,
+    "p99_ms": 940.39,
+    "min_ms": 459.2,
+    "max_ms": 981.54
+  },
+  "onnx_fp32": {
+    "backend": "ONNX CPU FP32",
+    "n": 100,
+    "mean_ms": 383.44,
+    "std_ms": 37.49,
+    "p50_ms": 374.75,
+    "p95_ms": 458.62,
+    "p99_ms": 497.18,
+    "min_ms": 327.21,
+    "max_ms": 499.82
+  },
+  "onnx_int8": {
+    "backend": "ONNX CPU INT8",
+    "n": 100,
+    "mean_ms": 140.42,
+    "std_ms": 17.69,
+    "p50_ms": 135.52,
+    "p95_ms": 177.2,
+    "p99_ms": 196.77,
+    "min_ms": 119.35,
+    "max_ms": 197.44
+  },
+  "speedup_fp32_p50": 1.46,
+  "speedup_int8_p50": 4.04
+}

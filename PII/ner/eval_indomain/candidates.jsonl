@@ -1,0 +1,550 @@
+{"id": "eval-0495", "sentence": "법인등록번호 110111-7637022 로 사업자 등록했어요.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 21, "entity_type": "CORPORATE_REG_NO", "value": "110111-7637022", "gold": true}], "needs_human_label": false}
+{"id": "eval-0458", "sentence": "여권번호 G46325803 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "G46325803", "gold": true}], "needs_human_label": false}
+{"id": "eval-0124", "sentence": "저녁에 따뜻한 우유가 잠을 잘 오게 하는 이유는 무엇일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0367", "sentence": "제가 좋아하는 영화는 일본 감독들의 영화인데, 추천해줄만한 일본 영화 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0485", "sentence": "제 차 번호판 049두0564 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 16, "entity_type": "VEHICLE_REG_NO", "value": "049두0564", "gold": true}], "needs_human_label": false}
+{"id": "eval-0021", "sentence": "대한민국에서 영화의 대박 수준은 어느정도일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0001", "sentence": "안녕하세요 저는 20대 여성입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0080", "sentence": "가족실은 간단한 취사가 가능해서 예약했어요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0118", "sentence": "물고기의 수염이 하는 역할은 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0273", "sentence": "팀장님이 간단한 조사 업무를 부탁하셨는데 내가 잘못 처리했어.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0007", "sentence": "비특이적 면역글로불린 정맥주사(IVIG)와 표준 치료(SOC)를 비교한 연구에서, IVIG 치료군의 사망률이 표준 치료군보다 1.56배 높게 나타났습니다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0404", "sentence": "법인등록번호 134511-3501689 로 사업자 등록했어요.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 21, "entity_type": "CORPORATE_REG_NO", "value": "134511-3501689", "gold": true}], "needs_human_label": false}
+{"id": "eval-0537", "sentence": "차량번호 18무8765 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 12, "entity_type": "VEHICLE_REG_NO", "value": "18무8765", "gold": true}], "needs_human_label": false}
+{"id": "eval-0112", "sentence": "밭에 검은색 비닐과 투명색 비닐을 사용하는 이유는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0322", "sentence": "풍전포차 패키지 너무 만족, 편의시설 만족", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0085", "sentence": "○ 개인정보 보호법 제15조 제1항 제4호에 근거하여 계약이행을 위해 불가피한 경우로써 차량 파손, 법규 위반에 따라 업무를 처리해야 하므로 임차인의 동의 없이 블랙박스 상 영상을 확인하는 것은 가능하다고 보입니다.", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0435", "sentence": "제 계좌는 신한 764-47-466695 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 22, "entity_type": "BANK_ACCOUNT", "value": "764-47-466695", "gold": true}], "needs_human_label": false}
+{"id": "eval-0325", "sentence": "게실염의 진단을 위해 가장 유용한 검사를 제시하고, 그 검사가 유용한 이유를 설명하시오.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0407", "sentence": "회사 법인번호는 110121-6021671 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 23, "entity_type": "CORPORATE_REG_NO", "value": "110121-6021671", "gold": true}], "needs_human_label": false}
+{"id": "eval-0146", "sentence": "중증 호흡 부전으로 기계 환기를 받고 있는 성인 환자에서 비침습적 양압 환기(NPPV)를 이용한 이탈 전략에 대한 설명으로 옳은 것은?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0235", "sentence": "파란색 색을 칠하고 빨간 셀로판지로 보면 검은색으로 보이는 이유는 무엇일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0068", "sentence": "집안 곰팡이 제거 방법을 알고 계신가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0252", "sentence": "2021년 6월 29일 기준 외국인 입국 자가격리 인원이 15명 가량 수용 중인데 계속 들어오고 있네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0413", "sentence": "차량번호 48로4731 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 12, "entity_type": "VEHICLE_REG_NO", "value": "48로4731", "gold": true}], "needs_human_label": false}
+{"id": "eval-0491", "sentence": "회사 법인번호는 110115-8724490 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 23, "entity_type": "CORPORATE_REG_NO", "value": "110115-8724490", "gold": true}], "needs_human_label": false}
+{"id": "eval-0450", "sentence": "제 차 번호판 229너6104 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 16, "entity_type": "VEHICLE_REG_NO", "value": "229너6104", "gold": true}], "needs_human_label": false}
+{"id": "eval-0178", "sentence": "고양이에 대한 라이머릭을 쓰되, \"따르릉\"이라는 단어를 사용하고, 다음과 같은 조건을 충족시켜야 합니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0286", "sentence": "모멘텀 트레이딩이란 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0339", "sentence": "라이방은 어디서 유래된 말인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0497", "sentence": "주민등록번호 770428-40903901 로 본인확인했어요.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 22, "entity_type": "RRN", "value": "770428-40903901", "gold": true}], "needs_human_label": false}
+{"id": "eval-0296", "sentence": "마취주사의 발명은 어디에서 시작되었나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0177", "sentence": "임신 초기 검진에서 Rh 음성 혈액형을 가진 임산부가 반드시 시행해야 할 검사는 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0536", "sentence": "예약번호 715-10-504007 확인해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 18, "entity_type": "BANK_ACCOUNT", "value": "715-10-504007", "gold": true}], "needs_human_label": false}
+{"id": "eval-0275", "sentence": "물엿은 전분시럽으로, 전분 또는 전분질 원료를 산 또는 효소로 부분적으로 가수분해(당화)하여 만들어진 점조성 감미물질입니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0460", "sentence": "주민번호는 361022-16828870 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "361022-16828870", "gold": true}], "needs_human_label": false}
+{"id": "eval-0443", "sentence": "그냥 38-17-224928-21 라고 적혀있던데요.", "source": "synth_structured", "draft_spans": [{"start": 3, "end": 18, "entity_type": "DRIVER_LICENSE", "value": "38-17-224928-21", "gold": true}], "needs_human_label": false}
+{"id": "eval-0266", "sentence": "만성콩팥병 환자가 수분 섭취를 조절할 때 가장 적절한 방법은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0101", "sentence": "Q) 관공서로부터 골프장 이용 내역 요청이 있을 경우 그 제공 요청에 응하여야 할 의무가 있는지 궁금합니다.", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0084", "sentence": "안녕하십니까~ 저는 20대 여자입니다~ 그쪽을 만나서 너무나도 반가워요.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0218", "sentence": "일회용카메라에 사용되는 렌즈는 어떤 종류인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0123", "sentence": "손님에 대한 예의나 서비스가 최악입니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0476", "sentence": "면허번호는 16-59-964811-47 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "DRIVER_LICENSE", "value": "16-59-964811-47", "gold": true}], "needs_human_label": false}
+{"id": "eval-0357", "sentence": "친구들과 추억 여행을 즐거웠어요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0164", "sentence": "대기업과 중소기업의 구분 수단은 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0331", "sentence": "급성 췌장염의 주요 원인으로 가장 흔히 보고되는 두 가지는 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0493", "sentence": "여권번호 R08141593 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "R08141593", "gold": true}], "needs_human_label": false}
+{"id": "eval-0418", "sentence": "법인등록번호 110115-4172677 로 사업자 등록했어요.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 21, "entity_type": "CORPORATE_REG_NO", "value": "110115-4172677", "gold": true}], "needs_human_label": false}
+{"id": "eval-0492", "sentence": "passport no: R25212744 로 예약했어요.", "source": "synth_structured", "draft_spans": [{"start": 13, "end": 22, "entity_type": "PASSPORT", "value": "R25212744", "gold": true}], "needs_human_label": false}
+{"id": "eval-0326", "sentence": "별과 별 사이의 거리는 어떻게 측정할까?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0141", "sentence": "네가 학교를 멀리 다녔잖아.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0111", "sentence": "연어를 먹으면 다크써클이 없어진다는데, 맞는 말인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0214", "sentence": "매미가 여름에 우는 이유가 무엇일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0374", "sentence": "성장호르몬 결핍증으로 진단받은 소아 환자가 성장호르몬 치료를 시작하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0074", "sentence": "대변실금 환자에서 차전자피 제제를 사용하는 주된 이유는 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0045", "sentence": "나 올림피아드에서 금상 탔어!", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0066", "sentence": "전 30대 여자입니다 ㅎㅎ 저도 잘 부탁드려요.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0156", "sentence": "신청이유 피신청인은 온라인 쇼핑몰을 운영하는 자이고 신청인은 해당 쇼핑몰의 회원으로 가입한 자이다.", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0008", "sentence": "최근에 스포츠 본 적 있나?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0187", "sentence": "룸 컨디션, 직원들 친절도, 청소 상태, 가격 모두 수준급으로 매우 만족함.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0341", "sentence": "신장이식 후 환자에서 면역 억제제 사용으로 인해 발생할 수 있는 주요 부작용은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0162", "sentence": "새로 오픈해서 그런지 깔끔하고 되게 고급스럽네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0135", "sentence": "기업이 1+1 판매 전략을 사용하는 이유는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0090", "sentence": "소아 혈우병 환자에서 출혈 시 가장 우선적으로 시행해야 할 치료는 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0251", "sentence": "페닐케톤뇨증의 진단에서 가장 적합한 검사 방법은 무엇입니까?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0249", "sentence": "가격도 괜찮은데 바로 앞에 광안대교가 보이는 진짜 완전 힐링 그 자체…", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0533", "sentence": "회사 법인번호는 110111-8143375 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 23, "entity_type": "CORPORATE_REG_NO", "value": "110111-8143375", "gold": true}], "needs_human_label": false}
+{"id": "eval-0475", "sentence": "여권번호 D19353908 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "D19353908", "gold": true}], "needs_human_label": false}
+{"id": "eval-0337", "sentence": "파스타 종류인 스파게티와 라자냐는 파스타의 일종인데, 이 외에도 파스타에는 어떤 종류가 있을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0194", "sentence": "샤프 뚜껑에 있는 심 정보는 왜 표시되어 있는 건가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0498", "sentence": "주민번호는 390103-16372099 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "390103-16372099", "gold": true}], "needs_human_label": false}
+{"id": "eval-0206", "sentence": "돈 좀 버는 거 가지고 별 유세는 다 떠네.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0300", "sentence": "별(★, ☆)이 언제부터 난이도, 평점을 나타내는데 사용되기 시작했을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0279", "sentence": "55세 남성이 발기부전 치료를 위해 병원을 방문하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0145", "sentence": "5세 여아가 발열, 기침, 콧물과 함께 얼굴에 붉은 반점이 나타나 병원에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0139", "sentence": "저는 형과 같이 바버샵을 운영하고 있어요.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0027", "sentence": "안녕하세요, 저도 30대 여성입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0417", "sentence": "주민번호는 260808-31441081 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "260808-31441081", "gold": true}], "needs_human_label": false}
+{"id": "eval-0370", "sentence": "50세 남성이 최근 숲에서 캠핑을 다녀온 후 발열, 심한 두통, 근육통을 호소하며 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0276", "sentence": "안녕하세요 저는 20대 여성입니다 반갑습니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0288", "sentence": "줄넘기를 먼저 개발한 사람은 누구였을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0067", "sentence": "대장내시경 검사 후 폴립 절제술을 받은 환자에서 다음 중 감시 대장내시경 시기를 6개월로 권장하는 경우는 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0401", "sentence": "47소3335 차 봤어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 7, "entity_type": "VEHICLE_REG_NO", "value": "47소3335", "gold": true}], "needs_human_label": false}
+{"id": "eval-0095", "sentence": "너는 요리에 대해서 어떻게 생각하는지 궁금하기도 해.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0157", "sentence": "바둑에서 최고 단급은 어떻게 되나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0121", "sentence": "왜 한글 맞춤법에서 표기와 발음이 다른가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0110", "sentence": "파실 생각인지, 코시국 때문에 안 고쳐서인지 아니면 스트라타여서인지 로비는 리모델링 공사를 들어가긴 했는데 서울 3성급보다 더 후진 내부 시설에 경악.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0389", "sentence": "30세 남자가 6개월 전부터 허리와 엉덩이의 통증으로 내원했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0433", "sentence": "카드번호 0125-4729-5750-7545 로 결제했어요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "0125-4729-5750-7545", "gold": true}], "needs_human_label": false}
+{"id": "eval-0359", "sentence": "35세 남성이 기침과 체중 감소로 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0408", "sentence": "문서에 110121-7441563 숫자가 있던데 뭐죠?", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 18, "entity_type": "CORPORATE_REG_NO", "value": "110121-7441563", "gold": true}], "needs_human_label": false}
+{"id": "eval-0315", "sentence": "과거에는 어떤 방법으로 책을 보존해왔나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0265", "sentence": "천식의 급성악화가 의심될 때 즉시 병원으로 이송해야 하는 상황은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0195", "sentence": "sale이 할인의 의미로 사용되게 된 역사는 어떻게 되나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0040", "sentence": "35세 여성이 낭포성 섬유증 관련 당뇨병(CFRD) 진단을 받고 인슐린 치료를 시작하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0037", "sentence": "45세 남자가 최근 3주 동안 지속된 설사, 체중 감소, 복통을 호소하며 병원에 방문했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0539", "sentence": "0740-9702-2326-0315 영수증 번호 같던데요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 19, "entity_type": "CREDIT_CARD", "value": "0740-9702-2326-0315", "gold": true}], "needs_human_label": false}
+{"id": "eval-0087", "sentence": "수영장과 피트니스 시설이 잘 구비되어 있고, 레스토랑도 수준급입니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0125", "sentence": "법으로 처벌하죠~ 무슨일 하세요?", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0369", "sentence": "Omphalocele을 가진 신생아의 장기 추적 관찰에서 가장 중요한 관리 항목은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0490", "sentence": "문서에 110115-8980662 숫자가 있던데 뭐죠?", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 18, "entity_type": "CORPORATE_REG_NO", "value": "110115-8980662", "gold": true}], "needs_human_label": false}
+{"id": "eval-0411", "sentence": "코드 11-06-300314-50 가 뭔지 모르겠어요.", "source": "synth_structured", "draft_spans": [{"start": 3, "end": 18, "entity_type": "DRIVER_LICENSE", "value": "11-06-300314-50", "gold": true}], "needs_human_label": false}
+{"id": "eval-0517", "sentence": "회사 법인번호는 110114-1114210 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 23, "entity_type": "CORPORATE_REG_NO", "value": "110114-1114210", "gold": true}], "needs_human_label": false}
+{"id": "eval-0319", "sentence": "급성 대동맥 박리의 주요 위험 인자로 가장 적절한 것은 무엇입니까?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0143", "sentence": "부르스타가 어디에서 유래한 말인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0225", "sentence": "데크가 넓고 샤워장 온수가 세고, 가격도 싸고 좋아요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0064", "sentence": "객실이 깔끔하고, 친절했습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0449", "sentence": "주민번호는 780907-41620489 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "780907-41620489", "gold": true}], "needs_human_label": false}
+{"id": "eval-0030", "sentence": "펭귄의 겨드랑이 온도는 몇 도인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0421", "sentence": "신용카드 0178-1692-0096-6272 승인 확인 부탁해요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "0178-1692-0096-6272", "gold": true}], "needs_human_label": false}
+{"id": "eval-0333", "sentence": "45세 남성이 최근 피로감과 체중 증가를 호소하며 병원에 내원했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0327", "sentence": "45세 남성이 반복적인 다리 혈전을 주소로 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0377", "sentence": "저는 비올라 학원을 알아보고 있었어요.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0309", "sentence": "샤워 시설 높낮이 조절이 안 되고요, 욕조 타일에 곰팡이가 몇 군데나 있어서 기겁했네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0171", "sentence": "35세 남자 환자가 최근 몇 주 동안 점점 심해지는 복통과 메스꺼움을 주소로 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0060", "sentence": "급성 허혈성 뇌졸중 환자에서 혈전용해제의 사용과 관련된 부작용으로 가장 가능성이 높은 것은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0031", "sentence": "57세 남성이 흉통을 주소로 응급실에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0280", "sentence": "뷔페만 들렀는데 처음에 가짓수가 별로 없어서 좀 실망했지만 맛은 되게 좋아서 마음에 들었음.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0144", "sentence": "우주풍경과 행성 폭발 사진을 찍는데 사용하는 사진기는 어떤 종류인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0524", "sentence": "주민번호는 261201-22511783 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "261201-22511783", "gold": true}], "needs_human_label": false}
+{"id": "eval-0388", "sentence": "35세 남성이 반도체 생산 시설에서 일한 후 호흡곤란과 가슴의 압박감을 호소하며 응급실에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0217", "sentence": "저는 종교 여행을 좋아하는데 다음에 체험 여행 갈 곳을 알아보려고요.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0078", "sentence": "전 중학교 국어 교사 일하는 50대 남자입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0466", "sentence": "차량번호 71바9797 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 12, "entity_type": "VEHICLE_REG_NO", "value": "71바9797", "gold": true}], "needs_human_label": false}
+{"id": "eval-0242", "sentence": "금요일 화명 오토캠핑장을 다녀왔습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0188", "sentence": "저는 리조트에서 머물고 월요일 새벽에 출근하였는데, 놓고 간 물건이 있었어요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0291", "sentence": "꽃의 향기는 어디서 어떻게 발산되나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0117", "sentence": "심한 운동을 하고 나면 왜 목이 마르게 느껴질까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0416", "sentence": "010106-27406341 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "010106-27406341", "gold": true}], "needs_human_label": false}
+{"id": "eval-0310", "sentence": "폐색전증의 초기 치료로 가장 우선적으로 사용되는 약물은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0312", "sentence": "야 저 년 봐봐 ㅋㅋ 존중과 예의를 중요시하는 가상 도우미로서, 욕설을 사용하는 것은 적절하지 않다고 생각합니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0440", "sentence": "출장 가는데 M51583011 어쩌고 적어놨더라.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 16, "entity_type": "PASSPORT", "value": "M51583011", "gold": true}], "needs_human_label": false}
+{"id": "eval-0114", "sentence": "왜 눈이 내릴때는 낚시가 잘 안되나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0205", "sentence": "45세 남성 환자가 지속적인 피로와 체중 감소를 호소하며 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0165", "sentence": "30세 여성 C씨는 급성 중증 천식으로 병원에 입원했습니다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0203", "sentence": "방화유리, 방탄유리는 일반유리와는 어떤 차이가 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0335", "sentence": "공항도 가깝고 일하시는 분들이 너무 친절합니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0020", "sentence": "38주에 태어난 신생아가 출생 직후 심한 호흡곤란과 청색증을 보이고 있다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0120", "sentence": "반가워요.ㅋㅋ 저도 30대 여자인데.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0119", "sentence": "윈도우가 부팅될 때 최대화/최소화/닫기 버튼이 숫자로 나오며, F8키도 작동하지 않아 안전모드 부팅도 되지 않습니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0223", "sentence": "25세 여성이 최근 몇 주 동안 피로감, 창백함, 두근거림을 호소하며 내원했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0410", "sentence": "신용카드 4428-1817-1234-9863 승인 확인 부탁해요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "4428-1817-1234-9863", "gold": true}], "needs_human_label": false}
+{"id": "eval-0298", "sentence": "시설도 캠핑장 구조도 다시 만들어야 할 듯.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0186", "sentence": "당근은 뿌리채소인데도 불구하고 다른 뿌리채소와는 달리 오렌지색입니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0289", "sentence": "30세 여성이 월경통과 성교통으로 병원을 방문하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0241", "sentence": "장어와 복숭아를 함께 먹으면 탈이나는데, 복숭아를 먹은 후에 장어를 먹어도 괜찮을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0073", "sentence": "넥타이를 죄어 매면 녹내장 위험이 증가하는 건 사실인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0092", "sentence": "진짜 뷰로 말을 다 할 수 있을 것 같더라고요ㅠ 고층으로 배정되어서 너무 좋았고, 직원분들이 하나하나 챙겨주시고 도와주셔서 기분 좋게 있다가 갑니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0183", "sentence": "호흡기 감염 감시체계에서 바이러스 검출을 위한 가장 적합한 검체는 무엇인가요?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0166", "sentence": "최상의 위치로 부산 어디든 이동하기 편리함!", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0512", "sentence": "5181-9730-6558-6149 영수증 번호 같던데요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 19, "entity_type": "CREDIT_CARD", "value": "5181-9730-6558-6149", "gold": true}], "needs_human_label": false}
+{"id": "eval-0292", "sentence": "엘리베이터의 7세그먼트 방식에서 사용되는 대각선 표기는 어떤 용도로 사용되나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0345", "sentence": "냉동인간 및 인공수정에 필요한 난자와 정자를 꼭 액체질소에 보관하는 이유는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0360", "sentence": "자동차 앞에 곡선 모양의 유리가 있는 이유는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0055", "sentence": "요즘 코로나 특가인데, 딱 그 금액이면 적당한 호텔.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0371", "sentence": "오메가3 지방산에서 3의 의미는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0094", "sentence": "메이저리그에서 영구결번된 번호는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0504", "sentence": "passport no: G13814286 로 예약했어요.", "source": "synth_structured", "draft_spans": [{"start": 13, "end": 22, "entity_type": "PASSPORT", "value": "G13814286", "gold": true}], "needs_human_label": false}
+{"id": "eval-0521", "sentence": "회사 법인번호는 110121-0718076 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 23, "entity_type": "CORPORATE_REG_NO", "value": "110121-0718076", "gold": true}], "needs_human_label": false}
+{"id": "eval-0122", "sentence": "뷰도 너무 좋고 덕분에 좋은 분위기에서 생일 파티했네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0381", "sentence": "엄청 깔끔하고 편하고 좋습니다ㅎ 가격도 다른 호텔에 비해서 저렴하구요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0270", "sentence": "2003년 8월에 화성이 가까이 다가와 보이나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0528", "sentence": "계좌번호 553-65-438077 로 입금해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 18, "entity_type": "BANK_ACCOUNT", "value": "553-65-438077", "gold": true}], "needs_human_label": false}
+{"id": "eval-0054", "sentence": "싱글룸을 사용했는데, 깨끗하고 무료였으며 조식도 생각보다 괜찮았음.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0079", "sentence": "조선시대 대머리는 어떻게 상투를 뜰까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0462", "sentence": "949조3328 차 봤어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 8, "entity_type": "VEHICLE_REG_NO", "value": "949조3328", "gold": true}], "needs_human_label": false}
+{"id": "eval-0170", "sentence": "60세 남자가 구강암 진단을 받고 치료 계획을 논의 중이다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0542", "sentence": "차량번호 95러2201 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 12, "entity_type": "VEHICLE_REG_NO", "value": "95러2201", "gold": true}], "needs_human_label": false}
+{"id": "eval-0546", "sentence": "문서에 110114-1202015 숫자가 있던데 뭐죠?", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 18, "entity_type": "CORPORATE_REG_NO", "value": "110114-1202015", "gold": true}], "needs_human_label": false}
+{"id": "eval-0130", "sentence": "위도가 높을수록 중력이 왜 세지요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0070", "sentence": "30대 여자입니다 처음 뵙겠습니다 ^^", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0534", "sentence": "430705-12415682 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "430705-12415682", "gold": true}], "needs_human_label": false}
+{"id": "eval-0075", "sentence": "컨테이너 100만 TEU 달성 \"에서 TEU란 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0479", "sentence": "제 차 번호판 67보2060 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 15, "entity_type": "VEHICLE_REG_NO", "value": "67보2060", "gold": true}], "needs_human_label": false}
+{"id": "eval-0016", "sentence": "30세 여성이 치과 수술 후 과다출혈로 병원에 방문했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0346", "sentence": "임신 중 여성에게 제공되는 지질 기반 영양 보충제(LNS)와 철분 엽산(IFA) 보충제의 비교 결과에 대한 설명으로 옳은 것은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0400", "sentence": "32세 여성 환자가 피로감과 부종을 주소로 내원하였습니다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0246", "sentence": "새 가구, 새 리넨, 깨끗하고 새로운 장소.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0428", "sentence": "면허번호는 19-46-393703-29 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "DRIVER_LICENSE", "value": "19-46-393703-29", "gold": true}], "needs_human_label": false}
+{"id": "eval-0036", "sentence": "인공지능 기술을 통해 교육 시스템을 변화시키고 미래의 일자리를 형성하는 것에는 어떤 제한적인 요건 및 요구사항이 있을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0320", "sentence": "콜라의 맛을 즐기기 위한 가장 적합한 온도는 몇 도인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0364", "sentence": "리뷰 맛집 호텔 원하면 무조건 여기임.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0198", "sentence": "요일의 이름을 태양계 행성 이름에서 따올 때 천왕성, 해왕성, 명왕성이 포함되지 못한 이유는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0299", "sentence": "만성 B형 간염 치료에 사용되는 항바이러스제의 효과와 안전성에 대한 연구 결과로 옳은 것은?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0161", "sentence": "23일 입실, 25일 퇴실했습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0535", "sentence": "예약번호 812-12-314196 확인해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 18, "entity_type": "BANK_ACCOUNT", "value": "812-12-314196", "gold": true}], "needs_human_label": false}
+{"id": "eval-0140", "sentence": "노후 준비와 관련한 프로그램을 찾고 있는데 아무런 자료가 없다는 게 어이없네.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0159", "sentence": "서울 가서 가족들과 몇 번 묵었던 곳인데, 시설이 깨끗하고 직원분들이 친절했습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0150", "sentence": "미국 혁명이 실패하고 식민지가 영국의 지배 아래 남아 있다면 어떻게 될까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0083", "sentence": "니아신 치료가 심혈관 질환 예방에 미치는 효과에 대한 연구 결과에 따르면, 니아신 치료가 다음 중 어느 결과에 유의미한 영향을 미치지 않는 것으로 보고되었는가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0062", "sentence": "왜 두꺼비에게 헌집을 주고 새집을 받을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0444", "sentence": "제 여권번호는 G40464359 입니다. 확인 부탁드려요.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 17, "entity_type": "PASSPORT", "value": "G40464359", "gold": true}], "needs_human_label": false}
+{"id": "eval-0216", "sentence": "사자는 이빨이 안 썩는 것인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0033", "sentence": "왜 멍은 파란색으로 보일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0248", "sentence": "25세 여성이 오른쪽 아랫배의 심한 통증을 주소로 응급실에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0470", "sentence": "제 차 번호판 06노9663 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 15, "entity_type": "VEHICLE_REG_NO", "value": "06노9663", "gold": true}], "needs_human_label": false}
+{"id": "eval-0351", "sentence": "해운대 접근성만으로 최고의 장소입니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0481", "sentence": "주민번호는 220320-37794161 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "220320-37794161", "gold": true}], "needs_human_label": false}
+{"id": "eval-0116", "sentence": "라운지, 조식을 생각하면 호캉스로 가격이 나쁘지 않음.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0305", "sentence": "엔씨소프트가 출시한 모바일 MMORPG ‘리니지2M’과 ‘리니지M’이 흥행 부진을 겪고 있다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0032", "sentence": "35세 여성이 체외 수정(IVF) 없이 자궁 내 수정(IUI)을 통해 임신을 시도하고 있다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0496", "sentence": "계좌번호 301-46-920290 로 입금해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 18, "entity_type": "BANK_ACCOUNT", "value": "301-46-920290", "gold": true}], "needs_human_label": false}
+{"id": "eval-0138", "sentence": "왜 과학자들은 켈빈온도를 사용할까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0129", "sentence": "45세 남자가 눈 주위에 노란색 반점이 생겨 병원을 방문하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0419", "sentence": "83무0119 차 봤어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 7, "entity_type": "VEHICLE_REG_NO", "value": "83무0119", "gold": true}], "needs_human_label": false}
+{"id": "eval-0403", "sentence": "신용카드 3533-6388-9791-4187 승인 확인 부탁해요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "3533-6388-9791-4187", "gold": true}], "needs_human_label": false}
+{"id": "eval-0311", "sentence": "언제 가도 최고의 호텔이에요!", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0274", "sentence": "임신 20주차인 30세 여성이 산전 정기검진에서 톡소플라즈마 혈청 검사 IgM 양성 결과를 받았습니다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0344", "sentence": "주차장도 넓고 근처에 먹을 곳도 많고 오션뷰 중 최고입니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0155", "sentence": "2세 여아가 또래에 비해 키와 체중이 현저히 낮아 소아과에 방문하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0182", "sentence": "치과나 외과에서 찍은 X레이, CT, MRI사진의 소유권은 누구에게 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0126", "sentence": "자동차 안전벨트 원리와 제조 방법은 어떻게 되나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0253", "sentence": "여기가 고객을 조롱하고 싸게 잡았다고 강제로 취소시킨 곳 맞네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0548", "sentence": "문서에 110121-0432353 숫자가 있던데 뭐죠?", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 18, "entity_type": "CORPORATE_REG_NO", "value": "110121-0432353", "gold": true}], "needs_human_label": false}
+{"id": "eval-0077", "sentence": "물음표와 기타 구두점들은 어디서 유래한 것일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0277", "sentence": "답변) 학습자 주소록도 유출되지 않도록 안전성 확보조치를 취하셔야 합니다.○ 학습자(또는 보호자)의 이름, 연락처 등이 담겨있는 수강생 주소록은 개인정보파일에 해당되고, 이와 같이 문서로 된 개인정보파일은 잠금장치가 있는 안전한 장소에 보관하여야 합니다.", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0052", "sentence": "어떤 아르바이트를 해 보셨나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0392", "sentence": "45세 여성이 최근 멍이 쉽게 들고 잇몸 출혈을 겪어 병원을 방문했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0250", "sentence": "문화원과 대사관의 차이는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0010", "sentence": "안녕하세요 저는 백화점 판매일을 하고 있는 30대 여성 입니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0041", "sentence": "6사단 바로 옆에 있는 펜션이라서 면회하시는 분들에게 강력 추천합니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0294", "sentence": "신축 호텔이기도 하고 깨끗하고 레벨이 있는 인테리어에 에이스 침대, 전망까지 넘 좋아요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0429", "sentence": "문서에 110121-2512707 숫자가 있던데 뭐죠?", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 18, "entity_type": "CORPORATE_REG_NO", "value": "110121-2512707", "gold": true}], "needs_human_label": false}
+{"id": "eval-0233", "sentence": "비싼 가격 말고는 나쁜 게 없네.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0169", "sentence": "아몬드를 먹는 것이 어떤 효과가 있는 건가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0446", "sentence": "법인등록번호 110121-6816791 로 사업자 등록했어요.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 21, "entity_type": "CORPORATE_REG_NO", "value": "110121-6816791", "gold": true}], "needs_human_label": false}
+{"id": "eval-0469", "sentence": "제 차 번호판 995우5907 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 16, "entity_type": "VEHICLE_REG_NO", "value": "995우5907", "gold": true}], "needs_human_label": false}
+{"id": "eval-0268", "sentence": "주식회사가 생긴 이유는 무엇일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0390", "sentence": "주어진 주장에 동의하면서도, 오픈소스 프로그래밍에 있어서 추가적인 제한 조건이나 요구 사항을 몇 가지 더 제시하고, 이러한 조건이나 요구 사항이 오픈소스 프로그래밍에 어떠한 영향을 미칠 수 있는지 설명해주세요.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0501", "sentence": "회사 법인번호는 110115-2164650 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 23, "entity_type": "CORPORATE_REG_NO", "value": "110115-2164650", "gold": true}], "needs_human_label": false}
+{"id": "eval-0059", "sentence": "전화 엄청 자주 하고, 뭐 하면 뭐 한다, 꿍시렁꿍시렁 진짜 어이가 없다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0181", "sentence": "딸기맛 우유에는 벌레가 들어있다는데, 정말 딸기맛 우유에 벌레가 들어있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0499", "sentence": "9001-4277-0530-7655 영수증 번호 같던데요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 19, "entity_type": "CREDIT_CARD", "value": "9001-4277-0530-7655", "gold": true}], "needs_human_label": false}
+{"id": "eval-0549", "sentence": "96어4573 차 봤어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 7, "entity_type": "VEHICLE_REG_NO", "value": "96어4573", "gold": true}], "needs_human_label": false}
+{"id": "eval-0468", "sentence": "메모에 M77419818 라고만 써있어요.", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 13, "entity_type": "PASSPORT", "value": "M77419818", "gold": true}], "needs_human_label": false}
+{"id": "eval-0236", "sentence": "녹차와 말차를 먹을 때 맛에 큰 차이가 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0375", "sentence": "28세 여성이 5일 전부터 발열, 인후통, 림프절 종대, 구강 내 궤양을 주소로 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0313", "sentence": "어서오세요~ 30대 남자입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0227", "sentence": "55세 여성이 갑작스러운 가슴 통증과 호흡 곤란을 호소하며 응급실에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0361", "sentence": "간경변증과 복수를 가진 성인 환자에서 복수 천자 후 발생할 수 있는 순환기능 장애를 예방하기 위해 사용되는 혈관활성 약물에 대한 다음 설명 중 옳은 것은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0213", "sentence": "곱슬머리를 깔끔하게 만들고 싶습니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0263", "sentence": "바로 코앞이 해변이고 생각보다 방이 넓고 깨끗하고 좋았음.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0191", "sentence": "조식이 맛있고 룸 컨디션이 좋았음.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0526", "sentence": "63머8616 차 봤어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 7, "entity_type": "VEHICLE_REG_NO", "value": "63머8616", "gold": true}], "needs_human_label": false}
+{"id": "eval-0238", "sentence": "계절마다 토끼의 몸 색깔이 변한다는데 이게 맞는 걸까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0519", "sentence": "차량번호 07우6625 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 12, "entity_type": "VEHICLE_REG_NO", "value": "07우6625", "gold": true}], "needs_human_label": false}
+{"id": "eval-0228", "sentence": "◦ 신청인은 2011년 7월 5일 기간통신 사업자인 피신청인의 ‘A’ 서비스’에 가입 하여 이용하던 중, 2012년 1월 3일에 결합 상품으로 피신청인의 ‘B 서비스’에 추가로 가입하였고,", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0057", "sentence": "깨끗하고 친절해서 너무 좋아요~!", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0338", "sentence": "Erythrokeratodermia variabilis et progressiva (EKVP)는 주로 어떤 유전 양식을 통해 유전되는가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0437", "sentence": "차량번호 582가1542 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 13, "entity_type": "VEHICLE_REG_NO", "value": "582가1542", "gold": true}], "needs_human_label": false}
+{"id": "eval-0516", "sentence": "주민등록번호 490626-22526131 로 본인확인했어요.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 22, "entity_type": "RRN", "value": "490626-22526131", "gold": true}], "needs_human_label": false}
+{"id": "eval-0518", "sentence": "여권번호 O83373987 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "O83373987", "gold": true}], "needs_human_label": false}
+{"id": "eval-0175", "sentence": "제주 성산일출봉에 4개의 구멍이 있는데 그것은 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0541", "sentence": "주민번호는 181025-32902556 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "181025-32902556", "gold": true}], "needs_human_label": false}
+{"id": "eval-0232", "sentence": "왜 고대 중대 현대 라고 안하고 중세 라고 하나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0220", "sentence": "3세 여아가 크룹으로 응급실에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0409", "sentence": "운전면허번호 22-06-501455-44 로 렌트 예약했습니다.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 22, "entity_type": "DRIVER_LICENSE", "value": "22-06-501455-44", "gold": true}], "needs_human_label": false}
+{"id": "eval-0508", "sentence": "제 계좌는 신한 519-71-601877 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 22, "entity_type": "BANK_ACCOUNT", "value": "519-71-601877", "gold": true}], "needs_human_label": false}
+{"id": "eval-0127", "sentence": "과학자들은 대기 중에서 과다한 이산화탄소를 제거하는 방법을 찾았나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0373", "sentence": "1976년에 헐리우드 영화 '퀸콩(Queen Kong)'이 제작되었다는데, 이 영화가 실제로 있었을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0219", "sentence": "가격 대비 해피 아워 음식 수준이나 조식 가짓수를 보면 다시는 가고 싶지 않음", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0330", "sentence": "깨끗하다는 리뷰는 운이 좋았나?", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0356", "sentence": "건강을 챙기고 싶어서 영양제를 사고 싶은데 주변에 물어볼 사람이 없어.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0254", "sentence": "내가 갔을 때만 깨끗하고 친절했나?", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0093", "sentence": "내 친구 말을 너무 짜증나게 해 친구의 말을 너무 짜증나게 느끼는 이유를 이해할 수 있습니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0530", "sentence": "제 차 번호판 89바6325 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 15, "entity_type": "VEHICLE_REG_NO", "value": "89바6325", "gold": true}], "needs_human_label": false}
+{"id": "eval-0072", "sentence": "다리가 저릴때 왜 코에 침을 바르는 걸 추천할까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0415", "sentence": "제 계좌는 신한 690-60-437018 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 22, "entity_type": "BANK_ACCOUNT", "value": "690-60-437018", "gold": true}], "needs_human_label": false}
+{"id": "eval-0340", "sentence": "자신이 생각하는 성격은 어떤 성격이세요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0224", "sentence": "펜션 사장님께서 너무나 친절하셨고, 다른 분들 리뷰처럼 정말 좋고 깨끗한 곳이었어요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0042", "sentence": "여기가 그 유명한 부산 최대 비리 LCT인가요?", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0267", "sentence": "관혼상제라는 개념이 되게 예전부터 있어 왔잖아.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0151", "sentence": "국내 방위산업 업체 중 하나인 한화디펜스가 세계 최대 규모의 지상무기 전시회에서 'K9 자주포' 사업 계약을 따냈다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0136", "sentence": "프로야구에서는 배트의 길이에 제한이 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0500", "sentence": "그냥 32-05-740822-73 라고 적혀있던데요.", "source": "synth_structured", "draft_spans": [{"start": 3, "end": 18, "entity_type": "DRIVER_LICENSE", "value": "32-05-740822-73", "gold": true}], "needs_human_label": false}
+{"id": "eval-0507", "sentence": "제 차 번호판 31오7281 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 15, "entity_type": "VEHICLE_REG_NO", "value": "31오7281", "gold": true}], "needs_human_label": false}
+{"id": "eval-0199", "sentence": "나 어제 저녁에 심심해서 티빙 틀어서 뭐 볼지 보다가 스우파 갈라 토크쇼 했던 게 있는 거야.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0350", "sentence": "일년에 한번쯤 간다면 추천하고 싶음.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0271", "sentence": "임신 30주차 여성 환자가 정기 검진에서 고혈압과 단백뇨가 발견되었다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0215", "sentence": "가격 대비 그냥 그렇습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0348", "sentence": "네덜란드 제독인 Ruyter Michiel은 어떤 인물인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0358", "sentence": "COPD 환자에서 단기 작용성 기관지확장제(SABA)에 대한 반응이 부족한 경우, 장기 작용성 베타-2 아드레날린 작용제(LABA)인 salmeterol 50 mcg BID의 효과로 올바른 것은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0022", "sentence": "60세 남성이 발기부전 치료를 위해 PDE5 억제제인 타다라필(Tadalafil)을 복용하기 시작했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0509", "sentence": "980711-41815553 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "980711-41815553", "gold": true}], "needs_human_label": false}
+{"id": "eval-0285", "sentence": "무쇠란 정확히 어떤 재질의 금속일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0245", "sentence": "65세 남자가 심장 카테터 삽입술을 위해 병원에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0396", "sentence": "뷰가 너무 좋았어요~ 위치 좋음", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0353", "sentence": "기대했던 대로 영도대교 뷰도 너무 좋고, 객실도 깔끔하고 예쁘네요!", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0258", "sentence": "55세 남성이 고혈압 치료를 위해 베탁솔롤을 복용 중이다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0012", "sentence": "여기서부터 쭉 모텔 안 주차야 놀자", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0494", "sentence": "passport no: M07421347 로 예약했어요.", "source": "synth_structured", "draft_spans": [{"start": 13, "end": 22, "entity_type": "PASSPORT", "value": "M07421347", "gold": true}], "needs_human_label": false}
+{"id": "eval-0004", "sentence": "55세 남성이 소화불량과 체중 감소로 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0131", "sentence": "전선 모양이 계란형이 있는데, 왜 그런 모양으로 만드는 건가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0240", "sentence": "스파이더맨 홈시리즈에서 주인공이 기계로 거미줄쏘는 이유가 뭔가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0430", "sentence": "제 차 번호판 43소7179 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 15, "entity_type": "VEHICLE_REG_NO", "value": "43소7179", "gold": true}], "needs_human_label": false}
+{"id": "eval-0432", "sentence": "driver license 24-71-665302-41 등록해주세요.", "source": "synth_structured", "draft_spans": [{"start": 15, "end": 30, "entity_type": "DRIVER_LICENSE", "value": "24-71-665302-41", "gold": true}], "needs_human_label": false}
+{"id": "eval-0295", "sentence": "달의 이름과 각각의 뜻을 알고 싶습니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0483", "sentence": "1347-8525-5407-9941 영수증 번호 같던데요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 19, "entity_type": "CREDIT_CARD", "value": "1347-8525-5407-9941", "gold": true}], "needs_human_label": false}
+{"id": "eval-0196", "sentence": "여기는 사장 때문에 다시는 안 갑니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0287", "sentence": "다음 중 전파경로에 따른 예방지침에 따라 환자를 음압병실에 입원시켜야 하는 질환은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0306", "sentence": "비결핵 항산균 감염(Nontuberculous Mycobacterial Infection)에서 흔히 나타나는 증상이 아닌 것은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0386", "sentence": "카사노바에 대해 자세히 알고 싶습니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0088", "sentence": "야구공은 왜 습득한 사람의 소유인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0447", "sentence": "주민번호는 130124-31508730 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "130124-31508730", "gold": true}], "needs_human_label": false}
+{"id": "eval-0154", "sentence": "방이 청결하고 위치가 좋습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0510", "sentence": "카드번호 4356-6623-5658-8516 로 결제했어요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "4356-6623-5658-8516", "gold": true}], "needs_human_label": false}
+{"id": "eval-0399", "sentence": "왜 '며칠'은 '몇일'이 아닌가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0197", "sentence": "씨몽키란 무엇이며, 키우는 바다새우인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0089", "sentence": "광안리에 올 때마다 꼭 오고 싶을 정도로 뷰가 너무 좋았어요!", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0256", "sentence": "호스텔 컨셉과 1층 공용 시설은 좋지만, 정작 실내는 경기 외곽권 모텔보다 구림ㅠㅠ", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0480", "sentence": "카드번호 9324-1917-9695-4805 로 결제했어요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "9324-1917-9695-4805", "gold": true}], "needs_human_label": false}
+{"id": "eval-0395", "sentence": "10세 남아가 간과 비장의 비대, 빈혈 및 쉽게 멍이 드는 증상으로 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0308", "sentence": "경치 좋은 곳에서 따사로운 햇살 즐기며 가족과 차 한 잔 기분 좋게 다녀갑니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0362", "sentence": "금액 뒤에 也가 쓰인 경우는 어떤 의미인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0173", "sentence": "45세 남자가 6개월 전 신장이식 수술을 받은 후 최근 소변량 감소, 피로감, 발열 증상을 보여 병원을 방문했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0063", "sentence": "다음 중, 초발성 유발되지 않은 정맥 혈전 색전증(VTE)을 겪은 환자에서 초기 경구 항응고 치료 후 재발 방지를 위한 확장 예방 치료로 사용된 rivaroxaban과 aspirin의 비교에 관한 연구 결과에 대한 설명으로 옳은 것은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0025", "sentence": "60세 남성이 코로나19로 인해 중증 폐렴으로 입원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0545", "sentence": "면허번호는 23-60-438475-01 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "DRIVER_LICENSE", "value": "23-60-438475-01", "gold": true}], "needs_human_label": false}
+{"id": "eval-0234", "sentence": "만성폐쇄성폐질환(COPD) 환자에서 질병 악화를 예방하기 위해 권장되지 않는 백신은 무엇입니까?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0237", "sentence": "13세 여아가 인유두종바이러스(HPV) 백신 접종 후 두통, 피로, 복부 통증 등의 증상을 호소하며 병원에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0102", "sentence": "고혈압을 동반한 당뇨병 환자에서 혈압 조절 목표와 관련된 연구 결과에 따르면, 낮은 혈압 목표(<130/85 mmHg)가 어떤 임상적 이점을 제공할 수 있는가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0318", "sentence": "청어가 방귀로 대화를 한다는데, 실제로 무슨 신호를 전달하는 건가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0304", "sentence": "한-미 통화 스와프체결이 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0474", "sentence": "그냥 33-11-826378-21 라고 적혀있던데요.", "source": "synth_structured", "draft_spans": [{"start": 3, "end": 18, "entity_type": "DRIVER_LICENSE", "value": "33-11-826378-21", "gold": true}], "needs_human_label": false}
+{"id": "eval-0405", "sentence": "8936-3579-7933-5813 영수증 번호 같던데요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 19, "entity_type": "CREDIT_CARD", "value": "8936-3579-7933-5813", "gold": true}], "needs_human_label": false}
+{"id": "eval-0302", "sentence": "65세 남성이 급성 심근경색증으로 병원에 입원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0329", "sentence": "유머, 개그, 코메디의 차이점은 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0058", "sentence": "저는 18세이고 첫 번째 데이트로 음식점에 갈 예정입니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0489", "sentence": "driver license 23-72-507533-22 등록해주세요.", "source": "synth_structured", "draft_spans": [{"start": 15, "end": 30, "entity_type": "DRIVER_LICENSE", "value": "23-72-507533-22", "gold": true}], "needs_human_label": false}
+{"id": "eval-0264", "sentence": "워비곤 호수 효과는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0100", "sentence": "처음으로 여자친구가 호텔 예약을 잘했다며 칭찬을 했습니다^^ 이미 해외랑 서울에서는 유명한 호텔이라고 해서 믿고 예약했는데, 생각했던 것보다 200% 더 만족했습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0290", "sentence": "좋아하는 영화 장르 있으세요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0097", "sentence": "방도 넓고 건물이 새것이라 그런지 깔끔하고 바다 뷰도 좋네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0202", "sentence": "여자의 수명이 더 긴 이유는 무엇일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0434", "sentence": "985거8348 지나갔어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 8, "entity_type": "VEHICLE_REG_NO", "value": "985거8348", "gold": true}], "needs_human_label": false}
+{"id": "eval-0347", "sentence": "체커스에서 이기는 방법은 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0465", "sentence": "주문번호 959-50-294689 조회요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 18, "entity_type": "BANK_ACCOUNT", "value": "959-50-294689", "gold": true}], "needs_human_label": false}
+{"id": "eval-0207", "sentence": "과학\" 이라는 말이 무슨 뜻인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0226", "sentence": "승객이 0명인 비행기도 이륙할 수 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0221", "sentence": "혼자 머물기에 적당한 크기.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0243", "sentence": "◦ 신청인은 2008년 6월 30일 피신청인의 패밀리 카드 발급 신청서를 작성하여 제출하였는데, 개인정보 제3자 제공에는 동의하지 않았음", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0397", "sentence": "선물을 다시 선물로 줘도 될까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0257", "sentence": "주변에서 결혼할 시기라고 말해서 너무 성가셔.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0372", "sentence": "소변검사에서 Occult Blood, Protein, RBC의 결과가 나오면 무슨 의미인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0502", "sentence": "080317-40075777 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "080317-40075777", "gold": true}], "needs_human_label": false}
+{"id": "eval-0108", "sentence": "늑척추각 압통(CVAT) 검사가 임상적으로 중요한 이유는 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0459", "sentence": "면허번호는 21-01-224732-69 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "DRIVER_LICENSE", "value": "21-01-224732-69", "gold": true}], "needs_human_label": false}
+{"id": "eval-0099", "sentence": "럭셔리 방이라고 숙박했는데, 창문은 조그맣고 뷰는 형편없으며 이게 5성급 럭셔리라니 어이가 없습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0471", "sentence": "여권번호 D33365287 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "D33365287", "gold": true}], "needs_human_label": false}
+{"id": "eval-0152", "sentence": "깨끗하고 오션뷰가 멋지며, 파도 소리까지 잘 들리는 손에 꼽히는 좋은 숙소입니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0420", "sentence": "문서에 134511-1822459 숫자가 있던데 뭐죠?", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 18, "entity_type": "CORPORATE_REG_NO", "value": "134511-1822459", "gold": true}], "needs_human_label": false}
+{"id": "eval-0244", "sentence": "패밀리 트윈에 성인 3인은 너무 힘들었네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0349", "sentence": "안녕하세요 저는 50대 여성이예요.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0520", "sentence": "제 차 번호판 338누6244 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 16, "entity_type": "VEHICLE_REG_NO", "value": "338누6244", "gold": true}], "needs_human_label": false}
+{"id": "eval-0106", "sentence": "왜 로마인들과 그리스, 이집트인들의 이름은 왜 항상 '~스'로 끝나나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0423", "sentence": "신용카드 2528-2065-4962-8859 승인 확인 부탁해요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "2528-2065-4962-8859", "gold": true}], "needs_human_label": false}
+{"id": "eval-0438", "sentence": "운전면허번호 20-88-955675-48 로 렌트 예약했습니다.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 22, "entity_type": "DRIVER_LICENSE", "value": "20-88-955675-48", "gold": true}], "needs_human_label": false}
+{"id": "eval-0034", "sentence": "식후에 바로 녹차를 마셔도 되는 건가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0148", "sentence": "시설도 너무 좋고 잠옷이랑 조식이 무료 제공되는 점이 좋았어요!!!!", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0412", "sentence": "메모에 G05110231 라고만 써있어요.", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 13, "entity_type": "PASSPORT", "value": "G05110231", "gold": true}], "needs_human_label": false}
+{"id": "eval-0522", "sentence": "08수3737 지나갔어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 7, "entity_type": "VEHICLE_REG_NO", "value": "08수3737", "gold": true}], "needs_human_label": false}
+{"id": "eval-0391", "sentence": "에그타르트 안에 들어 있는 필링은 커스터드 크림인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0011", "sentence": "안녕하세요 50대 남자입니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0017", "sentence": "마지막 루프탑 풀을 하고 싶다는 아들램.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0379", "sentence": "8세 남아가 얼굴과 팔에 건조하고 가려운 발진을 보이며, 긁을 때 발진이 더욱 붉어지고 부어오른다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0189", "sentence": "말기 신질환 환자의 임종 계획 수립에서 가장 중요한 요소는 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0297", "sentence": "지방자치단체 조례에 교통약자의 이동 편의 증진을 위해 개인정보의 수집이 가능하다고 규정되어 있다면, 이용자의 동의 없이도 연락처와 주소를 수집하고 이용할 수 있을까요?", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0414", "sentence": "카드번호 7647-3062-7797-3769 로 결제했어요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "7647-3062-7797-3769", "gold": true}], "needs_human_label": false}
+{"id": "eval-0259", "sentence": "바다생물 중 독을 지니고 있는 생물에는 어떤 것이 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0487", "sentence": "차량번호 54저5561 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 12, "entity_type": "VEHICLE_REG_NO", "value": "54저5561", "gold": true}], "needs_human_label": false}
+{"id": "eval-0230", "sentence": "독일 탱크들에는 왜 동물이름이 붙을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0378", "sentence": "뷰랑 수영장은 너무 좋은데 방에 먼지가 정말 많고 방음이 전혀 안 돼요ㅜ", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0307", "sentence": "왜 유리창을 신문지로 닦는 거죠?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0201", "sentence": "안녕하세요 저는 30대 남성입니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0436", "sentence": "passport no: M61086783 로 예약했어요.", "source": "synth_structured", "draft_spans": [{"start": 13, "end": 22, "entity_type": "PASSPORT", "value": "M61086783", "gold": true}], "needs_human_label": false}
+{"id": "eval-0006", "sentence": "최근 동해안에서 대형 오징어와 물고기의 어획량이 늘어난 이유는 무엇일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0427", "sentence": "법인등록번호 110111-2083056 로 사업자 등록했어요.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 21, "entity_type": "CORPORATE_REG_NO", "value": "110111-2083056", "gold": true}], "needs_human_label": false}
+{"id": "eval-0441", "sentence": "회사 법인번호는 110121-7174263 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 23, "entity_type": "CORPORATE_REG_NO", "value": "110121-7174263", "gold": true}], "needs_human_label": false}
+{"id": "eval-0231", "sentence": "볼링공의 스팩 중 RG와 DIFF에 대해서 궁금합니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0113", "sentence": "동남아시아와 열대 호주에 주로 분포하며, 신장 문제와 요로 감염 치료에 사용되는 약초로, 항염증 및 이뇨 작용을 가진 식물은 무엇인가요?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0269", "sentence": "근처에 갈 곳도 볼 것들도 많아요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0014", "sentence": "비행기가 왜 뒤부터 착륙하는 걸까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0316", "sentence": "영화에서 나오는 명언들 중 유명한 것들이 어떤 것이 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0038", "sentence": "60세 여자가 갈증과 다뇨로 병원에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0464", "sentence": "카드번호 9421-4253-2846-5688 로 결제했어요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "9421-4253-2846-5688", "gold": true}], "needs_human_label": false}
+{"id": "eval-0163", "sentence": "누나 요새 티비 많이 보던데 텔레비전에서 뭐 보냐?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0128", "sentence": "내가 낸다면 여기 말고 다른 부산 5성 호텔 갈래요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0402", "sentence": "예약번호 464-16-582190 확인해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 18, "entity_type": "BANK_ACCOUNT", "value": "464-16-582190", "gold": true}], "needs_human_label": false}
+{"id": "eval-0142", "sentence": "Ⅲ.2.다.2) (계속) — 사유 15~19", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0056", "sentence": "혼자 여행 온 사람에게도 예쁜 뷰 볼 수 있어 좋고, 광안리 근접성도 좋아요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0239", "sentence": "전자렌지도 있고 오피스텔 같네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0506", "sentence": "출장 가는데 O85854112 어쩌고 적어놨더라.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 16, "entity_type": "PASSPORT", "value": "O85854112", "gold": true}], "needs_human_label": false}
+{"id": "eval-0382", "sentence": "젊은 사람들과 프로젝트를 하게 됐는데 진행하기가 어려워.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0505", "sentence": "driver license 34-38-927169-52 등록해주세요.", "source": "synth_structured", "draft_spans": [{"start": 15, "end": 30, "entity_type": "DRIVER_LICENSE", "value": "34-38-927169-52", "gold": true}], "needs_human_label": false}
+{"id": "eval-0005", "sentence": "아내가 만족하니 뿌듯하네요 ㅎ", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0323", "sentence": "62세 여자가 2개월 전부터 다리가 붓는다고 내원했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0229", "sentence": "이 논문은 신경망을 사용한 자율 주행 자동차의 도로 상황 판단 시스템을 개선하기 위한 새로운 알고리즘을 제안합니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0523", "sentence": "320825-25370683 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "320825-25370683", "gold": true}], "needs_human_label": false}
+{"id": "eval-0406", "sentence": "계좌번호 448-30-753501 로 입금해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 18, "entity_type": "BANK_ACCOUNT", "value": "448-30-753501", "gold": true}], "needs_human_label": false}
+{"id": "eval-0543", "sentence": "80저2304 지나갔어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 7, "entity_type": "VEHICLE_REG_NO", "value": "80저2304", "gold": true}], "needs_human_label": false}
+{"id": "eval-0193", "sentence": "안녕하세요 저는 30대 여성입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0445", "sentence": "driver license 19-97-578407-38 등록해주세요.", "source": "synth_structured", "draft_spans": [{"start": 15, "end": 30, "entity_type": "DRIVER_LICENSE", "value": "19-97-578407-38", "gold": true}], "needs_human_label": false}
+{"id": "eval-0422", "sentence": "신용카드 4360-6735-3144-7183 승인 확인 부탁해요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "4360-6735-3144-7183", "gold": true}], "needs_human_label": false}
+{"id": "eval-0384", "sentence": "안녕하세요 반갑습니다 40대 여성입니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0293", "sentence": "65세 여성이 진행성 호흡곤란으로 병원에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0065", "sentence": "당신이 화가 나 있거나 불쾌해하는 것 같아요.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0044", "sentence": "야 너는 버스랑 지하철 중에 뭘 더 선호해?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0477", "sentence": "944소0907 지나갔어요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 8, "entity_type": "VEHICLE_REG_NO", "value": "944소0907", "gold": true}], "needs_human_label": false}
+{"id": "eval-0096", "sentence": "안녕하세요 저는 40대 여성입니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0200", "sentence": "대로변에 있고 이 정도면 만족합니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0532", "sentence": "운전면허번호 15-80-274661-99 로 렌트 예약했습니다.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 22, "entity_type": "DRIVER_LICENSE", "value": "15-80-274661-99", "gold": true}], "needs_human_label": false}
+{"id": "eval-0039", "sentence": "55세 여성이 전신 경화증(systemic sclerosis)과 관련된 간질성 폐질환(CTD-ILD)으로 진단받고 치료를 시작하려고 한다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0486", "sentence": "면허번호는 14-46-401184-96 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "DRIVER_LICENSE", "value": "14-46-401184-96", "gold": true}], "needs_human_label": false}
+{"id": "eval-0354", "sentence": "섬네일\"이란 무엇이며, 어떤 어원을 가지고 있는지 알려주세요.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0053", "sentence": "국어 사전에서 'ㄱ' 왜 가장 많이 사용될까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0282", "sentence": "수혈 거부 동의서를 제출한 환자가 급성 출혈로 응급실에 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0153", "sentence": "경치도 좋고 음료와 디저트 맛도 좋네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0024", "sentence": "가성비 최고의 호텔, 광안리는 여기로 올 것 같아요 이제.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0210", "sentence": "여권과 비자의 차이는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0105", "sentence": "바다가 보이는 뷰가 멋집니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0255", "sentence": "저희 소통 합시다~저는 40대 남자입니다!!", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0147", "sentence": "외화 영화나 TV에서는 대사의 끝에 마침표를 사용하지 않는 것 같습니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0515", "sentence": "제 계좌는 신한 475-19-166572 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 22, "entity_type": "BANK_ACCOUNT", "value": "475-19-166572", "gold": true}], "needs_human_label": false}
+{"id": "eval-0439", "sentence": "주민번호는 300805-47369121 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "300805-47369121", "gold": true}], "needs_human_label": false}
+{"id": "eval-0107", "sentence": "55세 남성이 2형 당뇨병으로 진단받고 치료 중입니다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0314", "sentence": "안녕하세요 저는 강릉에 거주하고 있는 20대 여성입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0003", "sentence": "요즘 건강과 다이어트에 관심이 있는 사람들을 위해, 보리를 이용한 요리 레시피를 개발해야 합니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0461", "sentence": "운전면허번호 11-41-871870-07 로 렌트 예약했습니다.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 22, "entity_type": "DRIVER_LICENSE", "value": "11-41-871870-07", "gold": true}], "needs_human_label": false}
+{"id": "eval-0336", "sentence": "안녕하세요 저는 20대 여성입니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0301", "sentence": "솔직히 가장 외벽 쪽 라인은 추웠는데 사장님이 너무 친절하셔서 별 5개 드려요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0104", "sentence": "심근경색 발생 시 초기 치료로 권장되는 약물은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0547", "sentence": "신용카드 6594-6779-1288-9296 승인 확인 부탁해요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "6594-6779-1288-9296", "gold": true}], "needs_human_label": false}
+{"id": "eval-0035", "sentence": "탈레반의 카불 점령 후 발생하는 혼란 상황에서도 우리나라 대사관 직원 및 교민들이 안전하게 탈출할 수 있도록 외교부는 어떤 조치를 취해야 하는가?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0513", "sentence": "차량번호 24러3460 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 12, "entity_type": "VEHICLE_REG_NO", "value": "24러3460", "gold": true}], "needs_human_label": false}
+{"id": "eval-0281", "sentence": "안녕하세요 20대 남성입니다~", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0514", "sentence": "passport no: G51164824 로 예약했어요.", "source": "synth_structured", "draft_spans": [{"start": 13, "end": 22, "entity_type": "PASSPORT", "value": "G51164824", "gold": true}], "needs_human_label": false}
+{"id": "eval-0043", "sentence": "35세 임신부가 임신 중기에 초음파 검사를 받았고, 의사는 태반 유착 이상(morbidly adherent placenta)을 의심했습니다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0211", "sentence": "인사동점에 이어 두 번째 나인트리 숙박이었는데, 방음이 너무 안 돼요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0015", "sentence": "안녕하세요 30대남자입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0185", "sentence": "폴리오 감시에서 \"특이적 면역결핍 장애(PID)\" 환자 감시는 주로 어떤 목적으로 수행되나요?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0431", "sentence": "passport no: R73255022 로 예약했어요.", "source": "synth_structured", "draft_spans": [{"start": 13, "end": 22, "entity_type": "PASSPORT", "value": "R73255022", "gold": true}], "needs_human_label": false}
+{"id": "eval-0209", "sentence": "Q) 회사에 고객들의 이름, 주소, 전화번호, 이메일, 비밀번호를 저장하고 있습니다.", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0061", "sentence": "45세 여성이 만성 기침과 가래를 동반한 호흡 곤란을 호소하며 병원에 내원했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0261", "sentence": "결혼을 안 하고 생일이 10월인 30대 여성입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0133", "sentence": "하시모토병(Hashimoto's disease)에서 초기 증상으로 나타날 수 있는 갑상선의 비대와 관련된 증상은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0137", "sentence": "야경이 너무 예쁘고 좋아요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0455", "sentence": "제 계좌는 신한 125-34-980402 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 22, "entity_type": "BANK_ACCOUNT", "value": "125-34-980402", "gold": true}], "needs_human_label": false}
+{"id": "eval-0174", "sentence": "멍석 말아 때리는 이유는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0380", "sentence": "다음에 가면 또 갈 의향 있음 ㅎ 그런데 위치가 좀 별로.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0456", "sentence": "여권번호 D12400566 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "D12400566", "gold": true}], "needs_human_label": false}
+{"id": "eval-0503", "sentence": "신용카드 7152-4969-4402-7870 승인 확인 부탁해요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "7152-4969-4402-7870", "gold": true}], "needs_human_label": false}
+{"id": "eval-0109", "sentence": "안녕하세요 저는 10대 여성입니다!", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0467", "sentence": "제 차 번호판 97조1102 입니다.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 15, "entity_type": "VEHICLE_REG_NO", "value": "97조1102", "gold": true}], "needs_human_label": false}
+{"id": "eval-0262", "sentence": "제품을 국내용과 수출용으로 구분하는 이유는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0046", "sentence": "리사이클링과 업사이클링의 뜻과 차이점이 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0538", "sentence": "여권번호 G83483324 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "G83483324", "gold": true}], "needs_human_label": false}
+{"id": "eval-0284", "sentence": "연예인들 쓸데없이 돈 잘버는거 배아리꼴려 연예인들이 얼마나 돈을 버는지 알리는 것에 대해 비판적인 시각을 가질 수 있습니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0448", "sentence": "메모에 M07940562 라고만 써있어요.", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 13, "entity_type": "PASSPORT", "value": "M07940562", "gold": true}], "needs_human_label": false}
+{"id": "eval-0091", "sentence": "58세 남성이 급성 관상동맥 증후군으로 약물 용출 스텐트(DES) 삽입 후 6개월이 지나 갑작스러운 흉통을 호소하며 응급실에 내원하였습니다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0387", "sentence": "직불카드와 직불용 신용카드의 차이점과 사용 방법이 궁금합니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0028", "sentence": "버스킹 멱 따는 소리 시끄러워서 방에서 쉴 수가 없는데, 호텔은 아무것도 못 해준다고 합니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0472", "sentence": "카드번호 8489-4816-1745-4249 로 결제했어요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "8489-4816-1745-4249", "gold": true}], "needs_human_label": false}
+{"id": "eval-0149", "sentence": "프론트가 없고 3시 넘어서 객실 키를 보내줍니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0368", "sentence": "미슐랭에서 스타 음식점은 전체 체인 음식점에 해당하는 건가요, 아니면 특정 지점만 해당하는 건가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0050", "sentence": "호텔은 모르겠는데, 카페는 이용객 아니면 외부 흡연하지 말라고 내쫓네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0071", "sentence": "왜 옛날에 5월 5일날 태어난 사람을 죽였을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0222", "sentence": "고대에서부터 중세시대까지는 일요일을 포함한 쉬는 날이 있었을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0009", "sentence": "휴가철에 숙박을 했는데, 해변가 호텔은 사이트 표시 가격보다 배 가격을 받지 않아 좋았습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0484", "sentence": "2209-6646-4228-7633 영수증 번호 같던데요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 19, "entity_type": "CREDIT_CARD", "value": "2209-6646-4228-7633", "gold": true}], "needs_human_label": false}
+{"id": "eval-0328", "sentence": "프로야구 개막전 티켓 구매 방법과 시기는 언제인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0324", "sentence": "다른 건 몰라도 로비 남자 직원은 진짜 센스 있고 친절하다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0463", "sentence": "여권번호 M46896241 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "M46896241", "gold": true}], "needs_human_label": false}
+{"id": "eval-0272", "sentence": "자바스크립트는 자바와는 별개의 언어로, HTML 소스에 삽입된 형태로 웹브라우저 내에서 작동하는 웹 프로그래밍 언어입니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0452", "sentence": "면허번호는 37-72-117319-04 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "DRIVER_LICENSE", "value": "37-72-117319-04", "gold": true}], "needs_human_label": false}
+{"id": "eval-0023", "sentence": "어떻게 요통을 관리할 수 있을까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0478", "sentence": "차량번호 03라8130 주차 위반 조회해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 12, "entity_type": "VEHICLE_REG_NO", "value": "03라8130", "gold": true}], "needs_human_label": false}
+{"id": "eval-0488", "sentence": "여권번호 D47344171 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "D47344171", "gold": true}], "needs_human_label": false}
+{"id": "eval-0180", "sentence": "드라이아이스를 보면 피어오르는 연기는 무엇일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0018", "sentence": "방음 꾸짐, 옆 방 씻는 소리 다 들림, 그리고 차 소리도.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0332", "sentence": "나 따릉이 한 번도 안 타봤는데 넌 타봤어?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0540", "sentence": "면허번호는 21-61-741337-64 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "DRIVER_LICENSE", "value": "21-61-741337-64", "gold": true}], "needs_human_label": false}
+{"id": "eval-0172", "sentence": "조식 서비스, 사우나, 호캉스 좋았어요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0115", "sentence": "65세 남성이 피로와 호흡곤란을 호소하며 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0069", "sentence": "58세 여자가 1주 전부터 머리가 아프다고 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0098", "sentence": "Landau-Kleffner 증후군에 대한 설명으로 옳지 않은 것은 무엇인가요?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0134", "sentence": "방은 생각보다 아담했지만 시설이나 청결 면에서는 참 마음에 들었어요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0013", "sentence": "생후 2일 된 남아가 청색증과 빈호흡을 보였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0192", "sentence": "뷰도 좋고, 가격도 괜찮습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0424", "sentence": "driver license 34-71-809420-97 등록해주세요.", "source": "synth_structured", "draft_spans": [{"start": 15, "end": 30, "entity_type": "DRIVER_LICENSE", "value": "34-71-809420-97", "gold": true}], "needs_human_label": false}
+{"id": "eval-0527", "sentence": "계좌번호 192-38-873363 로 입금해주세요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 18, "entity_type": "BANK_ACCOUNT", "value": "192-38-873363", "gold": true}], "needs_human_label": false}
+{"id": "eval-0321", "sentence": "시스틴뇨증에 대한 설명으로 옳은 것은?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0544", "sentence": "주민번호는 210528-28596331 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "210528-28596331", "gold": true}], "needs_human_label": false}
+{"id": "eval-0511", "sentence": "출장 가는데 R28850304 어쩌고 적어놨더라.", "source": "synth_structured", "draft_spans": [{"start": 7, "end": 16, "entity_type": "PASSPORT", "value": "R28850304", "gold": true}], "needs_human_label": false}
+{"id": "eval-0212", "sentence": "체크인 할 때부터 직원분들 모두 너무 친절하시고 서비스 만족입니다!", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0158", "sentence": "안녕하세요 전 10대 여성입니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0283", "sentence": "연휴에 가서 그 가성비도 희석됨.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0343", "sentence": "리셉션 친절 몇 년 전에 리모델링을 완료해서 깔끔함.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0334", "sentence": "안녕하세요 저는 30대 남성입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0442", "sentence": "680927-47291847 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "680927-47291847", "gold": true}], "needs_human_label": false}
+{"id": "eval-0048", "sentence": "안녕하십니까~ 저는 60대 여자입니다~ ㅎㅎ.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0393", "sentence": "콜라의 탄산이 뚜껑을 열면 왜 사라질까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0376", "sentence": "잠만 잘 거라서 여기 예약했는데, 가성비를 따지고 할 것 없이 기본도 못합니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0454", "sentence": "480513-24208591 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "480513-24208591", "gold": true}], "needs_human_label": false}
+{"id": "eval-0168", "sentence": "매장에서 발생하는 비닐, 밴딩끈, 스티로폼 쓰레기를 분리수거하는 방법을 알려주세요.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0049", "sentence": "0.025N 티오황산나트륨의 N은 어떤 단위를 의미하는가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0383", "sentence": "네페르타리와 네페르티티는 누구인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0247", "sentence": "양력과 음력의 차이는 무엇일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0453", "sentence": "제 여권번호는 O58379280 입니다. 확인 부탁드려요.", "source": "synth_structured", "draft_spans": [{"start": 8, "end": 17, "entity_type": "PASSPORT", "value": "O58379280", "gold": true}], "needs_human_label": false}
+{"id": "eval-0184", "sentence": "육군군복은 왜 반팔이 없는 걸까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0167", "sentence": "크게 불편하지 않고 깔끔하네요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0426", "sentence": "190907-12497851 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "190907-12497851", "gold": true}], "needs_human_label": false}
+{"id": "eval-0047", "sentence": "만성 B형 간염 환자의 치료에 관해 옳은 설명은 무엇인가?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0208", "sentence": "한국 성씨에서 파는 어떻게 만들어지고, 그 파는 무엇을 나타내는지 궁금합니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0179", "sentence": "서울 지하철 역간 구간 중 가장 긴 구간과 그 길이는 무엇인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0394", "sentence": "팬톤 올해의 색 선정 기준은 뭘까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0029", "sentence": "35세 남자가 최근 브라질의 São Paulo 외곽 Sabiá 마을을 여행한 후 고열, 피로감, 근육통을 호소하며 병원에 내원했다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0366", "sentence": "화이트 와인은 왜 색이 투명한가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0451", "sentence": "주민번호는 611207-34601920 예요.", "source": "synth_structured", "draft_spans": [{"start": 6, "end": 21, "entity_type": "RRN", "value": "611207-34601920", "gold": true}], "needs_human_label": false}
+{"id": "eval-0425", "sentence": "회사 법인번호는 110114-1687613 입니다.", "source": "synth_structured", "draft_spans": [{"start": 9, "end": 23, "entity_type": "CORPORATE_REG_NO", "value": "110114-1687613", "gold": true}], "needs_human_label": false}
+{"id": "eval-0081", "sentence": "안녕하세요 저는 10대 여성입니다", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0176", "sentence": "귀지가 생기는 이유와 귀지가 많이 생기면 문제가 있는가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0103", "sentence": "통계작성 편 — Ⅲ.1.나 개인정보 보호 계획 수립", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0160", "sentence": "12세 남자 아이가 크론병으로 인해 성장 지연을 호소하고 있다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0002", "sentence": "우리가 항상 살면서 건강하다는 보장은 없잖아요.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0525", "sentence": "카드번호 8567-6159-0524-5570 로 결제했어요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "8567-6159-0524-5570", "gold": true}], "needs_human_label": false}
+{"id": "eval-0352", "sentence": "안녕하세요~ 저는 20대 여성입니다.", "source": "dialogue_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0026", "sentence": "맥주 3000cc는 소주병으로 몇 병일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0363", "sentence": "경포대 바로 앞이라 산책길과 가까워서 위치가 좋고, 오션뷰가 멋지며 방과 화장실도 깔끔하고 침대도 크고 튼튼해서 좋아요.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0342", "sentence": "야한 생각을 많이 하면 머리가 빨리 자란다는 말은 과학적인 근거가 있는 말인가요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0303", "sentence": "낭포성 섬유증(CF) 환자의 폐 기능 개선에 도움을 줄 수 있는 항산화제로 가장 적합한 것은 무엇인가요?", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0482", "sentence": "카드번호 7520-5157-1435-8580 로 결제했어요.", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 24, "entity_type": "CREDIT_CARD", "value": "7520-5157-1435-8580", "gold": true}], "needs_human_label": false}
+{"id": "eval-0365", "sentence": "분홍색 플라밍고는 자는 동안 왜 한 발로 서 있나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0355", "sentence": "헌혈하기 전에 빼는 검사용 혈액으로 무엇을 검사하나요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0132", "sentence": "지구상에 식인식물이 존재할까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0204", "sentence": "증여세 탈루 의혹 받는 홍종학 중소벤처기업부 장관 후보자는 어떤 입장을 표명해야 할까?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0086", "sentence": "바둑\"이라는 단어는 1482년(성종13년)에 '바도기'라는 표현으로 처음 등장합니다.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0531", "sentence": "790313-25837348 비슷한 숫자만 기억나요.", "source": "synth_structured", "draft_spans": [{"start": 0, "end": 15, "entity_type": "RRN", "value": "790313-25837348", "gold": true}], "needs_human_label": false}
+{"id": "eval-0529", "sentence": "여권번호 R06429142 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "R06429142", "gold": true}], "needs_human_label": false}
+{"id": "eval-0260", "sentence": "키 작고 가슴 큰 여자 매력적이지 않냐?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0082", "sentence": "다음 중 열사병의 주요 증상이 아닌 것을 고르시오.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0457", "sentence": "여권번호 O13038626 인데 갱신 가능할까요?", "source": "synth_structured", "draft_spans": [{"start": 5, "end": 14, "entity_type": "PASSPORT", "value": "O13038626", "gold": true}], "needs_human_label": false}
+{"id": "eval-0019", "sentence": "역사 왜곡은 절대 해서는 안되는가?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0385", "sentence": "45세 남성이 X-연관 심장 판막 이형성증으로 진단받았다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0473", "sentence": "문서에 110115-7173789 숫자가 있던데 뭐죠?", "source": "synth_structured", "draft_spans": [{"start": 4, "end": 18, "entity_type": "CORPORATE_REG_NO", "value": "110115-7173789", "gold": true}], "needs_human_label": false}
+{"id": "eval-0190", "sentence": "공항까지 픽업 서비스가 있어서 좋고 조식도 주니까 가성비가 괜찮습니다.", "source": "review_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0076", "sentence": "Q) 온라인 예약 후 계약이 진행되는 경우, 계약자와 여행자가 다를 수 있는데, 온라인 예약 페이지가 위임장과 동일한 효력이 발생하는지요?", "source": "privacy_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0278", "sentence": "노자' 등 뒤에 '자'를 붙일까요?", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0317", "sentence": "나 길 가다가 진짜 거지 같은 거 봄 그런 경험이 불쾌했을 것 같아요.", "source": "safe_conv_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0550", "sentence": "passport no: M33327855 로 예약했어요.", "source": "synth_structured", "draft_spans": [{"start": 13, "end": 22, "entity_type": "PASSPORT", "value": "M33327855", "gold": true}], "needs_human_label": false}
+{"id": "eval-0051", "sentence": "42세 여성이 최근 식욕 저하와 체중 감소를 경험하며 우울증 증상이 나타났다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}
+{"id": "eval-0398", "sentence": "65세 남성이 급성 흉통으로 내원하였다.", "source": "medical_qa_weak", "draft_spans": [], "needs_human_label": true}

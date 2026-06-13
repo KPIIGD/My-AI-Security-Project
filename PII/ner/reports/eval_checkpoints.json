@@ -1,0 +1,66 @@
+[
+  {
+    "name": "monologg",
+    "ckpt": "monologg/koelectra-base-v3-naver-ner",
+    "metrics": {
+      "NAME": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 181
+      },
+      "ADDRESS": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 77
+      },
+      "ORG": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 90
+      },
+      "macro_f1": 0.0
+    },
+    "verdict": "❌ C-fallback 즉시 발동 권고 (< 0.60)"
+  },
+  {
+    "name": "leo97",
+    "ckpt": "Leo97/KoELECTRA-small-v3-modu-ner",
+    "metrics": {
+      "NAME": {
+        "precision": 0.812,
+        "recall": 0.691,
+        "f1": 0.746,
+        "tp": 125,
+        "fp": 29,
+        "fn": 56
+      },
+      "ADDRESS": {
+        "precision": 0.462,
+        "recall": 0.558,
+        "f1": 0.506,
+        "tp": 43,
+        "fp": 50,
+        "fn": 34
+      },
+      "ORG": {
+        "precision": 0.683,
+        "recall": 0.622,
+        "f1": 0.651,
+        "tp": 56,
+        "fp": 26,
+        "fn": 34
+      },
+      "macro_f1": 0.634
+    },
+    "verdict": "⚠️  ADDRESS 후처리 1일 시도 후 재측정 (0.60~0.75)"
+  }
+]

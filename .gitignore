@@ -32,6 +32,13 @@ PII/fuzzer/data/*.jsonl
 PII/fuzzer/seeds/name/name_input_queue_202604_v1.jsonl
 PII/fuzzer/smoke_*.json
 
+# NER module — large data/model directories (35GB total, regeneratable from scripts)
+PII/ner/data/
+PII/ner/datacenter/
+PII/ner/models/
+PII/ner/tmp/
+PII/ner/logs/
+
 # Regeneratable build and presentation scratch artifacts
 build/**/node_modules/
 tmp/

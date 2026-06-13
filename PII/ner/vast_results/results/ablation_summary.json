@@ -1,0 +1,18 @@
+{
+  "baseline": {
+    "error": "klue_test_results.json 없음",
+    "aborted": false
+  },
+  "silver": {
+    "error": "klue_test_results.json 없음",
+    "aborted": false
+  },
+  "synth": {
+    "error": "klue_test_results.json 없음",
+    "aborted": false
+  },
+  "silver_synth": {
+    "error": "klue_test_results.json 없음",
+    "aborted": false
+  }
+}

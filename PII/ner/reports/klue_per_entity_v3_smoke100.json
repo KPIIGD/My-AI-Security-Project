@@ -1,0 +1,51 @@
+{
+  "model": "models/pii_ner_v3/onnx_int8/model.onnx",
+  "eval_set": "KLUE-NER validation (100 sentences)",
+  "per_entity": {
+    "ADDRESS": {
+      "precision": 0.675,
+      "recall": 0.7105263157894737,
+      "f1-score": 0.6923076923076923,
+      "support": 38
+    },
+    "NAME": {
+      "precision": 0.8350515463917526,
+      "recall": 0.8709677419354839,
+      "f1-score": 0.8526315789473684,
+      "support": 93
+    },
+    "ORG": {
+      "precision": 0.6346153846153846,
+      "recall": 0.6346153846153846,
+      "f1-score": 0.6346153846153846,
+      "support": 52
+    },
+    "micro avg": {
+      "precision": 0.746031746031746,
+      "recall": 0.7704918032786885,
+      "f1-score": 0.7580645161290323,
+      "support": 183
+    },
+    "macro avg": {
+      "precision": 0.7148889770023791,
+      "recall": 0.7387031474467807,
+      "f1-score": 0.7265182186234819,
+      "support": 183
+    },
+    "weighted avg": {
+      "precision": 0.7448622612810546,
+      "recall": 0.7704918032786885,
+      "f1-score": 0.7573903232229374,
+      "support": 183
+    }
+  },
+  "macro_f1": 0.7265182186234819,
+  "micro_f1": 0.7580645161290323,
+  "gold_entity_counts": {
+    "ORG": 52,
+    "NAME": 93,
+    "ADDRESS": 38
+  },
+  "inference_time_s": 25.241055011749268,
+  "ms_per_sentence": 252.4105501174927
+}
