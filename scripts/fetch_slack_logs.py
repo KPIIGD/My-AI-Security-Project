@@ -253,6 +253,14 @@ def main() -> int:
     args = ap.parse_args()
 
     token = os.environ.get("SLACK_BOT_TOKEN") or os.environ.get("SLACK_TOKEN")
+    if not token and sys.platform == "win32":
+        # 작업 스케줄러가 환경변수를 상속하지 못해도 사용자 레지스트리에서 직접 읽음
+        try:
+            import winreg
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as k:
+                token = winreg.QueryValueEx(k, "SLACK_BOT_TOKEN")[0]
+        except (FileNotFoundError, OSError):
+            pass
     if not token:
         print("환경변수 SLACK_BOT_TOKEN 이 없습니다. 토큰을 먼저 설정하세요.", file=sys.stderr)
         return 2
