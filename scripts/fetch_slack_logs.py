@@ -35,6 +35,13 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 
+# Windows 콘솔(cp949)에서 한글·이모지 출력 시 UnicodeEncodeError 방지
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
+
 API = "https://slack.com/api/"
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(REPO_ROOT, "슬랙")
@@ -131,20 +138,15 @@ def fetch_channel_md(token, channel, oldest, latest, tz, users) -> str:
     ))
     msgs.sort(key=lambda m: float(m["ts"]))
 
-    lines = [f"## #{name}", ""]
-    if not msgs:
-        lines.append("_이 날짜에 메시지가 없습니다._")
-        lines.append("")
-        return "\n".join(lines)
-
+    body_lines = []
     for m in msgs:
         if m.get("subtype") in {"channel_join", "channel_leave"}:
             continue
         who = users.get(m.get("user", ""), m.get("username", m.get("user", "?")))
         body = clean_text(m.get("text", ""), users)
-        lines.append(f"**{hhmm(m['ts'], tz)} {who}**")
-        lines.append(body if body else "_(첨부/시스템 메시지)_")
-        lines.append("")
+        body_lines.append(f"**{hhmm(m['ts'], tz)} {who}**")
+        body_lines.append(body if body else "_(첨부/시스템 메시지)_")
+        body_lines.append("")
         # 스레드 답글
         if m.get("thread_ts") == m.get("ts") and m.get("reply_count", 0) > 0:
             replies = list(paginate(
@@ -156,12 +158,18 @@ def fetch_channel_md(token, channel, oldest, latest, tz, users) -> str:
                     continue  # 부모 메시지 중복 제외
                 rwho = users.get(r.get("user", ""), r.get("username", "?"))
                 rbody = clean_text(r.get("text", ""), users)
-                lines.append(f"- ↳ **{hhmm(r['ts'], tz)} {rwho}**: {rbody}")
-            lines.append("")
-    return "\n".join(lines)
+                body_lines.append(f"- ↳ **{hhmm(r['ts'], tz)} {rwho}**: {rbody}")
+            body_lines.append("")
+
+    if not body_lines:
+        return None  # 실제 메시지 없음(시스템 메시지뿐) → 섹션 생략
+    return "\n".join([f"## #{name}", ""] + body_lines)
 
 
 def write_day_file(date_str, team, sections, tz_hours):
+    sections = [s for s in sections if s]  # 빈(None) 채널 섹션 제외
+    if not sections:
+        return None, False  # 이 날짜에 어떤 채널에도 메시지 없음
     os.makedirs(OUT_DIR, exist_ok=True)
     path = os.path.join(OUT_DIR, f"{date_str}.md")
     new = not os.path.exists(path)
@@ -220,6 +228,9 @@ def main() -> int:
         return 1
 
     path, new = write_day_file(date_str, team, sections, args.tz)
+    if path is None:
+        print(f"{date_str}: 수집 대상 채널에 메시지가 없어 파일을 만들지 않았습니다.")
+        return 0
     print(f"{'생성' if new else '추가'}: {path}")
     print("→ 요약(📌) 섹션을 채우고, 슬랙/목차.md 인덱스를 갱신하세요.")
     return 0
