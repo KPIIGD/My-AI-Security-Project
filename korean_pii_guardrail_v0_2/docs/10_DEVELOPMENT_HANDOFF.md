@@ -21,12 +21,13 @@ Date: 2026-05-09
 1. raw offset 기준을 깨지 않는다.
 2. detector는 final action을 결정하지 않는다.
 3. NER output은 candidate일 뿐이다.
-4. raw PII를 log, exception, metric, report에 넣지 않는다.
+4. raw PII를 log, exception, metric, report, audit event, screenshot, public response, evidence, AI context에 넣지 않는다.
 5. RAG와 멀티턴 코드를 v0.2에 넣지 않는다.
 6. score rule을 코드에 하드코딩하지 않고 config로 둔다.
 7. dictionary match 단독으로 PERSON을 high confidence 처리하지 않는다.
 8. M1 구현 시 기존 L0 코드는 reference로만 사용하고 v0.2 package에서 직접 import하지 않는다.
 9. L0-derived 변형 복원 결과는 raw span으로 되돌릴 수 있어야 하며, 복원 실패 candidate는 reject한다.
+10. API key, token, credential, local account name, machine-specific secret을 커밋하지 않는다.
 
 ## 3. 첫 PR 목표
 
@@ -145,6 +146,7 @@ jumin beonho 900101-1234568
 | raw offset 검증 | Yes |
 | raw PII log 없음 | Yes |
 | public response raw text 없음 | Yes |
+| secret/credential 커밋 없음 | Yes |
 | unit test 추가 | Yes |
 | config/doc 동기화 | Yes |
 | RAG/multiturn 코드 없음 | Yes |

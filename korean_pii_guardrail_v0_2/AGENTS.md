@@ -31,7 +31,8 @@ Always inspect existing source, tests, schemas, and configs before editing.
 - All detector spans must use raw text character offsets.
 - Every internal `PIISpan` must satisfy `span.text == raw_text[span.start:span.end]`.
 - Detectors produce candidates only; final actions belong to resolver, policy, and masking stages.
-- Never write raw PII into logs, exceptions, metrics, reports, audit events, or public response spans.
+- Never write raw PII into logs, exceptions, metrics, reports, audit events, screenshots, public response spans, evidence files, or AI context files.
+- Never commit API keys, tokens, credentials, local account names, machine paths that expose private identity, or machine-specific secrets.
 - Keep entity, scoring, context, and policy behavior config-driven.
 - Do not promote dictionary-only `PERSON_NAME` matches to high confidence without context.
 - Preserve Korean suffixes during masking: replace only the PII body and keep josa/honorific/ending text outside the replacement.

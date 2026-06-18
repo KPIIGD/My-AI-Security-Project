@@ -12,7 +12,7 @@ Date: 2026-05-09
 | 초기 개념 | v0.2 처리 |
 |---|---|
 | RAG context scan | 제외 |
-| Retrieval document PII filter | 제외 |
+| Retrieval document PII filter / sanitizer | 제외 |
 | Multi-turn session monitor | 제외 |
 | Fragment ledger | 제외 |
 | Subject tracker | 제외 |
@@ -76,6 +76,8 @@ T3: 강남구에 삽니다.
 - `session_id` required field
 - `rag_context`
 - `retrieval_scan`
+- `retrieval_sanitizer`
+- `retrieval_document_sanitizer`
 
 단, 향후 확장 가능성을 위해 `scan_stage` enum에는 `input`과 `output`만 둔다. `retrieval`은 예약하지 않는다.
 
