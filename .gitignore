@@ -45,3 +45,7 @@ tmp_capstone_review*.txt
 tmp_capstone_review*.pptx
 outputs/**/output.pptx
 outputs/**/output_updated.pptx
+
+# 슬랙 대화 로그 — 공개 레포이므로 개인정보 포함 가능한 날짜별 로그는 로컬 전용.
+# 구조 파일(목차.md, 히스토리.md, _템플릿.md)만 추적.
+슬랙/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].md
