@@ -28,6 +28,7 @@ korean_pii_guardrail_v0_2/reports/audit_release_gate_*.jsonl
 .DS_Store
 Thumbs.db
 .claude/
+.serena/
 
 # Generated large artifacts (do not commit)
 PII/fuzzer/corpus_build/korean_addresses/raw/*.zip
