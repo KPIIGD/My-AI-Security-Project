@@ -1,15 +1,33 @@
 # CODEOWNERS for My-AI-Security-Project
 #
-# This file is intentionally a placeholder until the repository owner chooses
-# concrete GitHub usernames or teams. CODEOWNERS only enforces reviews when the
-# patterns below name valid owners and branch protection requires code-owner
-# review.
+# Activated 2026-06-20. Completes the PR #58 follow-up
+# "Select real CODEOWNERS users/teams".
 #
-# Recommended activation pattern:
-# * @owner-or-team
-# /korean_pii_guardrail_v0_2/ @owner-or-team
-# /.github/ @owner-or-team
-# /docs/ @owner-or-team
+# CODEOWNERS only *enforces* review once branch protection on the default
+# branch has "Require review from Code Owners" enabled. Until then these
+# patterns auto-request reviewers but do not block merge. To enable enforcement
+# see docs/github-org-migration-runbook.md.
+#
+# After the GitHub Organization migration, replace the individual handles below
+# with org teams, e.g.
+#   *  @my-ai-security/maintainers
+# Decision: docs/decisions/2026-06-20-github-org-migration.md
+#
+# Reviewer handles:
+#   @vmaca123   - repository owner / maintainer (Minwoo)
+#   @yangyu0330 - security & PII reviewer (Yangyusang)
+#   @KeoJung    - maintainer (Keojung)
 #
 # Do not replace human review with AI approval. AI agents may prepare changes,
 # but humans remain the approval owners.
+
+# Default reviewers for everything (any one code owner satisfies the rule)
+*                                     @vmaca123 @yangyu0330 @KeoJung
+
+# Security-, PII-, and governance-sensitive areas require the security/PII reviewer
+/.github/                             @vmaca123 @yangyu0330
+/docs/decisions/                      @vmaca123 @yangyu0330
+/docs/ai-agent-security-policy.md     @yangyu0330
+/docs/ai-agent-operating-rules.md     @yangyu0330
+/korean_pii_guardrail_v0_2/           @yangyu0330 @vmaca123
+/PII/                                 @yangyu0330 @vmaca123

@@ -54,6 +54,8 @@ Core package directories:
 - Knowledge management workflow: `docs/knowledge-management-workflow.md`
 - Decision record guide: `docs/decisions/README.md`
 - AI agent security baseline decision: `docs/decisions/2026-06-18-ai-agent-security-baseline.md`
+- GitHub org migration decision: `docs/decisions/2026-06-20-github-org-migration.md`
+- GitHub org migration runbook (owner steps): `docs/github-org-migration-runbook.md`
 - Project plan: `korean_pii_guardrail_v0_2/docs/00_PROJECT_PLAN.md`
 - Requirements: `korean_pii_guardrail_v0_2/docs/01_REQUIREMENTS_SPEC.md`
 - Architecture: `korean_pii_guardrail_v0_2/docs/02_ARCHITECTURE_SPEC.md`
@@ -73,7 +75,7 @@ Core package directories:
 
 - Agent Task Issue template: `.github/ISSUE_TEMPLATE/agent-task.yml`
 - Pull request template: `.github/pull_request_template.md`
-- CODEOWNERS placeholder: `.github/CODEOWNERS`
+- CODEOWNERS (activated, real handles): `.github/CODEOWNERS`
 - Active package pytest workflow draft: `.github/workflows/korean_pii_guardrail_v0_2_tests.yml`
 
 ## Decision Records
