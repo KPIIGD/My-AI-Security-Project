@@ -52,8 +52,10 @@ import re
 from pathlib import Path
 from typing import Optional
 
-import torch
-from transformers import AutoModelForTokenClassification, AutoTokenizer
+# NOTE: torch / transformers 는 모듈 최상단이 아니라 실제 모델을 로드/추론하는
+# 메서드(__init__, _infer_single_window) 안에서 lazy import 한다. 이렇게 해야
+# `[ner]` extra(torch) 없이도 이 모듈을 import 하여 상수·라벨 매핑·인터페이스
+# 계약(test_owner_wrapper_contract)을 검증할 수 있다. 런타임 동작은 동일하다.
 
 
 # v0.2 EntityType 매핑 (NER label → pipeline entity)
@@ -110,6 +112,10 @@ class FinetunedKoreanNERDetector:
         device: str = "auto",
         max_length: int = 256,
     ):
+        # torch / transformers lazy import (모듈 최상단 import 제거 대응)
+        import torch
+        from transformers import AutoModelForTokenClassification, AutoTokenizer
+
         # model_path 는 로컬 디렉터리 경로일 수도, HuggingFace Hub repo id
         # ("vmaca123/korean-pii-ner-v3") 일 수도 있다. Hub repo id 를 Path 로
         # 변환하면 Windows 에서 "/" → "\\" 가 되어 ("vmaca123\\korean-pii-ner-v3")
@@ -203,6 +209,8 @@ class FinetunedKoreanNERDetector:
 
     def _infer_single_window(self, chars: list[str], offset: int) -> list[dict]:
         """char list 한 window 입력 → BIO contiguous span 리스트."""
+        import torch  # lazy import (모듈 최상단 import 제거 대응)
+
         enc = self.tokenizer(
             chars,
             is_split_into_words=True,

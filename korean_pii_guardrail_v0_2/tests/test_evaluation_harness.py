@@ -1062,6 +1062,9 @@ def test_runner_w6_external_policy_documented_in_docstring() -> None:
 
 
 def test_run_eval_writes_safe_json_report(tmp_path: Path) -> None:
+    # real-NER integration test: run_eval 가 mode="real" 로 실제 NER 모델
+    # (torch + `[ner]` extra)을 로드한다. torch 없는 가벼운 CI 에서는 skip.
+    pytest.importorskip("torch")
     raw_phone = "010-1234-5678"
     raw_text = f"연락처 {raw_phone}"
     dataset = tmp_path / "tiny_eval.jsonl"
@@ -1197,6 +1200,8 @@ def test_ablation_report_does_not_contain_raw_text(tmp_path: Path) -> None:
 
 
 def test_run_ablation_writes_safe_json_report(tmp_path: Path) -> None:
+    # real-NER integration test (test_run_eval 와 동일 이유): torch 없으면 skip.
+    pytest.importorskip("torch")
     dataset, raw_text, raw_phone = _tiny_ablation_dataset(tmp_path)
     output = tmp_path / "reports" / "ablation.json"
 
