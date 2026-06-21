@@ -1,0 +1,16 @@
+# 무료 의존성 보안/업데이트 (public repo 무료). 취약 의존성 + 액션 버전 자동 감지.
+version: 2
+updates:
+  # GitHub Actions 버전 업데이트 — 이번 claude-code-action @v1 같은 ref 문제도 잡아줌
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Python 패키지 (활성 v0.2 패키지)
+  - package-ecosystem: "pip"
+    directory: "/korean_pii_guardrail_v0_2"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
