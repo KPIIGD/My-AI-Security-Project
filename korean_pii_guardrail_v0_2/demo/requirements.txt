@@ -2,7 +2,7 @@
 # 메인 패키지(pii_guardrail)는 src/ 에 있으며 app.py가 sys.path에 자동 추가한다.
 
 gradio>=5.0,<6.0
-matplotlib>=3.5
+matplotlib>=3.11.0
 
 # real NER 추론용. 기본 실행은 로드 실패 시 fail-closed이며,
 # mock fallback은 `python demo/app.py --allow-mock` 에서만 명시적으로 허용한다.
