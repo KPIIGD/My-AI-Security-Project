@@ -1,4 +1,4 @@
-transformers==4.57.3
+transformers==5.0.0rc3
 huggingface_hub>=0.34,<1.0
 tqdm>=4.66
 torch
