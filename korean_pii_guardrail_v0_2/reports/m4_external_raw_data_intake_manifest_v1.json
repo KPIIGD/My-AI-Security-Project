@@ -1,0 +1,1948 @@
+{
+  "report_type": "M4ExternalRawDataIntakeManifest",
+  "schema_version": "m4_external_raw_data_intake_manifest_v1",
+  "version": "v0.2-single-turn",
+  "generated_at": "2026-06-05T06:43:10.396823+00:00",
+  "phase": "Phase A. Raw Data Intake Manifest",
+  "project_root": "C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\korean_pii_guardrail_v0_2",
+  "raw_root": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\aihub_624",
+  "raw_root_exists": true,
+  "runtime_scoring_behavior_changed": false,
+  "score_delta_changed": false,
+  "context_rule_changed": false,
+  "candidate_generation_changed": false,
+  "raw_source_files_committed_to_repo": false,
+  "raw_text_persisted_in_reports": false,
+  "raw_candidate_values_persisted_in_reports": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "hash_files_requested": true,
+  "file_count": 28,
+  "zip_file_count": 28,
+  "compressed_bytes_total": 26465440451,
+  "by_source_id": {
+    "aihub_624_web_corpus": 4,
+    "aihub_free_conversation_speech_labels": 4,
+    "aihub_specialized_corpus": 20
+  },
+  "by_dataset_role": {
+    "label": 24,
+    "source": 4
+  },
+  "by_split": {
+    "training": 14,
+    "validation": 14
+  },
+  "by_recommended_action": {
+    "include_for_context_extraction": 4,
+    "include_for_parser_probe": 24
+  },
+  "zip_entry_extension_counts": {
+    ".json": 1879845,
+    ".txt": 2,
+    "<none>": 2105
+  },
+  "zip_entry_extension_counts_by_source_id": {
+    "aihub_624_web_corpus": {
+      ".json": 117994,
+      "<none>": 34
+    },
+    "aihub_free_conversation_speech_labels": {
+      ".json": 1761186,
+      "<none>": 2071
+    },
+    "aihub_specialized_corpus": {
+      ".json": 665,
+      ".txt": 2
+    }
+  },
+  "parser_probe_status_counts": {
+    "json_parse_failed": 1,
+    "parsed_small_json_shape": 25,
+    "skipped": 18
+  },
+  "files": [
+    {
+      "relative_path": "030.웹데이터 기반 한국어 말뭉치 데이터\\01.데이터\\1.Training\\라벨링데이터\\TL1.zip",
+      "file_name": "TL1.zip",
+      "source_id": "aihub_624_web_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 4600877963,
+      "sha256": "3510607c6a0bbc76213257de0f52f7b9cfaacec316fbb56aca61fe52845422a8",
+      "hash_status": "computed",
+      "zip_entry_count": 51847,
+      "zip_extension_counts": {
+        ".json": 51830,
+        "<none>": 17
+      },
+      "text_like_entry_count": 51830,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "IT_과학/BWSC217000049024.json",
+          "entry_size_bytes": 528099,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049025.json",
+          "entry_size_bytes": 516450,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049026.json",
+          "entry_size_bytes": 501254,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049027.json",
+          "entry_size_bytes": 516605,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049028.json",
+          "entry_size_bytes": 491759,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049029.json",
+          "entry_size_bytes": 475272,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049030.json",
+          "entry_size_bytes": 564767,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049031.json",
+          "entry_size_bytes": 460439,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049032.json",
+          "entry_size_bytes": 464636,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000049033.json",
+          "entry_size_bytes": 520988,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 3
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "header:dict": 3,
+        "header.identifier:str": 3,
+        "header.name:str": 3,
+        "header.category:str": 3,
+        "header.type:str": 3,
+        "header.source_file:str": 3,
+        "header.source:str": 3,
+        "header.subject:str": 3,
+        "named_entity:list": 3,
+        "named_entity[]:list": 3,
+        "named_entity[].title:list": 3,
+        "named_entity[].title[]:list": 3,
+        "named_entity[].title[].sentence:str": 3,
+        "named_entity[].title[].labels:list": 3,
+        "named_entity[].title[].labels[]:list": 3,
+        "named_entity[].subtitle:list": 3,
+        "named_entity[].subtitle[]:list": 3,
+        "named_entity[].content:list": 3,
+        "named_entity[].content[]:list": 3,
+        "named_entity[].content[].sentence:str": 3,
+        "named_entity[].content[].labels:list": 3,
+        "named_entity[].content[].labels[]:list": 3,
+        "named_entity[].board:str": 3,
+        "named_entity[].writer:str": 3,
+        "named_entity[].write_date:str": 3,
+        "named_entity[].url:str": 3,
+        "named_entity[].source_site:str": 3
+      },
+      "text_candidate_key_paths": [
+        "named_entity[].content:list",
+        "named_entity[].content[].labels:list",
+        "named_entity[].content[].labels[]:list",
+        "named_entity[].content[].sentence:str",
+        "named_entity[].content[]:list",
+        "named_entity[].subtitle:list",
+        "named_entity[].subtitle[]:list",
+        "named_entity[].title:list",
+        "named_entity[].title[].labels:list",
+        "named_entity[].title[].labels[]:list",
+        "named_entity[].title[].sentence:str",
+        "named_entity[].title[]:list"
+      ],
+      "recommended_action": "include_for_context_extraction"
+    },
+    {
+      "relative_path": "030.웹데이터 기반 한국어 말뭉치 데이터\\01.데이터\\1.Training\\원천데이터\\TS1.zip",
+      "file_name": "TS1.zip",
+      "source_id": "aihub_624_web_corpus",
+      "dataset_role": "source",
+      "split": "training",
+      "compressed_size_bytes": 3935274233,
+      "sha256": "49f99a3bbd92bf3855544dadcfaf034661aa346ca05aebf27a075d898f8dd9f5",
+      "hash_status": "computed",
+      "zip_entry_count": 51830,
+      "zip_extension_counts": {
+        ".json": 51830
+      },
+      "text_like_entry_count": 51830,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049024.json",
+          "entry_size_bytes": 270684,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049025.json",
+          "entry_size_bytes": 267743,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049026.json",
+          "entry_size_bytes": 247135,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049027.json",
+          "entry_size_bytes": 271853,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049028.json",
+          "entry_size_bytes": 258024,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049029.json",
+          "entry_size_bytes": 246989,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049030.json",
+          "entry_size_bytes": 289188,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049031.json",
+          "entry_size_bytes": 234419,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049032.json",
+          "entry_size_bytes": 246317,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_░·╟╨/BWSC217000049033.json",
+          "entry_size_bytes": 259480,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 3
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "SJML:dict": 3,
+        "SJML.header:dict": 3,
+        "SJML.header.identifier:str": 3,
+        "SJML.header.name:str": 3,
+        "SJML.header.category:int": 3,
+        "SJML.header.type:int": 3,
+        "SJML.header.source_file:str": 3,
+        "SJML.header.source:str": 3,
+        "SJML.text:list": 3,
+        "SJML.text[]:list": 3,
+        "SJML.text[].title:str": 3,
+        "SJML.text[].subtitle:str": 3,
+        "SJML.text[].content:str": 3,
+        "SJML.text[].board:str": 3,
+        "SJML.text[].writer:str": 3,
+        "SJML.text[].write_date:str": 3,
+        "SJML.text[].url:str": 3,
+        "SJML.text[].source_site:str": 3
+      },
+      "text_candidate_key_paths": [
+        "SJML.text:list",
+        "SJML.text[].board:str",
+        "SJML.text[].content:str",
+        "SJML.text[].source_site:str",
+        "SJML.text[].subtitle:str",
+        "SJML.text[].title:str",
+        "SJML.text[].url:str",
+        "SJML.text[].write_date:str",
+        "SJML.text[].writer:str",
+        "SJML.text[]:list"
+      ],
+      "recommended_action": "include_for_context_extraction"
+    },
+    {
+      "relative_path": "030.웹데이터 기반 한국어 말뭉치 데이터\\01.데이터\\2.Validation\\라벨링데이터\\VL1.zip",
+      "file_name": "VL1.zip",
+      "source_id": "aihub_624_web_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 576935894,
+      "sha256": "65421907a8f2e36ab97fadd716990be072d8113634f13563ed81db2bf09a0446",
+      "hash_status": "computed",
+      "zip_entry_count": 7184,
+      "zip_extension_counts": {
+        ".json": 7167,
+        "<none>": 17
+      },
+      "text_like_entry_count": 7167,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "IT_과학/BWSC217000050241.json",
+          "entry_size_bytes": 580048,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050242.json",
+          "entry_size_bytes": 600273,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050243.json",
+          "entry_size_bytes": 619062,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050244.json",
+          "entry_size_bytes": 555223,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050245.json",
+          "entry_size_bytes": 600821,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050246.json",
+          "entry_size_bytes": 610727,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050247.json",
+          "entry_size_bytes": 633343,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050248.json",
+          "entry_size_bytes": 627912,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050249.json",
+          "entry_size_bytes": 657629,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT_과학/BWSC217000050250.json",
+          "entry_size_bytes": 538465,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 3
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "header:dict": 3,
+        "header.identifier:str": 3,
+        "header.name:str": 3,
+        "header.category:str": 3,
+        "header.type:str": 3,
+        "header.source_file:str": 3,
+        "header.source:str": 3,
+        "header.subject:str": 3,
+        "named_entity:list": 3,
+        "named_entity[]:list": 3,
+        "named_entity[].title:list": 3,
+        "named_entity[].title[]:list": 3,
+        "named_entity[].title[].sentence:str": 3,
+        "named_entity[].title[].labels:list": 3,
+        "named_entity[].title[].labels[]:list": 3,
+        "named_entity[].subtitle:list": 3,
+        "named_entity[].subtitle[]:list": 3,
+        "named_entity[].content:list": 3,
+        "named_entity[].content[]:list": 3,
+        "named_entity[].content[].sentence:str": 3,
+        "named_entity[].content[].labels:list": 3,
+        "named_entity[].content[].labels[]:list": 3,
+        "named_entity[].board:str": 3,
+        "named_entity[].writer:str": 3,
+        "named_entity[].write_date:str": 3,
+        "named_entity[].url:str": 3,
+        "named_entity[].source_site:str": 3
+      },
+      "text_candidate_key_paths": [
+        "named_entity[].content:list",
+        "named_entity[].content[].labels:list",
+        "named_entity[].content[].labels[]:list",
+        "named_entity[].content[].sentence:str",
+        "named_entity[].content[]:list",
+        "named_entity[].subtitle:list",
+        "named_entity[].subtitle[]:list",
+        "named_entity[].title:list",
+        "named_entity[].title[].labels:list",
+        "named_entity[].title[].labels[]:list",
+        "named_entity[].title[].sentence:str",
+        "named_entity[].title[]:list"
+      ],
+      "recommended_action": "include_for_context_extraction"
+    },
+    {
+      "relative_path": "030.웹데이터 기반 한국어 말뭉치 데이터\\01.데이터\\2.Validation\\원천데이터\\VS1.zip",
+      "file_name": "VS1.zip",
+      "source_id": "aihub_624_web_corpus",
+      "dataset_role": "source",
+      "split": "validation",
+      "compressed_size_bytes": 495284052,
+      "sha256": "74fd71f6bc7189c2b11f5a3cc6a85d7ba51b18cf3da764d767949b79bf1f6ecc",
+      "hash_status": "computed",
+      "zip_entry_count": 7167,
+      "zip_extension_counts": {
+        ".json": 7167
+      },
+      "text_like_entry_count": 7167,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050241.json",
+          "entry_size_bytes": 287848,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050242.json",
+          "entry_size_bytes": 301500,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050243.json",
+          "entry_size_bytes": 301327,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050244.json",
+          "entry_size_bytes": 270035,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050245.json",
+          "entry_size_bytes": 288198,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050246.json",
+          "entry_size_bytes": 313163,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050247.json",
+          "entry_size_bytes": 316139,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050248.json",
+          "entry_size_bytes": 307920,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050249.json",
+          "entry_size_bytes": 321068,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "IT░·╟╨/BWSC217000050250.json",
+          "entry_size_bytes": 264293,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 3
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "SJML:dict": 3,
+        "SJML.header:dict": 3,
+        "SJML.header.identifier:str": 3,
+        "SJML.header.name:str": 3,
+        "SJML.header.category:int": 3,
+        "SJML.header.type:int": 3,
+        "SJML.header.source_file:str": 3,
+        "SJML.header.source:str": 3,
+        "SJML.text:list": 3,
+        "SJML.text[]:list": 3,
+        "SJML.text[].title:str": 3,
+        "SJML.text[].subtitle:str": 3,
+        "SJML.text[].content:str": 3,
+        "SJML.text[].board:str": 3,
+        "SJML.text[].writer:str": 3,
+        "SJML.text[].write_date:str": 3,
+        "SJML.text[].url:str": 3,
+        "SJML.text[].source_site:str": 3
+      },
+      "text_candidate_key_paths": [
+        "SJML.text:list",
+        "SJML.text[].board:str",
+        "SJML.text[].content:str",
+        "SJML.text[].source_site:str",
+        "SJML.text[].subtitle:str",
+        "SJML.text[].title:str",
+        "SJML.text[].url:str",
+        "SJML.text[].write_date:str",
+        "SJML.text[].writer:str",
+        "SJML.text[]:list"
+      ],
+      "recommended_action": "include_for_context_extraction"
+    },
+    {
+      "relative_path": "자유대화 음성(일반남녀)\\Training\\[라벨]1.AI챗봇.zip",
+      "file_name": "[라벨]1.AI챗봇.zip",
+      "source_id": "aihub_free_conversation_speech_labels",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 1731465282,
+      "sha256": "90cd7e6de8dbde06029b63711511c0e8d0ad22082ba303e806b2d2d47d567d5d",
+      "hash_status": "computed",
+      "zip_entry_count": 1371739,
+      "zip_extension_counts": {
+        ".json": 1370295,
+        "<none>": 1444
+      },
+      "text_like_entry_count": 1370295,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "일반남여_일반통합05_M_1455308554-6_37_수도권_실내/일반남여_일반통합05_M_1455308554-6_37_수도권_실내_06313.json",
+          "entry_size_bytes": 631,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1462181814_29_수도권_실내/일반남여_일반통합05_M_1462181814_29_수도권_실내_06317.json",
+          "entry_size_bytes": 653,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1462181814_29_수도권_실내/일반남여_일반통합05_M_1462181814_29_수도권_실내_06319.json",
+          "entry_size_bytes": 673,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1462181814_29_수도권_실내/일반남여_일반통합05_M_1462181814_29_수도권_실내_06323.json",
+          "entry_size_bytes": 662,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1462181814_29_수도권_실내/일반남여_일반통합05_M_1462181814_29_수도권_실내_06325.json",
+          "entry_size_bytes": 667,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1462181814_29_수도권_실내/일반남여_일반통합05_M_1462181814_29_수도권_실내_06328.json",
+          "entry_size_bytes": 669,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1462181814_29_수도권_실내/일반남여_일반통합05_M_1462181814_29_수도권_실내_06332.json",
+          "entry_size_bytes": 655,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1521450504_34_전라_실내/일반남여_일반통합05_M_1521450504_34_전라_실내_08013.json",
+          "entry_size_bytes": 607,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1521450504_34_전라_실내/일반남여_일반통합05_M_1521450504_34_전라_실내_08015.json",
+          "entry_size_bytes": 615,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1521450504_34_전라_실내/일반남여_일반통합05_M_1521450504_34_전라_실내_08017.json",
+          "entry_size_bytes": 649,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 3
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "발화정보:dict": 3,
+        "발화정보.stt:str": 3,
+        "발화정보.scriptId:str": 3,
+        "발화정보.fileNm:str": 3,
+        "발화정보.recrdTime:str": 3,
+        "발화정보.recrdQuality:str": 3,
+        "발화정보.recrdDt:str": 3,
+        "발화정보.scriptSetNo:str": 3,
+        "대화정보:dict": 3,
+        "대화정보.recrdEnvrn:str": 3,
+        "대화정보.colctUnitCode:str": 3,
+        "대화정보.cityCode:str": 3,
+        "대화정보.recrdUnit:str": 3,
+        "대화정보.convrsThema:str": 3,
+        "녹음자정보:dict": 3,
+        "녹음자정보.gender:str": 3,
+        "녹음자정보.recorderId:str": 3,
+        "녹음자정보.age:int": 3
+      },
+      "text_candidate_key_paths": [
+        "발화정보.fileNm:str",
+        "발화정보.recrdDt:str",
+        "발화정보.recrdQuality:str",
+        "발화정보.recrdTime:str",
+        "발화정보.scriptId:str",
+        "발화정보.scriptSetNo:str",
+        "발화정보.stt:str",
+        "발화정보:dict"
+      ],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "자유대화 음성(일반남녀)\\Training\\[라벨]3.스튜디오.zip",
+      "file_name": "[라벨]3.스튜디오.zip",
+      "source_id": "aihub_free_conversation_speech_labels",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 264562811,
+      "sha256": "46c74a1781f39283cfe657ec163e6a23c7d9ce93ca110d0cc53fdcf8847c66e1",
+      "hash_status": "computed",
+      "zip_entry_count": 214953,
+      "zip_extension_counts": {
+        ".json": 214789,
+        "<none>": 164
+      },
+      "text_like_entry_count": 214789,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00001.json",
+          "entry_size_bytes": 614,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00002.json",
+          "entry_size_bytes": 635,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00003.json",
+          "entry_size_bytes": 673,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00004.json",
+          "entry_size_bytes": 603,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00005.json",
+          "entry_size_bytes": 673,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00006.json",
+          "entry_size_bytes": 659,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00007.json",
+          "entry_size_bytes": 643,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00008.json",
+          "entry_size_bytes": 613,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00009.json",
+          "entry_size_bytes": 616,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_HSH00_28_수도권_녹음실/일반남여_일반통합01_F_HSH00_28_수도권_녹음실_00010.json",
+          "entry_size_bytes": 630,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 3
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "발화정보:dict": 3,
+        "발화정보.stt:str": 3,
+        "발화정보.scriptId:str": 3,
+        "발화정보.fileNm:str": 3,
+        "발화정보.recrdTime:str": 3,
+        "발화정보.recrdQuality:str": 3,
+        "발화정보.recrdDt:str": 3,
+        "발화정보.scriptSetNo:str": 3,
+        "대화정보:dict": 3,
+        "대화정보.recrdEnvrn:str": 3,
+        "대화정보.colctUnitCode:str": 3,
+        "대화정보.cityCode:str": 3,
+        "대화정보.recrdUnit:str": 3,
+        "대화정보.convrsThema:str": 3,
+        "녹음자정보:dict": 3,
+        "녹음자정보.gender:str": 3,
+        "녹음자정보.recorderId:str": 3,
+        "녹음자정보.age:int": 3
+      },
+      "text_candidate_key_paths": [
+        "발화정보.fileNm:str",
+        "발화정보.recrdDt:str",
+        "발화정보.recrdQuality:str",
+        "발화정보.recrdTime:str",
+        "발화정보.scriptId:str",
+        "발화정보.scriptSetNo:str",
+        "발화정보.stt:str",
+        "발화정보:dict"
+      ],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "자유대화 음성(일반남녀)\\Validation\\[라벨]1.AI챗봇.zip",
+      "file_name": "[라벨]1.AI챗봇.zip",
+      "source_id": "aihub_free_conversation_speech_labels",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 188242717,
+      "sha256": "26765c4547df158fb30277365a06559b2bc71f1d43671278ba9ea4f79e61fa50",
+      "hash_status": "computed",
+      "zip_entry_count": 149451,
+      "zip_extension_counts": {
+        ".json": 149009,
+        "<none>": 442
+      },
+      "text_like_entry_count": 149009,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06313.json",
+          "entry_size_bytes": 633,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06315.json",
+          "entry_size_bytes": 677,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06316.json",
+          "entry_size_bytes": 729,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06317.json",
+          "entry_size_bytes": 652,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06319.json",
+          "entry_size_bytes": 662,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06322.json",
+          "entry_size_bytes": 681,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06323.json",
+          "entry_size_bytes": 705,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06325.json",
+          "entry_size_bytes": 661,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06328.json",
+          "entry_size_bytes": 668,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합05_M_1524045237_33_수도권_실내/일반남여_일반통합05_M_1524045237_33_수도권_실내_06330.json",
+          "entry_size_bytes": 646,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 3
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "발화정보:dict": 3,
+        "발화정보.stt:str": 3,
+        "발화정보.scriptId:str": 3,
+        "발화정보.fileNm:str": 3,
+        "발화정보.recrdTime:str": 3,
+        "발화정보.recrdQuality:str": 3,
+        "발화정보.recrdDt:str": 3,
+        "발화정보.scriptSetNo:str": 3,
+        "대화정보:dict": 3,
+        "대화정보.recrdEnvrn:str": 3,
+        "대화정보.colctUnitCode:str": 3,
+        "대화정보.cityCode:str": 3,
+        "대화정보.recrdUnit:str": 3,
+        "대화정보.convrsThema:str": 3,
+        "녹음자정보:dict": 3,
+        "녹음자정보.gender:str": 3,
+        "녹음자정보.recorderId:str": 3,
+        "녹음자정보.age:int": 3
+      },
+      "text_candidate_key_paths": [
+        "발화정보.fileNm:str",
+        "발화정보.recrdDt:str",
+        "발화정보.recrdQuality:str",
+        "발화정보.recrdTime:str",
+        "발화정보.scriptId:str",
+        "발화정보.scriptSetNo:str",
+        "발화정보.stt:str",
+        "발화정보:dict"
+      ],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "자유대화 음성(일반남녀)\\Validation\\[라벨]3.스튜디오.zip",
+      "file_name": "[라벨]3.스튜디오.zip",
+      "source_id": "aihub_free_conversation_speech_labels",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 33142344,
+      "sha256": "2b1cbdbf6ea643a76ec1ce76adc2ac8e506eeec7dfe07dc3ee69958b04ad002f",
+      "hash_status": "computed",
+      "zip_entry_count": 27114,
+      "zip_extension_counts": {
+        ".json": 27093,
+        "<none>": 21
+      },
+      "text_like_entry_count": 27093,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00001.json",
+          "entry_size_bytes": 614,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00002.json",
+          "entry_size_bytes": 635,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00003.json",
+          "entry_size_bytes": 673,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00004.json",
+          "entry_size_bytes": 603,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00005.json",
+          "entry_size_bytes": 673,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00006.json",
+          "entry_size_bytes": 659,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00007.json",
+          "entry_size_bytes": 643,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00008.json",
+          "entry_size_bytes": 613,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00009.json",
+          "entry_size_bytes": 616,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "일반남여_일반통합01_F_KKJ00_47_수도권_녹음실/일반남여_일반통합01_F_KKJ00_47_수도권_녹음실_00010.json",
+          "entry_size_bytes": 630,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 3
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "발화정보:dict": 3,
+        "발화정보.stt:str": 3,
+        "발화정보.scriptId:str": 3,
+        "발화정보.fileNm:str": 3,
+        "발화정보.recrdTime:str": 3,
+        "발화정보.recrdQuality:str": 3,
+        "발화정보.recrdDt:str": 3,
+        "발화정보.scriptSetNo:str": 3,
+        "대화정보:dict": 3,
+        "대화정보.recrdEnvrn:str": 3,
+        "대화정보.colctUnitCode:str": 3,
+        "대화정보.cityCode:str": 3,
+        "대화정보.recrdUnit:str": 3,
+        "대화정보.convrsThema:str": 3,
+        "녹음자정보:dict": 3,
+        "녹음자정보.gender:str": 3,
+        "녹음자정보.recorderId:str": 3,
+        "녹음자정보.age:int": 3
+      },
+      "text_candidate_key_paths": [
+        "발화정보.fileNm:str",
+        "발화정보.recrdDt:str",
+        "발화정보.recrdQuality:str",
+        "발화정보.recrdTime:str",
+        "발화정보.scriptId:str",
+        "발화정보.scriptSetNo:str",
+        "발화정보.stt:str",
+        "발화정보:dict"
+      ],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_논문.zip",
+      "file_name": "[라벨]training_논문.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 298086303,
+      "sha256": "916f5e21a6cc7b01fafed7e7ee4735d83cfa1d35f75ec31ac074f43c01bdfed2",
+      "hash_status": "computed",
+      "zip_entry_count": 23,
+      "zip_extension_counts": {
+        ".json": 23
+      },
+      "text_like_entry_count": 23,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "training_논문_01_000.json",
+          "entry_size_bytes": 129702749,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_001.json",
+          "entry_size_bytes": 136007048,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_002.json",
+          "entry_size_bytes": 137812173,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_003.json",
+          "entry_size_bytes": 142410886,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_004.json",
+          "entry_size_bytes": 141872883,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_005.json",
+          "entry_size_bytes": 142195891,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_006.json",
+          "entry_size_bytes": 140489759,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_007.json",
+          "entry_size_bytes": 142111080,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_008.json",
+          "entry_size_bytes": 141698663,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_논문_01_009.json",
+          "entry_size_bytes": 142399995,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_법령제개정.zip",
+      "file_name": "[라벨]training_법령제개정.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 370224331,
+      "sha256": "03ce29b6ee131822a065bc4b858a1a55b3e1e02fd71965f65df0d47498d7fc71",
+      "hash_status": "computed",
+      "zip_entry_count": 9,
+      "zip_extension_counts": {
+        ".json": 9
+      },
+      "text_like_entry_count": 9,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_000.json",
+          "entry_size_bytes": 314764810,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_001.json",
+          "entry_size_bytes": 344787344,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_002.json",
+          "entry_size_bytes": 455400904,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_003.json",
+          "entry_size_bytes": 494072655,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_004.json",
+          "entry_size_bytes": 559199388,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_005.json",
+          "entry_size_bytes": 722676558,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_006.json",
+          "entry_size_bytes": 761675736,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_007.json",
+          "entry_size_bytes": 545908507,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╣²╖╔_┴ª░│┴ñ╣«_008.json",
+          "entry_size_bytes": 589601214,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_의안.zip",
+      "file_name": "[라벨]training_의안.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 79012712,
+      "sha256": "07bb7819b1eea0d2b309a5b2c2410c89f371a1f21e0db4f8b1e798dc8d1113d5",
+      "hash_status": "computed",
+      "zip_entry_count": 11,
+      "zip_extension_counts": {
+        ".json": 11
+      },
+      "text_like_entry_count": 11,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "training_└╟╛╚_000.json",
+          "entry_size_bytes": 20213731,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_001.json",
+          "entry_size_bytes": 60111133,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_002.json",
+          "entry_size_bytes": 106784554,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_003.json",
+          "entry_size_bytes": 95097924,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_004.json",
+          "entry_size_bytes": 75078543,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_005.json",
+          "entry_size_bytes": 77902641,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_006.json",
+          "entry_size_bytes": 75907545,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_007.json",
+          "entry_size_bytes": 75198752,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_008.json",
+          "entry_size_bytes": 76297429,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└╟╛╚_009.json",
+          "entry_size_bytes": 75765172,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_자치법규_제개정문.zip",
+      "file_name": "[라벨]training_자치법규_제개정문.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 11375791,
+      "sha256": "5de7ed9f824cc52ae070c9fe52ae08afb74410452f5e30ccbd5cebe55421e4f4",
+      "hash_status": "computed",
+      "zip_entry_count": 1,
+      "zip_extension_counts": {
+        ".json": 1
+      },
+      "text_like_entry_count": 1,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "자치법규_제개정문_training.json",
+          "entry_size_bytes": 150832567,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_자치법규_조례.zip",
+      "file_name": "[라벨]training_자치법규_조례.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 445782783,
+      "sha256": "bf5c6e7847fd7f6a4429f88ac7a9fd6311eee2ee0bf2667192bb60ad41b76cc7",
+      "hash_status": "computed",
+      "zip_entry_count": 15,
+      "zip_extension_counts": {
+        ".json": 15
+      },
+      "text_like_entry_count": 15,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_000.json",
+          "entry_size_bytes": 363050597,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_001.json",
+          "entry_size_bytes": 380241871,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_002.json",
+          "entry_size_bytes": 386658654,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_003.json",
+          "entry_size_bytes": 388126534,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_004.json",
+          "entry_size_bytes": 358594363,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_005.json",
+          "entry_size_bytes": 356375671,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_006.json",
+          "entry_size_bytes": 354668351,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_007.json",
+          "entry_size_bytes": 391791795,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_008.json",
+          "entry_size_bytes": 406910518,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_┴╢╖╩_009.json",
+          "entry_size_bytes": 403936917,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "json_parse_failed": 1
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_자치법규_행정규칙.zip",
+      "file_name": "[라벨]training_자치법규_행정규칙.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 118574758,
+      "sha256": "073c1a43fab2ebec0e16cd0ae66d985f0405d1b842f16ecffc43258c461ecb2f",
+      "hash_status": "computed",
+      "zip_entry_count": 4,
+      "zip_extension_counts": {
+        ".json": 4
+      },
+      "text_like_entry_count": 4,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "training_└┌─í╣²▒╘_╟α┴ñ▒╘─ó_000.json",
+          "entry_size_bytes": 433302102,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_╟α┴ñ▒╘─ó_001.json",
+          "entry_size_bytes": 433964461,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_╟α┴ñ▒╘─ó_002.json",
+          "entry_size_bytes": 473427899,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_└┌─í╣²▒╘_╟α┴ñ▒╘─ó_005.json",
+          "entry_size_bytes": 57979,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "parsed_small_json_shape": 1
+      },
+      "parser_probe_skipped_reason": "",
+      "json_shape_key_counts": {
+        "totalcount:int": 1,
+        "data:list": 1,
+        "data[]:list": 1,
+        "data[].no:int": 1,
+        "data[].title:str": 1,
+        "data[].issue_num:str": 1,
+        "data[].issue_date:str": 1,
+        "data[].rows:list": 1,
+        "data[].rows[]:list": 1
+      },
+      "text_candidate_key_paths": [
+        "data[].title:str"
+      ],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_특허.zip",
+      "file_name": "[라벨]training_특허.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 11462419705,
+      "sha256": "76b0041ad369efd4ee187e539bf2e0fc3f9a8be779ffa6189fc42fea7ac9f049",
+      "hash_status": "computed",
+      "zip_entry_count": 505,
+      "zip_extension_counts": {
+        ".json": 505
+      },
+      "text_like_entry_count": 505,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "training_특허_01_000.json",
+          "entry_size_bytes": 378961462,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_001.json",
+          "entry_size_bytes": 409867375,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_002.json",
+          "entry_size_bytes": 398820995,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_003.json",
+          "entry_size_bytes": 399662242,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_004.json",
+          "entry_size_bytes": 412049472,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_005.json",
+          "entry_size_bytes": 400569616,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_006.json",
+          "entry_size_bytes": 377302211,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_007.json",
+          "entry_size_bytes": 382801253,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_008.json",
+          "entry_size_bytes": 362003634,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_특허_01_009.json",
+          "entry_size_bytes": 369894017,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_판례.zip",
+      "file_name": "[라벨]training_판례.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 532614295,
+      "sha256": "2f34047a60736d6ebc127e47f5ac0835a48a8e917b32fe4ea83a1caaff1930b6",
+      "hash_status": "computed",
+      "zip_entry_count": 7,
+      "zip_extension_counts": {
+        ".json": 7
+      },
+      "text_like_entry_count": 7,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "training_╞╟╖╩_000.json",
+          "entry_size_bytes": 1098861480,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╞╟╖╩_001.json",
+          "entry_size_bytes": 1038792812,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╞╟╖╩_002.json",
+          "entry_size_bytes": 878543034,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╞╟╖╩_003.json",
+          "entry_size_bytes": 516315550,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╞╟╖╩_005.json",
+          "entry_size_bytes": 394738566,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╞╟╖╩_006.json",
+          "entry_size_bytes": 542683782,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "training_╞╟╖╩_007.json",
+          "entry_size_bytes": 1369519443,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[라벨]training_행정규칙_제개정문.zip",
+      "file_name": "[라벨]training_행정규칙_제개정문.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "training",
+      "compressed_size_bytes": 16499083,
+      "sha256": "8c4ef582e3af7cf7492c976e47f66718328483e85ae844b0958e4123978add39",
+      "hash_status": "computed",
+      "zip_entry_count": 2,
+      "zip_extension_counts": {
+        ".json": 2
+      },
+      "text_like_entry_count": 2,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "╟α┴ñ▒╘─ó_┴ª░│┴ñ╣«_000.json",
+          "entry_size_bytes": 157361385,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "╟α┴ñ▒╘─ó_┴ª░│┴ñ╣«_001.json",
+          "entry_size_bytes": 30651060,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Training\\[원천]전문분야_train.zip",
+      "file_name": "[원천]전문분야_train.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "source",
+      "split": "training",
+      "compressed_size_bytes": 306898047,
+      "sha256": "57b0ed0c972201876cd4b373f8e236d42a57f913c47d0bf19a793235c992d8cd",
+      "hash_status": "computed",
+      "zip_entry_count": 34,
+      "zip_extension_counts": {
+        ".json": 34
+      },
+      "text_like_entry_count": 34,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "논문_1_0.json",
+          "entry_size_bytes": 77688049,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "논문_1_1.json",
+          "entry_size_bytes": 81834091,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "법령_l_1000_1.json",
+          "entry_size_bytes": 100837855,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "법령_l_100_1.json",
+          "entry_size_bytes": 103116264,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "법령_l_1302_1.json",
+          "entry_size_bytes": 105102867,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "법령_l_2103_1.json",
+          "entry_size_bytes": 90374792,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "법령_l_3002_1.json",
+          "entry_size_bytes": 101328125,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "법령_l_4001_1.json",
+          "entry_size_bytes": 104753522,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "특허_01.json",
+          "entry_size_bytes": 88730762,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "특허_02.json",
+          "entry_size_bytes": 89791004,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_논문.zip",
+      "file_name": "[라벨]validation_논문.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 30013651,
+      "sha256": "e41819337cf3a62493c13f5c7256a896af546991440b3a788b48808198dbdb61",
+      "hash_status": "computed",
+      "zip_entry_count": 2,
+      "zip_extension_counts": {
+        ".json": 2
+      },
+      "text_like_entry_count": 2,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "validation_│φ╣«_02_008.json",
+          "entry_size_bytes": 137556761,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_│φ╣«_03_000.json",
+          "entry_size_bytes": 130795782,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_법령제개정.zip",
+      "file_name": "[라벨]validation_법령제개정.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 44521221,
+      "sha256": "3f505cd18501224a913ba7d626cb35286fd904baa3c4c55c5b2bcab412524955",
+      "hash_status": "computed",
+      "zip_entry_count": 1,
+      "zip_extension_counts": {
+        ".json": 1
+      },
+      "text_like_entry_count": 1,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "validation_╣²╖╔_┴ª░│┴ñ╣«_009.json",
+          "entry_size_bytes": 541139261,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_의안.zip",
+      "file_name": "[라벨]validation_의안.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 15375139,
+      "sha256": "75925332cc972ed3dbb3721cca48c1fdb2e285f654c1a89b25083cb6f2351f81",
+      "hash_status": "computed",
+      "zip_entry_count": 2,
+      "zip_extension_counts": {
+        ".json": 2
+      },
+      "text_like_entry_count": 2,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "validation_└╟╛╚_010.json",
+          "entry_size_bytes": 76960323,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_└╟╛╚_011.json",
+          "entry_size_bytes": 76051449,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_자치법규_제개정문.zip",
+      "file_name": "[라벨]validation_자치법규_제개정문.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 1757680,
+      "sha256": "503a9230763b9d378ab6d18fd3ea9ccb3159b48f7fee9ea4204d465c16e054d4",
+      "hash_status": "computed",
+      "zip_entry_count": 1,
+      "zip_extension_counts": {
+        ".txt": 1
+      },
+      "text_like_entry_count": 1,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "자치법규_제개정문_validation.txt",
+          "entry_size_bytes": 23001870,
+          "extension": ".txt"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_자치법규_조례.zip",
+      "file_name": "[라벨]validation_자치법규_조례.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 68257840,
+      "sha256": "fb60a37eb830d2bf6909b19c561cf4ac33a43cb2e1abc0d18703dec530e57848",
+      "hash_status": "computed",
+      "zip_entry_count": 2,
+      "zip_extension_counts": {
+        ".json": 2
+      },
+      "text_like_entry_count": 2,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "validation_└┌─í╣²▒╘_┴╢╖╩_014.json",
+          "entry_size_bytes": 369613075,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_└┌─í╣²▒╘_┴╢╖╩_015.json",
+          "entry_size_bytes": 392236077,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_자치법규_행정규칙.zip",
+      "file_name": "[라벨]validation_자치법규_행정규칙.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 34375663,
+      "sha256": "19d3b9712498d8371c0a147f0632256938e1220f0cfb37975331cfacbb330a91",
+      "hash_status": "computed",
+      "zip_entry_count": 1,
+      "zip_extension_counts": {
+        ".json": 1
+      },
+      "text_like_entry_count": 1,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "validation_자치법규_행정규칙_003.json",
+          "entry_size_bytes": 426938103,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_특허.zip",
+      "file_name": "[라벨]validation_특허.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 719988136,
+      "sha256": "4b3c7da247587e4a8aa1f05efc2526c45930a41513b735410b044f7d53da3702",
+      "hash_status": "computed",
+      "zip_entry_count": 40,
+      "zip_extension_counts": {
+        ".json": 40
+      },
+      "text_like_entry_count": 40,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "validation_특허_07_062 (1).json",
+          "entry_size_bytes": 236084979,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (10).json",
+          "entry_size_bytes": 228376539,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (11).json",
+          "entry_size_bytes": 233112076,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (12).json",
+          "entry_size_bytes": 225887028,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (13).json",
+          "entry_size_bytes": 230842229,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (14).json",
+          "entry_size_bytes": 234676759,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (15).json",
+          "entry_size_bytes": 231013741,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (16).json",
+          "entry_size_bytes": 230925020,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (17).json",
+          "entry_size_bytes": 225226999,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "validation_특허_07_062 (18).json",
+          "entry_size_bytes": 231917408,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_판례.zip",
+      "file_name": "[라벨]validation_판례.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 46120691,
+      "sha256": "7971f336a0e823ab186ada5365f4e06c96c1a98ffd580306ad070f5765ddd74a",
+      "hash_status": "computed",
+      "zip_entry_count": 1,
+      "zip_extension_counts": {
+        ".json": 1
+      },
+      "text_like_entry_count": 1,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "validation_╞╟╖╩_008.json",
+          "entry_size_bytes": 446586514,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[라벨]validation_행정규칙_제개정문.zip",
+      "file_name": "[라벨]validation_행정규칙_제개정문.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "label",
+      "split": "validation",
+      "compressed_size_bytes": 1117072,
+      "sha256": "6f0fe0bd73325ed5f71d7a02af1cb7dbfaee3a7a41a6080bf0e0cfc7bdb9df62",
+      "hash_status": "computed",
+      "zip_entry_count": 1,
+      "zip_extension_counts": {
+        ".txt": 1
+      },
+      "text_like_entry_count": 1,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "행정규칙_제개정문_validation.txt",
+          "entry_size_bytes": 13676743,
+          "extension": ".txt"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    },
+    {
+      "relative_path": "전문분야 말뭉치\\Validation\\[원천]전문분야_valid.zip",
+      "file_name": "[원천]전문분야_valid.zip",
+      "source_id": "aihub_specialized_corpus",
+      "dataset_role": "source",
+      "split": "validation",
+      "compressed_size_bytes": 36640254,
+      "sha256": "e553196c236a35e48781997f63fa725ac5f5887434fb125b0f9e935c582033af",
+      "hash_status": "computed",
+      "zip_entry_count": 5,
+      "zip_extension_counts": {
+        ".json": 5
+      },
+      "text_like_entry_count": 5,
+      "audio_like_entry_count": 0,
+      "text_entry_samples": [
+        {
+          "entry_name": "논문_1_2.json",
+          "entry_size_bytes": 18212076,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "법령_l_5001_1.json",
+          "entry_size_bytes": 86129043,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "특허_19.json",
+          "entry_size_bytes": 83884561,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "특허_20.json",
+          "entry_size_bytes": 80604538,
+          "extension": ".json"
+        },
+        {
+          "entry_name": "판례_case08.json",
+          "entry_size_bytes": 87046591,
+          "extension": ".json"
+        }
+      ],
+      "parser_probe_status_counts": {
+        "skipped": 1
+      },
+      "parser_probe_skipped_reason": "no_small_json_entries_under_probe_limit",
+      "json_shape_key_counts": {},
+      "text_candidate_key_paths": [],
+      "recommended_action": "include_for_parser_probe"
+    }
+  ],
+  "intake_gate": {
+    "status": "pass",
+    "checks": {
+      "raw_root_exists": true,
+      "zip_files_present": true,
+      "raw_source_files_not_committed": true,
+      "raw_text_not_persisted_in_reports": true,
+      "raw_candidate_values_not_persisted_in_reports": true,
+      "hashes_computed": true,
+      "has_parser_candidate_files": true
+    },
+    "failure_verdicts": [
+      "external_raw_intake_gate_pass"
+    ],
+    "score_tuning_allowed_by_this_phase": false
+  }
+}

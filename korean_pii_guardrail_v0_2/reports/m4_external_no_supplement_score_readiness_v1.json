@@ -1,0 +1,153 @@
+{
+  "blocked_entity_groups": [
+    "PERSON_NAME",
+    "PHONE",
+    "EMAIL",
+    "REGISTRATION_IDENTIFIER",
+    "BANK_ACCOUNT"
+  ],
+  "candidate_generation_changed": false,
+  "config_change_proposed": false,
+  "context_rule_changed": false,
+  "continuation_mode": "no_additional_data_requested",
+  "decision": "gated_stop_without_score_change",
+  "eligible_probability_feature_summary": {
+    "eligible_by_direction": {
+      "not_pii_penalty_candidate": 2,
+      "pii_boost_candidate": 9
+    },
+    "eligible_by_feature_kind": {
+      "candidate_shape": 2,
+      "field_context_role": 2,
+      "right_bigrams": 1,
+      "right_unigrams": 4,
+      "source_domain": 1,
+      "source_field_role": 1
+    },
+    "eligible_by_group": {
+      "ADDRESS": 11
+    },
+    "eligible_hashed_context_feature_count": 5,
+    "eligible_probability_feature_count": 11,
+    "eligible_safe_display_feature_count": 6,
+    "top_by_group": [
+      {
+        "eligible_feature_count": 11,
+        "entity_group": "ADDRESS",
+        "max_abs_log_likelihood_ratio": 2.071837,
+        "max_feature_support": 342
+      }
+    ]
+  },
+  "entity_group_readiness": [
+    {
+      "entity_group": "PERSON_NAME",
+      "failure_reason": "insufficient_total_support",
+      "not_pii": 10,
+      "pii": 4,
+      "status": "fail",
+      "total": 14
+    },
+    {
+      "entity_group": "ADDRESS",
+      "failure_reason": "none",
+      "not_pii": 391,
+      "pii": 295,
+      "status": "pass",
+      "total": 686
+    },
+    {
+      "entity_group": "PHONE",
+      "failure_reason": "insufficient_non_pii_support",
+      "not_pii": 0,
+      "pii": 286,
+      "status": "fail",
+      "total": 286
+    },
+    {
+      "entity_group": "EMAIL",
+      "failure_reason": "insufficient_non_pii_support",
+      "not_pii": 0,
+      "pii": 63,
+      "status": "fail",
+      "total": 63
+    },
+    {
+      "entity_group": "REGISTRATION_IDENTIFIER",
+      "failure_reason": "insufficient_non_pii_support",
+      "not_pii": 0,
+      "pii": 471,
+      "status": "fail",
+      "total": 471
+    },
+    {
+      "entity_group": "BANK_ACCOUNT",
+      "failure_reason": "insufficient_total_support",
+      "not_pii": 0,
+      "pii": 0,
+      "status": "fail",
+      "total": 0
+    }
+  ],
+  "gate_inputs": {
+    "delta_status": "blocked_probability_support_gate_failed",
+    "delta_sweep_executed": false,
+    "label_quality_status": "pass",
+    "locked_test_used": false,
+    "probability_support_gate_status": "fail",
+    "proposal_count": 0,
+    "release_gate_executed": false,
+    "reviewer_approved_label_count": 1999
+  },
+  "generated_at": "2026-06-05T12:04:31.614716+00:00",
+  "hard_gate_blockers": [
+    "probability_support_gate_failed",
+    "no_score_candidate_proposals",
+    "delta_sweep_not_passed"
+  ],
+  "m4_score_changed": false,
+  "mechanical_steps_remaining_if_gates_pass": [
+    "select raw-free M4 score candidates",
+    "run M4-only delta sweep with frozen upstream candidates",
+    "run release gate and raw PII artifact audit",
+    "propose config diff only after release gate approval"
+  ],
+  "phase": "No-supplement continuation after Phase G/H",
+  "raw_candidate_values_persisted_in_reports": false,
+  "raw_context_terms_persisted_in_reports": false,
+  "raw_free_artifact_audit": {
+    "artifact_rows": [
+      {
+        "path": "m4_external_no_supplement_score_readiness_v1.json",
+        "raw_pii_like_reason_count": 0,
+        "raw_pii_like_reasons": []
+      },
+      {
+        "path": "m4_external_no_supplement_score_readiness_v1.md",
+        "raw_pii_like_reason_count": 0,
+        "raw_pii_like_reasons": []
+      }
+    ],
+    "raw_pii_like_reason_count": 0,
+    "status": "pass"
+  },
+  "raw_text_persisted_in_reports": false,
+  "ready_entity_groups": [
+    "ADDRESS"
+  ],
+  "report_type": "M4ExternalNoSupplementScoreReadiness",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "m4_external_no_supplement_score_readiness_v1",
+  "score_change_distance": "blocked_before_score_candidate_selection",
+  "score_delta_changed": false,
+  "score_tuning_allowed": false,
+  "score_tuning_allowed_by_this_report": false,
+  "version": "v0.2-single-turn",
+  "why_existing_eligible_features_are_not_config_changes": [
+    "global probability support gate has not passed",
+    "candidate proposal count is zero under the active gate",
+    "delta sweep did not execute",
+    "locked test was not used",
+    "release gate did not execute"
+  ]
+}

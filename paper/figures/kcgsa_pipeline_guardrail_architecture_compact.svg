@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="980" viewBox="0 0 1100 980">
+<rect width="1100" height="980" fill="#ffffff"/>
+<text x="58" y="78" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="38" font-weight="700" fill="#1f2937">Korean PII Guardrail Pipeline</text>
+<text x="58" y="115" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="22" font-weight="400" fill="#4b5563">Compact view for paper layout</text>
+<defs><marker id="downArrow" markerWidth="8" markerHeight="12" refX="4" refY="11" orient="auto"><path d="M0,0 L8,0 L4,12 z" fill="#9ca3af"/></marker></defs>
+<text x="72" y="318" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="700" fill="#4b5563">Input-side</text>
+<text x="72" y="348" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="18" font-weight="400" fill="#4b5563">pre-call / gateway</text>
+<text x="884" y="608" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="700" fill="#4b5563">Service</text>
+<text x="884" y="638" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="18" font-weight="400" fill="#4b5563">model call</text>
+<text x="884" y="764" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="700" fill="#4b5563">Output-side</text>
+<text x="884" y="794" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="18" font-weight="400" fill="#4b5563">post-call</text>
+<rect x="245" y="150" width="610" height="70" rx="22" fill="#f3f4f6" stroke="#9ca3af" stroke-width="4"/>
+<text x="550" y="193" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="700" fill="#1f2937">User Input</text>
+<rect x="245" y="280" width="610" height="85" rx="22" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+<text x="550" y="312" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="700" fill="#1f2937">L0</text>
+<text x="550" y="348" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="400" fill="#1f2937">Korean PII Guard</text>
+<rect x="245" y="430" width="610" height="85" rx="22" fill="#e0f2fe" stroke="#0284c7" stroke-width="4"/>
+<text x="550" y="462" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="700" fill="#1f2937">L1~L3</text>
+<text x="550" y="498" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="400" fill="#1f2937">Presidio · Bedrock · Lakera</text>
+<rect x="245" y="580" width="610" height="85" rx="22" fill="#fef3c7" stroke="#d97706" stroke-width="4"/>
+<text x="550" y="630" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="700" fill="#1f2937">Target LLM</text>
+<rect x="245" y="730" width="610" height="85" rx="22" fill="#ede9fe" stroke="#7c3aed" stroke-width="4"/>
+<text x="550" y="762" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="700" fill="#1f2937">L4</text>
+<text x="550" y="798" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="400" fill="#1f2937">Output Judge</text>
+<rect x="245" y="875" width="610" height="65" rx="22" fill="#f3f4f6" stroke="#9ca3af" stroke-width="4"/>
+<text x="550" y="915" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="29" font-weight="700" fill="#1f2937">Final Response</text>
+<line x1="550" y1="220" x2="550" y2="270" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="550" y1="365" x2="550" y2="420" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="550" y1="515" x2="550" y2="570" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="550" y1="665" x2="550" y2="720" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="550" y1="815" x2="550" y2="865" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+</svg>

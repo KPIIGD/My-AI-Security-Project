@@ -1,0 +1,141 @@
+{
+  "context_rule_changed": false,
+  "coverage_by_entity_group": {
+    "ADDRESS": {
+      "hard_negative_count": 7,
+      "hard_negative_ratio": 1.0,
+      "non_pii_anchor_count": 7,
+      "required_ratio": 0.5,
+      "status": "pass"
+    },
+    "BANK_ACCOUNT": {
+      "hard_negative_count": 336,
+      "hard_negative_ratio": 1.0,
+      "non_pii_anchor_count": 336,
+      "required_ratio": 0.5,
+      "status": "pass"
+    },
+    "EMAIL": {
+      "hard_negative_count": 224,
+      "hard_negative_ratio": 1.0,
+      "non_pii_anchor_count": 224,
+      "required_ratio": 0.5,
+      "status": "pass"
+    },
+    "PERSON_NAME": {
+      "hard_negative_count": 7,
+      "hard_negative_ratio": 1.0,
+      "non_pii_anchor_count": 7,
+      "required_ratio": 0.6,
+      "status": "pass"
+    },
+    "PHONE": {
+      "hard_negative_count": 475,
+      "hard_negative_ratio": 1.0,
+      "non_pii_anchor_count": 475,
+      "required_ratio": 0.5,
+      "status": "pass"
+    },
+    "REGISTRATION_IDENTIFIER": {
+      "hard_negative_count": 74,
+      "hard_negative_ratio": 1.0,
+      "non_pii_anchor_count": 74,
+      "required_ratio": 0.5,
+      "status": "pass"
+    }
+  },
+  "evidence_role": "hard_negative_coverage_not_score_tuning",
+  "final_anchor_window_count": 1307,
+  "final_by_label": {
+    "non_pii": 1123,
+    "true_pii": 184,
+    "unknown": 0
+  },
+  "final_current_counts_by_core_entity": {
+    "ADDRESS": {
+      "non_pii": 7,
+      "true_pii": 7,
+      "unknown": 0
+    },
+    "BANK_ACCOUNT": {
+      "non_pii": 336,
+      "true_pii": 99,
+      "unknown": 0
+    },
+    "EMAIL": {
+      "non_pii": 224,
+      "true_pii": 71,
+      "unknown": 0
+    },
+    "PERSON_NAME": {
+      "non_pii": 7,
+      "true_pii": 7,
+      "unknown": 0
+    },
+    "PHONE": {
+      "non_pii": 475,
+      "true_pii": 0,
+      "unknown": 0
+    },
+    "REGISTRATION_IDENTIFIER": {
+      "non_pii": 74,
+      "true_pii": 0,
+      "unknown": 0
+    }
+  },
+  "generated_at": "2026-06-01T00:42:48.806170+00:00",
+  "generated_hard_negative_anchor_count": 14,
+  "generated_hard_negative_counts_by_entity_group": {
+    "ADDRESS": 7,
+    "PERSON_NAME": 7
+  },
+  "hard_negative_definition": {
+    "explicit_hard_negative_corpus": "non_pii rows from the hard_negative_corpus evidence lane",
+    "public_context_hard_negative": "non_pii public-web context rows with PII-like anchor shapes; coverage evidence only, never final score evidence"
+  },
+  "hard_negative_gate": {
+    "checks": {
+      "ADDRESS_hard_negative_ratio": true,
+      "BANK_ACCOUNT_hard_negative_ratio": true,
+      "EMAIL_hard_negative_ratio": true,
+      "PERSON_NAME_hard_negative_ratio": true,
+      "PHONE_hard_negative_ratio": true,
+      "REGISTRATION_IDENTIFIER_hard_negative_ratio": true,
+      "context_rule_unchanged": true,
+      "manifest_data_quality_gate_pass": true,
+      "public_corpus_not_score_tuning": true,
+      "raw_pii_safety_pass": true,
+      "runtime_scoring_behavior_unchanged": true,
+      "score_delta_unchanged": true
+    },
+    "failure_verdicts": [
+      "hard_negative_gate_pass"
+    ],
+    "required_ratios": {
+      "ADDRESS": 0.5,
+      "BANK_ACCOUNT": 0.5,
+      "EMAIL": 0.5,
+      "PERSON_NAME": 0.6,
+      "PHONE": 0.5,
+      "REGISTRATION_IDENTIFIER": 0.5
+    },
+    "status": "pass"
+  },
+  "phase": "Phase 5. Hard Negative Coverage",
+  "public_corpus_used_for_score_tuning": false,
+  "raw_pii_safety": {
+    "contains_raw_pii_true_count": 0,
+    "invalid_offset_count": 0,
+    "raw_pii_leak_count": 0,
+    "raw_url_logged_count": 0,
+    "raw_value_logged_count": 0,
+    "status": "pass"
+  },
+  "report_type": "ContextHardNegativeCoverage",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "context_hard_negative_coverage_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "status": "pass",
+  "version": "v0.2-single-turn"
+}

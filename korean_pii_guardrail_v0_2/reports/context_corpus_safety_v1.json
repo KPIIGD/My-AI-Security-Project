@@ -1,0 +1,18 @@
+{
+  "contains_raw_pii_true_count": 0,
+  "evidence_role": "coverage_only_not_score_tuning",
+  "generated_at": "2026-05-29T07:49:24.445018+00:00",
+  "page_body_stored": false,
+  "phase": "Execution Phase 2. Safe Context Coverage",
+  "public_corpus_used_for_score_tuning": false,
+  "raw_pii_leak_count": 0,
+  "raw_url_logged_count": 0,
+  "raw_value_logged_count": 0,
+  "reason_codes": [
+    "context_corpus.safety.pass"
+  ],
+  "report_type": "ContextCorpusSafetyReport",
+  "status": "pass",
+  "total_rows": 26,
+  "version": "v0.2-single-turn"
+}

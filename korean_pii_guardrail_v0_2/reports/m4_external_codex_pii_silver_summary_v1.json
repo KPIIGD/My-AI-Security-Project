@@ -1,0 +1,80 @@
+{
+  "by_entity_verdict": {
+    "ADDRESS_FULL": {
+      "pii": 18
+    },
+    "ADDRESS_UNIT": {
+      "not_pii": 80
+    },
+    "BUSINESS_REG_NO": {
+      "pii": 80
+    },
+    "CORPORATE_REG_NO": {
+      "pii": 43
+    },
+    "EMAIL": {
+      "pii": 63
+    },
+    "FAMILY_RELATION": {
+      "not_pii": 7
+    },
+    "FRN": {
+      "pii": 3
+    },
+    "HOSPITAL": {
+      "not_pii": 60
+    },
+    "ORGANIZATION": {
+      "not_pii": 26
+    },
+    "PERSON_NAME": {
+      "not_pii": 10,
+      "pii": 4
+    },
+    "PHONE_LANDLINE": {
+      "pii": 80
+    },
+    "PHONE_MOBILE": {
+      "pii": 20
+    },
+    "RRN": {
+      "pii": 6
+    }
+  },
+  "by_reason_code": {
+    "address_identifier_guardrail_scope": 18,
+    "common_noun_not_person_name": 10,
+    "contact_identifier": 163,
+    "identifier_number_guardrail_scope": 132,
+    "organization_or_institution_name": 86,
+    "person_name_surface_and_context": 4,
+    "region_or_location_unit_not_identifying_person": 80,
+    "relation_term_fragment_not_identifier": 7
+  },
+  "by_verdict": {
+    "not_pii": 183,
+    "pii": 317
+  },
+  "gold_label_count": 0,
+  "label_source": "codex_pii_silver",
+  "label_status": "silver_not_gold",
+  "local_raw_inclusive_csv": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context\\review_ui\\m4_external_codex_pii_silver_labels_v1.csv",
+  "local_raw_inclusive_jsonl": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context\\review_ui\\m4_external_codex_pii_silver_labels_v1.jsonl",
+  "m4_score_changed": false,
+  "probability_loglr_computed": false,
+  "public_private_context_used_for_final_label": false,
+  "raw_context_in_repo_report": false,
+  "raw_values_in_repo_report": false,
+  "report_type": "M4ExternalCodexPiiSilverSummary",
+  "review_question": "pii_or_not_pii_only",
+  "reviewer_approved_label_count": 0,
+  "row_count": 500,
+  "schema_version": "m4_external_codex_pii_silver_v1",
+  "score_tuning_allowed_by_this_phase": false,
+  "stop_conditions": [
+    "codex_silver_labels_not_gold_stop_before_probability_loglr",
+    "reviewer_approved_labels_missing_stop_before_probability_loglr",
+    "probability_loglr_not_computed",
+    "m4_score_tuning_not_changed"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "candidate_generation_changed": false,
+  "config_change_proposed": false,
+  "context_rule_changed": false,
+  "delta_sweep_executed": false,
+  "delta_sweep_gate": {
+    "failure_verdicts": [
+      "probability_support_gate_failed",
+      "insufficient_magnitude_evidence",
+      "insufficient_action_evidence",
+      "no_score_delta_candidate_selected"
+    ],
+    "status": "fail"
+  },
+  "generated_at": "2026-06-05T11:30:24.859076+00:00",
+  "inputs": {
+    "label_quality_status": "pass",
+    "probability_support_gate_status": "fail",
+    "proposal_count": 0,
+    "reviewer_approved_label_count": 1999
+  },
+  "locked_test_access_count": 0,
+  "locked_test_used": false,
+  "m4_score_changed": false,
+  "phase": "Phase H. M4-Only Delta Sweep And Release Gate",
+  "pre_sweep_locks": {
+    "approval_criteria": [
+      "high_risk_recall_no_regression",
+      "actionable_high_risk_recall_no_regression",
+      "hard_negative_actionable_fp_no_increase",
+      "raw_pii_safety_pass"
+    ],
+    "candidate_delta_grid": [
+      -0.3,
+      -0.2,
+      -0.1,
+      0.0,
+      0.1,
+      0.2,
+      0.3
+    ],
+    "objective_function": "no_action_regression_then_minimize_hard_negative_actionable_fp",
+    "rejection_criteria": [
+      "insufficient_direction_evidence",
+      "insufficient_magnitude_evidence",
+      "insufficient_action_evidence"
+    ],
+    "sweep_locks_recorded_before_run": true,
+    "train_dev_locked_test_split_policy": "locked_test_not_used_without_final_candidate"
+  },
+  "raw_pii_safety": {
+    "invalid_offset_count": 0,
+    "raw_pii_leak_count": 0,
+    "raw_pii_logging_count": 0,
+    "status": "pass"
+  },
+  "release_gate_executed": false,
+  "release_gate_execution_reason": "not_run_no_score_or_config_change",
+  "report_type": "M4ExternalM4OnlyDeltaSweep",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "m4_external_m4_only_delta_sweep_v1",
+  "score_delta_changed": false,
+  "selected_delta_count": 0,
+  "status": "blocked_probability_support_gate_failed",
+  "stop_conditions": [
+    "insufficient_magnitude_evidence",
+    "insufficient_action_evidence",
+    "probability_support_gate_failed",
+    "m4_score_tuning_not_changed"
+  ],
+  "version": "v0.2-single-turn"
+}

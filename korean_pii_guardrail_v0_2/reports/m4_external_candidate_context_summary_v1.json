@@ -1,0 +1,174 @@
+{
+  "by_candidate_entity": {
+    "ADDRESS_FULL": 18,
+    "ADDRESS_UNIT": 668,
+    "BUSINESS_REG_NO": 419,
+    "CORPORATE_REG_NO": 43,
+    "CREDIT_CARD": 48,
+    "EMAIL": 63,
+    "FAMILY_RELATION": 61,
+    "FRN": 3,
+    "HOSPITAL": 92,
+    "ORGANIZATION": 272,
+    "PERSON_NAME": 14,
+    "PHONE_LANDLINE": 266,
+    "PHONE_MOBILE": 20,
+    "RRN": 6,
+    "SCHOOL": 6
+  },
+  "by_detector_source": {
+    "dictionary": 1131,
+    "regex": 868,
+    "validator": 825
+  },
+  "by_field_role": {
+    "address": 433,
+    "business_registration": 407,
+    "company_name": 69,
+    "corporate_registration": 74,
+    "email": 50,
+    "free_text": 250,
+    "location": 76,
+    "organization": 152,
+    "other": 300,
+    "phone": 182,
+    "representative_name": 6
+  },
+  "by_label_source": {
+    "detector_candidate": 511,
+    "source_field_rule": 1488
+  },
+  "by_label_status": {
+    "candidate": 511,
+    "review_needed": 1488
+  },
+  "by_offset_scope": {
+    "field_value": 1749,
+    "text_field": 250
+  },
+  "by_privacy_context_class": {
+    "organization_contact": 1023,
+    "public_record_identifier": 462,
+    "public_record_representative": 3,
+    "unknown": 511
+  },
+  "by_score_role": {
+    "detect_org_contact_adjust_action": 1023,
+    "detect_public_pii_adjust_action": 465,
+    "review_needed": 511
+  },
+  "by_source_dataset_id": {
+    "aihub_624_web_corpus": 250,
+    "commercial_store_info": 250,
+    "corporate_basic_info": 250,
+    "fair_trade_door_to_door_sales": 250,
+    "fair_trade_online_sales": 250,
+    "financial_company_basic_info": 250,
+    "hira_hospital_info": 250,
+    "nts_business_status": 249
+  },
+  "by_source_domain": {
+    "general_web": 250,
+    "public_business_status": 249,
+    "public_commercial_org": 250,
+    "public_healthcare_org": 250,
+    "public_record_commerce": 500,
+    "public_record_corporate": 250,
+    "public_record_finance": 250
+  },
+  "candidate_generation_changed": false,
+  "candidate_row_count": 1999,
+  "context_feature_counts": {
+    "field_context_names": 45989,
+    "field_context_roles": 10998,
+    "left_bigrams": 1262,
+    "left_trigrams": 923,
+    "left_unigrams": 1634,
+    "right_bigrams": 2066,
+    "right_trigrams": 1372,
+    "right_unigrams": 2854
+  },
+  "context_rule_changed": false,
+  "detector_output_interpreted_as_truth": false,
+  "generated_at": "2026-06-05T09:39:05.635871+00:00",
+  "invalid_offset_count": 0,
+  "local_detail_output": {
+    "candidate_rows_path": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context\\m4_external_candidate_context_rows_v1.jsonl",
+    "candidate_rows_written": true,
+    "detail_output_dir": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context",
+    "inside_repository": false,
+    "raw_candidate_values_stored": false,
+    "raw_context_terms_stored_local_only": true,
+    "raw_text_stored": false
+  },
+  "m4_score_changed": false,
+  "max_single_source_domain_ratio": 0.250125,
+  "max_single_source_domain_ratio_for_score_tuning": 0.35,
+  "parameters": {
+    "context_tokens": 5,
+    "max_aihub_entries_per_zip": 15,
+    "max_aihub_texts": 150,
+    "max_aihub_zip_files": 2,
+    "max_candidate_rows": 2500,
+    "max_candidate_rows_per_source": 250,
+    "max_data_go_kr_files_per_source": 8,
+    "max_data_go_kr_records_per_source": 250,
+    "max_field_value_chars": 500,
+    "max_text_chars": 3000
+  },
+  "phase": "Phase C/D/E. Existing Detector Candidate And Context Extraction",
+  "probability_loglr_computed": false,
+  "project_root": "C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\korean_pii_guardrail_v0_2",
+  "public_record_pii_preserved_as_pii_candidate": true,
+  "raw_candidate_values_persisted_in_reports": false,
+  "raw_context_terms_persisted_in_reports": false,
+  "raw_like_context_count_after_redaction": 0,
+  "raw_staging_root": "C:\\Users\\andyw\\Desktop\\M4_raw_staging",
+  "raw_text_persisted_in_reports": false,
+  "report_type": "M4ExternalCandidateContextSummary",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "m4_external_candidate_context_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "source_domain_count": 7,
+  "source_records_seen_by_dataset": {
+    "aihub_624_web_corpus": 150,
+    "commercial_store_info": 44,
+    "corporate_basic_info": 63,
+    "fair_trade_door_to_door_sales": 55,
+    "fair_trade_online_sales": 33,
+    "financial_company_basic_info": 41,
+    "hira_hospital_info": 61,
+    "nts_business_status": 250
+  },
+  "stop_conditions": [
+    "reviewer_approved_labels_missing_stop_before_probability_loglr",
+    "detector_outputs_are_candidate_only",
+    "probability_loglr_not_computed",
+    "m4_score_tuning_not_changed"
+  ],
+  "version": "v0.2-single-turn",
+  "workflow_gate": {
+    "checks": {
+      "candidate_rows_present": true,
+      "codex_assisted_rows_review_needed_only": true,
+      "detector_outputs_marked_candidate": true,
+      "local_rows_outside_repo": true,
+      "m4_score_unchanged": true,
+      "offsets_valid": true,
+      "probability_loglr_disabled": true,
+      "raw_candidate_values_not_in_repo_report": true,
+      "raw_context_terms_not_in_repo_report": true,
+      "raw_staging_root_exists": true,
+      "raw_text_not_in_repo_report": true,
+      "reviewer_approved_labels_absent": true,
+      "score_tuning_disabled": true,
+      "source_not_too_concentrated_for_score_tuning": true
+    },
+    "failure_verdicts": [
+      "reviewer_approved_labels_missing_stop_before_probability_loglr"
+    ],
+    "score_tuning_allowed_by_this_phase": false,
+    "status": "blocked_before_score_tuning"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "m4_nts_business_status_download_v1",
+  "generated_at": "2026-06-05T17:28:13+09:00",
+  "raw_root": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\data_go_kr",
+  "repository_safety": "raw API responses are stored outside the repository; this report does not contain the service key or raw business numbers",
+  "source_inputs": [
+    "fair_trade_online_sales CSV files",
+    "fair_trade_door_to_door_sales CSV files"
+  ],
+  "status": "downloaded",
+  "business_numbers_discovered": 2202103,
+  "business_numbers_requested": 10000,
+  "batch_size": 100,
+  "batches_planned": 100,
+  "batches_saved": 100,
+  "compressed_bytes": 122852,
+  "failures": []
+}

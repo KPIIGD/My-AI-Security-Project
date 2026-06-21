@@ -1,0 +1,703 @@
+{
+  "report_type": "FuzzerV4V02CompatibilityReport",
+  "generated_at": "2026-05-23T07:25:12.271007+00:00",
+  "source_payload": {
+    "generator": "Korean PII Guardrail Fuzzer v4.0 (Validity-First)",
+    "count_arg_effective_total": 3939,
+    "corpus_policy": "legacy_fixtures",
+    "raw_data_policy": "synthetic fuzzer payloads; raw values excluded from this report"
+  },
+  "scope": {
+    "total_payloads": 3939,
+    "mapped_in_scope_payloads": 1247,
+    "out_of_v0_2_scope_payloads": 2692,
+    "out_of_scope_top": [
+      {
+        "key": "EN_SSN",
+        "count": 1014
+      },
+      {
+        "key": "transaction",
+        "count": 49
+      },
+      {
+        "key": "prescription",
+        "count": 36
+      },
+      {
+        "key": "visa",
+        "count": 32
+      },
+      {
+        "key": "car_ins",
+        "count": 32
+      },
+      {
+        "key": "face_id",
+        "count": 32
+      },
+      {
+        "key": "ins_policy",
+        "count": 32
+      },
+      {
+        "key": "voter",
+        "count": 32
+      },
+      {
+        "key": "ssh",
+        "count": 32
+      },
+      {
+        "key": "immigration",
+        "count": 32
+      },
+      {
+        "key": "stock",
+        "count": 32
+      },
+      {
+        "key": "political",
+        "count": 32
+      },
+      {
+        "key": "insurance4",
+        "count": 32
+      },
+      {
+        "key": "property",
+        "count": 32
+      },
+      {
+        "key": "biometric",
+        "count": 32
+      },
+      {
+        "key": "flight",
+        "count": 32
+      },
+      {
+        "key": "health_ins",
+        "count": 32
+      },
+      {
+        "key": "cctv",
+        "count": 32
+      },
+      {
+        "key": "military",
+        "count": 32
+      },
+      {
+        "key": "loan",
+        "count": 28
+      },
+      {
+        "key": "crime",
+        "count": 28
+      },
+      {
+        "key": "hire_date",
+        "count": 28
+      },
+      {
+        "key": "aws_key",
+        "count": 28
+      },
+      {
+        "key": "vin",
+        "count": 28
+      },
+      {
+        "key": "body",
+        "count": 28
+      },
+      {
+        "key": "parcel",
+        "count": 28
+      },
+      {
+        "key": "family",
+        "count": 28
+      },
+      {
+        "key": "password",
+        "count": 28
+      },
+      {
+        "key": "session",
+        "count": 28
+      },
+      {
+        "key": "aws_secret",
+        "count": 28
+      },
+      {
+        "key": "iban",
+        "count": 28
+      },
+      {
+        "key": "expiry",
+        "count": 28
+      },
+      {
+        "key": "grad_year",
+        "count": 28
+      },
+      {
+        "key": "credit_score",
+        "count": 28
+      },
+      {
+        "key": "salary",
+        "count": 28
+      },
+      {
+        "key": "cvv",
+        "count": 28
+      },
+      {
+        "key": "gpa",
+        "count": 28
+      },
+      {
+        "key": "jwt",
+        "count": 28
+      },
+      {
+        "key": "retirement",
+        "count": 28
+      },
+      {
+        "key": "voice",
+        "count": 28
+      }
+    ]
+  },
+  "metrics": {
+    "strict_type_hits": 513,
+    "strict_type_misses": 734,
+    "strict_type_hit_rate": 0.4114,
+    "any_actionable_hits": 1002,
+    "any_actionable_misses": 245,
+    "any_actionable_hit_rate": 0.8035,
+    "raw_pii_logging_count": 0,
+    "action_counts": {
+      "mask": 1259,
+      "pass": 265
+    }
+  },
+  "by_expected_entity": [
+    {
+      "expected_entity": "PHONE_MOBILE",
+      "total": 436,
+      "strict_type_hit_rate": 0.1514,
+      "any_actionable_hit_rate": 0.9908,
+      "strict_miss": 370
+    },
+    {
+      "expected_entity": "PHONE_LANDLINE",
+      "total": 64,
+      "strict_type_hit_rate": 0.9531,
+      "any_actionable_hit_rate": 0.9531,
+      "strict_miss": 3
+    },
+    {
+      "expected_entity": "EMAIL",
+      "total": 60,
+      "strict_type_hit_rate": 1.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 0
+    },
+    {
+      "expected_entity": "ORGANIZATION",
+      "total": 60,
+      "strict_type_hit_rate": 0.3333,
+      "any_actionable_hit_rate": 0.6333,
+      "strict_miss": 40
+    },
+    {
+      "expected_entity": "VEHICLE_REG_NO",
+      "total": 60,
+      "strict_type_hit_rate": 0.3667,
+      "any_actionable_hit_rate": 0.9333,
+      "strict_miss": 38
+    },
+    {
+      "expected_entity": "BANK_ACCOUNT",
+      "total": 52,
+      "strict_type_hit_rate": 0.9231,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 4
+    },
+    {
+      "expected_entity": "MEDICAL_RECORD_NO",
+      "total": 51,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.1176,
+      "strict_miss": 51
+    },
+    {
+      "expected_entity": "ADDRESS_FULL",
+      "total": 41,
+      "strict_type_hit_rate": 0.9512,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 2
+    },
+    {
+      "expected_entity": "RRN",
+      "total": 35,
+      "strict_type_hit_rate": 0.9714,
+      "any_actionable_hit_rate": 0.9714,
+      "strict_miss": 1
+    },
+    {
+      "expected_entity": "BUSINESS_REG_NO",
+      "total": 32,
+      "strict_type_hit_rate": 0.9375,
+      "any_actionable_hit_rate": 0.9375,
+      "strict_miss": 2
+    },
+    {
+      "expected_entity": "CREDIT_CARD",
+      "total": 32,
+      "strict_type_hit_rate": 0.9688,
+      "any_actionable_hit_rate": 0.9688,
+      "strict_miss": 1
+    },
+    {
+      "expected_entity": "DRIVER_LICENSE",
+      "total": 32,
+      "strict_type_hit_rate": 0.8125,
+      "any_actionable_hit_rate": 0.8125,
+      "strict_miss": 6
+    },
+    {
+      "expected_entity": "EMPLOYEE_ID",
+      "total": 32,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.125,
+      "strict_miss": 32
+    },
+    {
+      "expected_entity": "FRN",
+      "total": 32,
+      "strict_type_hit_rate": 0.9375,
+      "any_actionable_hit_rate": 0.9375,
+      "strict_miss": 2
+    },
+    {
+      "expected_entity": "DEVICE_ID",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.9286,
+      "strict_miss": 28
+    },
+    {
+      "expected_entity": "DOB",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.1071,
+      "strict_miss": 28
+    },
+    {
+      "expected_entity": "IP_ADDRESS",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.0714,
+      "strict_miss": 28
+    },
+    {
+      "expected_entity": "MAC_ADDRESS",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.0714,
+      "strict_miss": 28
+    },
+    {
+      "expected_entity": "PASSPORT",
+      "total": 28,
+      "strict_type_hit_rate": 0.9286,
+      "any_actionable_hit_rate": 0.9286,
+      "strict_miss": 2
+    },
+    {
+      "expected_entity": "STUDENT_ID",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.3214,
+      "strict_miss": 28
+    },
+    {
+      "expected_entity": "HOSPITAL",
+      "total": 20,
+      "strict_type_hit_rate": 1.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 0
+    },
+    {
+      "expected_entity": "PERSON_NAME",
+      "total": 20,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.0,
+      "strict_miss": 20
+    },
+    {
+      "expected_entity": "SCHOOL",
+      "total": 20,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.65,
+      "strict_miss": 20
+    }
+  ],
+  "by_pii_type": [
+    {
+      "pii_type": "EN_phone",
+      "expected_entity": "PHONE_MOBILE",
+      "total": 338,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 338
+    },
+    {
+      "pii_type": "account",
+      "expected_entity": "BANK_ACCOUNT",
+      "total": 52,
+      "strict_type_hit_rate": 0.9231,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 4
+    },
+    {
+      "pii_type": "medical_rec",
+      "expected_entity": "MEDICAL_RECORD_NO",
+      "total": 51,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.1176,
+      "strict_miss": 51
+    },
+    {
+      "pii_type": "rrn",
+      "expected_entity": "RRN",
+      "total": 35,
+      "strict_type_hit_rate": 0.9714,
+      "any_actionable_hit_rate": 0.9714,
+      "strict_miss": 1
+    },
+    {
+      "pii_type": "phone",
+      "expected_entity": "PHONE_MOBILE",
+      "total": 34,
+      "strict_type_hit_rate": 0.9706,
+      "any_actionable_hit_rate": 0.9706,
+      "strict_miss": 1
+    },
+    {
+      "pii_type": "alien",
+      "expected_entity": "FRN",
+      "total": 32,
+      "strict_type_hit_rate": 0.9375,
+      "any_actionable_hit_rate": 0.9375,
+      "strict_miss": 2
+    },
+    {
+      "pii_type": "biz_reg",
+      "expected_entity": "BUSINESS_REG_NO",
+      "total": 32,
+      "strict_type_hit_rate": 0.9375,
+      "any_actionable_hit_rate": 0.9375,
+      "strict_miss": 2
+    },
+    {
+      "pii_type": "card",
+      "expected_entity": "CREDIT_CARD",
+      "total": 32,
+      "strict_type_hit_rate": 0.9688,
+      "any_actionable_hit_rate": 0.9688,
+      "strict_miss": 1
+    },
+    {
+      "pii_type": "driver",
+      "expected_entity": "DRIVER_LICENSE",
+      "total": 32,
+      "strict_type_hit_rate": 0.8125,
+      "any_actionable_hit_rate": 0.8125,
+      "strict_miss": 6
+    },
+    {
+      "pii_type": "emergency",
+      "expected_entity": "PHONE_MOBILE",
+      "total": 32,
+      "strict_type_hit_rate": 0.9688,
+      "any_actionable_hit_rate": 0.9688,
+      "strict_miss": 1
+    },
+    {
+      "pii_type": "emp_id",
+      "expected_entity": "EMPLOYEE_ID",
+      "total": 32,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.125,
+      "strict_miss": 32
+    },
+    {
+      "pii_type": "fax",
+      "expected_entity": "PHONE_LANDLINE",
+      "total": 32,
+      "strict_type_hit_rate": 0.9375,
+      "any_actionable_hit_rate": 0.9375,
+      "strict_miss": 2
+    },
+    {
+      "pii_type": "landline",
+      "expected_entity": "PHONE_LANDLINE",
+      "total": 32,
+      "strict_type_hit_rate": 0.9688,
+      "any_actionable_hit_rate": 0.9688,
+      "strict_miss": 1
+    },
+    {
+      "pii_type": "vehicle_reg",
+      "expected_entity": "VEHICLE_REG_NO",
+      "total": 32,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 32
+    },
+    {
+      "pii_type": "work_phone",
+      "expected_entity": "PHONE_MOBILE",
+      "total": 32,
+      "strict_type_hit_rate": 0.0625,
+      "any_actionable_hit_rate": 0.9375,
+      "strict_miss": 30
+    },
+    {
+      "pii_type": "device",
+      "expected_entity": "DEVICE_ID",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.9286,
+      "strict_miss": 28
+    },
+    {
+      "pii_type": "dob",
+      "expected_entity": "DOB",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.1071,
+      "strict_miss": 28
+    },
+    {
+      "pii_type": "ip",
+      "expected_entity": "IP_ADDRESS",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.0714,
+      "strict_miss": 28
+    },
+    {
+      "pii_type": "mac",
+      "expected_entity": "MAC_ADDRESS",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.0714,
+      "strict_miss": 28
+    },
+    {
+      "pii_type": "passport",
+      "expected_entity": "PASSPORT",
+      "total": 28,
+      "strict_type_hit_rate": 0.9286,
+      "any_actionable_hit_rate": 0.9286,
+      "strict_miss": 2
+    },
+    {
+      "pii_type": "plate",
+      "expected_entity": "VEHICLE_REG_NO",
+      "total": 28,
+      "strict_type_hit_rate": 0.7857,
+      "any_actionable_hit_rate": 0.8571,
+      "strict_miss": 6
+    },
+    {
+      "pii_type": "student_id",
+      "expected_entity": "STUDENT_ID",
+      "total": 28,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.3214,
+      "strict_miss": 28
+    },
+    {
+      "pii_type": "work_addr",
+      "expected_entity": "ADDRESS_FULL",
+      "total": 28,
+      "strict_type_hit_rate": 1.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 0
+    },
+    {
+      "pii_type": "EN_email",
+      "expected_entity": "EMAIL",
+      "total": 20,
+      "strict_type_hit_rate": 1.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 0
+    },
+    {
+      "pii_type": "EN_name",
+      "expected_entity": "PERSON_NAME",
+      "total": 20,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.0,
+      "strict_miss": 20
+    },
+    {
+      "pii_type": "company",
+      "expected_entity": "ORGANIZATION",
+      "total": 20,
+      "strict_type_hit_rate": 1.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 0
+    },
+    {
+      "pii_type": "dept",
+      "expected_entity": "ORGANIZATION",
+      "total": 20,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.15,
+      "strict_miss": 20
+    },
+    {
+      "pii_type": "email",
+      "expected_entity": "EMAIL",
+      "total": 20,
+      "strict_type_hit_rate": 1.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 0
+    },
+    {
+      "pii_type": "hospital",
+      "expected_entity": "HOSPITAL",
+      "total": 20,
+      "strict_type_hit_rate": 1.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 0
+    },
+    {
+      "pii_type": "job_title",
+      "expected_entity": "ORGANIZATION",
+      "total": 20,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.75,
+      "strict_miss": 20
+    },
+    {
+      "pii_type": "school",
+      "expected_entity": "SCHOOL",
+      "total": 20,
+      "strict_type_hit_rate": 0.0,
+      "any_actionable_hit_rate": 0.65,
+      "strict_miss": 20
+    },
+    {
+      "pii_type": "work_email",
+      "expected_entity": "EMAIL",
+      "total": 20,
+      "strict_type_hit_rate": 1.0,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 0
+    },
+    {
+      "pii_type": "address",
+      "expected_entity": "ADDRESS_FULL",
+      "total": 13,
+      "strict_type_hit_rate": 0.8462,
+      "any_actionable_hit_rate": 1.0,
+      "strict_miss": 2
+    }
+  ],
+  "by_mutation_level": [
+    {
+      "mutation_level": 1,
+      "total": 380,
+      "strict_type_hit_rate": 0.3263,
+      "any_actionable_hit_rate": 0.8553,
+      "strict_miss": 256
+    },
+    {
+      "mutation_level": 4,
+      "total": 354,
+      "strict_type_hit_rate": 0.5734,
+      "any_actionable_hit_rate": 0.7345,
+      "strict_miss": 151
+    },
+    {
+      "mutation_level": 0,
+      "total": 239,
+      "strict_type_hit_rate": 0.159,
+      "any_actionable_hit_rate": 0.887,
+      "strict_miss": 201
+    },
+    {
+      "mutation_level": 3,
+      "total": 109,
+      "strict_type_hit_rate": 0.578,
+      "any_actionable_hit_rate": 0.7339,
+      "strict_miss": 46
+    },
+    {
+      "mutation_level": 5,
+      "total": 99,
+      "strict_type_hit_rate": 0.5758,
+      "any_actionable_hit_rate": 0.899,
+      "strict_miss": 42
+    },
+    {
+      "mutation_level": 2,
+      "total": 66,
+      "strict_type_hit_rate": 0.4242,
+      "any_actionable_hit_rate": 0.5455,
+      "strict_miss": 38
+    }
+  ],
+  "by_validity_group": [
+    {
+      "validity_group": "format",
+      "total": 947,
+      "strict_type_hit_rate": 0.3263,
+      "any_actionable_hit_rate": 0.7804,
+      "strict_miss": 638
+    },
+    {
+      "validity_group": "checksum",
+      "total": 159,
+      "strict_type_hit_rate": 0.7862,
+      "any_actionable_hit_rate": 0.9497,
+      "strict_miss": 34
+    },
+    {
+      "validity_group": "semantic",
+      "total": 141,
+      "strict_type_hit_rate": 0.5603,
+      "any_actionable_hit_rate": 0.7943,
+      "strict_miss": 62
+    }
+  ],
+  "by_lang": [
+    {
+      "lang": "KR",
+      "total": 869,
+      "strict_type_hit_rate": 0.5673,
+      "any_actionable_hit_rate": 0.7411,
+      "strict_miss": 376
+    },
+    {
+      "lang": "EN",
+      "total": 378,
+      "strict_type_hit_rate": 0.0529,
+      "any_actionable_hit_rate": 0.9471,
+      "strict_miss": 358
+    }
+  ],
+  "failure_output": "C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\korean_pii_guardrail_v0_2\\reports\\fuzzer_v4_v0_2_count1_failures.jsonl"
+}

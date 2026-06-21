@@ -1,0 +1,67 @@
+{
+  "by_anchor_entity": {
+    "ADDRESS_FULL": 6,
+    "ADDRESS_UNIT": 1,
+    "PERSON_NAME": 7
+  },
+  "by_entity_group": {
+    "ADDRESS": 7,
+    "PERSON_NAME": 7
+  },
+  "by_source_domain": {
+    "customer_support": 2,
+    "ecommerce": 2,
+    "education": 2,
+    "enterprise_internal": 2,
+    "finance": 2,
+    "healthcare": 2,
+    "public_services": 2
+  },
+  "candidate_value_stored": false,
+  "contains_raw_pii_true_count": 0,
+  "context_rule_changed": false,
+  "entity_group_domain_counts": {
+    "ADDRESS": 7,
+    "PERSON_NAME": 7
+  },
+  "evidence_role": "template_extraction_only_not_score_tuning",
+  "forbidden_key_count": 0,
+  "generated_at": "2026-05-31T19:40:46.910111+00:00",
+  "invalid_template_count": 0,
+  "page_body_stored": false,
+  "phase": "Phase 3. Template Extraction For PERSON_NAME And ADDRESS",
+  "phase_exit_gate": {
+    "checks": {
+      "address_domain_count_at_least_5": true,
+      "address_templates_present": true,
+      "all_rows_valid": true,
+      "all_templates_usable": true,
+      "forbidden_keys_absent": true,
+      "person_name_domain_count_at_least_5": true,
+      "person_name_templates_present": true,
+      "raw_pii_safety_pass": true,
+      "raw_sentence_absent": true
+    },
+    "failure_verdicts": [
+      "template_extraction_gate_pass"
+    ],
+    "status": "pass"
+  },
+  "raw_pii_leak_count": 0,
+  "raw_sentence_logged_count": 0,
+  "raw_url_logged_count": 0,
+  "raw_value_logged_count": 0,
+  "reason_codes": [
+    "context_corpus.safety.pass"
+  ],
+  "report_type": "ContextTemplateInventorySafetyReport",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "context_template_inventory_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "slot_value_materialized": false,
+  "status": "pass",
+  "template_count": 14,
+  "template_sentence_stored": false,
+  "unusable_template_count": 0
+}

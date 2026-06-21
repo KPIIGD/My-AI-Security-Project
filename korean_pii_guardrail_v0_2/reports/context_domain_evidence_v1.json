@@ -1,0 +1,264 @@
+{
+  "default_profile_decision": "keep_global_default",
+  "domain_rows": [
+    {
+      "buckets": [
+        "positive_name_suffix"
+      ],
+      "domain": "generic",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.field_label_name",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_name_suffix"
+      ],
+      "domain": "generic",
+      "fired_count": 2,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.title_after_name",
+      "support_status": "insufficient_support",
+      "tp_fired": 2
+    },
+    {
+      "buckets": [
+        "hard_negative_abstract_value"
+      ],
+      "domain": "generic",
+      "fired_count": 2,
+      "fp_fired": 2,
+      "precision_when_fired": 0.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.penalty.abstract_value_context_for_person",
+      "support_status": "insufficient_support",
+      "tp_fired": 0
+    },
+    {
+      "buckets": [
+        "hard_negative_business_name"
+      ],
+      "domain": "generic",
+      "fired_count": 1,
+      "fp_fired": 1,
+      "precision_when_fired": 0.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.penalty.organization_not_person",
+      "support_status": "insufficient_support",
+      "tp_fired": 0
+    },
+    {
+      "buckets": [
+        "positive_address"
+      ],
+      "domain": "ecommerce",
+      "fired_count": 3,
+      "fp_fired": 2,
+      "precision_when_fired": 0.333333,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.field_label_address",
+      "support_status": "insufficient_support",
+      "tp_fired": 1
+    },
+    {
+      "buckets": [
+        "positive_person_phone"
+      ],
+      "domain": "ecommerce",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.field_label_name",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_person_phone"
+      ],
+      "domain": "ecommerce",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.field_label_phone",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_address"
+      ],
+      "domain": "ecommerce",
+      "fired_count": 1,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.full_address_detail",
+      "support_status": "insufficient_support",
+      "tp_fired": 1
+    },
+    {
+      "buckets": [
+        "positive_person_phone"
+      ],
+      "domain": "ecommerce",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.phone_cooccur_for_person",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_person_phone"
+      ],
+      "domain": "ecommerce",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.composite.PERSON_NAME",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_person_phone"
+      ],
+      "domain": "ecommerce",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.composite.PHONE_MOBILE",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_medical"
+      ],
+      "domain": "healthcare",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.medical_label",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_bank_account"
+      ],
+      "domain": "finance",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.field_label_account",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_organization_affiliation"
+      ],
+      "domain": "enterprise_internal",
+      "fired_count": 3,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.field_label_name",
+      "support_status": "insufficient_support",
+      "tp_fired": 3
+    },
+    {
+      "buckets": [
+        "positive_organization_affiliation"
+      ],
+      "domain": "enterprise_internal",
+      "fired_count": 1,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.boost.organization_affiliation_context",
+      "support_status": "insufficient_support",
+      "tp_fired": 1
+    },
+    {
+      "buckets": [
+        "positive_organization_affiliation"
+      ],
+      "domain": "enterprise_internal",
+      "fired_count": 2,
+      "fp_fired": 0,
+      "precision_when_fired": 1.0,
+      "recommendation": "report_only_collect_more_evidence",
+      "rule_id": "context.penalty.example_context",
+      "support_status": "insufficient_support",
+      "tp_fired": 2
+    }
+  ],
+  "domain_specific_profile_created": false,
+  "domain_summary": {
+    "ecommerce": {
+      "low_support_row_count": 7,
+      "recommendation": "keep_global_default_collect_more_evidence",
+      "rule_row_count": 7,
+      "total_fired_count": 19
+    },
+    "enterprise_internal": {
+      "low_support_row_count": 3,
+      "recommendation": "keep_global_default_collect_more_evidence",
+      "rule_row_count": 3,
+      "total_fired_count": 6
+    },
+    "finance": {
+      "low_support_row_count": 1,
+      "recommendation": "keep_global_default_collect_more_evidence",
+      "rule_row_count": 1,
+      "total_fired_count": 3
+    },
+    "generic": {
+      "low_support_row_count": 4,
+      "recommendation": "keep_global_default_collect_more_evidence",
+      "rule_row_count": 4,
+      "total_fired_count": 8
+    },
+    "healthcare": {
+      "low_support_row_count": 1,
+      "recommendation": "keep_global_default_collect_more_evidence",
+      "rule_row_count": 1,
+      "total_fired_count": 3
+    }
+  },
+  "domains_without_evidence": [
+    "education",
+    "developer_docs"
+  ],
+  "low_support_domain_row_count": 16,
+  "minimum_domain_support": 50,
+  "phase": "Execution Phase 6. Domain and Aggregate Follow-Up",
+  "public_corpus_used_for_score_tuning": false,
+  "raw_pii_safety": {
+    "raw_value_logged": false,
+    "report_raw_text_leak_count": 0,
+    "status": "pass"
+  },
+  "report_type": "ContextDomainEvidence",
+  "runtime_scoring_behavior_changed": false,
+  "score_delta_changed": false,
+  "status": "pass",
+  "version": "v0.2-single-turn"
+}

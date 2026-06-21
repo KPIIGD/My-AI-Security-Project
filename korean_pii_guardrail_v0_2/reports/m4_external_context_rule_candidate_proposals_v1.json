@@ -1,0 +1,23 @@
+{
+  "blocked_candidate_count": 173,
+  "blocked_reason": "probability_support_gate_failed_or_no_raw_free_eligible_feature",
+  "candidate_generation_changed": false,
+  "config_change_proposed": false,
+  "context_rule_changed": false,
+  "generated_at": "2026-06-05T11:30:24.859076+00:00",
+  "m4_score_changed": false,
+  "phase": "Phase G. Probability And Candidate Evidence",
+  "probability_report_schema_version": "m4_external_context_probability_v1",
+  "probability_support_gate_status": "fail",
+  "proposal_count": 0,
+  "proposals": [],
+  "raw_candidate_values_in_repo_report": false,
+  "raw_context_feature_values_in_repo_report": false,
+  "raw_text_in_repo_report": false,
+  "report_type": "M4ExternalContextRuleCandidateProposals",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "m4_external_context_rule_candidate_proposals_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "version": "v0.2-single-turn"
+}
