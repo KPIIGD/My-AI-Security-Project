@@ -8,6 +8,7 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  id-token: write  # OIDC 토큰 발급용 (claude-code-action 계열 공통 요구)
 
 jobs:
   security-review:
@@ -19,7 +20,8 @@ jobs:
         if: env.ANTHROPIC_API_KEY == ''
         run: echo "ANTHROPIC_API_KEY is not configured; skipping optional Claude security review."
 
-      - uses: anthropics/claude-code-security-review@v1
+      # claude-code-security-review 는 버전 태그가 없어 @main 을 사용 (@v1 미존재)
+      - uses: anthropics/claude-code-security-review@main
         if: env.ANTHROPIC_API_KEY != ''
         with:
-          anthropic_api_key: ${{ env.ANTHROPIC_API_KEY }}
+          claude-api-key: ${{ env.ANTHROPIC_API_KEY }}  # 이 액션의 입력명은 claude-api-key
