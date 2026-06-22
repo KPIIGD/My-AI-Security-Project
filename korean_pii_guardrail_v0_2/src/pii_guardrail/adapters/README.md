@@ -1,8 +1,12 @@
 # `pii_guardrail.adapters` — attach the guardrail to any gateway
 
-One core engine, two attachment primitives, six concrete adapters. Every
+One core engine, two attachment primitives, many concrete adapters. Every
 adapter funnels through [`core.py`](core.py) so detection/masking behaviour and
 the no-raw-PII boundary are identical everywhere.
+
+> **Full gateway/framework catalog (LiteLLM, Portkey, Azure APIM, Kong, APISIX,
+> Cloudflare, Envoy, Guardrails AI, NeMo, LangChain, OpenAI SDK, AWS Bedrock, …)
+> with per-target code/guides and verification status: [INTEGRATIONS.md](INTEGRATIONS.md).**
 
 ```
                        ┌─────────────────────────────┐

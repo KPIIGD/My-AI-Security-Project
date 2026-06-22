@@ -316,3 +316,208 @@ def test_litellm_post_call_fail_closed_on_engine_error():
         assert out.choices[0].message.content == guard._OUTPUT_BLOCKED_MSG
     finally:
         core.set_engine(None)
+
+
+# ── LangChain (langchain_core) ─────────────────────────────────────────────
+def test_langchain_mask_input_string(engine):
+    pytest.importorskip("langchain_core")
+    from pii_guardrail.adapters.langchain import mask_input
+
+    out = mask_input(engine=engine).invoke(PHONE_TEXT)
+    assert PHONE_RAW not in out
+
+
+def test_langchain_mask_message_preserves_type(engine):
+    pytest.importorskip("langchain_core")
+    from langchain_core.messages import HumanMessage
+
+    from pii_guardrail.adapters.langchain import mask_input
+
+    out = mask_input(engine=engine).invoke(HumanMessage(content=PHONE_TEXT))
+    assert isinstance(out, HumanMessage)
+    assert PHONE_RAW not in out.content
+
+
+# ── OpenAI SDK wrapper ─────────────────────────────────────────────────────
+def test_guard_openai_masks_input_and_output(engine):
+    import types
+
+    from pii_guardrail.adapters import guard_openai
+
+    class _FakeCompletions:
+        def __init__(self):
+            self.received = None
+
+        def create(self, **kw):
+            self.received = kw
+            msg = types.SimpleNamespace(content=PHONE_TEXT)  # model echoes PII
+            return types.SimpleNamespace(choices=[types.SimpleNamespace(message=msg)])
+
+    client = types.SimpleNamespace(
+        chat=types.SimpleNamespace(completions=_FakeCompletions())
+    )
+    fake = client.chat.completions
+    guard_openai(client, engine=engine)
+
+    resp = client.chat.completions.create(
+        model="gpt-4o", messages=[{"role": "user", "content": PHONE_TEXT}]
+    )
+    # input reached the SDK masked, output returned masked
+    assert PHONE_RAW not in fake.received["messages"][0]["content"]
+    assert PHONE_RAW not in resp.choices[0].message.content
+
+
+def test_guard_openai_is_idempotent(engine):
+    import types
+
+    from pii_guardrail.adapters import guard_openai
+
+    class _C:
+        def create(self, **kw):
+            return types.SimpleNamespace(choices=[])
+
+    client = types.SimpleNamespace(chat=types.SimpleNamespace(completions=_C()))
+    guard_openai(client, engine=engine)
+    f1 = client.chat.completions.create
+    guard_openai(client, engine=engine)  # second wrap must be a no-op
+    f2 = client.chat.completions.create
+    assert f1 is f2
+
+
+# ── ASGI middleware ────────────────────────────────────────────────────────
+def test_asgi_middleware_masks_in_and_out(engine):
+    pytest.importorskip("fastapi")
+    from fastapi.testclient import TestClient
+
+    from pii_guardrail.adapters import PIIGuardrailMiddleware
+
+    captured = {}
+
+    async def echo_app(scope, receive, send):
+        body = b""
+        while True:
+            m = await receive()
+            body += m.get("body", b"")
+            if not m.get("more_body", False):
+                break
+        captured["body"] = body
+        payload = json.dumps(
+            {"choices": [{"message": {"content": PHONE_TEXT}}]}
+        ).encode()
+        await send(
+            {
+                "type": "http.response.start",
+                "status": 200,
+                "headers": [(b"content-type", b"application/json")],
+            }
+        )
+        await send({"type": "http.response.body", "body": payload})
+
+    app = PIIGuardrailMiddleware(echo_app, engine=engine)
+    client = TestClient(app)
+    r = client.post(
+        "/v1/chat/completions",
+        json={"model": "x", "messages": [{"role": "user", "content": PHONE_TEXT}]},
+    )
+    assert r.status_code == 200
+    # output masked
+    assert PHONE_RAW not in r.json()["choices"][0]["message"]["content"]
+    # input reached the app masked
+    assert PHONE_RAW not in captured["body"].decode("utf-8")
+
+
+def test_asgi_middleware_strips_accept_encoding(engine):
+    # Regression: gzip response would pass raw PII; we strip Accept-Encoding so
+    # the app returns uncompressed JSON we can scan.
+    pytest.importorskip("fastapi")
+    from fastapi.testclient import TestClient
+
+    from pii_guardrail.adapters import PIIGuardrailMiddleware
+
+    seen = {}
+
+    async def app(scope, receive, send):
+        seen["headers"] = dict(scope.get("headers", []))
+        while True:
+            m = await receive()
+            if not m.get("more_body", False):
+                break
+        payload = b'{"choices":[]}'
+        await send({"type": "http.response.start", "status": 200, "headers": [(b"content-type", b"application/json")]})
+        await send({"type": "http.response.body", "body": payload})
+
+    client = TestClient(PIIGuardrailMiddleware(app, engine=engine))
+    client.post("/v1/chat/completions", json={"messages": [{"role": "user", "content": "hi"}]},
+                headers={"accept-encoding": "gzip, br"})
+    assert b"accept-encoding" not in seen["headers"]
+
+
+def test_asgi_middleware_blocks_input():
+    pytest.importorskip("fastapi")
+    from fastapi.testclient import TestClient
+
+    from pii_guardrail.adapters import PIIGuardrailMiddleware
+
+    async def never_called(scope, receive, send):  # pragma: no cover
+        raise AssertionError("upstream app must not be reached on block")
+
+    app = PIIGuardrailMiddleware(never_called, engine=_BlockingEngine())
+    r = TestClient(app).post(
+        "/v1/chat/completions",
+        json={"messages": [{"role": "user", "content": "x"}]},
+    )
+    assert r.status_code == 400
+    assert r.json()["error"]["type"] == "pii_blocked"
+
+
+# ── AWS Bedrock (boto3 complement) ─────────────────────────────────────────
+def test_guard_bedrock_masks_converse(engine):
+    import types
+
+    from pii_guardrail.adapters import guard_bedrock
+
+    received = {}
+
+    def fake_converse(**kw):
+        received.update(kw)
+        return {"output": {"message": {"content": [{"text": PHONE_TEXT}]}}}
+
+    client = types.SimpleNamespace(converse=fake_converse)
+    guard_bedrock(client, engine=engine)
+
+    resp = client.converse(
+        modelId="anthropic.claude",
+        messages=[{"role": "user", "content": [{"text": PHONE_TEXT}]}],
+    )
+    assert PHONE_RAW not in received["messages"][0]["content"][0]["text"]
+    assert PHONE_RAW not in resp["output"]["message"]["content"][0]["text"]
+
+
+# ── NeMo Guardrails custom action ──────────────────────────────────────────
+def test_nemo_action_masks(engine):
+    import asyncio
+
+    from pii_guardrail.adapters import nemo_guardrails as nemo
+
+    nemo.set_action_engine(engine)
+    try:
+        out = asyncio.run(nemo.korean_pii_mask(text=PHONE_TEXT))
+        assert out["blocked"] is False
+        assert PHONE_RAW not in out["text"]
+        assert PHONE_RAW not in json.dumps(out["summary"], ensure_ascii=False)
+    finally:
+        nemo.set_action_engine(None)
+
+
+def test_nemo_action_blocks():
+    import asyncio
+
+    from pii_guardrail.adapters import nemo_guardrails as nemo
+
+    nemo.set_action_engine(_BlockingEngine())
+    try:
+        out = asyncio.run(nemo.korean_pii_mask(text="x"))
+        assert out["blocked"] is True
+        assert out["text"] is None
+    finally:
+        nemo.set_action_engine(None)

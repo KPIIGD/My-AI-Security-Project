@@ -228,12 +228,21 @@ def mask_text(
     stage: str = "input",
     policy_profile: str = "strict",
     role: str = "user",
+    output_target: Optional[str] = None,
     engine: Optional[GuardrailEngine] = None,
 ) -> tuple[str, dict]:
     """Return ``(masked_or_original_text, summary)``.
 
-    Raises :class:`PIIBlocked` (carrying the summary) when the policy blocks."""
-    result = scan(text, scan_stage=stage, policy_profile=policy_profile, engine=engine)
+    Pass ``output_target="external_output"`` for output-stage scans so the
+    external-output policy boundary applies. Raises :class:`PIIBlocked`
+    (carrying the summary) when the policy blocks."""
+    result = scan(
+        text,
+        scan_stage=stage,
+        policy_profile=policy_profile,
+        output_target=output_target,
+        engine=engine,
+    )
     summary = public_summary(result, role=role, stage=stage)
     if result.get("blocked"):
         raise PIIBlocked(summary)

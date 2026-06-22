@@ -33,12 +33,19 @@ from .core import (
 
 # name → (submodule, attribute) resolved on first access
 _LAZY = {
+    # HTTP / gateway adapters
     "create_sidecar_app": ("sidecar", "create_app"),
     "create_reverse_proxy_app": ("reverse_proxy", "create_app"),
     "create_portkey_app": ("portkey_webhook", "create_app"),
     "process_portkey_payload": ("portkey_webhook", "process_portkey_payload"),
     "KoreanPIIValidator": ("guardrails_ai", "KoreanPIIValidator"),
     "KoreanPIIGuardrail": ("litellm_hook", "KoreanPIIGuardrail"),
+    # in-process framework adapters
+    "guard_openai": ("openai_wrapper", "guard_openai"),
+    "guard_bedrock": ("bedrock", "guard_bedrock"),
+    "PIIGuardrailMiddleware": ("asgi_middleware", "PIIGuardrailMiddleware"),
+    "langchain_protect": ("langchain", "protect"),
+    "nemo_register": ("nemo_guardrails", "register"),
 }
 
 __all__ = [
