@@ -1,0 +1,85 @@
+<!--
+Azure API Management — inbound policy that calls the Korean PII Guardrail
+sidecar and replaces the request body with the masked text.
+
+Attachment form: APIM has no native guardrail hook, but its <send-request>
+policy lets us call our sidecar (the same /v1/pii/apply contract LiteLLM uses)
+and rewrite the body. This is fail-closeable: on a non-200 from the sidecar we
+return 503 instead of forwarding raw PII upstream.
+
+Setup:
+  1. Deploy the sidecar:  uvicorn pii_guardrail.adapters.sidecar:app --port 8080
+  2. Set the named value `pii-sidecar-url` to e.g. https://pii-sidecar.internal/v1/pii/apply
+  3. Paste this into the API's inbound policy.
+
+This sample scans the first chat message's content. Extend the JObject parsing
+to loop over all messages for full coverage.
+-->
+<policies>
+  <inbound>
+    <base />
+    <!-- Pull the user text out of the OpenAI chat body -->
+    <set-variable name="userText" value="@{
+      var body = context.Request.Body.As<JObject>(preserveContent: true);
+      var msgs = body["messages"] as JArray;
+      if (msgs == null || msgs.Count == 0) { return ""; }
+      return (string)(msgs.Last["content"] ?? "");
+    }" />
+
+    <choose>
+      <when condition="@(((string)context.Variables["userText"]).Length > 0)">
+        <!-- Call the PII guardrail sidecar -->
+        <send-request mode="new" response-variable-name="piiResp" timeout="10" ignore-error="false">
+          <set-url>{{pii-sidecar-url}}</set-url>
+          <set-method>POST</set-method>
+          <set-header name="Content-Type" exists-action="override">
+            <value>application/json</value>
+          </set-header>
+          <set-body>@{
+            return new JObject(
+              new JProperty("text", (string)context.Variables["userText"]),
+              new JProperty("policy_profile", "strict"),
+              new JProperty("scan_stage", "input")
+            ).ToString();
+          }</set-body>
+        </send-request>
+
+        <!-- Fail-closed: any non-200 from the sidecar => block -->
+        <choose>
+          <when condition="@(((IResponse)context.Variables["piiResp"]).StatusCode != 200)">
+            <return-response>
+              <set-status code="503" reason="PII guardrail unavailable (fail-closed)" />
+            </return-response>
+          </when>
+        </choose>
+
+        <set-variable name="piiBody" value="@(((IResponse)context.Variables["piiResp"]).Body.As<JObject>())" />
+
+        <!-- BLOCK decision => 400 -->
+        <choose>
+          <when condition="@((bool)((JObject)context.Variables["piiBody"])["blocked"] == true)">
+            <return-response>
+              <set-status code="400" reason="Blocked by Korean PII guardrail" />
+              <set-body>{"error":"high-risk PII detected"}</set-body>
+            </return-response>
+          </when>
+        </choose>
+
+        <!-- Replace the last message content with masked_text -->
+        <set-body>@{
+          var body = context.Request.Body.As<JObject>(preserveContent: true);
+          var piiBody = (JObject)context.Variables["piiBody"];
+          var masked = (string)piiBody["masked_text"];
+          var msgs = body["messages"] as JArray;
+          if (masked != null && msgs != null && msgs.Count > 0) {
+            ((JObject)msgs.Last)["content"] = masked;
+          }
+          return body.ToString();
+        }</set-body>
+      </when>
+    </choose>
+  </inbound>
+  <backend><base /></backend>
+  <outbound><base /></outbound>
+  <on-error><base /></on-error>
+</policies>
