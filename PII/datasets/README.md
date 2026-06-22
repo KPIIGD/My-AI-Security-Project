@@ -59,7 +59,7 @@ size_categories:
 - **All PII is synthetic**. Real-person matching not attempted.
 - Checksum-typed PII (RRN, biz_reg, card, VIN) follows Korean national checksum rules but uses synthetic base digits — not real IDs.
 - Bank account formats mimic Korean bank profiles (KB/신한/우리/하나/농협/IBK/카뱅/토스/K뱅크) but don't represent real accounts.
-- Real AWS access keys in raw data have been masked (`AKIAXXXXXXXXXXXXXXXX`) to satisfy secret scanners.
+- Synthetic (fuzzer-generated) AWS-key-format strings in raw data have been masked (`AKIAXXXXXXXXXXXXXXXX`) to satisfy secret scanners.
 
 ## Loading (Python)
 
