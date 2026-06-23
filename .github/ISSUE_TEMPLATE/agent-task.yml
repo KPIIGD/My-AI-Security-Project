@@ -1,0 +1,139 @@
+name: Agent Task
+description: Convert a user or Slack request into a scoped Agent Task Brief.
+title: "[agent-task] "
+labels:
+  - agent-task
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for work that an AI agent may help execute.
+        Do not include raw PII, secrets, tokens, credentials, or production-only details.
+
+  - type: textarea
+    id: user-request
+    attributes:
+      label: Original request
+      description: Paste or summarize the user or Slack request. Mask sensitive values.
+      placeholder: "Example: Create a docs-only PR template for agent changes."
+    validations:
+      required: true
+
+  - type: textarea
+    id: task-brief
+    attributes:
+      label: Agent Task Brief
+      description: Link to or paste the structured brief from docs/agent-task-template.md.
+      value: |
+        Goal:
+        Background:
+        Scope:
+        Out of Scope:
+        Files To Read First:
+        Allowed Files/Areas:
+        Do Not Touch:
+        Acceptance Criteria:
+        Verification:
+        Security/PII Rules:
+        Expected Output:
+        Open Questions:
+    validations:
+      required: true
+
+  - type: textarea
+    id: allowed-scope
+    attributes:
+      label: Allowed files or areas
+      description: List the files, folders, or docs the agent may inspect or edit.
+      placeholder: |
+        - docs/
+        - .github/
+        - korean_pii_guardrail_v0_2/docs/
+    validations:
+      required: true
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope / do not touch
+      description: List forbidden work, folders, generated artifacts, production access, or destructive actions.
+      placeholder: |
+        - No production deploys
+        - No destructive commands
+        - Do not edit output/, outputs/, or build/
+        - Do not add RAG, multi-turn monitoring, dashboards, or retrieval sanitizers
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Define how a human reviewer can tell the work is complete.
+      placeholder: |
+        - Template exists at .github/pull_request_template.md
+        - docs/index.md links the workflow document
+        - Documentation links were checked manually
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification plan
+      description: List commands or manual checks. Use Needs confirmation if unclear.
+      placeholder: |
+        - Documentation-only: manually check links and paths
+        - Code changes: run focused pytest target, then full suite when practical
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety and scope checks
+      options:
+        - label: No raw PII will be stored in logs, exceptions, reports, audit events, screenshots, evidence, public spans, or AI context.
+          required: true
+        - label: No API keys, tokens, credentials, local account names, machine-specific secrets, or private paths will be committed.
+          required: true
+        - label: v0.2 work remains single-turn unless a human explicitly approves a scope change.
+          required: true
+        - label: RAG, retrieval sanitizer, multi-turn monitoring, fragment ledger, subject tracker, Redis TTL store, full LLM judge, and dashboard work are out of scope unless explicitly approved.
+          required: true
+        - label: Production deploys, destructive commands, and GitHub settings changes are not automatically approved.
+          required: true
+        - label: A human owns final approval and merge decisions.
+          required: true
+
+  - type: textarea
+    id: safe-run-log
+    attributes:
+      label: Safe agent run log
+      description: Optional safe summary after agent work. Do not include raw PII, secrets, full logs, screenshots, or recoverable values.
+      placeholder: |
+        task_id or issue/PR:
+        agent/tool:
+        files_read:
+        files_changed:
+        commands_run:
+        tests_run:
+        approvals_requested:
+        security_checks:
+        raw_pii_exposure: none | blocked | redacted
+        secrets_exposure: none | blocked | redacted
+        reviewer_decision:
+        follow_up:
+    validations:
+      required: false
+
+  - type: textarea
+    id: open-questions
+    attributes:
+      label: Open questions
+      description: List unknowns or confirmation needed before agent work starts.
+      placeholder: |
+        - Needs confirmation: exact reviewer owner
+        - Unknown: required pytest target
+    validations:
+      required: false

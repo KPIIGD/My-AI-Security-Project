@@ -1,0 +1,15 @@
+# CODEOWNERS for My-AI-Security-Project
+#
+# This file is intentionally a placeholder until the repository owner chooses
+# concrete GitHub usernames or teams. CODEOWNERS only enforces reviews when the
+# patterns below name valid owners and branch protection requires code-owner
+# review.
+#
+# Recommended activation pattern:
+# * @owner-or-team
+# /korean_pii_guardrail_v0_2/ @owner-or-team
+# /.github/ @owner-or-team
+# /docs/ @owner-or-team
+#
+# Do not replace human review with AI approval. AI agents may prepare changes,
+# but humans remain the approval owners.

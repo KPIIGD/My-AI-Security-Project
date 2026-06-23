@@ -1,5 +1,15 @@
 # LLM Security Framework — Korean PII Guardrail
 
+## Active Development Note
+
+The active implementation package is `korean_pii_guardrail_v0_2/`.
+AI agents should start from `AGENTS.md` and `docs/index.md`, then follow
+`korean_pii_guardrail_v0_2/AGENTS.md` for package work.
+
+Treat `PII/` as the older five-layer research and evaluation stack. It is
+reference material for the active package unless an integration task explicitly
+changes scope.
+
 > LiteLLM Gateway 환경에서 **한국어 특화 5계층 PII 가드레일 스택**을 구축·평가한 캡스톤 연구 결과물.
 >
 > **핵심 기여**: Layer 0 (한국어 정규화 + 키워드 사전, LLM 없음)가 GPT-4o-mini judge 대비 +8.99%p 더 잘 한국어 텍스트형 PII를 탐지하면서, 비용 $0 · 지연 220배 낮음.

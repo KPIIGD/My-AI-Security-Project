@@ -1,0 +1,38 @@
+name: Korean PII Guardrail v0.2 Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'korean_pii_guardrail_v0_2/**'
+      - '.github/workflows/korean_pii_guardrail_v0_2_tests.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'korean_pii_guardrail_v0_2/**'
+      - '.github/workflows/korean_pii_guardrail_v0_2_tests.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package and test dependencies
+        working-directory: korean_pii_guardrail_v0_2
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Run package tests
+        working-directory: korean_pii_guardrail_v0_2
+        run: python -m pytest
