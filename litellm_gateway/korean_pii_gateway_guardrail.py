@@ -151,7 +151,56 @@ class KoreanPIIGuardrail(CustomGuardrail):
                     if result.get("masked_text") is not None:
                         content[idx]["text"] = result["masked_text"]
 
+        # ── no-raw-PII: spend log / UI Logs 가 기록하는 원본 요청 스냅샷도 마스킹 ──
+        # LiteLLM 은 진입 시점에 data["proxy_server_request"] 로 원본 요청을 따로
+        # 캡처해 DB(spend log)에 저장한다. 이건 pre_call 훅 '이전' 값이라 마스킹이
+        # 반영돼 있지 않다 → 마스킹된 messages 를 여기에 다시 써서 게이트웨이
+        # 로그에 원문 PII 가 남지 않게 한다.
+        self._sync_proxy_request(data, messages)
+
         return data
+
+    @staticmethod
+    def _sync_proxy_request(data: dict, masked_messages: list) -> None:
+        """마스킹된 messages 를 proxy_server_request 스냅샷에 동기화 (인덱스 매칭).
+
+        LiteLLM 은 spend log 에 `proxy_server_request["body"]["messages"]` 를 원본
+        요청으로 저장한다(`_get_proxy_server_request_for_spend_logs_payload`). 이건
+        pre_call 훅 진입 시점에 잡힌 값이라 마스킹이 안 돼 있다 → body.messages 를
+        마스킹된 내용으로 덮어써 게이트웨이 DB/UI Logs 에 원문 PII 가 남지 않게 한다.
+        """
+        psr = data.get("proxy_server_request")
+        if not isinstance(psr, dict):
+            return
+        # 실제 저장 경로는 body.messages. 구버전 호환으로 psr.messages 도 시도.
+        body = psr.get("body")
+        psr_msgs = None
+        if isinstance(body, dict) and isinstance(body.get("messages"), list):
+            psr_msgs = body["messages"]
+        elif isinstance(psr.get("messages"), list):
+            psr_msgs = psr["messages"]
+        if not isinstance(psr_msgs, list):
+            return
+        for idx, m in enumerate(masked_messages):
+            if idx >= len(psr_msgs):
+                break
+            src = psr_msgs[idx]
+            if not isinstance(src, dict):
+                continue
+            content = m.get("content")
+            # string content → 그대로 복사
+            if isinstance(content, str):
+                src["content"] = content
+            # multimodal list → text 조각만 인덱스로 복사
+            elif isinstance(content, list) and isinstance(src.get("content"), list):
+                for j, part in enumerate(content):
+                    if (
+                        isinstance(part, dict)
+                        and isinstance(part.get("text"), str)
+                        and j < len(src["content"])
+                        and isinstance(src["content"][j], dict)
+                    ):
+                        src["content"][j]["text"] = part["text"]
 
     # ── post_call: 출력 마스킹 (방어적) ──────────────────────
     async def async_post_call_success_hook(
@@ -195,6 +244,7 @@ class KoreanPIIGuardrail(CustomGuardrail):
 
         stage = "output" if input_type == "response" else "input"
         masked_texts = []
+        text_map: dict[str, str] = {}  # 원문 → 마스킹 (로깅 스냅샷 치환용)
         for t in texts:
             if not isinstance(t, str) or not t.strip():
                 masked_texts.append(t)
@@ -208,9 +258,53 @@ class KoreanPIIGuardrail(CustomGuardrail):
                 raise self._blocked(
                     "고위험 개인정보(PII) 다수 탐지로 요청이 차단되었습니다."
                 )
-            masked_texts.append(
-                result["masked_text"] if result.get("masked_text") is not None else t
-            )
+            masked = result["masked_text"] if result.get("masked_text") is not None else t
+            masked_texts.append(masked)
+            if masked != t:
+                text_map[t] = masked
 
         inputs["texts"] = masked_texts
+
+        # ── no-raw-PII: spend log / UI Logs 에 남는 원본 요청 스냅샷도 마스킹 ──
+        # LiteLLM 은 proxy_server_request["body"]["messages"] 를 그대로 DB(spend log)에
+        # 저장하는데, 이 값은 가드레일 적용 '이전' 원문이라 PII 가 노출된다. 마스킹된
+        # 텍스트로 치환해 게이트웨이 자체 로그에도 원문 PII 가 남지 않게 한다.
+        if input_type != "response" and text_map:
+            self._mask_request_snapshot(request_data, text_map)
+
         return inputs
+
+    @staticmethod
+    def _mask_request_snapshot(request_data: dict, text_map: dict) -> None:
+        """원문→마스킹 매핑을 request_data 의 로깅 스냅샷에 적용 (원문 PII 비저장)."""
+        if not isinstance(request_data, dict):
+            return
+
+        def _apply(messages) -> None:
+            if not isinstance(messages, list):
+                return
+            for msg in messages:
+                if not isinstance(msg, dict):
+                    continue
+                content = msg.get("content")
+                if isinstance(content, str):
+                    if content in text_map:
+                        msg["content"] = text_map[content]
+                elif isinstance(content, list):
+                    for part in content:
+                        if (
+                            isinstance(part, dict)
+                            and isinstance(part.get("text"), str)
+                            and part["text"] in text_map
+                        ):
+                            part["text"] = text_map[part["text"]]
+
+        # 1) DB(spend log)에 저장되는 원본 요청 스냅샷
+        psr = request_data.get("proxy_server_request")
+        if isinstance(psr, dict):
+            body = psr.get("body")
+            if isinstance(body, dict):
+                _apply(body.get("messages"))
+            _apply(psr.get("messages"))  # 구버전 호환
+        # 2) request_data 자체 messages (별도 로깅 경로 대비)
+        _apply(request_data.get("messages"))

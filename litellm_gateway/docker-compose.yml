@@ -28,6 +28,10 @@ services:
       LITELLM_MASTER_KEY: sk-1234
       UI_USERNAME: admin
       UI_PASSWORD: sk-1234
+      # DB 기반 설정/모델 관리 + UI 전체 기능(Logs 본문, Test Key, virtual keys) 활성화.
+      # store_prompts_in_spend_logs 토글이 DB 에 반영되려면 이 값이 필요.
+      STORE_MODEL_IN_DB: "True"
+      STORE_PROMPTS_IN_SPEND_LOGS: "True"
 
       # ── LLM Provider ──
       OPENAI_API_KEY: ${OPENAI_API_KEY}
