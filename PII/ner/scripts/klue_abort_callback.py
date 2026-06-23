@@ -60,9 +60,12 @@ class KlueAbortCallback(TrainerCallback):
         **kwargs,
     ):
         """val_ds eval 직후 호출. 같은 시점에 klue_test 도 평가."""
-        trainer = kwargs.get("model")  # NOTE: HF 는 trainer 자체를 넘기지 않음
-        # Trainer 객체는 외부에서 주입받아야 evaluate() 호출 가능.
-        # 대안: tokenizer / data_collator / model 받아서 직접 eval loop 돌리기.
+        # 재진입 가드: 아래 trainer.evaluate(klue_test) 호출이 다시 on_evaluate 를
+        # 트리거해 무한 재귀에 빠지는 것을 차단 (HF Trainer.evaluate 는 끝에
+        # callback_handler.on_evaluate 를 부른다). 우리가 직접 부른 klue eval 은 스킵.
+        if getattr(self, "_in_klue_eval", False):
+            return control
+
         # 가장 단순한 방법은 콜백 등록 시 trainer 참조를 직접 attribute 로 박는 것.
         trainer = getattr(self, "_trainer", None)
         if trainer is None:
@@ -70,10 +73,14 @@ class KlueAbortCallback(TrainerCallback):
             return control
 
         print(f"\n[KlueAbortCallback] epoch={state.epoch:.2f} KLUE test eval...")
-        metrics = trainer.evaluate(
-            self.klue_test_dataset,
-            metric_key_prefix="klue_test",
-        )
+        self._in_klue_eval = True
+        try:
+            metrics = trainer.evaluate(
+                self.klue_test_dataset,
+                metric_key_prefix="klue_test",
+            )
+        finally:
+            self._in_klue_eval = False
         # metric key 가 prefix 다르게 나옴 (eval_macro_f1 → klue_test_macro_f1)
         for candidate in (
             f"klue_test_{self.metric_key.replace('eval_', '')}",

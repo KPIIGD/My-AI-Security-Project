@@ -1,0 +1,18 @@
+{
+  "klue_test_loss": 0.13806666433811188,
+  "klue_test_macro_f1": 0.7570961870698226,
+  "klue_test_micro_f1": 0.7856970282676975,
+  "klue_test_f1_NAME": 0.8505113179363437,
+  "klue_test_precision_NAME": 0.8637106184364061,
+  "klue_test_recall_NAME": 0.8377093707559982,
+  "klue_test_f1_ADDRESS": 0.6847377725397761,
+  "klue_test_precision_ADDRESS": 0.6659025787965616,
+  "klue_test_recall_ADDRESS": 0.7046694966646453,
+  "klue_test_f1_ORG": 0.7360394707333483,
+  "klue_test_precision_ORG": 0.7206851119894598,
+  "klue_test_recall_ORG": 0.7520623281393217,
+  "klue_test_runtime": 8.5936,
+  "klue_test_samples_per_second": 581.829,
+  "klue_test_steps_per_second": 36.422,
+  "epoch": 5.0
+}

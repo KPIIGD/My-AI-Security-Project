@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "trained_on": "VESSL L40S 46GB",
+    "date": "2026-06-20",
+    "base": "klue/roberta-large",
+    "recipe": "v3-identical: phase1 1ep(head) + phase2 5ep(full), batch16, max_len128, seed42, fp16",
+    "klue_abort": "disabled(threshold0); callback had infinite-recursion bug, fixed locally",
+    "v3_reference_KLUE": {
+      "macro": 0.766,
+      "NAME": 0.853,
+      "ADDR": 0.692,
+      "ORG": 0.635
+    },
+    "caveats": [
+      "single seed(42) each, not multi-seed averaged",
+      "3 KLUE-leak sentences remain in train (0.06% of test, negligible)",
+      "synth +0.2pt macro vs v3 is within noise; robust claim = ORG gain + macro held"
+    ]
+  },
+  "results": {
+    "baseline": {
+      "klue": {
+        "macro": 0.7571,
+        "NAME": 0.8505,
+        "ADDR": 0.6847,
+        "ORG": 0.736
+      },
+      "in_domain": {
+        "macro": 0.8451,
+        "NAME": 0.9243,
+        "ADDR": 0.7919,
+        "ORG": 0.8191
+      },
+      "delta_vs_v3_KLUE": {
+        "ORG_pt": 10.1,
+        "macro_pt": -0.9
+      }
+    },
+    "silver": {
+      "klue": {
+        "macro": 0.7482,
+        "NAME": 0.8513,
+        "ADDR": 0.6593,
+        "ORG": 0.734
+      },
+      "in_domain": {
+        "macro": 0.8426,
+        "NAME": 0.93,
+        "ADDR": 0.7782,
+        "ORG": 0.8197
+      },
+      "delta_vs_v3_KLUE": {
+        "ORG_pt": 9.9,
+        "macro_pt": -1.8
+      }
+    },
+    "synth": {
+      "klue": {
+        "macro": 0.7681,
+        "NAME": 0.8575,
+        "ADDR": 0.7005,
+        "ORG": 0.7463
+      },
+      "in_domain": {
+        "macro": 0.8497,
+        "NAME": 0.9322,
+        "ADDR": 0.7957,
+        "ORG": 0.821
+      },
+      "delta_vs_v3_KLUE": {
+        "ORG_pt": 11.1,
+        "macro_pt": 0.2
+      }
+    },
+    "silver_synth": {
+      "klue": {
+        "macro": 0.7598,
+        "NAME": 0.8599,
+        "ADDR": 0.68,
+        "ORG": 0.7394
+      },
+      "in_domain": {
+        "macro": 0.8461,
+        "NAME": 0.9201,
+        "ADDR": 0.7898,
+        "ORG": 0.8283
+      },
+      "delta_vs_v3_KLUE": {
+        "ORG_pt": 10.4,
+        "macro_pt": -0.6
+      }
+    }
+  },
+  "winner": {
+    "variant": "synth",
+    "why": "only variant to beat v3 on every KLUE entity (ORG +11.1pt, macro +0.2pt, ADDR +0.9pt, NAME +0.5pt) + best in-domain"
+  }
+}

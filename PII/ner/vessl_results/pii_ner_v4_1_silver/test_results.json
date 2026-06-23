@@ -1,0 +1,18 @@
+{
+  "test_loss": 0.094602569937706,
+  "test_macro_f1": 0.8426477431334218,
+  "test_micro_f1": 0.839623638862459,
+  "test_f1_NAME": 0.9300307358524679,
+  "test_precision_NAME": 0.9251798561151079,
+  "test_recall_NAME": 0.9349327517266448,
+  "test_f1_ADDRESS": 0.7781727692854604,
+  "test_precision_ADDRESS": 0.7691496837666901,
+  "test_recall_ADDRESS": 0.787410071942446,
+  "test_f1_ORG": 0.8197397242623374,
+  "test_precision_ORG": 0.7940589116325512,
+  "test_recall_ORG": 0.8471371504660453,
+  "test_runtime": 10.2744,
+  "test_samples_per_second": 574.337,
+  "test_steps_per_second": 35.914,
+  "epoch": 5.0
+}

@@ -236,7 +236,7 @@ def main():
         args=args1,
         train_dataset=train_ds,
         eval_dataset=val_ds,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         data_collator=collator,
         compute_metrics=lambda ep: compute_metrics(ep, id2label),
     )
@@ -274,7 +274,7 @@ def main():
         args=args2,
         train_dataset=train_ds,
         eval_dataset=val_ds,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         data_collator=collator,
         compute_metrics=lambda ep: compute_metrics(ep, id2label),
     )
