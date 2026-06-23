@@ -47,3 +47,12 @@ outputs/**/output.pptx
 outputs/**/output_updated.pptx
 
 # 슬랙 날짜별 로그는 자동 커밋으로 GitHub에 올림 (git push 포함)
+
+# NER datacenter: 코드는 추적, 데이터/대용량/볼륨은 무시
+PII/ner/datacenter/ner_datacenter.db
+PII/ner/datacenter/**/__pycache__/
+PII/ner/datacenter/milvus/volumes/
+PII/ner/datacenter/n8n/n8n_data/
+PII/ner/datacenter/**/*.npy
+PII/ner/datacenter/**/*.jsonl
+PII/ner/datacenter/**/*.db

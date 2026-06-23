@@ -1,0 +1,21 @@
+# n8n — 데이터센터 자동 정제 파이프라인 오케스트레이션 (cron 스케줄 + 단계 체이닝).
+# 실행: cd datacenter/n8n && docker compose up -d
+# UI:   http://localhost:5678  (첫 접속 시 계정 생성)
+# 호스트의 파이프라인 API 호출: http://host.docker.internal:8000/... (n8n HTTP 노드)
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_SECURE_COOKIE=false          # localhost http 접속 허용 (dev)
+      - GENERIC_TIMEZONE=Asia/Seoul
+      - TZ=Asia/Seoul
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_DIAGNOSTICS_ENABLED=false
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # 컨테이너 -> 호스트 접근
