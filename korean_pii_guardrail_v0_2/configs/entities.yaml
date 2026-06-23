@@ -130,6 +130,21 @@ entities:
     category: sensitive_information
     detectors: [dictionary, context]
     default_action: policy_dependent
+  RELIGIOUS_BELIEF:
+    risk_level: P1
+    category: sensitive_information
+    detectors: [dictionary, context]
+    default_action: policy_dependent
+  SEXUAL_ORIENTATION:
+    risk_level: P1
+    category: sensitive_information
+    detectors: [dictionary, context]
+    default_action: policy_dependent
+  POLITICAL_OPINION:
+    risk_level: P1
+    category: sensitive_information
+    detectors: [dictionary, context]
+    default_action: policy_dependent
   IP_ADDRESS:
     risk_level: P2
     category: technical_identifier
@@ -180,6 +195,10 @@ priority_order:
   - CORPORATE_REG_NO
   - ADDRESS_FULL
   - MEDICAL_RECORD_NO
+  - HEALTH_INFO
+  - RELIGIOUS_BELIEF
+  - SEXUAL_ORIENTATION
+  - POLITICAL_OPINION
   - CUSTOMER_ID
   - EMPLOYEE_ID
   - STUDENT_ID

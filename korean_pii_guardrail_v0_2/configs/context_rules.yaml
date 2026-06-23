@@ -16,6 +16,10 @@ field_labels:
   account_label: [계좌, 계좌번호, 입금, 송금, 환불계좌, 이체, bank account, account no, account number, deposit account, refund account]
   organization_label: [소속, 근무, 재직, 대표, 회사, 기관, 업체]
   medical_label: [환자번호, 차트번호, 진료기록, 의무기록, 병원]
+  health_label: [알레르기, 알러지, 과민반응, 진단명, 진단, 질환, 병명, 처방, 처방전, 투약, 복용, 수술, 시술, 수술력, 장애등급, 장애인, 혈액형, 정신건강, 정신과, 병력, 지병, 투병, 환자]
+  religion_label: [종교, 신앙, 종파, 교파, 개종, 종교적]
+  orientation_label: [성적지향, 성지향, 성적 지향, 성정체성]
+  political_label: [지지정당, 지지 정당, 정치성향, 정치적 성향, 정당 가입]
 honorifics_and_titles:
   person_suffixes: [님, 씨, 군, 양]
   job_titles: [과장, 팀장, 부장, 차장, 대리, 교수, 변호사, 의사, 간호사, 상담사]
