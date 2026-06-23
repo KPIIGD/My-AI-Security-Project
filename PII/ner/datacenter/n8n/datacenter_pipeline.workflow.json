@@ -1,0 +1,104 @@
+{
+  "name": "NER Datacenter Pipeline (full)",
+  "nodes": [
+    {
+      "parameters": { "rule": { "interval": [ { "field": "weeks", "weeksInterval": 1, "triggerAtHour": 3 } ] } },
+      "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Weekly Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [180, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/collect?only=synth_conv_name&limit=200",
+        "options": { "timeout": 1800000 }
+      },
+      "id": "aaaaaaaa-0001-0001-0001-000000000001",
+      "name": "1. Collect",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [380, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/distill?n=30&max_cost=0.05",
+        "options": { "timeout": 1800000 }
+      },
+      "id": "aaaaaaaa-0002-0002-0002-000000000002",
+      "name": "2. Distill (LLM label)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [580, 360]
+    },
+    {
+      "parameters": { "url": "http://host.docker.internal:8000/stats", "options": {} },
+      "id": "aaaaaaaa-0003-0003-0003-000000000003",
+      "name": "3. Stats",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/leakage_gate",
+        "options": { "timeout": 600000 }
+      },
+      "id": "aaaaaaaa-0004-0004-0004-000000000004",
+      "name": "4. Leakage Gate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [980, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/curate?source=weak&limit=2000&threshold=0.92",
+        "options": { "timeout": 1800000 }
+      },
+      "id": "aaaaaaaa-0005-0005-0005-000000000005",
+      "name": "5. Diversity Curate (Milvus)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1180, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/export",
+        "options": { "timeout": 600000 }
+      },
+      "id": "aaaaaaaa-0006-0006-0006-000000000006",
+      "name": "6. Export Clean",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1380, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/commit_push",
+        "options": { "timeout": 600000 }
+      },
+      "id": "aaaaaaaa-0007-0007-0007-000000000007",
+      "name": "7. Git Push (private data repo)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1580, 360]
+    }
+  ],
+  "connections": {
+    "Weekly Schedule": { "main": [ [ { "node": "1. Collect", "type": "main", "index": 0 } ] ] },
+    "1. Collect": { "main": [ [ { "node": "2. Distill (LLM label)", "type": "main", "index": 0 } ] ] },
+    "2. Distill (LLM label)": { "main": [ [ { "node": "3. Stats", "type": "main", "index": 0 } ] ] },
+    "3. Stats": { "main": [ [ { "node": "4. Leakage Gate", "type": "main", "index": 0 } ] ] },
+    "4. Leakage Gate": { "main": [ [ { "node": "5. Diversity Curate (Milvus)", "type": "main", "index": 0 } ] ] },
+    "5. Diversity Curate (Milvus)": { "main": [ [ { "node": "6. Export Clean", "type": "main", "index": 0 } ] ] },
+    "6. Export Clean": { "main": [ [ { "node": "7. Git Push (private data repo)", "type": "main", "index": 0 } ] ] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}
