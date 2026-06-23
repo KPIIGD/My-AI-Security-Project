@@ -1,0 +1,290 @@
+{
+  "context_rule_changed": false,
+  "core_entity_domain_plan": [
+    {
+      "current_observed_domain_count": 2,
+      "current_observed_domains": [
+        "ecommerce",
+        "education"
+      ],
+      "current_score_tuning_status": "insufficient_current_data",
+      "entity_group": "ADDRESS",
+      "meets_minimum_domain_plan": true,
+      "planned_domain_count": 6,
+      "planned_source_domains": [
+        "ecommerce",
+        "healthcare",
+        "finance",
+        "education",
+        "public_services",
+        "sample_forms"
+      ]
+    },
+    {
+      "current_observed_domain_count": 2,
+      "current_observed_domains": [
+        "ecommerce",
+        "education"
+      ],
+      "current_score_tuning_status": "insufficient_current_data",
+      "entity_group": "BANK_ACCOUNT",
+      "meets_minimum_domain_plan": true,
+      "planned_domain_count": 6,
+      "planned_source_domains": [
+        "customer_support",
+        "ecommerce",
+        "finance",
+        "public_services",
+        "enterprise_internal",
+        "sample_forms"
+      ]
+    },
+    {
+      "current_observed_domain_count": 2,
+      "current_observed_domains": [
+        "ecommerce",
+        "education"
+      ],
+      "current_score_tuning_status": "insufficient_current_data",
+      "entity_group": "EMAIL",
+      "meets_minimum_domain_plan": true,
+      "planned_domain_count": 6,
+      "planned_source_domains": [
+        "customer_support",
+        "ecommerce",
+        "education",
+        "enterprise_internal",
+        "developer_docs",
+        "general_web"
+      ]
+    },
+    {
+      "current_observed_domain_count": 2,
+      "current_observed_domains": [
+        "ecommerce",
+        "education"
+      ],
+      "current_score_tuning_status": "insufficient_current_data",
+      "entity_group": "PERSON_NAME",
+      "meets_minimum_domain_plan": true,
+      "planned_domain_count": 6,
+      "planned_source_domains": [
+        "customer_support",
+        "ecommerce",
+        "healthcare",
+        "education",
+        "enterprise_internal",
+        "public_services"
+      ]
+    },
+    {
+      "current_observed_domain_count": 2,
+      "current_observed_domains": [
+        "ecommerce",
+        "education"
+      ],
+      "current_score_tuning_status": "insufficient_current_data",
+      "entity_group": "PHONE",
+      "meets_minimum_domain_plan": true,
+      "planned_domain_count": 6,
+      "planned_source_domains": [
+        "customer_support",
+        "ecommerce",
+        "healthcare",
+        "finance",
+        "public_services",
+        "developer_docs"
+      ]
+    },
+    {
+      "current_observed_domain_count": 2,
+      "current_observed_domains": [
+        "ecommerce",
+        "education"
+      ],
+      "current_score_tuning_status": "insufficient_current_data",
+      "entity_group": "REGISTRATION_IDENTIFIER",
+      "meets_minimum_domain_plan": true,
+      "planned_domain_count": 6,
+      "planned_source_domains": [
+        "healthcare",
+        "finance",
+        "education",
+        "public_services",
+        "enterprise_internal",
+        "sample_forms"
+      ]
+    }
+  ],
+  "current_safe_context_window_summary": {
+    "by_material_class": {
+      "realistic_input_like": 26
+    },
+    "by_source_domain": {
+      "ecommerce": 23,
+      "education": 3
+    },
+    "by_source_type": {
+      "ecommerce_help": 23,
+      "education_application": 3
+    },
+    "current_data_quality_status": "insufficient_for_score_tuning",
+    "row_count": 26,
+    "unique_url_hash_count_by_domain": {
+      "ecommerce": 2,
+      "education": 1
+    }
+  },
+  "data_quality_gate_draft": {
+    "failure_verdicts": [
+      "rejected_data_quality_gate",
+      "evidence_backlog",
+      "needs_more_data",
+      "needs_domain_split"
+    ],
+    "measurements": [
+      "raw_pii_leak_count",
+      "invalid_offset_count",
+      "domain_count_by_core_entity",
+      "max_single_domain_ratio_by_entity",
+      "realistic_input_like_ratio",
+      "general_web_or_explanatory_ratio",
+      "example_or_sample_document_ratio",
+      "duplicate_anchor_window_ratio",
+      "unknown_label_ratio"
+    ],
+    "pass_criteria": {
+      "invalid_offset_count": 0,
+      "max_duplicate_anchor_window_ratio": 0.05,
+      "max_example_or_sample_document_ratio": 0.15,
+      "max_general_web_or_explanatory_ratio": 0.3,
+      "max_single_domain_ratio": 0.35,
+      "max_unknown_label_ratio_when_labels_present": 0.15,
+      "min_domain_count_by_core_entity": 5,
+      "min_realistic_input_like_ratio": 0.7,
+      "raw_pii_leak_count": 0
+    },
+    "score_tuning_allowed_by_this_phase": false,
+    "status": "draft_ready"
+  },
+  "page_body_stored": false,
+  "public_corpus_used_for_score_tuning": false,
+  "raw_url_logged": false,
+  "raw_value_logged": false,
+  "report_type": "ContextSourceInventory",
+  "runtime_scoring_behavior_changed": false,
+  "score_delta_changed": false,
+  "source_domain_taxonomy": [
+    {
+      "description": "support, contact, inquiry, and issue-resolution guidance",
+      "material_class": "realistic_input_like",
+      "source_domain": "customer_support"
+    },
+    {
+      "description": "ordering, delivery, refund, account, and checkout flows",
+      "material_class": "realistic_input_like",
+      "source_domain": "ecommerce"
+    },
+    {
+      "description": "appointment, reception, patient, and medical-record guidance",
+      "material_class": "realistic_input_like",
+      "source_domain": "healthcare"
+    },
+    {
+      "description": "deposit, transfer, refund, account, and identity guidance",
+      "material_class": "realistic_input_like",
+      "source_domain": "finance"
+    },
+    {
+      "description": "school, application, student, and registration guidance",
+      "material_class": "realistic_input_like",
+      "source_domain": "education"
+    },
+    {
+      "description": "public institution application and civil-service guidance",
+      "material_class": "realistic_input_like",
+      "source_domain": "public_services"
+    },
+    {
+      "description": "employee, HR, internal request, and organization workflows",
+      "material_class": "realistic_input_like",
+      "source_domain": "enterprise_internal"
+    },
+    {
+      "description": "technical examples, logs, schemas, and API documentation",
+      "material_class": "general_web_or_explanatory",
+      "source_domain": "developer_docs"
+    },
+    {
+      "description": "general explanatory or policy-like text",
+      "material_class": "general_web_or_explanatory",
+      "source_domain": "general_web"
+    },
+    {
+      "description": "safe sample forms and synthetic templates",
+      "material_class": "example_or_sample",
+      "source_domain": "sample_forms"
+    }
+  ],
+  "source_type_inventory": [
+    {
+      "collector_supported_currently": false,
+      "source_domain": "customer_support",
+      "source_type": "customer_support_help"
+    },
+    {
+      "collector_supported_currently": true,
+      "source_domain": "ecommerce",
+      "source_type": "ecommerce_help"
+    },
+    {
+      "collector_supported_currently": true,
+      "source_domain": "healthcare",
+      "source_type": "healthcare_guide"
+    },
+    {
+      "collector_supported_currently": false,
+      "source_domain": "finance",
+      "source_type": "finance_guide"
+    },
+    {
+      "collector_supported_currently": true,
+      "source_domain": "education",
+      "source_type": "education_application"
+    },
+    {
+      "collector_supported_currently": true,
+      "source_domain": "public_services",
+      "source_type": "institution_application"
+    },
+    {
+      "collector_supported_currently": true,
+      "source_domain": "enterprise_internal",
+      "source_type": "enterprise_internal"
+    },
+    {
+      "collector_supported_currently": true,
+      "source_domain": "developer_docs",
+      "source_type": "developer_docs"
+    },
+    {
+      "collector_supported_currently": true,
+      "source_domain": "general_web",
+      "source_type": "privacy_policy"
+    },
+    {
+      "collector_supported_currently": true,
+      "source_domain": "sample_forms",
+      "source_type": "synthetic_safe_template"
+    }
+  ],
+  "stage": "1.1 source inventory",
+  "stage_1_1_exit_gate": {
+    "core_entities_have_five_domain_plan": true,
+    "realistic_input_like_ratio_measurable": true,
+    "score_tuning_approved": false,
+    "single_domain_over_35_percent_not_allowed_for_score_tuning": true,
+    "source_domain_taxonomy_defined": true
+  },
+  "version": "v0.2-single-turn"
+}

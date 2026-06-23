@@ -1,0 +1,54 @@
+{
+  "by_anchor_term": {
+    "field:account_label": 4,
+    "field:address_label": 6,
+    "field:email_label": 4,
+    "field:name_label": 7,
+    "field:organization_label": 3,
+    "field:phone_label": 9,
+    "negative:business_name_context": 3,
+    "negative:code_context": 4,
+    "negative:public_number_context": 2,
+    "negative:weather_context": 12,
+    "structured:account_label": 2,
+    "structured:business_reg_no_label": 2,
+    "structured:order_id_label": 2
+  },
+  "by_entity_hint": {
+    "ADDRESS_FULL": 9,
+    "ADDRESS_UNIT": 9,
+    "BANK_ACCOUNT": 4,
+    "BUSINESS_REG_NO": 2,
+    "EMAIL": 4,
+    "ORGANIZATION": 5,
+    "PERSON_NAME": 21,
+    "PHONE_LANDLINE": 10,
+    "PHONE_MOBILE": 10
+  },
+  "by_rule_family": {
+    "field_label": 33,
+    "negative_context": 21,
+    "structured_identifier_context": 6
+  },
+  "by_source_type": {
+    "ecommerce_help": 23,
+    "education_application": 3
+  },
+  "evidence_role": "coverage_only_not_score_tuning",
+  "failed_source_count": 1,
+  "failed_sources": [
+    {
+      "error_type": "HTTPError",
+      "source_type": "healthcare_guide",
+      "url_hash": "sha256:6b0f82c7d100d4982a794cdf19cdf6f2a38b2316e163ba1e09b25431878e3d26"
+    }
+  ],
+  "generated_at": "2026-05-29T07:49:24.443560+00:00",
+  "phase": "Execution Phase 2. Safe Context Coverage",
+  "public_corpus_used_for_score_tuning": false,
+  "raw_value_logged": false,
+  "redaction_applied_count": 3,
+  "report_type": "ContextTermDistribution",
+  "total_rows": 26,
+  "version": "v0.2-single-turn"
+}

@@ -1,0 +1,35 @@
+{
+  "anchor_window_count": 1293,
+  "by_evidence_lane": {
+    "public_web_context": 1109,
+    "safe_synthetic_insertion": 184
+  },
+  "by_label_source": {
+    "codex_draft": 1109,
+    "safe_synthetic_generator": 184
+  },
+  "by_label_status": {
+    "review_needed": 1293
+  },
+  "candidate_value_stored": false,
+  "contains_raw_pii_true_count": 0,
+  "context_rule_changed": false,
+  "context_term_count": 19947,
+  "evidence_role": "anchor_context_only_not_score_tuning",
+  "generated_at": "2026-05-31T19:49:05.449601+00:00",
+  "page_body_stored": false,
+  "public_corpus_used_for_score_tuning": false,
+  "public_web_score_tuning_eligible_count": 0,
+  "raw_pii_leak_count": 0,
+  "raw_url_logged_count": 0,
+  "raw_value_logged_count": 0,
+  "reason_codes": [
+    "context_corpus.safety.pass"
+  ],
+  "report_type": "ContextAnchorCorpusSafetyReport",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "context_anchor_windows_v1",
+  "score_delta_changed": false,
+  "stage": "1.3 collector MVP",
+  "status": "pass"
+}

@@ -1,0 +1,112 @@
+{
+  "by_candidate_entity": {
+    "ADDRESS_FULL": 18,
+    "ADDRESS_UNIT": 80,
+    "BUSINESS_REG_NO": 80,
+    "CORPORATE_REG_NO": 43,
+    "EMAIL": 63,
+    "FAMILY_RELATION": 7,
+    "FRN": 3,
+    "HOSPITAL": 60,
+    "ORGANIZATION": 26,
+    "PERSON_NAME": 14,
+    "PHONE_LANDLINE": 80,
+    "PHONE_MOBILE": 20,
+    "RRN": 6
+  },
+  "by_label_source": {
+    "codex_assisted_review": 500
+  },
+  "by_label_status": {
+    "review_needed": 500
+  },
+  "by_privacy_context_class": {
+    "organization_contact": 249,
+    "public_figure_news": 11,
+    "public_record_identifier": 123,
+    "public_record_representative": 3,
+    "unknown": 114
+  },
+  "by_review_priority": {
+    "high": 14,
+    "low": 114,
+    "medium": 372
+  },
+  "by_score_role": {
+    "detect_org_contact_adjust_action": 249,
+    "detect_public_pii_adjust_action": 126,
+    "review_needed": 125
+  },
+  "by_source_domain": {
+    "general_web": 23,
+    "public_business_status": 138,
+    "public_commercial_org": 50,
+    "public_healthcare_org": 102,
+    "public_record_commerce": 99,
+    "public_record_corporate": 25,
+    "public_record_finance": 63
+  },
+  "candidate_generation_changed": false,
+  "candidate_rows_path_recorded_in_repo_report": false,
+  "context_rule_changed": false,
+  "detector_output_interpreted_as_truth": false,
+  "generated_at": "2026-06-05T09:40:11.537094+00:00",
+  "local_review_packet_output": {
+    "inside_repository": false,
+    "raw_candidate_values_stored": false,
+    "raw_context_terms_stored_local_only": true,
+    "raw_text_stored": false,
+    "review_output_dir": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context",
+    "review_packet_path": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context\\m4_external_codex_review_packet_v1.jsonl",
+    "review_packet_written": true
+  },
+  "m4_score_changed": false,
+  "parameters": {
+    "max_rows": 500,
+    "max_rows_per_entity": 80
+  },
+  "phase": "Phase E. Codex-Assisted Draft Labeling And Human Review Packet Prep",
+  "probability_loglr_computed": false,
+  "project_root": "C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\korean_pii_guardrail_v0_2",
+  "public_record_pii_preserved_as_pii_candidate": true,
+  "raw_candidate_values_persisted_in_reports": false,
+  "raw_context_terms_persisted_in_reports": false,
+  "raw_text_persisted_in_reports": false,
+  "report_type": "M4ExternalCodexReviewPacketSummary",
+  "review_packet_gate": {
+    "checks": {
+      "candidate_rows_path_exists": true,
+      "gold_labels_absent": true,
+      "label_source_codex_assisted_review_only": true,
+      "label_status_review_needed_only": true,
+      "local_packet_outside_repo": true,
+      "m4_score_unchanged": true,
+      "probability_loglr_disabled": true,
+      "public_record_pii_preserved": true,
+      "raw_candidate_values_not_in_repo_report": true,
+      "raw_context_terms_not_in_repo_report": true,
+      "raw_text_not_in_repo_report": true,
+      "review_packet_rows_present": true,
+      "score_tuning_disabled": true
+    },
+    "failure_verdicts": [
+      "codex_labels_only_stop_before_probability_loglr",
+      "reviewer_approved_labels_missing_stop_before_probability_loglr"
+    ],
+    "score_tuning_allowed_by_this_phase": false,
+    "status": "blocked_before_score_tuning"
+  },
+  "review_packet_row_count": 500,
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "m4_external_codex_review_packet_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "source_candidate_row_count": 1999,
+  "stop_conditions": [
+    "codex_labels_only_stop_before_probability_loglr",
+    "reviewer_approved_labels_missing_stop_before_probability_loglr",
+    "probability_loglr_not_computed",
+    "m4_score_tuning_not_changed"
+  ],
+  "version": "v0.2-single-turn"
+}

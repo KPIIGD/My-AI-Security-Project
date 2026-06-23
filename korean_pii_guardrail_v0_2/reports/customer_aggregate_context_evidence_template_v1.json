@@ -1,0 +1,54 @@
+{
+  "disallowed_fields": [
+    "raw_text",
+    "raw_url",
+    "raw_candidate_value",
+    "span_text",
+    "case_text",
+    "reversible_hash_map"
+  ],
+  "evidence_role": "customer_side_aggregate_only",
+  "example_row": {
+    "action_mask_count": 1270,
+    "action_pass_count": 10,
+    "config_version": "scoring-v0.2.1",
+    "dataset_window": "2026-W22",
+    "deployment_id_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "domain": "ecommerce",
+    "entity_type": "PHONE_MOBILE",
+    "fired_count": 1280,
+    "raw_value_logged": false,
+    "review_fp_count": 10,
+    "review_tp_count": 120,
+    "rule_id": "context.boost.field_label_phone"
+  },
+  "phase": "Execution Phase 6. Domain and Aggregate Follow-Up",
+  "public_corpus_used_for_score_tuning": false,
+  "raw_candidate_value_allowed": false,
+  "raw_pii_safety": {
+    "raw_value_logged": false,
+    "status": "pass",
+    "template_raw_like_match_count": 0
+  },
+  "raw_text_allowed": false,
+  "raw_url_allowed": false,
+  "report_type": "CustomerAggregateContextEvidenceTemplate",
+  "required_fields": [
+    "deployment_id_hash",
+    "config_version",
+    "dataset_window",
+    "domain",
+    "rule_id",
+    "entity_type",
+    "fired_count",
+    "action_mask_count",
+    "action_pass_count",
+    "review_tp_count",
+    "review_fp_count",
+    "raw_value_logged"
+  ],
+  "small_count_suppression_threshold": 10,
+  "status": "pass",
+  "suppression_rule": "omit or bucket rows where fired_count, review_tp_count, or review_fp_count is below the threshold",
+  "version": "v0.2-single-turn"
+}

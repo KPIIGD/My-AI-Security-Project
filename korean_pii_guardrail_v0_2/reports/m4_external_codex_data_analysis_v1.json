@@ -1,0 +1,163 @@
+{
+  "analysis_basis": "guardrail candidates compared against user-approved Codex PII-only labels",
+  "approved_label_count": 1999,
+  "by_entity_group_verdict": {
+    "ADDRESS": {
+      "not_pii": 391,
+      "pii": 295
+    },
+    "EMAIL": {
+      "pii": 63
+    },
+    "FAMILY_RELATION": {
+      "not_pii": 61
+    },
+    "ORGANIZATION": {
+      "not_pii": 370
+    },
+    "PAYMENT_IDENTIFIER": {
+      "pii": 48
+    },
+    "PERSON_NAME": {
+      "not_pii": 10,
+      "pii": 4
+    },
+    "PHONE": {
+      "pii": 286
+    },
+    "REGISTRATION_IDENTIFIER": {
+      "pii": 471
+    }
+  },
+  "candidate_generation_changed": false,
+  "codex_analysis_conclusion": "Codex-approved guardrail disagreements are already useful as hard negatives, but only ADDRESS is ready for probability comparison. The next data round should target PERSON_NAME, PHONE, EMAIL, REGISTRATION_IDENTIFIER, BANK_ACCOUNT before score tuning.",
+  "context_rule_changed": false,
+  "core_entity_group_analysis": [
+    {
+      "analysis_status": "needs_more_data",
+      "codex_data_collection_target": "collect more person-name-like common nouns, brand/shop fragments, and true person-name contexts; current total support is small",
+      "do_not_collect_as_not_pii": "",
+      "entity_group": "PERSON_NAME",
+      "hard_negative_count": 10,
+      "not_pii_count": 10,
+      "pii_count": 4,
+      "primary_gap": "insufficient_total_support",
+      "total_count": 14
+    },
+    {
+      "analysis_status": "ready_for_probability_comparison",
+      "codex_data_collection_target": "current group is usable; add more region-only/location-only hard negatives only if source diversity is needed",
+      "do_not_collect_as_not_pii": "",
+      "entity_group": "ADDRESS",
+      "hard_negative_count": 391,
+      "not_pii_count": 391,
+      "pii_count": 295,
+      "primary_gap": "none",
+      "total_count": 686
+    },
+    {
+      "analysis_status": "needs_more_data",
+      "codex_data_collection_target": "collect sample/test/documentation phone-like strings approved as not PII by Codex; keep public organization phone numbers as PII",
+      "do_not_collect_as_not_pii": "public organization or business phone numbers",
+      "entity_group": "PHONE",
+      "hard_negative_count": 0,
+      "not_pii_count": 0,
+      "pii_count": 286,
+      "primary_gap": "insufficient_not_pii_hard_negatives",
+      "total_count": 286
+    },
+    {
+      "analysis_status": "needs_more_data",
+      "codex_data_collection_target": "collect sample/test/placeholder email-like strings approved as not PII by Codex; keep public business emails as PII",
+      "do_not_collect_as_not_pii": "public business or organization email addresses",
+      "entity_group": "EMAIL",
+      "hard_negative_count": 0,
+      "not_pii_count": 0,
+      "pii_count": 63,
+      "primary_gap": "insufficient_not_pii_hard_negatives",
+      "total_count": 63
+    },
+    {
+      "analysis_status": "needs_more_data",
+      "codex_data_collection_target": "collect invalid/sample/unrelated registration-like codes that guardrail extracts but Codex approves as not PII",
+      "do_not_collect_as_not_pii": "valid public business or corporate registration identifiers",
+      "entity_group": "REGISTRATION_IDENTIFIER",
+      "hard_negative_count": 0,
+      "not_pii_count": 0,
+      "pii_count": 471,
+      "primary_gap": "insufficient_not_pii_hard_negatives",
+      "total_count": 471
+    },
+    {
+      "analysis_status": "needs_more_data",
+      "codex_data_collection_target": "collect both real account-context candidates and sample/test account-like false positives; current support is absent",
+      "do_not_collect_as_not_pii": "real payment/refund/settlement account details",
+      "entity_group": "BANK_ACCOUNT",
+      "hard_negative_count": 0,
+      "not_pii_count": 0,
+      "pii_count": 0,
+      "primary_gap": "insufficient_total_support",
+      "total_count": 0
+    }
+  ],
+  "generated_at": "2026-06-05T11:50:52.127615+00:00",
+  "hard_negative_by_candidate_entity": {
+    "ADDRESS_UNIT": 391,
+    "FAMILY_RELATION": 61,
+    "HOSPITAL": 92,
+    "ORGANIZATION": 272,
+    "PERSON_NAME": 10,
+    "SCHOOL": 6
+  },
+  "hard_negative_by_entity_group": {
+    "ADDRESS": 391,
+    "FAMILY_RELATION": 61,
+    "ORGANIZATION": 370,
+    "PERSON_NAME": 10
+  },
+  "hard_negative_row_count": 832,
+  "m4_score_changed": false,
+  "next_bounded_run_plan": [
+    "Collect or stage additional raw rows targeted to guardrail/Codex not-PII disagreements for: PERSON_NAME, PHONE, EMAIL, REGISTRATION_IDENTIFIER, BANK_ACCOUNT",
+    "Run existing guardrail candidate extraction without changing detector logic.",
+    "Run Codex PII-only classification and user approval in the same label model.",
+    "Rebuild hard-negative disagreement rows and probability/logLR evidence.",
+    "Run M4-only delta sweep only if all core support gates pass."
+  ],
+  "phase": "Codex data analysis after user-approved PII-only labels",
+  "probability_support_gate_failure_verdicts": [
+    "insufficient_non_pii_support",
+    "insufficient_total_support"
+  ],
+  "probability_support_gate_status": "fail",
+  "raw_candidate_values_persisted_in_reports": false,
+  "raw_free_artifact_audit": {
+    "artifact_rows": [
+      {
+        "path": "m4_external_codex_data_analysis_v1.json",
+        "raw_pii_like_reason_count": 0,
+        "raw_pii_like_reasons": []
+      },
+      {
+        "path": "m4_external_codex_data_analysis_v1.md",
+        "raw_pii_like_reason_count": 0,
+        "raw_pii_like_reasons": []
+      }
+    ],
+    "raw_pii_like_reason_count": 0,
+    "status": "pass"
+  },
+  "raw_text_persisted_in_reports": false,
+  "recoverable_context_terms_persisted_in_reports": false,
+  "report_type": "M4ExternalCodexDataAnalysis",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "m4_external_codex_data_analysis_v1",
+  "score_delta_changed": false,
+  "top_hard_negative_reason_codes": {
+    "common_noun_not_person_name": 10,
+    "organization_or_institution_name": 424,
+    "region_or_location_unit_not_identifying_person": 391,
+    "relation_term_fragment_not_identifier": 7
+  },
+  "version": "v0.2-single-turn"
+}

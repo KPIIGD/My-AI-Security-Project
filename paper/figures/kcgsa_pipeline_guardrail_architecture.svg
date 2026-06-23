@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="940" viewBox="0 0 2400 940">
+<rect width="2400" height="940" fill="#ffffff"/>
+<text x="90" y="86" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="48" font-weight="700" fill="#1f2937">Layer 0 기반 한국어 PII Guardrail Pipeline</text>
+<text x="90" y="138" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="28" font-weight="400" fill="#4b5563">Target LLM과 L4 GPT-4o-mini Judge를 분리한 LLM Gateway 구조</text>
+<defs><marker id="arrow" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto"><path d="M0,0 L12,4 L0,8 z" fill="#9ca3af"/></marker></defs>
+<rect x="470" y="202" width="1030" height="448" rx="34" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+<text x="985" y="242" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="700" fill="#4b5563">Input-side / Gateway Guardrails</text>
+<text x="985" y="272" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="400" fill="#4b5563">입력 단계 차단·마스킹</text>
+<rect x="1540" y="202" width="260" height="448" rx="34" fill="#fffbeb" stroke="#cbd5e1" stroke-width="3"/>
+<text x="1670" y="242" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="700" fill="#4b5563">Service Model</text>
+<text x="1670" y="272" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="400" fill="#4b5563">실제 답변 생성</text>
+<rect x="1840" y="202" width="300" height="448" rx="34" fill="#faf5ff" stroke="#cbd5e1" stroke-width="3"/>
+<text x="1990" y="242" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="700" fill="#4b5563">Output-side Guardrail</text>
+<text x="1990" y="272" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="400" fill="#4b5563">출력 단계 최종 검사</text>
+<rect x="90" y="365" width="260" height="140" rx="26" fill="#f3f4f6" stroke="#9ca3af" stroke-width="4"/>
+<text x="220" y="428" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2937">User Input</text>
+<text x="220" y="459" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">사용자 입력</text>
+<rect x="510" y="360" width="240" height="150" rx="26" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+<text x="630" y="412" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2937">L0</text>
+<text x="630" y="443" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">Korean Normalizer</text>
+<text x="630" y="474" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">+ PII Detector</text>
+<rect x="790" y="360" width="220" height="150" rx="26" fill="#e0f2fe" stroke="#0284c7" stroke-width="4"/>
+<text x="900" y="428" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2937">L1</text>
+<text x="900" y="459" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">Presidio PII</text>
+<rect x="1050" y="360" width="220" height="150" rx="26" fill="#e0f2fe" stroke="#0284c7" stroke-width="4"/>
+<text x="1160" y="412" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2937">L2</text>
+<text x="1160" y="443" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">Bedrock Guardrails</text>
+<text x="1160" y="474" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">(during-call)</text>
+<rect x="1310" y="360" width="160" height="150" rx="26" fill="#e0f2fe" stroke="#0284c7" stroke-width="4"/>
+<text x="1390" y="428" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2937">L3</text>
+<text x="1390" y="459" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">Lakera</text>
+<rect x="1570" y="352" width="200" height="166" rx="26" fill="#fef3c7" stroke="#d97706" stroke-width="4"/>
+<text x="1670" y="428" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2937">Target LLM</text>
+<text x="1670" y="459" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">서비스 모델</text>
+<rect x="1870" y="344" width="240" height="182" rx="26" fill="#ede9fe" stroke="#7c3aed" stroke-width="4"/>
+<text x="1990" y="412" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2937">L4</text>
+<text x="1990" y="443" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">GPT-4o-mini Judge</text>
+<text x="1990" y="474" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">(post-call)</text>
+<rect x="2180" y="365" width="140" height="140" rx="26" fill="#f3f4f6" stroke="#9ca3af" stroke-width="4"/>
+<text x="2250" y="428" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="700" fill="#1f2937">Final</text>
+<text x="2250" y="459" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="25" font-weight="400" fill="#1f2937">Response</text>
+<line x1="350" y1="435" x2="500" y2="435" stroke="#9ca3af" stroke-width="6" marker-end="url(#arrow)"/>
+<line x1="750" y1="435" x2="780" y2="435" stroke="#9ca3af" stroke-width="6" marker-end="url(#arrow)"/>
+<line x1="1010" y1="435" x2="1040" y2="435" stroke="#9ca3af" stroke-width="6" marker-end="url(#arrow)"/>
+<line x1="1270" y1="435" x2="1300" y2="435" stroke="#9ca3af" stroke-width="6" marker-end="url(#arrow)"/>
+<line x1="1470" y1="435" x2="1560" y2="435" stroke="#9ca3af" stroke-width="6" marker-end="url(#arrow)"/>
+<line x1="1770" y1="435" x2="1860" y2="435" stroke="#9ca3af" stroke-width="6" marker-end="url(#arrow)"/>
+<line x1="2110" y1="435" x2="2170" y2="435" stroke="#9ca3af" stroke-width="6" marker-end="url(#arrow)"/>
+<rect x="90" y="710" width="2220" height="140" rx="24" fill="#f9fafb" stroke="#e5e7eb" stroke-width="2"/>
+<text x="125" y="735" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2937">L0~L3는 사용자 입력이 Target LLM으로 전달되기 전 PII를 차단·마스킹한다.</text>
+<text x="125" y="771" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="400" fill="#1f2937">Target LLM은 실제 서비스 응답을 생성하고, L4 GPT-4o-mini Judge는 생성된 응답을 최종 검사한다.</text>
+<text x="125" y="807" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="24" font-weight="400" fill="#4b5563">※ L2 Bedrock Guardrails는 구현상 during-call 계층이며, 그림에서는 gateway 비교 흐름 안에 배치하였다.</text>
+</svg>

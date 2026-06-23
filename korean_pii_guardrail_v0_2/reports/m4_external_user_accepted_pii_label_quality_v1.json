@@ -1,0 +1,163 @@
+{
+  "agreement_score_against_codex_silver_rows": 1.0,
+  "approval_basis": "user_explicit_bulk_accepts_codex_pii_judgment_2026_06_05",
+  "by_candidate_entity_verdict": {
+    "ADDRESS_FULL": {
+      "pii": 18
+    },
+    "ADDRESS_UNIT": {
+      "not_pii": 391,
+      "pii": 277
+    },
+    "BUSINESS_REG_NO": {
+      "pii": 419
+    },
+    "CORPORATE_REG_NO": {
+      "pii": 43
+    },
+    "CREDIT_CARD": {
+      "pii": 48
+    },
+    "EMAIL": {
+      "pii": 63
+    },
+    "FAMILY_RELATION": {
+      "not_pii": 61
+    },
+    "FRN": {
+      "pii": 3
+    },
+    "HOSPITAL": {
+      "not_pii": 92
+    },
+    "ORGANIZATION": {
+      "not_pii": 272
+    },
+    "PERSON_NAME": {
+      "not_pii": 10,
+      "pii": 4
+    },
+    "PHONE_LANDLINE": {
+      "pii": 266
+    },
+    "PHONE_MOBILE": {
+      "pii": 20
+    },
+    "RRN": {
+      "pii": 6
+    },
+    "SCHOOL": {
+      "not_pii": 6
+    }
+  },
+  "by_decision_source": {
+    "codex_policy_extension": 1334,
+    "codex_silver_user_accepted": 665
+  },
+  "by_entity_group_verdict": {
+    "ADDRESS": {
+      "not_pii": 391,
+      "pii": 295
+    },
+    "EMAIL": {
+      "pii": 63
+    },
+    "FAMILY_RELATION": {
+      "not_pii": 61
+    },
+    "ORGANIZATION": {
+      "not_pii": 370
+    },
+    "PAYMENT_IDENTIFIER": {
+      "pii": 48
+    },
+    "PERSON_NAME": {
+      "not_pii": 10,
+      "pii": 4
+    },
+    "PHONE": {
+      "pii": 286
+    },
+    "REGISTRATION_IDENTIFIER": {
+      "pii": 471
+    }
+  },
+  "by_source_domain": {
+    "general_web": 250,
+    "public_business_status": 249,
+    "public_commercial_org": 250,
+    "public_healthcare_org": 250,
+    "public_record_commerce": 500,
+    "public_record_corporate": 250,
+    "public_record_finance": 250
+  },
+  "by_verdict": {
+    "not_pii": 832,
+    "pii": 1167
+  },
+  "candidate_generation_changed": false,
+  "candidate_row_count": 1999,
+  "context_rule_changed": false,
+  "disagreement_ratio_against_codex_silver_rows": 0.0,
+  "duplicate_approved_label_id_count": 0,
+  "duplicate_source_candidate_row_hash_count": 334,
+  "final_probability_label_source": "reviewer_approved",
+  "generated_at": "2026-06-05T11:30:24.745708+00:00",
+  "label_quality_gate": {
+    "checks": {
+      "agreement_target_met": true,
+      "approved_label_ids_unique": true,
+      "candidate_rows_present": true,
+      "codex_labels_promoted_only_after_user_approval": true,
+      "context_rule_unchanged": true,
+      "final_probability_label_source_is_reviewer_approved": true,
+      "local_detail_output_outside_repo": true,
+      "public_context_not_used_to_make_pii_disappear": true,
+      "raw_candidate_values_not_in_repo_report": true,
+      "raw_text_not_in_repo_report": true,
+      "recoverable_context_terms_not_in_repo_report": true,
+      "reviewer_approved_labels_present": true,
+      "reviewer_approved_sample_size_met": true,
+      "runtime_scoring_behavior_unchanged": true,
+      "score_delta_unchanged": true,
+      "unknown_ratio_target_met": true
+    },
+    "failure_verdicts": [
+      "label_quality_gate_pass"
+    ],
+    "status": "pass"
+  },
+  "local_outputs": {
+    "approved_labels_csv": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context\\m4_external_user_accepted_pii_labels_v1.csv",
+    "approved_labels_jsonl": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context\\m4_external_user_accepted_pii_labels_v1.jsonl",
+    "inside_repository": false,
+    "probability_rows_jsonl": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context\\m4_external_context_probability_rows_v1.jsonl",
+    "raw_candidate_values_stored": false,
+    "raw_text_stored": false,
+    "recoverable_context_terms_stored": false
+  },
+  "m4_score_changed": false,
+  "minimum_sample_rule": "min(total_rows, max(ceil(total_rows * 0.05), 1000_when_available))",
+  "phase": "Phase F. Human Review Gold Label Packet",
+  "probability_loglr_allowed_by_this_phase": true,
+  "probability_loglr_computed": false,
+  "project_root": "C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\korean_pii_guardrail_v0_2",
+  "raw_candidate_values_persisted_in_reports": false,
+  "raw_text_persisted_in_reports": false,
+  "recoverable_context_terms_persisted_in_reports": false,
+  "report_type": "M4ExternalUserAcceptedPiiLabelQuality",
+  "required_reviewer_sample_count": 1000,
+  "review_question": "pii_or_not_pii_only",
+  "reviewer_approved_label_count": 1999,
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "m4_external_user_accepted_pii_labels_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "silver_comparable_count": 665,
+  "silver_label_count": 500,
+  "silver_match_count": 665,
+  "unique_approved_label_id_count": 1999,
+  "unique_source_candidate_row_hash_count": 1665,
+  "unknown_excluded_label_count": 0,
+  "version": "v0.2-single-turn"
+}

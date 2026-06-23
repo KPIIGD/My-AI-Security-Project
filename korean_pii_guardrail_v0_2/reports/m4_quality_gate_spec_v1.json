@@ -1,0 +1,236 @@
+{
+  "version": "v0.2-single-turn",
+  "stage": "0.3 gate spec lock",
+  "report_type": "M4QualityGateSpec",
+  "runtime_scoring_behavior_changed": false,
+  "score_delta_changed": false,
+  "context_rule_changed": false,
+  "gates": [
+    {
+      "gate_id": "data_quality",
+      "name": "Data Quality Gate",
+      "required_before_score_or_rule_proposal": true,
+      "evidence_artifacts": [
+        "context_anchor_windows_manifest_v1.yaml"
+      ],
+      "measurements": [
+        "raw_pii_leak_count",
+        "invalid_offset_count",
+        "domain_count_by_entity",
+        "max_single_domain_ratio_by_entity",
+        "realistic_input_like_ratio",
+        "general_web_or_explanatory_ratio",
+        "example_or_sample_document_ratio",
+        "duplicate_anchor_window_ratio",
+        "unknown_label_ratio"
+      ],
+      "pass_criteria": {
+        "raw_pii_leak_count": 0,
+        "invalid_offset_count": 0,
+        "min_domain_count_by_core_entity": 5,
+        "max_single_domain_ratio": 0.35,
+        "min_realistic_input_like_ratio": 0.7,
+        "max_general_web_or_explanatory_ratio": 0.3,
+        "max_example_or_sample_document_ratio": 0.15,
+        "max_duplicate_anchor_window_ratio": 0.05,
+        "max_unknown_label_ratio_when_labels_present": 0.15
+      },
+      "failure_verdicts": [
+        "rejected_data_quality_gate",
+        "evidence_backlog",
+        "needs_more_data",
+        "needs_domain_split"
+      ]
+    },
+    {
+      "gate_id": "label_quality",
+      "name": "Label Quality Gate",
+      "required_before_score_or_rule_proposal": true,
+      "evidence_artifacts": [
+        "context_label_quality_v1.json",
+        "context_anchor_label_audit_v1.jsonl"
+      ],
+      "measurements": [
+        "label_source_counts",
+        "final_probability_label_source",
+        "stratified_reviewer_sample_count",
+        "agreement_score",
+        "disagreement_ratio",
+        "unknown_label_ratio"
+      ],
+      "pass_criteria": {
+        "final_probability_label_source": "reviewer_approved",
+        "sample_stratified_by": [
+          "entity",
+          "domain",
+          "label"
+        ],
+        "minimum_sample_rule": "max(5_percent, 1000_rows_when_available)",
+        "min_agreement": 0.85,
+        "max_disagreement_ratio": 0.1,
+        "unknown_excluded_from_final_tuning": true
+      },
+      "failure_verdicts": [
+        "rejected_label_quality_gate",
+        "needs_more_labels",
+        "needs_adjudication"
+      ]
+    },
+    {
+      "gate_id": "hard_negative",
+      "name": "Hard Negative Gate",
+      "required_before_score_or_rule_proposal": true,
+      "evidence_artifacts": [
+        "context_hard_negative_coverage_v1.md"
+      ],
+      "measurements": [
+        "non_pii_anchor_count_by_entity_group",
+        "hard_negative_count_by_entity_group",
+        "hard_negative_ratio_by_entity_group",
+        "failure_replay_update_status"
+      ],
+      "pass_criteria": {
+        "person_name_min_hard_negative_ratio": 0.6,
+        "phone_email_address_account_registration_min_hard_negative_ratio": 0.5,
+        "new_false_positives_added_to_raw_free_replay": true
+      },
+      "failure_verdicts": [
+        "rejected_hard_negative_gate",
+        "needs_more_hard_negatives",
+        "evidence_backlog"
+      ]
+    },
+    {
+      "gate_id": "delta_sweep",
+      "name": "Delta Sweep Gate",
+      "required_before_score_or_rule_proposal": true,
+      "evidence_artifacts": [
+        "context_delta_optimization_v2.json",
+        "context_score_recalibration_v2.md"
+      ],
+      "pre_sweep_locks": [
+        "candidate_delta_grid",
+        "objective_function",
+        "train_dev_locked_test_split_policy",
+        "approval_criteria",
+        "rejection_criteria",
+        "action_level_regression_constraints"
+      ],
+      "measurements": [
+        "candidate_level_metrics_by_delta",
+        "action_level_metrics_by_delta",
+        "high_risk_recall_delta",
+        "actionable_high_risk_recall_delta",
+        "hard_negative_actionable_fp_delta",
+        "raw_pii_leak_count",
+        "raw_pii_logging_count",
+        "invalid_offset_count"
+      ],
+      "pass_criteria": {
+        "sweep_locks_recorded_before_run": true,
+        "current_delta_auto_selection_allowed": false,
+        "high_risk_recall_regression_allowed": false,
+        "actionable_high_risk_recall_regression_allowed": false,
+        "hard_negative_actionable_fp_increase_allowed": false,
+        "raw_pii_leak_count": 0,
+        "raw_pii_logging_count": 0,
+        "invalid_offset_count": 0,
+        "selected_delta_requires_direction_magnitude_action_evidence": true
+      },
+      "failure_verdicts": [
+        "rejected_delta_sweep_gate",
+        "needs_delta_redesign",
+        "insufficient_magnitude_evidence"
+      ]
+    },
+    {
+      "gate_id": "independent_reviewer",
+      "name": "Independent Reviewer Gate",
+      "required_before_score_or_rule_proposal": true,
+      "evidence_artifacts": [
+        "phase_review_packet",
+        "reviewer_verdict"
+      ],
+      "measurements": [
+        "reviewer_verdict",
+        "reviewer_findings",
+        "required_fixes_status"
+      ],
+      "pass_criteria": {
+        "verdict": "APPROVED",
+        "reviewer_must_be_independent": true,
+        "review_packet_required": true,
+        "required_fixes_completed_before_commit": true
+      },
+      "failure_verdicts": [
+        "rejected_reviewer_gate",
+        "changes_requested"
+      ]
+    },
+    {
+      "gate_id": "locked_test",
+      "name": "Locked Test Gate",
+      "required_before_score_or_rule_proposal": true,
+      "evidence_artifacts": [
+        "locked_test_run_report"
+      ],
+      "measurements": [
+        "split_identifiers",
+        "locked_test_access_count",
+        "locked_test_run_commit_or_config_hash",
+        "locked_test_ngram_leakage",
+        "locked_test_failure_response"
+      ],
+      "pass_criteria": {
+        "train_for_discovery": true,
+        "dev_for_delta_selection": true,
+        "locked_test_only_after_final_candidate_selection": true,
+        "max_locked_test_access_count_for_final_candidate": 1,
+        "tune_directly_against_locked_test": false,
+        "locked_test_failure_returns_to_dev_redesign": true
+      },
+      "failure_verdicts": [
+        "rejected_locked_test_gate",
+        "locked_test_leakage",
+        "needs_dev_redesign"
+      ]
+    },
+    {
+      "gate_id": "raw_pii_safety",
+      "name": "Raw PII Safety Gate",
+      "required_before_score_or_rule_proposal": true,
+      "evidence_artifacts": [
+        "raw_pii_scan_report"
+      ],
+      "measurements": [
+        "raw_pii_leak_count",
+        "raw_pii_logging_count",
+        "public_response_raw_value_logged_count",
+        "audit_event_raw_value_logged_count",
+        "report_raw_text_leak_count",
+        "invalid_offset_count",
+        "raw_url_presence",
+        "reversible_token_mapping_presence",
+        "secret_or_credential_pattern_matches"
+      ],
+      "pass_criteria": {
+        "raw_pii_leak_count": 0,
+        "raw_pii_logging_count": 0,
+        "public_response_raw_value_logged_count": 0,
+        "audit_event_raw_value_logged_count": 0,
+        "report_raw_text_leak_count": 0,
+        "invalid_offset_count": 0,
+        "raw_url_presence": false,
+        "reversible_token_mapping_presence": false,
+        "secret_or_credential_pattern_matches": 0
+      },
+      "failure_verdicts": [
+        "rejected_safety",
+        "raw_pii_safety_failure",
+        "invalid_offset_failure"
+      ]
+    }
+  ],
+  "non_applicable_gate_rule": "A non-applicable gate must be explicitly marked with the reason in the phase review packet and cannot justify a score or context rule proposal.",
+  "all_applicable_gates_required_for_score_or_rule_proposal": true
+}

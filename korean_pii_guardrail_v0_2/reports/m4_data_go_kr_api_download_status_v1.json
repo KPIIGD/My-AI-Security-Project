@@ -1,0 +1,61 @@
+{
+  "schema_version": "m4_data_go_kr_api_download_status_v1",
+  "generated_at": "2026-06-05T17:26:35+09:00",
+  "raw_root": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\data_go_kr",
+  "repository_safety": "raw API responses are stored outside the repository; this report does not contain the service key or raw record values",
+  "num_rows": 10000,
+  "source_summaries": [
+    {
+      "source_id": "hira_hospital",
+      "dataset_dir": "hira_hospital_info",
+      "operation_dir": "api_hospInfoServicev2_getHospBasisList",
+      "status": "downloaded",
+      "records_planned": 79703,
+      "first_page_item_count": 10000,
+      "num_rows": 10000,
+      "pages_planned": 8,
+      "pages_saved": 8,
+      "compressed_bytes": 6839651,
+      "failures": []
+    },
+    {
+      "source_id": "finance_company",
+      "dataset_dir": "financial_company_basic_info",
+      "operation_dir": "api_GetFnCoBasiInfoService_getFnCoOutl",
+      "status": "downloaded",
+      "records_planned": 2219487,
+      "first_page_item_count": 10000,
+      "num_rows": 10000,
+      "pages_planned": 222,
+      "pages_saved": 222,
+      "compressed_bytes": 250026209,
+      "failures": []
+    },
+    {
+      "source_id": "corporate_outline",
+      "dataset_dir": "corporate_basic_info",
+      "operation_dir": "api_GetCorpBasicInfoService_V2_getCorpOutline_V2",
+      "status": "downloaded",
+      "records_planned": 1272078,
+      "first_page_item_count": 10000,
+      "num_rows": 10000,
+      "pages_planned": 128,
+      "pages_saved": 128,
+      "compressed_bytes": 83309191,
+      "failures": []
+    },
+    {
+      "source_id": "ftc_online_detail",
+      "dataset_dir": "fair_trade_online_sales",
+      "operation_dir": "api_MllBsDtl_3Service_getMllBsInfoDetail_3",
+      "status": "downloaded",
+      "records_planned": 2623221,
+      "first_page_item_count": 10000,
+      "num_rows": 10000,
+      "pages_planned": 263,
+      "pages_saved": 263,
+      "compressed_bytes": 275690312,
+      "failures": []
+    }
+  ]
+}

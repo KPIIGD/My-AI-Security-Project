@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="2050" viewBox="0 0 1200 2050">
+<rect width="1200" height="2050" fill="#ffffff"/>
+<text x="70" y="88" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="46" font-weight="700" fill="#1f2937">Korean PII Guardrail Pipeline</text>
+<text x="70" y="138" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="28" font-weight="400" fill="#4b5563">Target LLM과 L4 Judge를 분리한 세로형 구조</text>
+<defs><marker id="downArrow" markerWidth="8" markerHeight="12" refX="4" refY="11" orient="auto"><path d="M0,0 L8,0 L4,12 z" fill="#9ca3af"/></marker></defs>
+<rect x="150" y="295" width="900" height="820" rx="34" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+<text x="400" y="341" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="700" fill="#4b5563">Input-side / Gateway Guardrails</text>
+<text x="400" y="369" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="400" fill="#4b5563">입력 단계 차단·마스킹</text>
+<rect x="150" y="1220" width="900" height="220" rx="34" fill="#fffbeb" stroke="#cbd5e1" stroke-width="3"/>
+<text x="375" y="1266" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="700" fill="#4b5563">Service Model</text>
+<text x="375" y="1294" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="400" fill="#4b5563">실제 답변 생성</text>
+<rect x="150" y="1530" width="900" height="275" rx="34" fill="#faf5ff" stroke="#cbd5e1" stroke-width="3"/>
+<text x="375" y="1576" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="700" fill="#4b5563">Output-side Guardrail</text>
+<text x="375" y="1604" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="23" font-weight="400" fill="#4b5563">출력 단계 최종 검사</text>
+<rect x="290" y="185" width="620" height="75" rx="24" fill="#f3f4f6" stroke="#9ca3af" stroke-width="4"/>
+<text x="600" y="214" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2937">User Input</text>
+<text x="600" y="246" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">사용자 입력</text>
+<rect x="290" y="420" width="620" height="95" rx="24" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+<text x="600" y="459" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2937">L0</text>
+<text x="600" y="491" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">Korean Normalizer + PII Detector</text>
+<rect x="290" y="560" width="620" height="85" rx="24" fill="#e0f2fe" stroke="#0284c7" stroke-width="4"/>
+<text x="600" y="594" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2937">L1</text>
+<text x="600" y="626" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">Presidio PII</text>
+<rect x="290" y="690" width="620" height="100" rx="24" fill="#e0f2fe" stroke="#0284c7" stroke-width="4"/>
+<text x="600" y="716" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2937">L2</text>
+<text x="600" y="748" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">Bedrock Guardrails</text>
+<text x="600" y="780" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">(during-call)</text>
+<rect x="290" y="835" width="620" height="85" rx="24" fill="#e0f2fe" stroke="#0284c7" stroke-width="4"/>
+<text x="600" y="869" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2937">L3</text>
+<text x="600" y="901" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">Lakera</text>
+<rect x="290" y="1310" width="620" height="95" rx="24" fill="#fef3c7" stroke="#d97706" stroke-width="4"/>
+<text x="600" y="1349" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2937">Target LLM</text>
+<text x="600" y="1381" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">서비스 응답 생성 모델</text>
+<rect x="290" y="1650" width="620" height="115" rx="24" fill="#ede9fe" stroke="#7c3aed" stroke-width="4"/>
+<text x="600" y="1683" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2937">L4</text>
+<text x="600" y="1715" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">GPT-4o-mini Judge</text>
+<text x="600" y="1747" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">(post-call)</text>
+<rect x="290" y="1875" width="620" height="85" rx="24" fill="#f3f4f6" stroke="#9ca3af" stroke-width="4"/>
+<text x="600" y="1909" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2937">Final Response</text>
+<text x="600" y="1941" text-anchor="middle" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="26" font-weight="400" fill="#1f2937">사용자에게 반환</text>
+<line x1="600" y1="260" x2="600" y2="410" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="600" y1="515" x2="600" y2="550" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="600" y1="645" x2="600" y2="680" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="600" y1="790" x2="600" y2="825" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="600" y1="920" x2="600" y2="1300" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="600" y1="1405" x2="600" y2="1640" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<line x1="600" y1="1765" x2="600" y2="1865" stroke="#9ca3af" stroke-width="6" marker-end="url(#downArrow)"/>
+<text x="650" y="1055" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="22" font-weight="400" fill="#4b5563">PII neutralized before model call</text>
+<text x="650" y="1500" text-anchor="start" font-family="Noto Sans KR, Malgun Gothic, Arial, sans-serif" font-size="22" font-weight="400" fill="#4b5563">Generated output is inspected</text>
+</svg>

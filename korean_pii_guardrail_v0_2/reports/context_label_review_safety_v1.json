@@ -1,0 +1,19 @@
+{
+  "candidate_value_stored": false,
+  "contains_raw_pii_true_count": 0,
+  "evidence_role": "draft_label_review_not_score_tuning",
+  "generated_at": "2026-06-01T01:03:56.722076+00:00",
+  "page_body_stored": false,
+  "phase": "Phase 6. Label Review Packet",
+  "public_corpus_used_for_score_tuning": false,
+  "raw_pii_leak_count": 0,
+  "raw_url_logged_count": 0,
+  "raw_value_logged_count": 0,
+  "reason_codes": [
+    "context_corpus.safety.pass"
+  ],
+  "report_type": "ContextLabelReviewSafety",
+  "schema_version": "context_label_review_safety_v1",
+  "status": "pass",
+  "version": "v0.2-single-turn"
+}

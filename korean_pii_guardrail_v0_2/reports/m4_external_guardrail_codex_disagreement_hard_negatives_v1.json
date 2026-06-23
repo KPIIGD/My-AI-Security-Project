@@ -1,0 +1,150 @@
+{
+  "approved_label_count": 1999,
+  "by_candidate_entity": {
+    "ADDRESS_UNIT": 391,
+    "FAMILY_RELATION": 61,
+    "HOSPITAL": 92,
+    "ORGANIZATION": 272,
+    "PERSON_NAME": 10,
+    "SCHOOL": 6
+  },
+  "by_decision_source": {
+    "codex_policy_extension": 485,
+    "codex_silver_user_accepted": 347
+  },
+  "by_entity_group": {
+    "ADDRESS": 391,
+    "FAMILY_RELATION": 61,
+    "ORGANIZATION": 370,
+    "PERSON_NAME": 10
+  },
+  "by_reason_code": {
+    "common_noun_not_person_name": 10,
+    "organization_or_institution_name": 424,
+    "region_or_location_unit_not_identifying_person": 391,
+    "relation_term_fragment_not_identifier": 7
+  },
+  "by_source_domain": {
+    "general_web": 249,
+    "public_commercial_org": 185,
+    "public_healthcare_org": 93,
+    "public_record_commerce": 211,
+    "public_record_corporate": 40,
+    "public_record_finance": 54
+  },
+  "candidate_generation_changed": false,
+  "context_rule_changed": false,
+  "core_entity_group_hard_negative_support": [
+    {
+      "entity_group": "PERSON_NAME",
+      "gap_count": 0,
+      "hard_negative_count": 10,
+      "minimum_non_pii_support": 5,
+      "support_status": "pass"
+    },
+    {
+      "entity_group": "ADDRESS",
+      "gap_count": 0,
+      "hard_negative_count": 391,
+      "minimum_non_pii_support": 5,
+      "support_status": "pass"
+    },
+    {
+      "entity_group": "PHONE",
+      "gap_count": 5,
+      "hard_negative_count": 0,
+      "minimum_non_pii_support": 5,
+      "support_status": "needs_more_hard_negatives"
+    },
+    {
+      "entity_group": "EMAIL",
+      "gap_count": 5,
+      "hard_negative_count": 0,
+      "minimum_non_pii_support": 5,
+      "support_status": "needs_more_hard_negatives"
+    },
+    {
+      "entity_group": "REGISTRATION_IDENTIFIER",
+      "gap_count": 5,
+      "hard_negative_count": 0,
+      "minimum_non_pii_support": 5,
+      "support_status": "needs_more_hard_negatives"
+    },
+    {
+      "entity_group": "BANK_ACCOUNT",
+      "gap_count": 5,
+      "hard_negative_count": 0,
+      "minimum_non_pii_support": 5,
+      "support_status": "needs_more_hard_negatives"
+    }
+  ],
+  "definition": {
+    "codex_user_approved_not_pii": "user accepted Codex PII-only verdict as not_pii",
+    "guardrail_candidate": "existing deterministic guardrail produced a candidate",
+    "hard_negative": "candidate should be treated as non-PII evidence for M4 analysis",
+    "public_pii_excluded_from_hard_negative": true
+  },
+  "generated_at": "2026-06-05T11:38:07.878282+00:00",
+  "hard_negative_mining_gate": {
+    "checks": {
+      "approved_labels_present": true,
+      "context_rule_unchanged": true,
+      "hard_negative_rows_present": true,
+      "local_rows_outside_repo": true,
+      "raw_candidate_values_not_in_repo_report": true,
+      "raw_text_not_in_repo_report": true,
+      "recoverable_context_terms_not_in_repo_report": true,
+      "runtime_scoring_behavior_unchanged": true,
+      "score_delta_unchanged": true
+    },
+    "failure_verdicts": [
+      "hard_negative_disagreement_mining_pass"
+    ],
+    "status": "pass"
+  },
+  "hard_negative_row_count": 832,
+  "local_outputs": {
+    "hard_negative_rows_jsonl": "C:\\Users\\andyw\\Desktop\\M4_raw_staging\\_m4_candidate_context\\m4_external_guardrail_codex_disagreement_hard_negatives_v1.jsonl",
+    "inside_repository": false,
+    "raw_candidate_values_stored": false,
+    "raw_text_stored": false,
+    "recoverable_context_terms_stored": false
+  },
+  "m4_score_changed": false,
+  "missing_core_hard_negative_groups": [
+    "PHONE",
+    "EMAIL",
+    "REGISTRATION_IDENTIFIER",
+    "BANK_ACCOUNT"
+  ],
+  "phase": "External hard-negative mining from guardrail/Codex disagreement",
+  "probability_loglr_computed": false,
+  "project_root": "C:\\Users\\andyw\\Desktop\\My-AI-Security-Project\\korean_pii_guardrail_v0_2",
+  "raw_candidate_values_persisted_in_reports": false,
+  "raw_text_persisted_in_reports": false,
+  "recommended_collection_targets": [
+    {
+      "entity_group": "PHONE",
+      "recommended_data": "sample/test/documentation phone-like strings only; public organization phone numbers remain PII and must not be used as not-PII"
+    },
+    {
+      "entity_group": "EMAIL",
+      "recommended_data": "sample/test/placeholder email-like strings only; public business emails remain PII and must not be used as not-PII"
+    },
+    {
+      "entity_group": "REGISTRATION_IDENTIFIER",
+      "recommended_data": "sample/test/invalid registration-like strings or unrelated codes that pass candidate extraction but are not real registration identifiers"
+    },
+    {
+      "entity_group": "BANK_ACCOUNT",
+      "recommended_data": "sample/test/account-like numeric strings and unrelated formatted numbers that are not real bank accounts"
+    }
+  ],
+  "recoverable_context_terms_persisted_in_reports": false,
+  "report_type": "M4ExternalGuardrailCodexDisagreementHardNegatives",
+  "runtime_scoring_behavior_changed": false,
+  "schema_version": "m4_external_guardrail_codex_disagreement_hard_negatives_v1",
+  "score_delta_changed": false,
+  "score_tuning_allowed_by_this_phase": false,
+  "version": "v0.2-single-turn"
+}

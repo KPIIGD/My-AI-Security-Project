@@ -1,0 +1,52 @@
+{
+  "bucket_counts": {
+    "hard_negative_abstract_value": 3,
+    "hard_negative_business_name": 3,
+    "hard_negative_code_log": 3,
+    "hard_negative_order_identifier": 3,
+    "hard_negative_placeholder": 3,
+    "hard_negative_public_number": 3,
+    "positive_address": 3,
+    "positive_bank_account": 3,
+    "positive_business_identifier": 3,
+    "positive_email": 3,
+    "positive_medical": 3,
+    "positive_name_suffix": 3,
+    "positive_organization_affiliation": 3,
+    "positive_person_phone": 3,
+    "positive_personal_identifier": 3
+  },
+  "dataset_id": "context_calibration_v1",
+  "expected_masked_text_error_count": 0,
+  "generated_at": "2026-05-29T08:20:36.464612+00:00",
+  "label_counts": {
+    "ADDRESS_FULL": 3,
+    "BANK_ACCOUNT": 3,
+    "BUSINESS_REG_NO": 3,
+    "EMAIL": 3,
+    "HOSPITAL": 3,
+    "MEDICAL_RECORD_NO": 3,
+    "ORGANIZATION": 3,
+    "PERSON_NAME": 9,
+    "PHONE_MOBILE": 3,
+    "RRN": 3
+  },
+  "offset_validation_error_count": 0,
+  "phase": "Execution Phase 3. Calibration Dataset",
+  "production_pii_used": false,
+  "raw_value_logged_count": 0,
+  "reason_codes": [
+    "context_calibration.safety.pass"
+  ],
+  "report_type": "ContextCalibrationDatasetSafetyReport",
+  "split_counts": {
+    "dev": 15,
+    "test": 15,
+    "train": 15
+  },
+  "status": "pass",
+  "suffix_validation_error_count": 0,
+  "synthetic_fixture_only": true,
+  "template_level_split": "pass",
+  "version": "v0.2-single-turn"
+}

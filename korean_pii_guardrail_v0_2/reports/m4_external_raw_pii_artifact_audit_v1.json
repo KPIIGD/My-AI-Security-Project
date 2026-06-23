@@ -1,0 +1,65 @@
+{
+  "artifact_rows": [
+    {
+      "path": "m4_external_user_accepted_pii_label_quality_v1.json",
+      "raw_candidate_value_logged": false,
+      "raw_pii_like_reason_count": 0,
+      "raw_pii_like_reasons": [],
+      "raw_text_logged": false
+    },
+    {
+      "path": "m4_external_user_accepted_pii_label_quality_v1.md",
+      "raw_candidate_value_logged": false,
+      "raw_pii_like_reason_count": 0,
+      "raw_pii_like_reasons": [],
+      "raw_text_logged": false
+    },
+    {
+      "path": "m4_external_context_ngram_probability_by_entity_v1.json",
+      "raw_candidate_value_logged": false,
+      "raw_pii_like_reason_count": 0,
+      "raw_pii_like_reasons": [],
+      "raw_text_logged": false
+    },
+    {
+      "path": "m4_external_context_ngram_probability_by_entity_v1.md",
+      "raw_candidate_value_logged": false,
+      "raw_pii_like_reason_count": 0,
+      "raw_pii_like_reasons": [],
+      "raw_text_logged": false
+    },
+    {
+      "path": "m4_external_context_rule_candidate_proposals_v1.json",
+      "raw_candidate_value_logged": false,
+      "raw_pii_like_reason_count": 0,
+      "raw_pii_like_reasons": [],
+      "raw_text_logged": false
+    },
+    {
+      "path": "m4_external_m4_only_delta_sweep_v1.json",
+      "raw_candidate_value_logged": false,
+      "raw_pii_like_reason_count": 0,
+      "raw_pii_like_reasons": [],
+      "raw_text_logged": false
+    },
+    {
+      "path": "m4_external_m4_only_delta_sweep_v1.md",
+      "raw_candidate_value_logged": false,
+      "raw_pii_like_reason_count": 0,
+      "raw_pii_like_reasons": [],
+      "raw_text_logged": false
+    }
+  ],
+  "context_rule_changed": false,
+  "generated_at": "2026-06-05T11:30:26.190086+00:00",
+  "m4_score_changed": false,
+  "missing_artifacts": [],
+  "raw_pii_like_reason_count": 0,
+  "report_type": "M4ExternalRawPiiArtifactAudit",
+  "runtime_scoring_behavior_changed": false,
+  "scanned_artifact_count": 7,
+  "schema_version": "m4_external_raw_pii_artifact_audit_v1",
+  "score_delta_changed": false,
+  "status": "pass",
+  "version": "v0.2-single-turn"
+}

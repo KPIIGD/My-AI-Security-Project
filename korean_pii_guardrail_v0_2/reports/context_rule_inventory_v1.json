@@ -1,0 +1,655 @@
+{
+  "generated_at": "2026-05-29T07:33:39.404044+00:00",
+  "phase": "Execution Phase 1. Baseline Evidence MVP",
+  "raw_value_logged": false,
+  "report_type": "ContextRuleInventory",
+  "rule_count": 30,
+  "rules": [
+    {
+      "configured_delta": 0.15,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.address_cooccur_for_person",
+      "rule_name": "address_cooccur_for_person",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": 0.25,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.bank_cooccur",
+      "rule_name": "bank_cooccur",
+      "target_entities": [
+        "BANK_ACCOUNT"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": 0.3,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_account",
+      "rule_name": "field_label_account",
+      "target_entities": [
+        "BANK_ACCOUNT"
+      ],
+      "term_group": "account_label"
+    },
+    {
+      "configured_delta": 0.2,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_address",
+      "rule_name": "field_label_address",
+      "target_entities": [
+        "ADDRESS_FULL",
+        "ADDRESS_UNIT"
+      ],
+      "term_group": "address_label"
+    },
+    {
+      "configured_delta": 0.25,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_name",
+      "rule_name": "field_label_name",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": "name_label"
+    },
+    {
+      "configured_delta": 0.15,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_phone",
+      "rule_name": "field_label_phone",
+      "target_entities": [
+        "PHONE_LANDLINE",
+        "PHONE_MOBILE"
+      ],
+      "term_group": "phone_label"
+    },
+    {
+      "configured_delta": 0.2,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.full_address_detail",
+      "rule_name": "full_address_detail",
+      "target_entities": [
+        "ADDRESS_FULL"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": 0.2,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.medical_label",
+      "rule_name": "medical_label",
+      "target_entities": [
+        "HEALTH_INFO",
+        "HOSPITAL",
+        "MEDICAL_RECORD_NO"
+      ],
+      "term_group": "medical_label"
+    },
+    {
+      "configured_delta": 0.25,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.organization_affiliation_context",
+      "rule_name": "organization_affiliation_context",
+      "target_entities": [
+        "ORGANIZATION"
+      ],
+      "term_group": "organization_label"
+    },
+    {
+      "configured_delta": 0.2,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.phone_cooccur_for_person",
+      "rule_name": "phone_cooccur_for_person",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": 0.15,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_boosts + ContextScorer._evaluate_boost",
+      "policy_interaction": "strong_context_can_enable_policy_context_mask",
+      "raw_value_logged": false,
+      "rule_family": "boost",
+      "rule_id": "context.boost.title_after_name",
+      "rule_name": "title_after_name",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "ADDRESS_FULL+PERSON_NAME"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.ADDRESS_FULL",
+      "rule_name": "ADDRESS_FULL",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "ADDRESS_UNIT+DOB+SCHOOL"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.ADDRESS_UNIT",
+      "rule_name": "ADDRESS_UNIT",
+      "target_entities": [
+        "DOB",
+        "SCHOOL"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "BANK_ACCOUNT+PERSON_NAME"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.BANK_ACCOUNT",
+      "rule_name": "BANK_ACCOUNT",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "ADDRESS_UNIT+DOB+SCHOOL"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.DOB",
+      "rule_name": "DOB",
+      "target_entities": [
+        "ADDRESS_UNIT",
+        "SCHOOL"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "EMAIL+PERSON_NAME"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.EMAIL",
+      "rule_name": "EMAIL",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "HOSPITAL+MEDICAL_RECORD_NO"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.HOSPITAL",
+      "rule_name": "HOSPITAL",
+      "target_entities": [
+        "MEDICAL_RECORD_NO"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "HOSPITAL+MEDICAL_RECORD_NO"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.MEDICAL_RECORD_NO",
+      "rule_name": "MEDICAL_RECORD_NO",
+      "target_entities": [
+        "HOSPITAL"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "ADDRESS_FULL+PERSON_NAME",
+        "BANK_ACCOUNT+PERSON_NAME",
+        "EMAIL+PERSON_NAME",
+        "PERSON_NAME+PHONE_LANDLINE",
+        "PERSON_NAME+PHONE_MOBILE"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.PERSON_NAME",
+      "rule_name": "PERSON_NAME",
+      "target_entities": [
+        "ADDRESS_FULL",
+        "BANK_ACCOUNT",
+        "EMAIL",
+        "PHONE_LANDLINE",
+        "PHONE_MOBILE"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "PERSON_NAME+PHONE_LANDLINE"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.PHONE_LANDLINE",
+      "rule_name": "PHONE_LANDLINE",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "PERSON_NAME+PHONE_MOBILE"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.PHONE_MOBILE",
+      "rule_name": "PHONE_MOBILE",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": null,
+      "configured_risk_upgrade": [
+        "P1"
+      ],
+      "effect_scope": "composite_status_and_policy_action",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:single_turn_composite.upgrades + ContextScorer composite marking",
+      "policy_interaction": "policy.composite.mask via is_composite",
+      "raw_value_logged": false,
+      "related_composite_rules": [
+        "ADDRESS_UNIT+DOB+SCHOOL"
+      ],
+      "rule_family": "composite",
+      "rule_id": "context.composite.SCHOOL",
+      "rule_name": "SCHOOL",
+      "target_entities": [
+        "ADDRESS_UNIT",
+        "DOB"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": -0.2,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_penalties + ContextScorer._evaluate_penalty",
+      "policy_interaction": "score_only_before_policy_thresholds",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.abstract_value_context_for_person",
+      "rule_name": "abstract_value_context_for_person",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": "abstract_value_context"
+    },
+    {
+      "configured_delta": -0.2,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_penalties + ContextScorer._evaluate_penalty",
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.code_or_log_context",
+      "rule_name": "code_or_log_context",
+      "target_entities": [
+        "ADDRESS_FULL",
+        "ADDRESS_UNIT",
+        "PERSON_NAME"
+      ],
+      "term_group": "code_context"
+    },
+    {
+      "configured_delta": -0.15,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_penalties + ContextScorer._evaluate_penalty",
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.example_context",
+      "rule_name": "example_context",
+      "target_entities": [
+        "ALL_CANDIDATES"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": -0.35,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_penalties + ContextScorer._evaluate_penalty",
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.example_keyword_for_person",
+      "rule_name": "example_keyword_for_person",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": -0.25,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_penalties + ContextScorer._evaluate_penalty",
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.organization_not_person",
+      "rule_name": "organization_not_person",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": "business_name_context"
+    },
+    {
+      "configured_delta": -0.25,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_penalties + ContextScorer._evaluate_penalty",
+      "policy_interaction": "score_only_before_policy_thresholds",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.private_ip",
+      "rule_name": "private_ip",
+      "target_entities": [
+        "IP_ADDRESS"
+      ],
+      "term_group": null
+    },
+    {
+      "configured_delta": -0.25,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_penalties + ContextScorer._evaluate_penalty",
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.public_phone_context",
+      "rule_name": "public_phone_context",
+      "target_entities": [
+        "PHONE_LANDLINE",
+        "PHONE_MOBILE"
+      ],
+      "term_group": "public_number_context"
+    },
+    {
+      "configured_delta": -0.35,
+      "configured_risk_upgrade": null,
+      "effect_scope": "candidate_score",
+      "metric_scopes": [
+        "candidate_level",
+        "actionable_level"
+      ],
+      "owner": "configs/scoring.yaml:context_penalties + ContextScorer._evaluate_penalty",
+      "policy_interaction": "negative_context_can_enable_policy_pass",
+      "raw_value_logged": false,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.weather_context_for_person",
+      "rule_name": "weather_context_for_person",
+      "target_entities": [
+        "PERSON_NAME"
+      ],
+      "term_group": "weather_context"
+    }
+  ],
+  "runtime_scoring_behavior_changed": false,
+  "scope": "M4 deterministic context scorer",
+  "version": "v0.2-single-turn"
+}

@@ -1,0 +1,5132 @@
+{
+  "baseline_metrics": {
+    "dev": {
+      "actionable_high_risk_recall": 0.7,
+      "actionable_precision": 0.9,
+      "actionable_recall": 0.75,
+      "high_risk_recall": 0.7,
+      "invalid_offset_count": 0,
+      "overall_precision": 0.8182,
+      "overall_recall": 0.75,
+      "raw_pii_logging_count": 0,
+      "records_processed": 15,
+      "spans_detected": 11,
+      "spans_masked": 10
+    },
+    "test": {
+      "actionable_high_risk_recall": 0.7,
+      "actionable_precision": 1.0,
+      "actionable_recall": 0.6667,
+      "high_risk_recall": 0.7,
+      "invalid_offset_count": 0,
+      "overall_precision": 0.8889,
+      "overall_recall": 0.6667,
+      "raw_pii_logging_count": 0,
+      "records_processed": 15,
+      "spans_detected": 9,
+      "spans_masked": 8
+    },
+    "train": {
+      "actionable_high_risk_recall": 0.9,
+      "actionable_precision": 1.0,
+      "actionable_recall": 0.8333,
+      "high_risk_recall": 0.9,
+      "invalid_offset_count": 0,
+      "overall_precision": 0.8333,
+      "overall_recall": 0.8333,
+      "raw_pii_logging_count": 0,
+      "records_processed": 15,
+      "spans_detected": 12,
+      "spans_masked": 10
+    }
+  },
+  "config_changes_proposed": [],
+  "eligible_rule_count": 12,
+  "phase": "Execution Phase 4. Rule Metrics and Delta Sweep",
+  "public_corpus_used_for_score_tuning": false,
+  "report_type": "ContextDeltaSweep",
+  "rules": [
+    {
+      "candidate_grid": [
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": 0.1,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.15,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": 0.15,
+      "rule_family": "boost",
+      "rule_id": "context.boost.address_cooccur_for_person",
+      "selected_delta": 0.15,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        0.2,
+        0.25,
+        0.3,
+        0.35
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": 0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": -0.0818,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 1
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.8182,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 11
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.35,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": -0.0818,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 1
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.8182,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 11
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": 0.2,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_address",
+      "selected_delta": 0.2,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        0.2,
+        0.25,
+        0.3,
+        0.35
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": 0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.35,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": 0.25,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_name",
+      "selected_delta": 0.25,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": 0.1,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.15,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": 0.15,
+      "rule_family": "boost",
+      "rule_id": "context.boost.field_label_phone",
+      "selected_delta": 0.15,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        0.2,
+        0.25,
+        0.3,
+        0.35
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": 0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": -0.0111,
+                "actionable_recall_delta": -0.0833,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": -1
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.8889,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 9
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.35,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": 0.25,
+      "rule_family": "boost",
+      "rule_id": "context.boost.organization_affiliation_context",
+      "selected_delta": 0.25,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        0.2,
+        0.25,
+        0.3,
+        0.35
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": 0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.35,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": 0.2,
+      "rule_family": "boost",
+      "rule_id": "context.boost.phone_cooccur_for_person",
+      "selected_delta": 0.2,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": 0.1,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.15,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": 0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": 0.15,
+      "rule_family": "boost",
+      "rule_id": "context.boost.title_after_name",
+      "selected_delta": 0.15,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        -0.3,
+        -0.25,
+        -0.2,
+        -0.15,
+        -0.1
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": -0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.15,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.1,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": -0.2,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.abstract_value_context_for_person",
+      "selected_delta": -0.2,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        -0.3,
+        -0.25,
+        -0.2,
+        -0.15,
+        -0.1
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": -0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.15,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.1,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": -0.2,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.code_or_log_context",
+      "selected_delta": -0.2,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        -0.3,
+        -0.25,
+        -0.2,
+        -0.15,
+        -0.1
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": -0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": -0.1,
+                "actionable_precision_delta": -0.0111,
+                "actionable_recall_delta": -0.0833,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": -1
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": -0.1,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": -0.0833,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": -1
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.6,
+              "actionable_precision": 0.8889,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 9
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.8,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 9
+            }
+          },
+          "passes_release_constraints": false
+        },
+        {
+          "candidate_delta": -0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.2,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.15,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.1,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": -0.15,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.example_context",
+      "selected_delta": -0.15,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        -0.4,
+        -0.35,
+        -0.3,
+        -0.25
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": -0.4,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.35,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": -0.25,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.organization_not_person",
+      "selected_delta": -0.25,
+      "selection_reason": "conservative_current_delta_kept"
+    },
+    {
+      "candidate_grid": [
+        -0.4,
+        -0.35,
+        -0.3,
+        -0.25
+      ],
+      "candidate_results": [
+        {
+          "candidate_delta": -0.4,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.35,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.3,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        },
+        {
+          "candidate_delta": -0.25,
+          "impact_deltas_by_split": {
+            "dev": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "test": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            },
+            "train": {
+              "action_level": {
+                "actionable_high_risk_recall_delta": 0.0,
+                "actionable_precision_delta": 0.0,
+                "actionable_recall_delta": 0.0,
+                "high_risk_recall_delta": 0.0,
+                "spans_masked_delta": 0
+              },
+              "candidate_level": {
+                "overall_precision_delta": 0.0,
+                "overall_recall_delta": 0.0,
+                "spans_detected_delta": 0
+              }
+            }
+          },
+          "metrics_by_split": {
+            "dev": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 0.9,
+              "actionable_recall": 0.75,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8182,
+              "overall_recall": 0.75,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 11,
+              "spans_masked": 10
+            },
+            "test": {
+              "actionable_high_risk_recall": 0.7,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.6667,
+              "high_risk_recall": 0.7,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8889,
+              "overall_recall": 0.6667,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 9,
+              "spans_masked": 8
+            },
+            "train": {
+              "actionable_high_risk_recall": 0.9,
+              "actionable_precision": 1.0,
+              "actionable_recall": 0.8333,
+              "high_risk_recall": 0.9,
+              "invalid_offset_count": 0,
+              "overall_precision": 0.8333,
+              "overall_recall": 0.8333,
+              "raw_pii_logging_count": 0,
+              "records_processed": 15,
+              "spans_detected": 12,
+              "spans_masked": 10
+            }
+          },
+          "passes_release_constraints": true
+        }
+      ],
+      "config_change_proposed": false,
+      "current_delta": -0.35,
+      "rule_family": "penalty",
+      "rule_id": "context.penalty.weather_context_for_person",
+      "selected_delta": -0.35,
+      "selection_reason": "conservative_current_delta_kept"
+    }
+  ],
+  "runtime_scoring_behavior_changed": false,
+  "score_delta_changed": false,
+  "swept_rule_count": 12,
+  "unchanged_rule_reasons": [
+    {
+      "reason": "insufficient_support_or_direction_review",
+      "rule_id": "context.boost.bank_cooccur"
+    },
+    {
+      "reason": "insufficient_support_or_direction_review",
+      "rule_id": "context.boost.field_label_account"
+    },
+    {
+      "reason": "insufficient_support_or_direction_review",
+      "rule_id": "context.boost.full_address_detail"
+    },
+    {
+      "reason": "insufficient_support_or_direction_review",
+      "rule_id": "context.boost.medical_label"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.ADDRESS_FULL"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.ADDRESS_UNIT"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.BANK_ACCOUNT"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.DOB"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.EMAIL"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.HOSPITAL"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.MEDICAL_RECORD_NO"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.PERSON_NAME"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.PHONE_LANDLINE"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.PHONE_MOBILE"
+    },
+    {
+      "reason": "policy_only_rule",
+      "rule_id": "context.composite.SCHOOL"
+    },
+    {
+      "reason": "insufficient_support_or_direction_review",
+      "rule_id": "context.penalty.example_keyword_for_person"
+    },
+    {
+      "reason": "insufficient_support_or_direction_review",
+      "rule_id": "context.penalty.private_ip"
+    },
+    {
+      "reason": "insufficient_support_or_direction_review",
+      "rule_id": "context.penalty.public_phone_context"
+    }
+  ],
+  "version": "v0.2-single-turn"
+}
