@@ -240,19 +240,82 @@ ner.heuristic_split_v1   # (v3에서는 거의 트리거 안 됨)
 - batch 16 fp16: 학습 5.5 it/s × 1701 step/epoch
 - eval 1140 samples/sec
 
-### 추론 latency (계획 — production 시 측정 필요)
-| 환경 | 예상 latency (256 char) | 비고 |
-|---|---|---|
-| CPU PyTorch native FP32 | 150~250 ms | klue/roberta-large 335M |
-| CPU ONNX FP32 | 60~120 ms | aegis 패턴 (37ms) 참조 |
-| GPU T4/3090 FP16 | 15~30 ms | batch 16에서 ~2ms/sample |
+### 추론 latency — 실측 (2026-05-18, W-017)
 
-**Phase 6 비교 기준**:
-- alphagyuu (TF→pt): 221 ms
-- mncai (PyTorch CPU): 178 ms
-- aegis (ONNX CPU): 37 ms (가장 빠름)
+**측정 환경**: Intel Core Ultra 7 258V (8 cores / 8 threads, 2.2GHz base), 32 GB RAM, Windows 11
+**입력**: 256 chars → 122 subword tokens (한국어 PII 혼합 adversarial payload)
+**측정 방법**: warmup 30 + measure 100 iterations, single-batch, p50/p95/p99 + mean±std
 
-→ ONNX export 산출물 함께 제공 예정 (TODO).
+| Backend | p50 (ms) | p95 (ms) | p99 (ms) | mean±std (ms) | Speedup vs PyTorch (이 환경) | Model size |
+|---|---:|---:|---:|---:|---:|---:|
+| PyTorch CPU FP32 | 546.9 | 810.0 | 940.4 | 590.5 ± 113.0 | 1.0x (baseline) | 1.3 GB |
+| ONNX CPU FP32 (opset 18) | 374.8 | 458.6 | 497.2 | 383.4 ± 37.5 | **1.46x** | 1.3 GB |
+| **ONNX CPU INT8 (dynamic)** | **135.5** | **177.2** | **196.8** | **140.4 ± 17.7** | **4.04x** | **322 MB** |
+
+> **측정 환경 의존성 (해석 주의)**:
+> - 위 **상대 speedup(1.46x / 4.04x)은 환경 독립적이지 않다.** ONNX Runtime 버전, CPU ISA, thread 설정(intra/inter), 메모리 대역폭, PyTorch 버전에 따라 달라질 수 있으므로 **본 측정 환경 내 상대값**으로 읽어야 한다.
+> - **절대 latency 역시 하드웨어/런타임 의존적**이라 벤치마크 setup이 통제되지 않은 다른 환경과 직접 비교하면 안 된다. (측정 CPU: Core Ultra 7 258V, 노트북용 저전력 칩 — server-class 대비 절대값 차이는 통제된 비교가 아니므로 배수로 단정하지 않는다.)
+
+### INT8 quantization 정확도 — 실측
+
+ONNX `quantize_dynamic` (weights-only INT8, activation FP32 유지). FP32 prediction을 reference로 두고 INT8과 token-level 비교.
+
+| 지표 | 값 |
+|---|---:|
+| 테스트 샘플 | 200 (test split 중 random subset) |
+| 총 non-pad 토큰 | 5,148 |
+| **전체 token-level agreement** | **99.747%** |
+| 발산이 1개 이상인 문장 | 12 / 200 (6.0%) |
+| 평균 발산 토큰/문장 | 1.08 (boundary tokens) |
+
+**Per-label agreement** (FP32가 X 라벨인 토큰 중 INT8도 X로 예측한 비율):
+
+| Label | Agreement | Total tokens |
+|---|---:|---:|
+| I-NAME | **100.00%** | 134 |
+| O | 99.86% | 4,388 |
+| I-ADDRESS | 99.26% | 270 |
+| B-NAME | 99.22% | 129 |
+| B-ORG | 98.73% | 79 |
+| B-ADDRESS | 98.18% | 55 |
+| I-ORG | 97.85% | 93 |
+
+발산 사례 분석 (전체 disagreement 13건 모두 token-level):
+- 6건: entity ↔ O 경계 토큰 (boundary 위치 미세 변동)
+- 4건: I-ORG ↔ O (ORG 후미 토큰이 가장 흔들림 — 사전상 B-ORG 0.987 vs I-ORG 0.979 정합)
+- 2건: B-ADDRESS ↔ I-ADDRESS (composite address span 경계)
+- 1건: O ↔ B-NAME (idol name 같은 short-context 케이스)
+
+→ **entity-level F1 영향은 측정값이 아니라 추정치(estimate)다.** token-level agreement(99.75%)에서 ~1~2%p 정도로 어림한 값(FP32 internal test F1 0.878 → INT8 F1 0.86~0.87 *예상*)으로, **실측 전까지 확정 수치로 인용하지 말 것.** 실제 entity-level F1은 M10 evaluation_harness 통합 후 측정 예정 (TODO, 아래 §TODO 참조).
+
+### Phase 6 비교 (참고용)
+
+| 팀 | Backend | Latency (ms, 256 char) |
+|---|---|---:|
+| alphagyuu | TF→pt | 221 |
+| mncai | PyTorch CPU | 178 |
+| aegis | ONNX CPU | 37 |
+| **우리 (v3)** | **PyTorch CPU FP32** | **546.9** |
+| **우리 (v3)** | **ONNX CPU FP32** | **374.8** |
+| **우리 (v3)** | **ONNX CPU INT8** | **135.5** |
+
+> **비교 주의**: Phase 6 수치는 각 팀의 서로 다른 하드웨어/런타임에서 측정된 값이라 우리 절대값과 **직접 비교 불가**(통제된 동일 setup이 아님). 표는 참고용일 뿐 우열 근거로 쓰지 않는다. 본 PR에서 의미 있는 결론은 **동일 환경 내** "ONNX INT8가 PyTorch FP32 대비 4.04x speedup + 정확도 99.75% 유지" 라는 환경 내부 비교다.
+
+### 산출물
+
+- `models/pii_ner_v3/onnx/` — ONNX FP32 (opset 18, 1.3 GB)
+- `models/pii_ner_v3/onnx_int8/` — ONNX INT8 dynamic quantized (322 MB)
+- `scripts/export_to_onnx.py` — PyTorch → ONNX 변환 (재현 가능, 21초)
+- `scripts/quantize_to_int8.py` — ONNX FP32 → INT8 dynamic (재현 가능, 38초)
+- `scripts/bench_latency.py` — 3-way latency 측정
+- `scripts/measure_quantization_accuracy.py` — INT8 vs FP32 token-level 비교
+- `reports/latency_bench.json` — bench 결과 raw JSON
+- `reports/quantization_accuracy.json` — accuracy 결과 raw JSON
+
+### TODO (W-017 잔여)
+- GPU 환경 latency 측정 (현재 측정 환경에 CUDA GPU 없음)
+- per-entity threshold calibration (calibration.json hardcoded → temperature scaling)
+- entity-level F1 직접 측정 (M10 evaluation_harness 통합 후)
 
 ---
 
