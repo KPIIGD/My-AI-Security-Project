@@ -44,7 +44,10 @@ _BOOST_RULES_BY_ENTITY: dict[EntityType, tuple[str, ...]] = {
     EntityType.BANK_ACCOUNT: ("field_label_account", "bank_cooccur"),
     EntityType.MEDICAL_RECORD_NO: ("medical_label",),
     EntityType.HOSPITAL: ("medical_label",),
-    EntityType.HEALTH_INFO: ("medical_label",),
+    EntityType.HEALTH_INFO: ("medical_label", "health_label"),
+    EntityType.RELIGIOUS_BELIEF: ("religion_label",),
+    EntityType.SEXUAL_ORIENTATION: ("orientation_label",),
+    EntityType.POLITICAL_OPINION: ("political_label",),
 }
 
 _PENALTY_RULES_BY_ENTITY: dict[EntityType, tuple[str, ...]] = {
@@ -69,6 +72,10 @@ _FIELD_LABEL_GROUP_BY_RULE = {
     "field_label_account": "account_label",
     "organization_affiliation_context": "organization_label",
     "medical_label": "medical_label",
+    "health_label": "health_label",
+    "religion_label": "religion_label",
+    "orientation_label": "orientation_label",
+    "political_label": "political_label",
 }
 
 _NEGATIVE_GROUP_BY_RULE = {

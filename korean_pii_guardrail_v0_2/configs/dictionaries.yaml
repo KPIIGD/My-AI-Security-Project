@@ -424,3 +424,128 @@ bank_names:
   - 새마을금고
   - 신협
   - 우체국
+# ---------------------------------------------------------------------------
+# PIPA Article 23 sensitive information (text-form values).
+# Ported from the layer_0 prototype keyword detector. Detected as permissive
+# CANDIDATEs (see dictionary_base_scores.health_info/religious_belief/...).
+# Masking is gated by context labels (context_rules health_label/religion_label/
+# orientation_label/political_label) + policy router, so a bare value with no
+# nearby label PASSes rather than over-masking general discussion.
+# Subtype is preserved in reason_codes (dictionary.health.allergy, ...).
+# ---------------------------------------------------------------------------
+health_allergy:
+  - 견과류
+  - 갑각류
+  - 글루텐
+  - 페니실린
+  - 아스피린
+  - 설파제
+  - 조영제
+  - 집먼지진드기
+  - 라텍스
+health_diagnosis:
+  - 제2형 당뇨병
+  - 제1형 당뇨병
+  - 당뇨병
+  - 고혈압
+  - 대장암
+  - 폐암
+  - 위암
+  - 간암
+  - 유방암
+  - 갑상선암
+  - 우울증
+  - 조현병
+  - 불안장애
+  - 천식
+  - 폐렴
+  - 결핵
+  - 간염
+  - 녹내장
+  - 백내장
+  - 아토피피부염
+  - 류마티스
+  - 루푸스
+  - 크론병
+  - 심근경색
+  - 뇌졸중
+  - 치매
+  - 파킨슨병
+health_prescription:
+  - 아토르바스타틴
+  - 메트포르민
+  - 오메프라졸
+  - 발사르탄
+  - 암로디핀
+  - 로수바스타틴
+  - 졸피뎀
+  - 알프라졸람
+  - 디아제팜
+  - 트라마돌
+  - 코데인
+health_surgery:
+  - 척추융합술
+  - 제왕절개
+  - 위절제술
+  - 관절경수술
+  - 맹장수술
+  - 관상동맥우회술
+  - 백내장수술
+  - 심장판막수술
+  - 담낭절제술
+  - 갑상선절제술
+  - 지방흡입
+health_disability:
+  - 시각장애
+  - 청각장애
+  - 지체장애
+  - 지적장애
+  - 자폐성장애
+  - 정신장애
+  - 심장장애
+  - 신장장애
+  - 호흡기장애
+  - 뇌병변장애
+  - 언어장애
+health_blood:
+  - A형Rh+
+  - A형Rh-
+  - B형Rh+
+  - B형Rh-
+  - O형Rh+
+  - O형Rh-
+  - AB형Rh+
+  - AB형Rh-
+health_mental:
+  - 공황장애
+  - 강박장애
+  - 사회불안장애
+  - 섭식장애
+  - 외상후스트레스장애
+  - PTSD
+religion:
+  - 기독교
+  - 개신교
+  - 천주교
+  - 가톨릭
+  - 불교
+  - 이슬람교
+  - 원불교
+  - 천도교
+  - 힌두교
+  - 유대교
+  - 성공회
+sexual_orientation:
+  - 이성애
+  - 동성애
+  - 양성애
+  - 무성애
+  - 범성애
+political_party:
+  - 더불어민주당
+  - 국민의힘
+  - 정의당
+  - 개혁신당
+  - 진보당
+  - 조국혁신당
+  - 기본소득당

@@ -41,6 +41,40 @@ _ADDRESS_UNIT_TRAILING_SUFFIXES = tuple(
     rule.suffix for rule in _BOUNDARY_SUFFIX_RULES.get(EntityType.ADDRESS_UNIT, ())
 )
 
+# PIPA Article 23 sensitive-information dictionaries (text-form values), ported
+# from the layer_0 prototype keyword detector. Each entry maps a dictionary key
+# in configs/dictionaries.yaml to its entity type, the score key in
+# configs/scoring.yaml (dictionary_base_scores), and the subtype recorded in
+# reason_codes (e.g. ``dictionary.health.allergy``) so per-type reporting and
+# per-category (entity_type) policy both work off one match pass.
+_SENSITIVE_REASON_FAMILY: dict[EntityType, str] = {
+    EntityType.HEALTH_INFO: "health",
+    EntityType.RELIGIOUS_BELIEF: "religion",
+    EntityType.SEXUAL_ORIENTATION: "orientation",
+    EntityType.POLITICAL_OPINION: "political",
+}
+_SENSITIVE_ATTRIBUTE_DICTS: tuple[tuple[str, EntityType, str, str], ...] = (
+    ("health_allergy", EntityType.HEALTH_INFO, "health_info", "allergy"),
+    ("health_diagnosis", EntityType.HEALTH_INFO, "health_info", "diagnosis"),
+    ("health_prescription", EntityType.HEALTH_INFO, "health_info", "prescription"),
+    ("health_surgery", EntityType.HEALTH_INFO, "health_info", "surgery"),
+    ("health_disability", EntityType.HEALTH_INFO, "health_info", "disability"),
+    ("health_blood", EntityType.HEALTH_INFO, "health_info", "blood"),
+    ("health_mental", EntityType.HEALTH_INFO, "health_info", "mental"),
+    ("religion", EntityType.RELIGIOUS_BELIEF, "religious_belief", "religion"),
+    ("sexual_orientation", EntityType.SEXUAL_ORIENTATION, "sexual_orientation", "orientation"),
+    ("political_party", EntityType.POLITICAL_OPINION, "political_opinion", "political"),
+)
+
+# Particle / copula first-syllables that may legitimately follow a sensitive
+# value: subject/object/topic (은는이가을를), adnominal/adverbial (에의도만와과로으),
+# quote/copula (라입예야였), comparative/listing/limiting (보처마조나뿐밖께부까한).
+# A trailing Hangul syllable NOT in this set signals a longer compound noun
+# (통풍+구, 조현병+동, 진보당+원, 기독교+인, 백내장수술+실) and the candidate is
+# rejected, keeping the layer precision-oriented without dropping real values
+# in comparative/listing sentences ("불교나 기독교", "당뇨병보다 위험한").
+_SENSITIVE_TRAILING_PARTICLE_STARTS = frozenset("은는이가을를에의도만와과로으라입예야였께부까보처마조나뿐밖한")
+
 
 def _has_word_boundary_before(raw_text: str, start: int) -> bool:
     """True when ``start`` does not sit inside a longer Hangul word."""
@@ -60,6 +94,22 @@ def _has_word_boundary_after(raw_text: str, end: int) -> bool:
 
 def _is_address_unit_boundary(raw_text: str, end: int) -> bool:
     return _has_full_suffix_boundary(raw_text, end, _ADDRESS_UNIT_TRAILING_SUFFIXES)
+
+
+def _has_sensitive_right_boundary(raw_text: str, end: int) -> bool:
+    """True when a sensitive value ends a word rather than starting a compound.
+
+    Accepts a non-Hangul follower or a known particle/copula start; rejects a
+    Hangul follower that would extend the value into a longer noun
+    (통풍구, 조현병동, 진보당원, 기독교인).
+    """
+    if end >= len(raw_text):
+        return True
+    nxt = raw_text[end]
+    low, high = _HANGUL_SYLLABLE_RANGE
+    if not (low <= nxt <= high):
+        return True
+    return nxt in _SENSITIVE_TRAILING_PARTICLE_STARTS
 
 
 def _has_full_suffix_boundary(
@@ -140,6 +190,7 @@ class DictionaryDetector:
         self._hospital_suffixes = tuple(
             sorted(self.dictionaries.get("hospital_suffixes", ()), key=len, reverse=True)
         )
+        self._sensitive_terms = self._build_sensitive_terms()
 
     # ------------------------------------------------------------------ Protocol
 
@@ -156,6 +207,7 @@ class DictionaryDetector:
         candidates.extend(self._detect_affiliations(raw_text))
         candidates.extend(self._detect_relations(raw_text))
         candidates.extend(self._detect_person_names(raw_text, consumed_address))
+        candidates.extend(self._detect_sensitive_attributes(raw_text))
 
         return deduplicate_spans(self._build_span(raw_text, c) for c in candidates)
 
@@ -269,6 +321,65 @@ class DictionaryDetector:
                         "dictionary.family_relation",
                         "dictionary.family_relation.match",
                     ),
+                )
+
+    # ------------------------------------------------------------------ Sensitive attributes
+
+    def _build_sensitive_terms(
+        self,
+    ) -> tuple[tuple[str, EntityType, str, tuple[str, ...]], ...]:
+        """Flatten the sensitive-information dictionaries into a match list.
+
+        Longer values are matched first so a specific term (``제2형 당뇨병``)
+        wins over a substring term (``당뇨병``); the overlap guard in
+        ``_detect_sensitive_attributes`` then suppresses the shorter match.
+        """
+        terms: list[tuple[str, EntityType, str, tuple[str, ...]]] = []
+        for dict_key, entity_type, score_key, subtype in _SENSITIVE_ATTRIBUTE_DICTS:
+            family = _SENSITIVE_REASON_FAMILY[entity_type]
+            reason_codes = (
+                f"dictionary.{family}",
+                f"dictionary.{family}.{subtype}",
+            )
+            for value in self.dictionaries.get(dict_key, ()):
+                if value:
+                    terms.append((value, entity_type, score_key, reason_codes))
+        terms.sort(key=lambda item: len(item[0]), reverse=True)
+        return tuple(terms)
+
+    def _detect_sensitive_attributes(self, raw_text: str) -> Iterator[_Candidate]:
+        """Emit permissive CANDIDATEs for PIPA Art.23 sensitive values.
+
+        Detection is value-only; whether a match is masked is decided later by
+        ``context_scorer`` (label boost) and the policy router. A bare value with
+        no nearby context label therefore PASSes rather than over-masking general
+        discussion (e.g. ``불교`` in a cultural article). Matching is on
+        ``raw_text`` for the offset contract, so — like the other dictionary
+        detectors — it does not see Layer-0 normalization (a value with injected
+        zero-width characters is out of scope for this path).
+        """
+        consumed: list[tuple[int, int]] = []
+        for value, entity_type, score_key, reason_codes in self._sensitive_terms:
+            search_from = 0
+            while True:
+                index = raw_text.find(value, search_from)
+                if index < 0:
+                    break
+                end = index + len(value)
+                search_from = end
+                if not _has_word_boundary_before(raw_text, index):
+                    continue
+                if not _has_sensitive_right_boundary(raw_text, end):
+                    continue
+                if any(cs <= index and end <= ce for (cs, ce) in consumed):
+                    continue
+                consumed.append((index, end))
+                yield _Candidate(
+                    start=index,
+                    end=end,
+                    entity_type=entity_type,
+                    score_key=score_key,
+                    reason_codes=reason_codes,
                 )
 
     # ------------------------------------------------------------------ Address
